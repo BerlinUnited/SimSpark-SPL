@@ -1,5 +1,5 @@
 \begin{tikzpicture}
-  \tikzstyle{module}=[draw, minimum height=1cm, minimum width=2cm]
+  \tikzstyle{module}=[draw, minimum height=0.9cm, minimum width=2cm]
 
   \node[module] (sc) {\shortstack{Stiffness\\ Control}};
   \draw[<-] (sc) -- node[at end, above]{$k_s$} ++(-1.6,0);
@@ -26,9 +26,9 @@
   \draw[->] ($(ps.south east)!0.7!(ps.south west)$) -- ++(0,-0.2) -| node[above, near start]{$\Delta{Q}^+$}
   (bl);
 
-  \node[module] (bat) at (6, -1.7) {Battery};
+  \node[module, minimum height=0.5cm] (bat) at (6, -1.3) {Battery};
   \draw[->] ($(ps.south east)!0.3!(ps.south west)$) |- node[above, near end]{$E$} (bat);
   \draw[->] (bat) -| node[above, near start] {On/Off} (sc);
 
-  \draw[dashed] (-1.3,-1.1) rectangle (9.9,1.8) node[anchor=north east] {Servo Motor Model};
+  \draw[dashed] (-1.3,-0.8) rectangle (9.9,1.7) node[anchor=north east] {Servo Motor Model};
 \end{tikzpicture}

@@ -1,6 +1,7 @@
 \documentclass{llncs}
+\usepackage[belowskip=-15pt,aboveskip=10pt]{caption}
 \usepackage[utf8]{inputenc}
-\usepackage{todonotes}
+\usepackage[disable]{todonotes}
 \usepackage{amsmath}
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
@@ -71,16 +72,15 @@ This is especially true in the research of multi-robot systems in areas such as 
 Using simulation for algorithm development and testing makes thing easier.
 
 % \paragraph{History}
-\textit{SimSpark}, a multi-robot simulator based on the generic components of the Spark\cite{OR05} physical multi-agent simulation system, has been used in the RoboCup Soccer Simulation League since 2004.
+SimSpark, a multi-robot simulator based on the generic components of the Spark\cite{OR05} physical multi-agent simulation system, has been used in the RoboCup Soccer Simulation League since 2004.
 The project was registered as open source project in SourceForge in 2004, it has an established code base with development increasing year-over-year.
 As the result, RoboCup soccer simulations have changed significantly over the years, going from rather abstract agent representations to more and more realistic humanoid robot games\cite{Boedecker2008,usermanual}.
 Thanks to the flexibility of the Spark system, these transitions were achieved with little changes to the simulator's core architecture.
 
-In this paper we describe the recent development of \textit{SimSpark} project, which make the \textit{SimSpark} possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup 2012?}.
-In section \ref{s:overview}, we will give an overview of \textit{SimSpark} project since 2008. After that, we will describe the development of the \textit{Spark} simulation platform in section \ref{s:spark}.
-In section \ref{s:rcssserver3d}, we will briefly describe the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D}.
+In this paper we describe the recent development of SimSpark project, which make the SimSpark possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup 2012?}.
+In section \ref{s:overview}, we will give an overview of the SimSpark project since 2008. After that, we will describe the development of the Spark simulation platform in section \ref{s:spark} and the implementation of RoboCup 3D Soccer Simulator in section \ref{s:rcssserver3d}.
 We will introduce some new features for RoboCup 2013 in section \ref{s:ongoing}.
-Furthermore, we will discuss the application of \textit{SimSpark} not only in simulation league but also other leagues with real robots in section \ref{s:application}.
+Furthermore, we will give the application examples of SimSpark in section \ref{s:application}.
 Finally, we will outline future development plans in section \ref{s:conclusion}.
 
 \section{Project Overview}
@@ -102,11 +102,11 @@ to CMake, and windows installers are now released.
 
 \section{Spark}
 \label{s:spark}
-As a generic simulation environment, Spark provides a rich set of features to create, debug and modify multi-robot simulation.
+As a generic simulation environment, Spark provides a rich set of features to create, debug and modify multi-robot simulations.
 It has three main components, including the simulation engine, the object and memory management system, and the physics engine. Details about architecture and concepts of Spark have been described in \cite{Boedecker2008,OR05}.
 In this section, we describe the necessary changes for simulating 11 vs. 11 humanoid robot soccer game.
-However changes to the simulator core were never customized for the soccer simulation.
-First, a set of sensors of humanoid robot are implemented as plugins. Second, multi-threads supporting takes advantage of multi-cores in modern CPU to be able to run in real time.
+However changes to the simulator core were never specialized for the soccer simulation.
+% First, a set of sensors of humanoid robot are implemented as plugins. Second, multi-threads supporting takes advantage of multi-cores in modern CPU to be able to run in real time.
 
 \paragraph{Sensor Plugins}
 Sensors of a robot allows awareness of the robot's state and the environment.
@@ -116,8 +116,8 @@ Some of the sensors delivers information from physics engine, such as joint posi
 Additionally, a more realistic camera which delivers images rendered via OpenGL hardware accelerated offscreen buffers is implemented. Details of these sensors can be found in \cite{usermanual}.
 
 \paragraph{Multi-threads Supporting}
-In modern time, computers have a processor with multi-cores or even multi-CPUs.
-This improves the performance greatly, but only the multi-threaded program can benefit.
+% In modern time, computers have a processor with multi-cores or even multi-CPUs.
+% This improves the performance greatly, but only the multi-threaded program can benefit.
 One great feature of SimSpark is switching between single thread mode and multi-threads
 mode. The multi-threads mode can improve the performance in computer with multi-cores processor, but the single thread mode is also useful for developing the simulator. 
 
@@ -138,7 +138,8 @@ In RoboCup 2012, the 11 vs. 11 humanoid robot (22 degree of freedom) soccer game
 
 As the competition environment for the Soccer Simulation 3D League at RoboCup, 
 RCSSServer3D simulates the soccer field where two team of robots play soccer game.
-In its initial version players were modeled as spheres in a physical three dimensional world. Now it supports humanoid players with articulated bodies. In particular,  the soccer environment and rules are implemented in the simulation, and the NAO robot manufactured by Aldebaran Robotics is modeled.
+In its initial version players were modeled as spheres in a physical three dimensional world. Now it supports humanoid players with articulated bodies.
+% In particular,  the soccer environment and rules are implemented in the simulation, and the NAO robot manufactured by Aldebaran Robotics is modeled.
 
 \paragraph{Soccer Simulation}
 Most rules of the soccer game are judged by an automatic rule set that enforces the basic soccer rule set.
@@ -153,35 +154,34 @@ The NAO robot model is also equipped with a powerful selection of the
 sensors described in section \ref{s:spark}, to provide a widespread information base for
 agent development.
 
-There are differences between simulated NAO and real NAO. For example, the left hip and the right hip in the real NAO are physically connected by one motor so they cannot be controlled independently. The simulated robot has a motor for each joint. Furthermore, the simulated robot gets positions of objects via virtual vision sensor, while the real robot has to process images to understand the world. Never the less, this NAO model enables RCSSServer3D as a good humanoid robot research platform.
+There are differences between simulated NAO and real NAO. For example, the left hip and the right hip in the real NAO are physically connected by one motor so they cannot be controlled independently. The simulated robot has one motor for each joint. Furthermore, the simulated robot gets positions of objects via virtual vision sensor, while the real robot has to process images to understand the world. Nevertheless, this NAO model enables RCSSServer3D to be a good humanoid robot research platform.
 
 
 \section{Experimental Features}
 \label{s:ongoing}
 
-For getting more realistic simulation, some new features are proposed and implemented, including realistic motor, heterogeneous robots, and agent proxies. Furthermore, a new graphic user interface is implemented for better user experiences.
+For getting more realistic simulation, some new features are proposed and implemented, including realistic motor, heterogeneous robots, and agent proxies.
+% Furthermore, a new graphic user interface is implemented for better user experiences.
 These experimental features probably will be used in RoboCup 2013 for the first time.
 
 \subsection{Realistic Motor}
 NAO robot has twenty-one motor joints as its actuators.
-The simulation engine, e.g. ODE, provides a simple model of real life servos:
+The simulation engine, i.e. ODE, provides a simple model of real life servos:
 the motor brings the body up to speed in one step; and provides force that is not more than is allowed.
 The simple motor model is one reason for the unrealistic simulation results.
-Furthermore, some aspects like stiffness control, power consumption and temperature regulation, are missing but are also important for robotics.
-In this section, we proposed and implemented a realistic motor model. More details and experimental results are given in \cite{Xu2012}.
+% Furthermore, some aspects like stiffness control, power consumption and temperature regulation, are missing but are also important for robotics.
+In this section, we proposed and implemented a realistic motor model. More details and experimental results are described in \cite{Xu2012}.
 
 \paragraph{Stiffness}
-The stiffness determines how strong the motor is. The value is from 0.0
-to 1.0, 0 means the motor is off and 1 means the motor is running at
-full power. In the real robot,
-this percentage is the maximum electric current applied to the motor. Setting the
-stiffness to 0.5 means that the electric current limitation is reduced
-to 50\%.
+The stiffness determines how strong the motor is.
+% The value is from 0.0 to 1.0, 0 means the motor is off and 1 means the motor is running at full power. 
+In the real robot, this percentage is the maximum electric current applied to the motor.
+% Setting the stiffness to 0.5 means that the electric current limitation is reduced to 50\%.
 For a DC motor, the electric current, $I$, determines the output torque,
 $\tau = K_\tau I \label{eq:tau-i}$;
-where $K_\tau$ is the torque constant of the motor. $K_\tau$ can be found in the
-specifications of motor, e.g. \cite{naoqi}.
-The simulation engine can specified the maximum torque of the servo, therefore the
+where $K_\tau$ is the torque constant of the motor, and can be found in the
+specification.
+The simulation engine can specify the maximum torque of the servo, therefore the
 stiffness control can be easily implemented by setting the maximum torque
 of the simulated servo:
 \begin{align}
@@ -192,17 +192,14 @@ time $t$; $k_{s}(t)$ is the stiffness at time $t$; and $T_{max}$
 denotes the maximum torque of the servo when stiffness is 1.
 
 \paragraph{Power Consumption}
-Another important aspect besides the motor's performance is its
-power consumption: how much energy does it cost to run.
-The robot is powered by a battery with limited energy, and has to walk during the
+Another important aspect of real motor is power consumption.
+Because the robot is powered by a battery with limited energy, and has to walk during the
 game.
-An even more important factor in energy consumption is
-that the motor can overheat if it consumes too much energy and
-becomes too hot.
-In the real robot, the temperature of each motor is measured, and the motor shuts down 
+Furthermore, the motor can overheat if it consumes too much energy and becomes too hot.
+In real robots, the temperature of each motor is measured, and the motor shuts down 
 when the temperature is too high.
 
-DC motors are based on this equation:
+DC motors can be modeled by the following equation:
 $U = U_e + IR \label{eq:u-ir} = K_e \dot{\theta} \label{eq:u-ke}$;
 where $U$ is the voltage of input, $U_e$ is the back electromotive
 force (EMF), $I$ is the electric current, $R$ is resistance,
@@ -221,32 +218,31 @@ And the total energy used by the motor is:
 \end{equation}
 where $\Delta{}t$ is the time step of the simulation, and $P_t$ is the power consumed at time $t$. For the overall
 power consumption, the energy consumed by devices other than motors,
-e.g. mainboard, CPU, camera, etc. has to be added. It is the power
-consumption of the NAO robot in an idle state (all motors are off), and measured to be 33 W.
-\Cref{fig:battery} compares the simulation result of this model to
-reality. 
+e.g. main board, CPU, camera, etc. has to be counted.
+% \Cref{fig:battery} compares the simulation result of this model to
+% reality. 
 
-\begin{figure}
-  \centering
-  \begin{minipage}{0.49\columnwidth}
-    \centering
-    \pgfplotsset{width=0.9\columnwidth,height=7cm}
-    \inputtikz{battery}
-    \caption{Power consumption of the real and the simulated NAO robot in action.
-      The electric current is the summary of all motors.
-    In this example, the robot turns left for 5 minutes, then
-stands for 1 minutes and then turns right for 5 minutes. This is shown by the change of electric current.}
-    \label{fig:battery}
-  \end{minipage}\hfill{}
-  \begin{minipage}{0.49\columnwidth}
-    \centering
-    \pgfplotsset{width=0.9\columnwidth,height=7cm}
-    \inputtikz{joint-temp-LKneePitch}
-    \caption{The temperature of the (knee pitch) motor in the simulation and the real NAO robot. The green background is the electric current in the real robot. Note that the temperature of real NAO has accuracy of 1 $^{\circ}$C.\newline
-    }
-    \label{fig:joint-temperature}
-  \end{minipage}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \begin{minipage}{0.49\columnwidth}
+%     \centering
+%     \pgfplotsset{width=0.9\columnwidth,height=7cm}
+%     \inputtikz{battery}
+%     \caption{Power consumption of the real and the simulated NAO robot in action.
+%       The electric current is the summary of all motors.
+%     In this example, the robot turns left for 5 minutes, then
+% stands for 1 minutes and then turns right for 5 minutes. This is shown by the change of electric current.}
+%     \label{fig:battery}
+%   \end{minipage}\hfill{}
+%   \begin{minipage}{0.49\columnwidth}
+%     \centering
+%     \pgfplotsset{width=0.9\columnwidth,height=7cm}
+%     \inputtikz{joint-temp-LKneePitch}
+%     \caption{The temperature of the (knee pitch) motor in the simulation and the real NAO robot. The green background is the electric current in the real robot. Note that the temperature of real NAO has accuracy of 1 $^{\circ}$C.\newline
+%     }
+%     \label{fig:joint-temperature}
+%   \end{minipage}
+% \end{figure}
 
 \paragraph{Temperature Regulation}
 We model the temperature and heat of the motor with the following equations:
@@ -255,27 +251,28 @@ We model the temperature and heat of the motor with the following equations:
   \Delta{}Q &= C\Delta{}T
 \end{align}
 where $T$ is the temperature of the motor, $T_e$
-is the temperature of the environment, but it is the internal temperature
-of motor, so it is higher than outside and differs from motor to
-motor, $\Delta{}Q^+$ is the heat produced by the motor, $\Delta{}Q^-$ is
-the heat transferred from the motor to the environment, $\Delta{}Q$ is the
-heat changing, $\lambda$ is thermal conductivity which indicates the
-ability of a motor to conduct heat, and $C$ is the heat capacity of
+is the environment temperature inside the motor, so it is higher than outside and differs from motor to motor, $\Delta{}Q$ is the
+heat changing, $\Delta{}Q^+$ is the heat produced by the motor, $\Delta{}Q^-$ is
+the heat transferred from the motor to the environment,  $\lambda$ is thermal conductivity which indicates the ability of a motor to conduct heat, and $C$ is the heat capacity of
 the motor, which can be seen as constant. Finally, the temperature of
 the motor at time $t+\Delta{}t$ can be solved as:
 \begin{equation}
   \label{eq:motor-temp}
   T_{t+\Delta{}t} = T_t + \Delta{}T = T_t + \frac{[I^2R-\lambda(T_t-T_e)]\Delta{}t}{C}
 \end{equation}
-In this model, we need to determine $T_e$, $\lambda$, and $C$ by experiments. It can be formulate as a classic linear regression problem.
+In this model, we need to determine $T_e$, $\lambda$, and $C$ by experiments.
+% It can be formulate as a classic linear regression problem.
 A sequence values of $\Delta{}t$, $T_t$, and $I^2R$ can be measured by experiment, therefore the optimum parameters of \cref{eq:motor-temp} is determined.
-After determining the parameters in the \cref{eq:motor-temp}, we can use this model to simulate motor temperature. In \Cref{fig:joint-temperature}, the simulated temperature is compared with data from the real robot.
+% After determining the parameters in the \cref{eq:motor-temp}, we can use this model to simulate motor temperature.
+% In \Cref{fig:joint-temperature}, the simulated temperature is compared with data from the real robot.
 
 The whole process of joint simulation is summarized in
-\Cref{fig:joint}: stiffness $k_s$ is simulated by setting the maximum torque
-of the motor $\tau_{max}$; the final maximum torque $\tau_m$ used by simulation engine is calculated by temperature regulation; and the simulation engine computes the resulted angle
-and torque applied; in the end, the consumed power and temperature are
-computed by \cref{eq:motor-power,eq:motor-temp} respectively. When the battery is empty, the maximum torque $\tau_{max}$ is set to 0 to turn off the motor.
+\Cref{fig:joint}.
+% stiffness $k_s$ is simulated by setting the maximum torque
+% of the motor $\tau_{max}$; the final maximum torque $\tau_m$ used by simulation engine is calculated by temperature regulation; and the simulation engine computes the resulted angle
+% and torque applied; in the end, the consumed power and temperature are
+% computed by \cref{eq:motor-power,eq:motor-temp} respectively. 
+When the battery is empty, the maximum torque $\tau_{max}$ is set to 0 to turn off the motor.
 \begin{figure}
   \centering
   \inputtikz{joint}
@@ -340,37 +337,34 @@ traffic and therefore the latency will be reduced considerably.
 Currently, an initial version of agent proxies is under development outside SimSpark
 project using Java.
 
-\subsection{SimSpark GUI}
-\todo{SimSpark GUI: \url{http://simspark.sourceforge.net/wiki/index.php/Graphical_User_Interface}}
+% \subsection{SimSpark GUI}
+% \todo{SimSpark GUI: \url{http://simspark.sourceforge.net/wiki/index.php/Graphical_User_Interface}}
 
-NOTE: It will be merged to trunk soon. So it is almost complete.
+% NOTE: It will be merged to trunk soon. So it is almost complete.
 
-The main goal of this project is to provide a flexible and extensible User Interface and Simulation Development Environment, that can be used to start, control and monitor different simulations using the Simspark server, agent and monitor processes, as well as incorporate several additional tools like for example a visual editor for robot models (like RsgEdit) or a debugging monitor for agents (like RoboViz). 
+% The main goal of this project is to provide a flexible and extensible User Interface and Simulation Development Environment, that can be used to start, control and monitor different simulations using the Simspark server, agent and monitor processes, as well as incorporate several additional tools like for example a visual editor for robot models (like RsgEdit) or a debugging monitor for agents (like RoboViz). 
 
 \section{Applications}
+As a powerful robot simulator, SimSpark is gaining popularity in RoboCup, including Standard Platform League and Humanoid League. It is also widely used to teach artificial intelligence and robotic lectures.
+
 \label{s:application}
-\paragraph{RoboCup Soccer Simulation League}
-In RoboCup 2004, SimSpark was successfully used for the first official competition in RoboCup Simulation 3D League. Since then, it is used as a standard research platform and test bed\todo{How many teams in last RoboCup?}.
-Simulation teams also developed useful research tools based on SimSpark. Some of these tools are also released as open source.
-For example, RoboViz\cite{Stoecker2012} is designed to assess and develop agent behaviors in SimSpark,
-it facilitates the real-time visualization of agents running concurrently on the SimSpark simulator,
-and provides higher-level analysis and visualization of agent behaviors. 
-Combined with these tools, SimSpark becomes a good platform to develop and test new algorithms for multi-robot systems.
-It is also widely used to teach artificial intelligence and robotic lectures.
+% \paragraph{RoboCup Soccer Simulation League} Simulation 3D League. Since 2004, SimSpark has been used as a official competitions environment. Since then, research teams have developed useful research tools based on SimSpark. Some of these tools are also released as open source.
+% For example, RoboViz\cite{Stoecker2012} is designed to assess and develop agent behaviors in SimSpark. 
+% Combined with these tools, SimSpark becomes a useful platform to develop and test new algorithms for multi-robot systems.
 
 \paragraph{RoboCup Soccer Standard Platform League}
-As one of the long term goals of the soccer simulation is to aim for realism the long term objective are realistic humanoid players in a physical environment.
-These players should one day challenge the champion of the most recent World Cup.
-The SimSpark is also used by teams in RoboCup Standard Platform League and Humanoid League.
+% As one of the long term goals of the soccer simulation is to aim for realism the long term objective are realistic humanoid players in a physical environment.
+% These players should one day challenge the champion of the most recent World Cup.
+% The SimSpark is also used by teams in RoboCup Standard Platform League and Humanoid League.
 
 The special situation between Standard Platform League and 3D Simulation League is that both leagues use the same robot model — NAO from Aldebaran.
-So it appears to be natural to reuse the work which has already been done in Simulation League and make SimSpark usable in Standard Platform League.
-Nao Team Humboldt developed their software architecture\cite{SCPR2010} which enables their control software can run both in real NAO and simulated NAO with SimSpark. This helps them to achieve some good results in both Simulation League and Standard Platform League.
-Furthermore, Nao Team Humboldt also promotes the usage of SimSpark in the Standard Platform League by implementing its rules. \Cref{f:simspark-spl} is the snapshot of the extended SimSpark for Standard Platform League.
+So it appears to be natural to reuse the work which has already been done.
+Nao Team Humboldt developed a software architecture\cite{SCPR2010} which enables their control software can run both in real NAO and simulated NAO with SimSpark. This helps them to participate in both Simulation League and Standard Platform League, and achieve some good results.
+Furthermore, Nao Team Humboldt also promotes the usage of SimSpark in the Standard Platform League by implementing its rules, see \Cref{f:simspark-spl}.
 
 \begin{figure}
   \centering
-  \includegraphics[width = 0.75\columnwidth]{simspark-spl}
+  \includegraphics[width = 0.6\columnwidth]{simspark-spl}
   \caption{Prototype of the extended SimSpark for Standard Platform League.
     The bottom of screen are images of robot cameras.}
   \label{f:simspark-spl}
@@ -387,40 +381,47 @@ module test from the robotic hardware.
 \section{Conclusion and Future Work}
 \label{s:conclusion}
 SimSpark is a powerful tool to state different multi-robot researches.
-The introduction of a humanoid robot model to the simulation gave another perspective to the league.
-The interest in the 3D simulation competition is growing fast and research is slowly getting back to the design and implementation of multi-agent higher-level behaviors based on solid low level behavior architectures for realistic humanoid robot teams.
+The introduction of a humanoid robot model increase the realism of SimSpark, and gains popularity in research teams who have real robots.
+The increased number of players per team makes research slowly get back to the high level behaviors based on solid low level behavior for realistic humanoid robot teams.
 
-SimSpark has undergone continuous development driven by the requirement of continues research in multi-robot system.
-
-\paragraph{Integration With Existing Robotic Frameworks}
-To enhance the usability of SimSpark for wider usage, and also to make it easier
-for developers to develop and test their robotic software on SimSpark and to
+SimSpark has undergone continuous development driven by the requirement of continuous research in multi-robot system. The following approaches are planned:
+\begin{description}
+\item[Integration With Existing Robotic Frameworks] 
+To enhance the usability of SimSpark for wider usage, and also to make it easier to develop and test their robotic software on SimSpark and to
 use the same code on real hardware, we aim to integrate SimSpark to an 
-existing robotic framework. Player is a well-known robotic framework which
-can be used to control both real and simulated robots. We planned to integrate
-SimSpark with Player so that people can develop agents for SimSpark using 
-Player interfaces. It has the additional benefit of using Player's network
-protocol which is much more efficient than the current network protocol used
-in SimSpark. It is also a good opportunity to enhance the multi-threaded 
-capabilities of SimSpark given the asynchronous nature of using Player with
-different robot sensors. 
+existing robotic framework, such as Player and ROS.
 
-Recently, another robotic framework called ROS is gaining popularity and is in
-active development. Therefore, we will reconsider our planning and might decide
-to integrate SimSpark with ROS instead. However, considering that Player itself
-is integrated into ROS, integrating with Player still might make sense. 
+% Player is a well-known robotic framework which
+% can be used to control both real and simulated robots. We planned to integrate
+% SimSpark with Player so that people can develop agents for SimSpark using 
+% Player interfaces. It has the additional benefit of using Player's network
+% protocol which is much more efficient than the current network protocol used
+% in SimSpark. It is also a good opportunity to enhance the multi-threaded 
+% capabilities of SimSpark given the asynchronous nature of using Player with
+% different robot sensors. 
 
-If SimSpark is integrated into an existing robotic framework, it is possible 
-for researchers to develop a single program to control both a simulated 
-robot inside and the same real robot given that the robot itself is also
-supported by the framework. It will be also much easier to attract people 
-who have developed programs for real robots using the framework to experiment
-with SimSpark.
+% Recently, another robotic framework called ROS is gaining popularity and is in
+% active development. Therefore, we will reconsider our planning and might decide
+% to integrate SimSpark with ROS instead. However, considering that Player itself
+% is integrated into ROS, integrating with Player still might make sense. 
 
-\paragraph{physics simulation engine abstraction / Bullet}
-\paragraph{more robot models, formate?}
+% If SimSpark is integrated into an existing robotic framework, it is possible 
+% for researchers to develop a single program to control both a simulated 
+% robot inside and the same real robot given that the robot itself is also
+% supported by the framework. It will be also much easier to attract people 
+% who have developed programs for real robots using the framework to experiment
+% with SimSpark.
+
+\item[Abstract Physics Layer]
+Relying on a single physics engine, i.e. ODE, hampers Simspark's flexibility.
+Thus, an abstract physics layer was development\cite{Held2010}, ODE and Bullet can be used as plugins with the abstract physics layer. However, current implementation has many drawbacks and difficult to maintenance.
+
+\item[Robot Model Importers]
+The usage of SimSpark will be extended when it has more robot models, however creating robot models is a time consuming task. The idea is to create model importers for different model format, so SimSpark will be able to use the robot model which is available in other simulators.
+\end{description}
+
 \section*{Acknowledgments}
-We wish to thank other members in in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for introducing us to the SimSpark project.\todo{other names here...}
+We wish to thank other members in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for supporting us to work in the SimSpark project.\todo{other names here...}
 \bibliographystyle{splncs03}
 \bibliography{reference}
 \end{document}
