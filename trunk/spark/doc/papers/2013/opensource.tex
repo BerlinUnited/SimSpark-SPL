@@ -72,15 +72,15 @@ This is especially true in the research of multi-robot systems in areas such as 
 Using simulation for algorithm development and testing makes thing easier.
 
 % \paragraph{History}
-\textit{SimSpark}, a multi-robot simulator based on the generic components of the Spark\cite{OR05} physical multi-agent simulation system, has been used in the RoboCup Soccer Simulation League since 2004.
+SimSpark, a multi-robot simulator based on the generic components of the Spark\cite{OR05} physical multi-agent simulation system, has been used in the RoboCup Soccer Simulation League since 2004.
 The project was registered as open source project in SourceForge in 2004, it has an established code base with development increasing year-over-year.
 As the result, RoboCup soccer simulations have changed significantly over the years, going from rather abstract agent representations to more and more realistic humanoid robot games\cite{Boedecker2008,usermanual}.
 Thanks to the flexibility of the Spark system, these transitions were achieved with little changes to the simulator's core architecture.
 
-In this paper we describe the recent development of \textit{SimSpark} project, which make the \textit{SimSpark} possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup 2012?}.
-In section \ref{s:overview}, we will give an overview of \textit{SimSpark} project since 2008. After that, we will describe the development of the \textit{Spark} simulation platform in section \ref{s:spark} and the implementation of RoboCup 3D Soccer Simulator -- \textit{RCSSServer3D} in section \ref{s:rcssserver3d}.
+In this paper we describe the recent development of SimSpark project, which make the SimSpark possible to simulate 11 vs. 11 humanoid robot soccer games in real time\todo{is it real time in RoboCup 2012?}.
+In section \ref{s:overview}, we will give an overview of SimSpark project since 2008. After that, we will describe the development of the Spark simulation platform in section \ref{s:spark} and the implementation of RoboCup 3D Soccer Simulator in section \ref{s:rcssserver3d}.
 We will introduce some new features for RoboCup 2013 in section \ref{s:ongoing}.
-Furthermore, we will give the application examples of \textit{SimSpark} in section \ref{s:application}.
+Furthermore, we will give the application examples of SimSpark in section \ref{s:application}.
 Finally, we will outline future development plans in section \ref{s:conclusion}.
 
 \section{Project Overview}
@@ -154,7 +154,7 @@ The NAO robot model is also equipped with a powerful selection of the
 sensors described in section \ref{s:spark}, to provide a widespread information base for
 agent development.
 
-There are differences between simulated NAO and real NAO. For example, the left hip and the right hip in the real NAO are physically connected by one motor so they cannot be controlled independently. The simulated robot has a motor for each joint. Furthermore, the simulated robot gets positions of objects via virtual vision sensor, while the real robot has to process images to understand the world. Never the less, this NAO model enables RCSSServer3D as a good humanoid robot research platform.
+There are differences between simulated NAO and real NAO. For example, the left hip and the right hip in the real NAO are physically connected by one motor so they cannot be controlled independently. The simulated robot has a motor for each joint. Furthermore, the simulated robot gets positions of objects via virtual vision sensor, while the real robot has to process images to understand the world. Nevertheless, this NAO model enables RCSSServer3D as a good humanoid robot research platform.
 
 
 \section{Experimental Features}
@@ -218,7 +218,7 @@ And the total energy used by the motor is:
 \end{equation}
 where $\Delta{}t$ is the time step of the simulation, and $P_t$ is the power consumed at time $t$. For the overall
 power consumption, the energy consumed by devices other than motors,
-e.g. mainboard, CPU, camera, etc. has to be counted.
+e.g. main board, CPU, camera, etc. has to be counted.
 % \Cref{fig:battery} compares the simulation result of this model to
 % reality. 
 
@@ -384,7 +384,7 @@ SimSpark is a powerful tool to state different multi-robot researches.
 The introduction of a humanoid robot model increase the realism of SimSpark, and gains popularity in research teams who have real robots.
 The increased number of players per team makes research slowly get back to the high level behaviors based on solid low level behavior for realistic humanoid robot teams.
 
-SimSpark has undergone continuous development driven by the requirement of continuous research in multi-robot system. The following approches are planned:
+SimSpark has undergone continuous development driven by the requirement of continuous research in multi-robot system. The following approaches are planned:
 \begin{description}
 \item[Integration With Existing Robotic Frameworks] 
 To enhance the usability of SimSpark for wider usage, and also to make it easier to develop and test their robotic software on SimSpark and to
@@ -413,7 +413,7 @@ existing robotic framework, such as Player and ROS.
 % with SimSpark.
 
 \item[Abstract Physics Layer]
-Relying on a single physics engine, i.e. ODE, hampers Simspark’s flexibility.
+Relying on a single physics engine, i.e. ODE, hampers Simspark's flexibility.
 Thus, an abstract physics layer was development\cite{Held2010}, ODE and Bullet can be used as plugins with the abstract physics layer. However, current implementation has many drawbacks and difficult to maintenance.
 
 \item[Robot Model Importers]
@@ -421,7 +421,7 @@ The usage of SimSpark will be extended when it has more robot models, however cr
 \end{description}
 
 \section*{Acknowledgments}
-We wish to thank other members in in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for supporting us to work in the SimSpark project.\todo{other names here...}
+We wish to thank other members in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for supporting us to work in the SimSpark project.\todo{other names here...}
 \bibliographystyle{splncs03}
 \bibliography{reference}
 \end{document}
