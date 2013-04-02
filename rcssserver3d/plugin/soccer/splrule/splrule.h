@@ -73,6 +73,8 @@ public:
 
     void ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff);
 
+    void CheckPenalized(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
+
     void CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
 
     void CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);

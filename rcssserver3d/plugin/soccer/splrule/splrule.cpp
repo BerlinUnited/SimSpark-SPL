@@ -324,15 +324,24 @@ void SPLRule::UpdatePlaying()
     for (SoccerBase::TAgentStateList::const_iterator i = agentStatesLeft.begin(); i != agentStatesLeft.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        CheckIllegalDefender(agentAspectTrans, (*i), TI_LEFT);
-        CheckOutsideField(agentAspectTrans, (*i), TI_LEFT);
+
+        if((*i)->IsPenalized()) {
+          CheckPenalized(agentAspectTrans, (*i), TI_LEFT);
+        } else {
+          CheckIllegalDefender(agentAspectTrans, (*i), TI_LEFT);
+          CheckOutsideField(agentAspectTrans, (*i), TI_LEFT);
+        }
     }
 
     for (SoccerBase::TAgentStateList::const_iterator i = agentStatesRight.begin(); i != agentStatesRight.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        CheckIllegalDefender(agentAspectTrans,(*i), TI_RIGHT);
-        CheckOutsideField(agentAspectTrans, (*i), TI_RIGHT);
+        if((*i)->IsPenalized()) {
+          CheckPenalized(agentAspectTrans, (*i), TI_RIGHT);
+        } else {
+          CheckIllegalDefender(agentAspectTrans,(*i), TI_RIGHT);
+          CheckOutsideField(agentAspectTrans, (*i), TI_RIGHT);
+        }
     }
 
 
@@ -375,6 +384,24 @@ void SPLRule::UpdatePlaying()
   }
 
 }
+
+
+void SPLRule::CheckPenalized(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) 
+{
+  TTime now = mGameState->GetTime();
+
+  if(agentState->IsPenalized() && now - agentState->getWhenPenalized() > 30) {
+    Vector3f ballPos = mBallState->GetLastValidBallPosition();
+    float side = ballPos.y() > 0?-1.f:1.f;
+    salt::Vector3f pos(0, side*(mFieldWidth / 2.f), 0.4f);
+
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    SoccerBase::GetTransformParent(*agentState, agent_aspect);
+    SoccerBase::MoveAndRotateAgent(agent_aspect, pos, 180);
+
+    agentState->UnPenalize();
+  }
+}//end CheckPenalized
 
 
 void SPLRule::CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) {
@@ -422,8 +449,9 @@ void SPLRule::CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspect
 
 }
 
-bool SPLRule::checkIfGoal(Vector3f ballPos) {
-
+bool SPLRule::checkIfGoal(Vector3f ballPos) 
+{
+/*
     if (fabs(ballPos.y()) < mGoalWidth / 2.0 ) {
         if (ballPos.x() > mFieldLength/2) {
             mGameState->ScoreTeam(TI_LEFT);
@@ -437,6 +465,48 @@ bool SPLRule::checkIfGoal(Vector3f ballPos) {
     }
 
     return false;
+    */
+
+    // check if the ball is in one of the goals
+    TTeamIndex idx = mBallState->GetGoalState();
+
+    if (idx == TI_NONE)
+    {
+        const salt::Vector3f ballPos = mBallBody->GetPosition();
+        const float xDist2Goal = fabs(ballPos.x()) - mGoalBallLineX;
+
+        // check if ball is completely out of the field
+        if (xDist2Goal < 0)
+            return false;
+
+        salt::Vector3f normBVel = mBallBody->GetVelocity();
+        // ball should be inside the field recently (assumes that the simulation
+        // step size is smaller than 1 second)
+        if (fabs(ballPos.x() - normBVel.x()) > mGoalBallLineX)
+            return false;
+
+        normBVel.Normalize();
+        float velCos = normBVel.x();
+        float dist = xDist2Goal / velCos;
+        salt::Vector3f crossPoint = ballPos - normBVel * dist;
+
+        if (fabs(crossPoint.y()) < mGoalWidth / 2.0 &&
+                crossPoint.z() < mGoalHeight)
+        {
+            if (ballPos.x() < 0)
+                idx = TI_LEFT;
+            else
+                idx = TI_RIGHT;
+        }
+        else
+            return false;
+    }
+
+    // score the lucky team
+    mGameState->ScoreTeam((idx == TI_LEFT) ? TI_RIGHT : TI_LEFT);
+    mGameState->SetPlayMode((idx == TI_LEFT) ? PM_Goal_Right : PM_Goal_Left);
+
+    return true;
 }
 
 Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
