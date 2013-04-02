@@ -143,8 +143,8 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
   // for penalized robots
 
   // Choose x side based on team
-  float xFac = (robot->GetTeamIndex() == TI_LEFT ? -1 : 1) * 0.5;
-  salt::Vector3f pos = Vector3f(xFac * robot->GetUniformNumber(), (mFieldWidth / 2 + 1) *-1, 0.4);
+  float xFac = (robot->GetTeamIndex() == TI_LEFT) ? -0.5f : 0.5f;
+  salt::Vector3f pos(xFac * robot->GetUniformNumber(), -1.f*(mFieldWidth / 2.f + 1.f), 0.4f);
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
@@ -156,8 +156,7 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
 
 void SPLRule::UpdateReady()
 {
-
-    HideBall();
+  HideBall();
 
   if (mState->GetStateTime() > mReadyDuration)
   {
@@ -168,7 +167,7 @@ void SPLRule::UpdateReady()
 void SPLRule::UpdateSet()
 {
     //static TTime lastTimeBeforePlacement = mGameState->GetTime();
-    //static float range = salt::NormalRNG<>(4.0, 1.5)();
+    //static float range = (float)salt::NormalRNG<>(4.0, 1.5)();
 
 
     //TTime timeNow = mGameState->GetTime();
@@ -256,20 +255,20 @@ bool SPLRule::CheckIllegalPosition(TTeamIndex idx) {
 void SPLRule::ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff) {
 
     number--;
-    assert(number<0);
+    assert(number >= 0);
 
+    // todo: is it correct?
+    float site = left?-1.f:1.f;
     if (haveKickOff) {
-        float xPos [4] = {2.9, 2.4, 0.7, 1.2};
-        float yPos [4] = {0.0, 1.1, 0.0, -1.1};
-        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*(-1)*left,  yPos[number], 0.3), 90*(-1)*left);
+        float xPos [4] = {2.9f, 2.4f, 0.7f, 1.2f};
+        float yPos [4] = {0.0f, 1.1f, 0.0f, -1.1f};
+        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*site,  yPos[number], 0.3f), 90.f*site);
 
     } else {
-        float xPos [4] = {2.9, 2.4, 2.4, 2.4};
-        float yPos [4] = {0.0, 1.6, 0.3, -1.6};
-        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*(-1)*left,  yPos[number], 0.3), 90*(-1)*left);
+        float xPos [4] = {2.9f, 2.4f, 2.4f, 2.4f};
+        float yPos [4] = {0.0f, 1.6f, 0.3f, -1.6f};
+        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*site,  yPos[number], 0.3f), 90.f*site);
     }
-
-
 }
 
 void SPLRule::ManualPlacement(TTeamIndex idx) {
@@ -341,15 +340,14 @@ void SPLRule::UpdatePlaying()
   //ball outside the field
   //
 
-
   static TTime lastTimeBallOnField = mGameState->GetTime();
-  static float range = salt::NormalRNG<>(2.0, 1.8)();
+  static float range = (float)salt::NormalRNG<>(2.0, 1.8)();
 
   if (!mBallState->GetBallOnField()) {
 
     //ball infos
     Vector3f ballPos = mBallState->GetLastValidBallPosition();
-
+    std::cout << "ball: " << ballPos << std::endl;
     if(checkIfGoal(ballPos)) {
         std::cout << "ValidPose:" << mBallState->GetLastValidBallPosition() << std::endl;
         mState->SetState(Ready);
@@ -373,7 +371,7 @@ void SPLRule::UpdatePlaying()
   } else {
     lastTimeBallOnField = mGameState->GetTime();
         //N(mean, sigma) - randomly put the ball back
-    range = salt::NormalRNG<>(2.0, 1.8)();
+    range = (float)salt::NormalRNG<>(2.0f, 1.8f)();
   }
 
 }
@@ -426,12 +424,12 @@ void SPLRule::CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspect
 
 bool SPLRule::checkIfGoal(Vector3f ballPos) {
 
-    if (ballPos.x() > -mGoalWidth/2 &&  ballPos.y() < mGoalWidth/2 ) {
-        if (ballPos.y() > mFieldLength/2) {
+    if (fabs(ballPos.y()) < mGoalWidth / 2.0 ) {
+        if (ballPos.x() > mFieldLength/2) {
             mGameState->ScoreTeam(TI_LEFT);
             std::cout << "(SPLRule) Goal by blue" << std::endl;
             return true;
-        } else if (ballPos.y() < -mFieldLength/2) {
+        } else if (ballPos.x() < -mFieldLength/2) {
             mGameState->ScoreTeam(TI_RIGHT);
             std::cout << "(SPLRule) Goal by red " << std::endl;
             return true;
@@ -439,7 +437,6 @@ bool SPLRule::checkIfGoal(Vector3f ballPos) {
     }
 
     return false;
-
 }
 
 Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
@@ -469,11 +466,11 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
         //out right by red
         if (ballPos.x() > 3.0 && lastTouchRed) {
 
-            newX = (0 < agentPos.x()-1.0) ? 0 : agentPos.x()-1.0;
+            newX = (0 < agentPos.x()-1.0f) ? 0 : agentPos.x()-1.0f;
         //out left by blue
         } else if (ballPos.x() < 3.0 && !lastTouchRed) {
 
-            newX = (0 > agentPos.x()+1.0) ? 0 : agentPos.x()+1.0;
+            newX = (0 > agentPos.x()+1.0f) ? 0 : agentPos.x()+1.0f;
 
         //out top/bottom
         } else {
@@ -482,21 +479,22 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
             if(lastTouchRed) {
                 std::cout << "(SPLRule) Out by blue team" << std::endl;
                     //calculate new position
-                newX = (ballPos.x()-1.0 < agentPos.x()-1.0) ? ballPos.x()-1.0 : agentPos.x()-1.0;
-                if (newX < -2.0) newX = -2.0;
+                newX = (ballPos.x()-1.0f < agentPos.x()-1.0f) ? ballPos.x()-1.0f : agentPos.x()-1.0f;
+                if (newX < -2.0f) newX = -2.0f;
             } else {
                 std::cout << "(SPLRule) Out by red team" << std::endl;
                     //calculate new position
-                newX = (ballPos.x()+1.0 > agentPos.x()+1.0) ? ballPos.x()+1.0 : agentPos.x()+1.0;
-                if (newY > 2.0) newY = 2.0;
+                newX = (ballPos.x()+1.0f > agentPos.x()+1.0f) ? ballPos.x()+1.0f : agentPos.x()+1.0f;
+                if (newY > 2.0f) newY = 2.0f;
             } //lastTouchRed
 
         }// out top/bottom
 
-        if (ballOutBottom)
-            newY = -1.80;
-        else
-            newY = 1.80;
+        if (ballOutBottom) {
+            newY = -1.80f;
+        } else {
+            newY = 1.80f;
+        }
 
         return Vector3f(newX, newY, 0);
 

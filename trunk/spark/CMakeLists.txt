@@ -53,7 +53,7 @@ include(AdditionalSearchPaths)
 find_package(Ruby REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(DevIL REQUIRED)
-find_package(Boost REQUIRED thread COMPONENTS regex date_time)
+find_package(Boost REQUIRED thread COMPONENTS regex date_time system)
 find_package(wxWidgets COMPONENTS gl base core)
 find_package(ODE REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -217,6 +217,7 @@ if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directo
                 PATTERN "*boost*regex*mt*.dll"
                 PATTERN "*boost*date_time*mt*.dll"
                 PATTERN "*boost*thread*mt*.dll"
+				PATTERN "*boost*system*mt*.dll"
                 PATTERN "libIL*.dll"
                 PATTERN "libjpeg*.dll"
                 PATTERN "libpng*.dll"
@@ -232,7 +233,8 @@ if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directo
         install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
             FILES_MATCHING PATTERN "*boost*regex*mt*.dll"
                 PATTERN "*boost*date_time*mt*.dll"
-                PATTERN "*boost*thread*mt*.dll")
+                PATTERN "*boost*thread*mt*.dll"
+				PATTERN "*boost*system*mt*.dll")
         
         string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${IL_LIBRARIES}")
         if (EXISTS ${DevIL_DLL} AND ${DevIL_DLL} MATCHES ".dll$")
