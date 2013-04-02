@@ -109,10 +109,10 @@ Spark::Init(int argc, char** argv)
         }
     }
 
-    mZeitgeist = shared_ptr<Zeitgeist>(new Zeitgeist("." PACKAGE_NAME, relPathPrefix));
-    mOxygen = shared_ptr<Oxygen>(new Oxygen(*mZeitgeist));
+    mZeitgeist = boost::shared_ptr<Zeitgeist>(new Zeitgeist("." PACKAGE_NAME, relPathPrefix));
+    mOxygen = boost::shared_ptr<Oxygen>(new Oxygen(*mZeitgeist));
 #if HAVE_KEROSIN_KEROSIN_H
-    mKerosin = shared_ptr<Kerosin>(new Kerosin(*mZeitgeist));
+    mKerosin = boost::shared_ptr<Kerosin>(new Kerosin(*mZeitgeist));
 #endif
 
     // run the spark init script
