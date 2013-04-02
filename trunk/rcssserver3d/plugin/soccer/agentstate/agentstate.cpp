@@ -291,7 +291,7 @@ void AgentState::Penalize(const TTime gameTime) {
     isPenelized = true;
 }
 
-void AgentState::unPenalize() {
+void AgentState::UnPenalize() {
     isPenelized = false;
 }
 
