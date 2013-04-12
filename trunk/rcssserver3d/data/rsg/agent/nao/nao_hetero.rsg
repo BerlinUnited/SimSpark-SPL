@@ -106,7 +106,9 @@
     ;
     ;The neck and head part
     ;
-    (importScene rsg/agent/nao/naoneckhead.rsg $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+    (importScene rsg/agent/nao/naoneckhead.rsg
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+              $type)
     
 
     ;
@@ -114,28 +116,32 @@
     ;
     (importScene rsg/agent/nao/naoarm.rsg
               1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+              $type)
 
     ;
     ;The Left Arm
     ;
     (importScene rsg/agent/nao/naoarm.rsg
               -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+              $type)
     
     ;
     ;The Right Leg
     ;
     (importScene rsg/agent/nao/naoleg.rsg
               1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+              $type)
     
     ;
     ;The Left Leg
     ;
     (importScene rsg/agent/nao/naoleg.rsg
               -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+              $type)
 
 );end of nd Space
 

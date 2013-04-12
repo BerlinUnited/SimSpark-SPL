@@ -8,6 +8,7 @@
     ;    
     (templ  $LRFactor $LeftOrRight
             $Torso_X $Torso_Y $Torso_Z $loadObj
+            $type
     )
     
     ;
@@ -56,7 +57,8 @@
 
     (def $ThighRelHip2_X 0)
     (def $ThighRelHip2_Y 0.01)
-    (def $ThighRelHip2_Z -0.04)
+    ;(def $ThighRelHip2_Z -0.04)
+    (def $ThighRelHip2_Z (eval "NaoType["$type"]['ThighRelHip2_Z']"))
     
     (def $ShankRelThigh_X 0)
     (def $ShankRelThigh_Y 0.005)
@@ -125,8 +127,12 @@
     ;
     ;Joint Parameters
     ;
+    (def $PI 3.14159265)
+    (def $MaxAbsJointSpeed (eval $PI * (eval 351.77 / 180.0)))
+    
     (def $lj1_min    -90)
     (def $lj1_max    1)
+    (def $lj1_max_abs_speed $MaxAbsJointSpeed)
 
     (def $right_lj2_min -45)
     (def $left_lj2_min  -25)
@@ -139,15 +145,19 @@
     (def $lj2_max_c1    (eval (eval $right_lj2_max + $left_lj2_max) * 0.5))
     (def $lj2_max_c2    (eval (eval $right_lj2_max - $left_lj2_max) * 0.5))
     (def $lj2_max       (eval $lj2_max_c1 + (eval $LRFactor * $lj2_max_c2)))
+    (def $lj2_max_abs_speed $MaxAbsJointSpeed)
     
     (def $lj3_min    -25)
     (def $lj3_max    100)
+    (def $lj3_max_abs_speed $MaxAbsJointSpeed)
     
     (def $lj4_min       -130)
     (def $lj4_max       1)
+    (def $lj4_max_abs_speed $MaxAbsJointSpeed)
     
     (def $lj5_min       -45)
     (def $lj5_max       75)
+    (def $lj5_max_abs_speed (eval "NaoType["$type"]['lj5_max_abs_speed']"))
     
     (def $right_lj6_min -25)
     (def $left_lj6_min  -45)
@@ -160,6 +170,7 @@
     (def $lj6_max_c1    (eval (eval $right_lj6_max + $left_lj6_max) * 0.5))
     (def $lj6_max_c2    (eval (eval $right_lj6_max - $left_lj6_max) * 0.5))
     (def $lj6_max       (eval $lj6_max_c1 + (eval $LRFactor * $lj6_max_c2)))
+    (def $lj6_max_abs_speed (eval "NaoType["$type"]['lj6_max_abs_speed']"))
     
     (def $lj1_axis_x   -0.7071)
     (def $lj1_axis_y   0)
@@ -193,7 +204,8 @@
                               ../sphereBody ../../body/boxBody
                               0 0 0
                               $lj1_axis_x $lj1_axis_y $lj1_axis_z
-                              $lj1_min $lj1_max)
+                              $lj1_min $lj1_max
+                              $lj1_max_abs_speed)
     )
     
     ;
@@ -212,7 +224,8 @@
                               ../sphereBody $Hip1BodyPath
                               0 0 0  ;anchor
                               0 1 0  ;axis
-                              $lj2_min $lj2_max)
+                              $lj2_min $lj2_max
+                              $lj2_max_abs_speed)
     )
          
     ;
@@ -243,11 +256,12 @@
 
 
        (importScene rsg/agent/nao/hingejoint.rsg
-                               $Joint3PerName $Joint3EffName
-                               ../boxBody $Hip2BodyPath
-                               $lj3_Anchor_X $lj3_Anchor_Y $lj3_Anchor_Z
-                               1 0 0 ;1 -1 -1
-                               $lj3_min $lj3_max)
+                              $Joint3PerName $Joint3EffName
+                              ../boxBody $Hip2BodyPath
+                              $lj3_Anchor_X $lj3_Anchor_Y $lj3_Anchor_Z
+                              1 0 0 ;1 -1 -1
+                              $lj3_min $lj3_max
+                              $lj3_max_abs_speed)
         
     )
     
@@ -277,11 +291,12 @@
         )
         
         (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint4PerName $Joint4EffName
-                                ../boxBody $ThighBodyPath
-                                0 -0.01 0.045
-                                1 0 0 ;0 -1 -1
-                                $lj4_min $lj4_max)
+                              $Joint4PerName $Joint4EffName
+                              ../boxBody $ThighBodyPath
+                              0 -0.01 0.045
+                              1 0 0 ;0 -1 -1
+                              $lj4_min $lj4_max
+                              $lj4_max_abs_speed)
         
     )
     
@@ -301,7 +316,8 @@
                               ../sphereBody $ShankBodyPath
                               0 0 0
                               1 0 0 ;0 -1 -1
-                              $lj5_min $lj5_max)
+                              $lj5_min $lj5_max
+                              $lj5_max_abs_speed)
         
      )    
      
@@ -336,11 +352,12 @@
         )
         
         (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint6PerName $Joint6EffName
-                                ../boxBody $AnkleBodyPath
-                                0 -0.03 0.035
-                                0 1 0 ;1 -1 -1
-                                $lj6_min $lj6_max)
+                              $Joint6PerName $Joint6EffName
+                              ../boxBody $AnkleBodyPath
+                              0 -0.03 0.035
+                              0 1 0 ;1 -1 -1
+                              $lj6_min $lj6_max
+                              $lj6_max_abs_speed)
 
         (nd ObjectState
             (setID $FootName)
