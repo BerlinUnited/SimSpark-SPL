@@ -70,6 +70,7 @@
         
         (nd AgentState
             (setName AgentState)
+            (setRobotType $type)
             (nd GameStatePerceptor)
             (nd HearPerceptor)
             (nd Transform
