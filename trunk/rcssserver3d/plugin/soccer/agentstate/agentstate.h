@@ -59,6 +59,12 @@ public:
     /** returns the uniform number as integer */
     int GetUniformNumber() const;
 
+    /** Set the robot type. */
+    void SetRobotType(int type);
+
+    /** returns the robot type */
+    int GetRobotType() const;
+
     /** Set the object id for perceptors.
      *
      * This method is the same as SetUniformNumber for AgentState.
@@ -97,31 +103,34 @@ public:
 
     /** Whether agent is selected */
     bool IsSelected() const;
-    
+
     /** Select agent */
     void Select(bool s = true);
-    
+
     /** Unselect agent */
     void UnSelect();
-    
+
     /** Backup old touch group and create new empty one */
     void NewTouchGroup();
-    
+
     /** Get the touch group of the previous step */
     boost::shared_ptr<TouchGroup> GetOldTouchGroup();
-    
+
     /** Get the current touch group */
     boost::shared_ptr<TouchGroup> GetTouchGroup();
-    
+
     /** Set the current touch group */
     void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
-    
+
 protected:
     /** team index */
     TTeamIndex mTeamIndex;
 
     /** uniform number */
     int mUniformNumber;
+
+    /** robot type */
+    int mRobotType;
 
     /** motor temperature */
     float mTemperature;
@@ -161,7 +170,7 @@ protected:
 
     /** is this agent selected */
     bool mSelected;
-    
+
     boost::shared_ptr<TouchGroup> mOldTouchGroup;
     boost::shared_ptr<TouchGroup> mTouchGroup;
 
