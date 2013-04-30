@@ -35,6 +35,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 using namespace salt;
+using namespace spl;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
   mReadyDuration(45), //old 45
@@ -57,6 +58,14 @@ void SPLRule::OnLink()
           GetLog()->Error()
                   << "(SPLRule) ERROR: could not get SPLState\n";
       }
+
+
+
+  mSPLRightHalf = salt::AABB2(Vector2f(0               , -mFieldWidth/2.0),
+                              Vector2f(mFieldLength/2.0,  mFieldWidth/2.0));
+
+  mSPLLeftHalf = salt::AABB2(Vector2f(0                , -mFieldWidth/2.0),
+                             Vector2f(-mFieldLength/2.0,  mFieldWidth/2.0));
 }
 
 void SPLRule::OnUnlink()
@@ -203,72 +212,91 @@ bool SPLRule::CheckIllegalPosition(TTeamIndex idx) {
     boost::shared_ptr<oxygen::Transform> agentAspectTrans;
     SoccerBase::TAgentStateList agentStates;
 
-    Vector3f agentPos;
+    if (idx == TI_NONE || mBallState.get() == 0) {
+        return false;
+    }
 
-    if (idx == TI_NONE || mBallState.get() == 0)
-        return 0;
-
-    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx))
-        return 0;
-
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx)) {
+        return false;
+    }
 
     for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
     {
-
         SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        agentPos = agentAspectTrans->GetWorldTransform().Pos();
+        Vector3f agentPos = agentAspectTrans->GetWorldTransform().Pos();
+        Vector2f agentPos2D(agentPos.x(), agentPos.y());
 
         //boost::shared_ptr<AgentState> agentState;
-
-        if (idx == TI_LEFT) {
-            //check if agent inside penalty area and move
-            if (!mLeftHalf.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                return true;
-            }
-        }        
-        if (idx == TI_RIGHT) {
-            //check if agent inside penalty area and move
-            if (!mRightHalf.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                return true;
-            }
-        }
 
         //check goalie in box
         if (idx == TI_LEFT && (*i)->GetUniformNumber() == 1) {
             //check if agent inside penalty area and move
-            if (!mLeftPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
+            if (!mLeftPenaltyArea.Contains(agentPos2D)) {
                 return true;
             }
         }
         if (idx == TI_RIGHT && (*i)->GetUniformNumber() == 1) {
             //check if agent inside penalty area and move
-            if (!mRightPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
+            if (!mRightPenaltyArea.Contains(agentPos2D)) {
+                return true;
+            }
+        }
+
+        if (idx == TI_LEFT) {
+            // check wrong field side
+            if (!mSPLLeftHalf.Contains(agentPos2D)
+                // own penalty area is forbidden
+                || mLeftPenaltyArea.Contains(agentPos2D) 
+                // center circle + kick off
+                || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Left))
+            {
+                return true;
+            }
+        }
+
+        if (idx == TI_RIGHT) {
+            //check if agent is in the correct half
+            if (!mSPLRightHalf.Contains(agentPos2D) 
+                // own penalty area is forbidden
+                || mRightPenaltyArea.Contains(agentPos2D)
+                // center circle + kick off
+                || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Right)) 
+            {
                 return true;
             }
         }
     }
 
     return false;
-
 }
 
 void SPLRule::ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff) {
 
-    number--;
-    assert(number >= 0);
+    number--; // map the player number to index, e.g., 1->0
+    static const int MAX_NUM_OF_PLAYERS = 5;
+    assert(number >= 0 && number < MAX_NUM_OF_PLAYERS);
 
-    // todo: is it correct?
+    Vector2f pos_defensive[MAX_NUM_OF_PLAYERS] = 
+    {
+      Vector2f(4.4f, 0.0f),
+      Vector2f(3.7f, 0.7f),
+      Vector2f(3.7f,-0.7f),
+      Vector2f(3.7f, 2.3f),
+      Vector2f(3.7f,-2.3f)
+    };
+
+    Vector2f pos_offensive[MAX_NUM_OF_PLAYERS] = 
+    {
+      Vector2f(4.4f, 0.0f),
+      Vector2f(0.9f, 0.0f),
+      Vector2f(2.0f,-0.7f),
+      Vector2f(3.7f, 2.0f),
+      Vector2f(3.7f,-2.0f)
+    };
+
     float site = left?-1.f:1.f;
-    if (haveKickOff) {
-        float xPos [4] = {2.9f, 2.4f, 0.7f, 1.2f};
-        float yPos [4] = {0.0f, 1.1f, 0.0f, -1.1f};
-        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*site,  yPos[number], 0.3f), 90.f*site);
-
-    } else {
-        float xPos [4] = {2.9f, 2.4f, 2.4f, 2.4f};
-        float yPos [4] = {0.0f, 1.6f, 0.3f, -1.6f};
-        SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(xPos[number]*site,  yPos[number], 0.3f), 90.f*site);
-    }
+    const Vector2f& pos = haveKickOff?pos_offensive[number]:pos_defensive[number];
+    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(pos.x()*site,  pos.y(), 0.3f), 90.f*site);
 }
 
 void SPLRule::ManualPlacement(TTeamIndex idx) {
@@ -550,20 +578,20 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
                 std::cout << "(SPLRule) Out by blue team" << std::endl;
                     //calculate new position
                 newX = (ballPos.x()-1.0f < agentPos.x()-1.0f) ? ballPos.x()-1.0f : agentPos.x()-1.0f;
-                if (newX < -2.0f) newX = -2.0f;
+                if (newX < -3.5f) newX = -3.5f;
             } else {
                 std::cout << "(SPLRule) Out by red team" << std::endl;
                     //calculate new position
                 newX = (ballPos.x()+1.0f > agentPos.x()+1.0f) ? ballPos.x()+1.0f : agentPos.x()+1.0f;
-                if (newY > 2.0f) newY = 2.0f;
+                if (newX > 3.5f) newX = 3.5f;
             } //lastTouchRed
 
         }// out top/bottom
 
         if (ballOutBottom) {
-            newY = -1.80f;
+            newY = -2.60f;
         } else {
-            newY = 1.80f;
+            newY = 2.60f;
         }
 
         return Vector3f(newX, newY, 0);

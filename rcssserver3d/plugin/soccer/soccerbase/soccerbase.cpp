@@ -613,21 +613,21 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
     };
 }
 
-std::string SoccerBase::SPLState2Str(const TSPLState state)
+std::string SoccerBase::SPLState2Str(const spl::TSPLState state)
 {
   switch (state)
   {
-  case Initial:
+  case spl::Initial:
     return STR_SPL_STATE_INITIAL;
-  case Ready:
+  case spl::Ready:
     return STR_SPL_STATE_READY;
-  case Set:
+  case spl::Set:
     return STR_SPL_STATE_SET;
-  case Playing:
+  case spl::Playing:
     return STR_SPL_STATE_PLAYING;
-  case Finished:
+  case spl::Finished:
     return STR_SPL_STATE_FINISHED;
-  case Penalized:
+  case spl::Penalized:
     return STR_SPL_STATE_PENALIZED;
   default:
     return STR_SPL_STATE_UNKNOWN;

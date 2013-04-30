@@ -87,6 +87,8 @@ enum TGameHalf
     GH_SECOND = 2
 };
 
+namespace spl
+{
 enum TSPLState
 {
   Initial,
@@ -97,6 +99,7 @@ enum TSPLState
   Penalized,
   Unknown
 };
+}
 
 #define STR_SPL_STATE_INITIAL "initial"
 #define STR_SPL_STATE_READY "ready"

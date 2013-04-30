@@ -28,6 +28,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 using namespace salt;
+using namespace spl;
 
 SPLState::SPLState() : GameStateAspect()
 {
