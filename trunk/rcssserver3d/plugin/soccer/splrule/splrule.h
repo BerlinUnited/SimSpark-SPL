@@ -46,6 +46,11 @@ public:
     SPLRule();
     virtual ~SPLRule();
 
+    /** bounding box for the right half of the field */
+    salt::AABB2 mSPLRightHalf;
+    /** bounding box for the left half of the field */
+    salt::AABB2 mSPLLeftHalf;
+
     /** called during the update of the GameControlServer to allow the
         ControlAspect to perform any necessary checks.
     */

@@ -35,10 +35,10 @@ public:
     virtual void Update(float deltaTime);
 
     /** sets the current SPL state */
-    void SetState(TSPLState state);
+    void SetState(spl::TSPLState state);
 
     /** returns the current spl state */
-    TSPLState GetState() const { return mSPLState; }
+    spl::TSPLState GetState() const { return mSPLState; }
 
     virtual void KickOff(TTeamIndex ti = TI_NONE);
 
@@ -50,7 +50,7 @@ public:
 
 protected:
     /** state of SPL game */
-    TSPLState mSPLState;
+    spl::TSPLState mSPLState;
 };
 
 DECLARE_CLASS(SPLState);
