@@ -58,14 +58,6 @@ void SPLRule::OnLink()
           GetLog()->Error()
                   << "(SPLRule) ERROR: could not get SPLState\n";
       }
-
-
-
-  mSPLRightHalf = salt::AABB2(Vector2f(0               , -mFieldWidth/2.0),
-                              Vector2f(mFieldLength/2.0,  mFieldWidth/2.0));
-
-  mSPLLeftHalf = salt::AABB2(Vector2f(0                , -mFieldWidth/2.0),
-                             Vector2f(-mFieldLength/2.0,  mFieldWidth/2.0));
 }
 
 void SPLRule::OnUnlink()
@@ -90,8 +82,14 @@ void SPLRule::Update(float /*deltaTime*/)
     {
     case Unknown:
     {
-      UpdateCachedInternal();
+      SoccerRuleAspect::UpdateCachedInternal();
       mState->SetState(Initial);
+
+      mSPLRightHalf = salt::AABB2(Vector2f(0                , -mFieldWidth/2.0f),
+                                  Vector2f(mFieldLength/2.0f,  mFieldWidth/2.0f));
+
+      mSPLLeftHalf = salt::AABB2(Vector2f(-mFieldLength/2.0f, -mFieldWidth/2.0f),
+                                 Vector2f(0                 ,  mFieldWidth/2.0f));
 
       // debug ----
       /*float factor = 0.1;
@@ -220,6 +218,8 @@ bool SPLRule::CheckIllegalPosition(TTeamIndex idx) {
         return false;
     }
 
+    bool result = false;
+
     for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agentAspectTrans);
@@ -228,44 +228,34 @@ bool SPLRule::CheckIllegalPosition(TTeamIndex idx) {
 
         //boost::shared_ptr<AgentState> agentState;
 
-        //check goalie in box
-        if (idx == TI_LEFT && (*i)->GetUniformNumber() == 1) {
-            //check if agent inside penalty area and move
-            if (!mLeftPenaltyArea.Contains(agentPos2D)) {
-                return true;
-            }
-        }
-        if (idx == TI_RIGHT && (*i)->GetUniformNumber() == 1) {
-            //check if agent inside penalty area and move
-            if (!mRightPenaltyArea.Contains(agentPos2D)) {
-                return true;
-            }
-        }
-
-        if (idx == TI_LEFT) {
-            // check wrong field side
-            if (!mSPLLeftHalf.Contains(agentPos2D)
-                // own penalty area is forbidden
-                || mLeftPenaltyArea.Contains(agentPos2D) 
-                // center circle + kick off
-                || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Left))
-            {
-                return true;
-            }
-        }
+        if (idx == TI_LEFT) 
+        {
+          //check goalie in box
+          result = result || ((*i)->GetUniformNumber() == 1 && !mLeftPenaltyArea.Contains(agentPos2D));
+          // own penalty area is forbidden
+          result = result || ((*i)->GetUniformNumber() != 1 &&  mLeftPenaltyArea.Contains(agentPos2D));
+          // check wrong field side
+          result = result || !mSPLLeftHalf.Contains(agentPos2D);
+          // center circle + kick off
+          result = result || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Left);
+        }  
 
         if (idx == TI_RIGHT) {
-            //check if agent is in the correct half
-            if (!mSPLRightHalf.Contains(agentPos2D) 
-                // own penalty area is forbidden
-                || mRightPenaltyArea.Contains(agentPos2D)
-                // center circle + kick off
-                || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Right)) 
-            {
-                return true;
-            }
+          //check goalie in box
+          result = result || ((*i)->GetUniformNumber() == 1 && !mRightPenaltyArea.Contains(agentPos2D));
+          // own penalty area is forbidden
+          result = result || ((*i)->GetUniformNumber() != 1 &&  mRightPenaltyArea.Contains(agentPos2D));
+          // check wrong field side
+          result = result || !mSPLRightHalf.Contains(agentPos2D);
+          // center circle + kick off
+          result = result || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Right);
         }
-    }
+
+        // break up if one player violates the rules
+        if(result) {
+          return true;
+        }
+    }//end for
 
     return false;
 }
