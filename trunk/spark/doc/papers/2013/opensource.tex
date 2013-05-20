@@ -1,7 +1,7 @@
 \documentclass{llncs}
 \usepackage[belowskip=-15pt,aboveskip=10pt]{caption}
 \usepackage[utf8]{inputenc}
-\usepackage[disable]{todonotes}
+\usepackage{todonotes}
 \usepackage{amsmath}
 \usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
@@ -25,6 +25,8 @@
   \input{#1.tikz}
 }
 
+\newcommand{\review}[1]{\todo[inline,color=red]{REVIEW: #1}}
+
 \renewcommand{\textfraction}{0.15}
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\bottomfraction}{0.65}
@@ -34,7 +36,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\title{SimSpark: An Open Source Robot Simulator Developed by RoboCup Community}
+\title{SimSpark: An Open Source Robot Simulator Developed by the RoboCup Community}
 
 \author{Yuan Xu\inst{1} \and Hedayat Vatankhah\inst{2}}
 
@@ -83,6 +85,8 @@ We will introduce some new features for RoboCup 2013 in section \ref{s:ongoing}.
 Furthermore, we will give the application examples of SimSpark in section \ref{s:application}.
 Finally, we will outline future development plans in section \ref{s:conclusion}.
 
+\review{As a technical paper, it is better to add detailed description of the mechanism to guarantee the generality and the extendability of SimSpark.}
+
 \section{Project Overview}
 \label{s:overview}
 
@@ -102,6 +106,9 @@ to CMake, and windows installers are now released.
 
 \section{Spark}
 \label{s:spark}
+
+\review{a picture of the architecture would simplify reading may be including clients and monitor}
+
 As a generic simulation environment, Spark provides a rich set of features to create, debug and modify multi-robot simulations.
 It has three main components, including the simulation engine, the object and memory management system, and the physics engine. Details about architecture and concepts of Spark have been described in \cite{Boedecker2008,OR05}.
 In this section, we describe the necessary changes for simulating 11 vs. 11 humanoid robot soccer game.
@@ -131,7 +138,13 @@ As we know, the physics computation is the most time-consuming, and the physics 
 So the physics computation and \textit{SimControlNode}s can run in parallel.
 Furthermore, the physics engine, e.g. Open Dynamic Engine\cite{Smith:ODE}, is modified to run in parallel by using Intel Threading Building Blocks\cite{tbb}.
 
-In RoboCup 2012, the 11 vs. 11 humanoid robot (22 degree of freedom) soccer games were simulated in real time by computer with Intel Core i7-975 @3.33GHz CPU and 4G DDR3 RAM. \todo[color=yellow]{results of performance improvement, any benchmark?}
+In RoboCup 2012, the 11 vs. 11 humanoid robot (22 degree of freedom) soccer games were simulated in real time by computer with Intel Core i7-975 @3.33GHz CPU and 4G DDR3 RAM.
+
+\review{22 agents is great. Just to add that in such a setup, the soccerserver claims 'only' 160\% of an 800\% CPU availability even when run in as fast as possible mode. So there still might be space for improvement.}
+
+\review{it is nice to add some comparative evaluation of speed up by multi-threading.}
+
+\todo[color=yellow]{results of performance improvement, any benchmark?}
 
 \section{RCSSServer3D}
 \label{s:rcssserver3d}
@@ -332,7 +345,7 @@ This model is not ideal because the agents can have some spare time if network l
 occurs, but it is better, more predictable and more fair than the current model. Also,
 no new information is arrived to agents in that spare time and they cannot send new 
 commands for that cycle. Hopefully, by using a new binary network protocol the network 
-traffic and therefore the latency will be reduced considerably.
+traffic and therefore the latency will be reduced considerably.\review{this does not quite fit to the rest of section where you argue that the proxy exactly removes the need for such optimizations}
 
 Currently, an initial version of agent proxies is under development outside SimSpark
 project using Java.
@@ -345,7 +358,7 @@ project using Java.
 % The main goal of this project is to provide a flexible and extensible User Interface and Simulation Development Environment, that can be used to start, control and monitor different simulations using the Simspark server, agent and monitor processes, as well as incorporate several additional tools like for example a visual editor for robot models (like RsgEdit) or a debugging monitor for agents (like RoboViz). 
 
 \section{Applications}
-As a powerful robot simulator, SimSpark is gaining popularity in RoboCup, including Standard Platform League and Humanoid League. It is also widely used to teach artificial intelligence and robotic lectures.
+As a powerful robot simulator, SimSpark is gaining popularity in RoboCup, including Standard Platform League and Humanoid League.\review{may be this is too obvious, but the main application is still 3D simulation league that is not mentioned here. It should be. That has the most impact as of today.} It is also widely used to teach artificial intelligence and robotic lectures.
 
 \label{s:application}
 % \paragraph{RoboCup Soccer Simulation League} Simulation 3D League. Since 2004, SimSpark has been used as a official competitions environment. Since then, research teams have developed useful research tools based on SimSpark. Some of these tools are also released as open source.
@@ -384,12 +397,12 @@ SimSpark is a powerful tool to state different multi-robot researches.
 The introduction of a humanoid robot model increase the realism of SimSpark, and gains popularity in research teams who have real robots.
 The increased number of players per team makes research slowly get back to the high level behaviors based on solid low level behavior for realistic humanoid robot teams.
 
-SimSpark has undergone continuous development driven by the requirement of continuous research in multi-robot system. The following approaches are planned:
+SimSpark has undergone continuous development driven by the requirement of continuous research in multi-robot system. The following extentions are planned:
 \begin{description}
 \item[Integration With Existing Robotic Frameworks] 
 To enhance the usability of SimSpark for wider usage, and also to make it easier to develop and test their robotic software on SimSpark and to
 use the same code on real hardware, we aim to integrate SimSpark to an 
-existing robotic framework, such as Player and ROS.
+existing robotic framework, such as ROS or Player.
 
 % Player is a well-known robotic framework which
 % can be used to control both real and simulated robots. We planned to integrate
@@ -412,16 +425,18 @@ existing robotic framework, such as Player and ROS.
 % who have developed programs for real robots using the framework to experiment
 % with SimSpark.
 
-\item[Abstract Physics Layer]
+\item[Physics Abstraction Layer]
 Relying on a single physics engine, i.e. ODE, hampers Simspark's flexibility.
 Thus, an abstract physics layer was development\cite{Held2010}, ODE and Bullet can be used as plugins with the abstract physics layer. However, current implementation has many drawbacks and difficult to maintenance.
+\review{any plans to support physics calculations in GPU? Or is it done already?}
+
 
 \item[Robot Model Importers]
 The usage of SimSpark will be extended when it has more robot models, however creating robot models is a time consuming task. The idea is to create model importers for different model format, so SimSpark will be able to use the robot model which is available in other simulators.
 \end{description}
 
 \section*{Acknowledgments}
-We wish to thank other members in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for supporting us to work in the SimSpark project.\todo{other names here...}
+We wish to thank other members in the Maintenance Committee of the RoboCup Soccer Simulation League, especially the original authors of SimSpark: M. K\"ogler, M. Rollmann, and O. Obst. Furthermore, thanks go to J. Boedecker for supporting us to work in the SimSpark project.
 \bibliographystyle{splncs03}
 \bibliography{reference}
 \end{document}
