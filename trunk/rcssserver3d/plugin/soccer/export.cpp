@@ -36,6 +36,7 @@
 #include "gamestateaspect/gamestateitem.h"
 #include "ballstateaspect/ballstateaspect.h"
 #include "soccerruleaspect/soccerruleaspect.h"
+#include "soccerruleaspect/soccerruleitem.h"
 #include "agentstate/agentstate.h"
 #include "sexpmonitor/sexpmonitor.h"
 #include "internalsoccermonitor/internalsoccerrender.h"
@@ -63,6 +64,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(GameStateItem);
         ZEITGEIST_EXPORT(BallStateAspect);
         ZEITGEIST_EXPORT(SoccerRuleAspect);
+        ZEITGEIST_EXPORT(SoccerRuleItem);
         ZEITGEIST_EXPORT(BeamEffector);
         ZEITGEIST_EXPORT(CatchEffector);
         ZEITGEIST_EXPORT(CreateEffector);
