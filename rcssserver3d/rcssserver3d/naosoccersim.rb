@@ -124,6 +124,7 @@ end
 monitorServer = get($serverPath+'monitor')
 if (monitorServer != nil)
   monitorServer.registerMonitorItem('GameStateItem')
+  monitorServer.registerMonitorItem('SoccerRuleItem')
 end
 
 # install the TrainerCommandParser to parse commands received from a
