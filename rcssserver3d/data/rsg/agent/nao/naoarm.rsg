@@ -46,7 +46,8 @@
     (def $UpperarmRelShoulderZ 0)
     
     (def $ElbowRelUpperArm_X (eval $LRFactor * -0.01))
-    (def $ElbowRelUpperArm_Y 0.07)
+    ;(def $ElbowRelUpperArm_Y 0.07)
+    (def $ElbowRelUpperArm_Y (eval "NaoType["$type"]['ElbowRelUpperArm_Y']"))
     (def $ElbowRelUpperArm_Z 0.009)
     
     (def $LowerarmRelElbow_X 0)

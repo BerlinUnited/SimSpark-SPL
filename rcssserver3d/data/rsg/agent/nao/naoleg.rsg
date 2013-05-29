@@ -66,7 +66,8 @@
 
     (def $AnkleRelShank_X 0)
     (def $AnkleRelShank_Y -0.01)
-    (def $AnkleRelShank_Z -0.055)
+    ;(def $AnkleRelShank_Z -0.055)
+    (def $AnkleRelShank_Z (eval "NaoType["$type"]['AnkleRelShank_Z']"))
     
     (def $FootRelAnkle_X 0)
     (def $FootRelAnkle_Y 0.03)
