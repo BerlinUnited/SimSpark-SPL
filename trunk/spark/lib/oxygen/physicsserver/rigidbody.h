@@ -83,7 +83,7 @@ public:
     float GetMass() const;
     
     /** Sets the mass parameters of this body */
-    void SetMassParameters(const GenericMass& mass);
+    void SetMassParameters(const GenericMass* mass);
 
     /** sets the mass parameters to represent a sphere of the given
         radius and density, with the center of mass at (0,0,0)
@@ -243,8 +243,10 @@ public:
     /** Creates a new mass object with the information passed on to this
         method via \param mass and \param cVector
     */
-    GenericMass& CreateMass(float mass, salt::Vector3f cVector);
-    
+    GenericMass* CreateMass(float mass, salt::Vector3f cVector);
+
+    GenericMass* CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const;
+
     /** Sets the value of the inertia tensor of this body. \param i is the
         index of the \param value 's position in the inertia tensor.
         (It's a 3x3 matrix)

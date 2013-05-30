@@ -2,39 +2,66 @@
 
 (RSG 0 1)
 (
-    (templ $Torso_X $Torso_Y $Torso_Z $loadObj)
+    (templ $RobotX $RobotY $RobotZ $loadObj)
     
+    (def $NeckOffsetZ 0.11) ;0.1265)
     ;
     ;neck parameter
     ;
-    (def $Neck_X        $Torso_X)
-    (def $Neck_Y        $Torso_Y)
-    (def $Neck_Z        (eval $Torso_Z + 0.09))
     (def $Neck_Radius   0.015)
     (def $Neck_Length   0.08)
-    (def $Neck_Mass     0.050)
-    
+    (def $Neck_Mass     0.05959)
+    (def $NeckCGX       -0.00018)
+    (def $NeckCGY       -0.00003)
+    (def $NeckCGZ       -0.02573)
+    (def $NeckI11       0.00006223368)
+    (def $NeckI22       0.00006324431)
+    (def $NeckI33       0.00000549462)
+    (def $NeckI12       0.00000000042)
+    (def $NeckI13       0.00000007448)
+    (def $NeckI23       0.00000010416)
+    (def $Neck_X        (eval $RobotX + $NeckCGX))
+    (def $Neck_Y        (eval $RobotY + $NeckCGY))
+    (def $Neck_Z        (eval $RobotZ + $NeckOffsetZ + $NeckCGZ))
     
     ;
     ;head parameter
     ;
-    (def $Head_X        $Neck_X)
-    (def $Head_Y        $Neck_Y)
-    (def $Head_Z        (eval $Neck_Z + 0.065))
-    (def $Head_Radius   0.065)
-    (def $Head_Mass     0.350)
+    (def $Head_Radius   0.05)
+    (def $Head_Mass     0.47671)
+    (def $HeadCGX       0.00093)
+    (def $HeadCGY       0.00383)
+    (def $HeadCGZ       0.05156)
+    (def $HeadI11       0.00208895741)
+    (def $HeadI22       0.00193222263)
+    (def $HeadI33       0.00082257793)
+    (def $HeadI12       0.00000549094)
+    (def $HeadI13       0.00011339950)
+    (def $HeadI23       -0.00002803917)
+    (def $Head_X        (eval $RobotX + $HeadCGX))
+    (def $Head_Y        (eval $RobotY + $HeadCGY))
+    (def $Head_Z        (eval $RobotZ + $NeckOffsetZ + $HeadCGZ))
     
     ;
     ;Head effector 1 parameter
     ;
-    (def $he1_min -120)
-    (def $he1_max 120)
+    (def $he1_min -119.5)
+    (def $he1_max 119.5)
+    (def $he1X (eval -1 * $NeckCGX))
+    (def $he1Y (eval -1 * $NeckCGY))
+    (def $he1Z (eval -1 * $NeckCGZ))
     
     ;
     ;Head effector 2 parameter
     ;
-    (def $he2_min -45)
-    (def $he2_max 45)
+    (def $he2_min -38.5)
+    (def $he2_max 29.5)
+    (def $he2X (eval -1 * $HeadCGX))
+    (def $he2Y (eval -1 * $HeadCGY))
+    (def $he2Z (eval -1 * $HeadCGZ))
+    (def $HeadGeoX (eval -1 * $HeadCGX))
+    (def $HeadGeoY (eval -1 * $HeadCGY))
+    (def $HeadGeoZ (eval -1 * $HeadCGZ + $Head_Radius))
     
     ;
     ;Begin construct neck
@@ -43,13 +70,18 @@
         (setName neck)
         (setLocalPos $Neck_X $Neck_Y $Neck_Z)
         
-        (importScene rsg/agent/naov4/capsule_appearance.rsg $Neck_Radius $Neck_Length matDarkGrey)
-        (importScene rsg/agent/naov4/capsule_physics.rsg    $Neck_Radius $Neck_Length $Neck_Mass)
+	(nd Transform
+	    (setLocalPos $he1X $he1Y $he1Z)
+	    (importScene rsg/agent/naov4/capsule_appearance.rsg $Neck_Radius $Neck_Length matDarkGrey)
+	    )
+
+	;; (importScene rsg/agent/naov4/capsule_physics.rsg    $Neck_Radius $Neck_Length $Neck_Mass)
+        (importScene rsg/agent/naov4/body_physics.rsg $Neck_Mass 0 0 0 $NeckI11 $NeckI22 $NeckI33 $NeckI12 $NeckI13 $NeckI23)
         
         (importScene rsg/agent/naov4/joint2.rsg 
                             hj1 he1
-                            ../capsuleBody ../../body/boxBody
-                            0 0 0
+                            ../body ../../torso/body
+                            $he1X $he1Y $he1Z
                             0 0 1
                             $he1_min $he1_max)
     )
@@ -61,6 +93,8 @@
         (setName head)
         (setLocalPos $Head_X $Head_Y $Head_Z)
 
+		(nd Transform
+	    (setLocalPos $HeadGeoX $HeadGeoY $HeadGeoZ)
         (switch $loadObj
            (true
              (nd Transform
@@ -76,25 +110,60 @@
              (importScene rsg/agent/naov4/sphere_appearance.rsg $Head_Radius matRed)
            )
         )
-        (importScene rsg/agent/naov4/sphere_physics.rsg $Head_Radius $Head_Mass)
-        
+		)
+
+        (importScene rsg/agent/naov4/body_physics.rsg $Head_Mass 0 0 0 $HeadI11 $HeadI22 $HeadI33 $HeadI12 $HeadI13 $HeadI23)
+	(nd TransformCollider
+	    (nd SphereCollider
+		(setRadius $Head_Radius)
+		(setLocalPosition $HeadGeoX $HeadGeoY $HeadGeoZ)
+		(importScene rsg/agent/naov4/contactjointhandler.rsg)
+		)
+	    )        
         (importScene rsg/agent/naov4/joint4.rsg
                               hj2 he2
-                              ../sphereBody ../../neck/capsuleBody 
-                              ;../boxBody ../../body/boxBody
-                              0 0 -0.005
+                              ../body ../../neck/body 
+                              $he2X $he2Y $he2Z
                               1 0 0
                               $he2_min $he2_max)
 
-        (nd RestrictedVisionPerceptor
-            (setViewCones 120 120)
-            (setSenseMyPos false)
-            (setSenseBallPos false)
-            (setStaticSenseAxis false)
-            (addNoise true)
-            (setInterval 3)
-            (setSenseLine true)
-        )
+	(nd Transform
+	    (setLocalPos 0 0.05871 0.016364)
+	    (setLocalRotation -1.2 0 0)
+	    (nd RestrictedVisionPerceptor
+		(setPredicateName TopCamera)
+		(setViewCones 60.9 47.6)
+		(setSenseMyPos true)
+		(setSenseBallPos false)
+		(setStaticSenseAxis false)
+		(addNoise true)
+		(setInterval 3)
+		(setSenseLine true)
+		)
+	    )
+
+	(nd Transform
+	    (setLocalPos 0 0.05071 -0.03226)
+	    (setLocalRotation -39.7 0 0)
+	    (nd RestrictedVisionPerceptor
+		(setPredicateName BottomCamera)
+		(setViewCones 60.9 47.6)
+		(setSenseMyPos false)
+		(setSenseBallPos false)
+		(setStaticSenseAxis false)
+		(addNoise true)
+		(setInterval 3)
+		(setSenseLine true)
+		)
+	    )
+
+
+	;(nd Transform
+	;    (setLocalRotation 0 0 90)
+	;    (nd GPS
+;		(setName head)
+;		)
+;	    )
 
 	;; (nd Transform
 	;;     (setLocalPos 0 $Head_Radius 0)

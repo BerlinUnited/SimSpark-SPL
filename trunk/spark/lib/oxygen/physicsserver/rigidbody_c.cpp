@@ -65,13 +65,14 @@ FUNCTION(RigidBody,setMassParameters)
     Vector3f inCenter; // mass center in body frame
 
     // 3x3 inerta tensor in body frame
-    // [ I11(0) I12(1) I13(2) ]
-    // [ I12(3) I22(4) I23(5) ]
-    // [ I13(6) I23(7) I33(8) ]
-    // float inI[9];
+    // ( I11 I12 I13 )
+    // ( I12 I22 I23 )
+    // ( I13 I23 I33 )
+    Vector3f Ixx; // I11 I22 I33
+    Vector3f Ixy; // I12 I13 I23
 
     if (
-        (in.GetSize() < 11)
+        (in.GetSize() < 10)
         )
         {
             return false;
@@ -80,39 +81,17 @@ FUNCTION(RigidBody,setMassParameters)
     ParameterList::TVector::const_iterator iter = in.begin();
     if  (
          (! in.AdvanceValue(iter,inMass)) ||
-         (! in.AdvanceValue(iter,inCenter))
+         (! in.AdvanceValue(iter,inCenter)) ||
+         (! in.AdvanceValue(iter,Ixx)) ||
+         (! in.AdvanceValue(iter,Ixy))
          )
         {
             return false;
         }
 
-    GenericMass& mass = obj->CreateMass(inMass, inCenter);
-    //mass.mass = inMass;
-    //mass.c[0] = inCenter[0];
-    //mass.c[1] = inCenter[1];
-    //mass.c[2] = inCenter[2];
-    
-    float currentValue;
-    
-    //try to emulate the loop commented out below without understanding it
-    for (int i=0;i<9;++i)
-        {
-            if (in.AdvanceValue(iter,currentValue))
-                {
-                    obj->SetInertiaTensorAt(i, currentValue, mass);
-                }
-            else return false;
-        }    
-    
-    //for (int i=0;i<9;++i)
-    //    {
-    //        if (! in.AdvanceValue(iter,mass.I[i]))
-    //            {
-    //                return false;
-    //            }
-    //    }
-
+    GenericMass* mass = obj->CreateMass(inMass, inCenter, Ixx, Ixy);
     obj->SetMassParameters(mass);
+    delete mass;
     return true;
 }
 

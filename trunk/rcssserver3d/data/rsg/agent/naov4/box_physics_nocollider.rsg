@@ -8,6 +8,6 @@
         (setName boxBody)
         (setBoxTotal $totalMass $lenX $lenY $lenZ)
 
-        (importScene rsg/agent/nao/dragcontroller.rsg)
+        (importScene rsg/agent/naov4/dragcontroller.rsg)
     )
 )
