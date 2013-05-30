@@ -75,6 +75,7 @@ Oxygen::Oxygen(zeitgeist::Zeitgeist& zg)
     zg.GetCore()->RegisterClassObject(new CLASS(SliderJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(UniversalJoint), "oxygen/");
     zg.GetCore()->RegisterClassObject(new CLASS(Hinge2Joint), "oxygen/");
+    zg.GetCore()->RegisterClassObject(new CLASS(Battery), "oxygen/");
 
     // collider
     zg.GetCore()->RegisterClassObject(new CLASS(Collider), "oxygen/");
