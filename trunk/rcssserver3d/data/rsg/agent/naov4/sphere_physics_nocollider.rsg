@@ -8,6 +8,6 @@
         (setName sphereBody)
         (setSphereTotal $totalMass $radius)
 
-        (importScene rsg/agent/nao/dragcontroller.rsg)
+        (importScene rsg/agent/naov4/dragcontroller.rsg)
     )
  )

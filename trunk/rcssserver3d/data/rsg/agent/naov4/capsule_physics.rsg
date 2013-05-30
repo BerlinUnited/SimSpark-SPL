@@ -8,7 +8,7 @@
         (setName capsuleBody)
         (setCapsuleTotal $totalMass $radius $length)
 
-        (importScene rsg/agent/nao/dragcontroller.rsg)
+        (importScene rsg/agent/naov4/dragcontroller.rsg)
     )
 
     (nd CapsuleCollider
