@@ -190,7 +190,7 @@ public:
     static std::string PlayMode2Str(const TPlayMode mode);
 
     /** returns a string representing a SPL state */
-    static std::string SPLState2Str(const TSPLState state);
+    static std::string SPLState2Str(const spl::TSPLState state);
 
     /* move an agent including all its connected bodies */
     static bool

@@ -35,6 +35,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 using namespace salt;
+using namespace spl;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
   mReadyDuration(45),
@@ -522,20 +523,20 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
                 std::cout << "(SPLRule) Out by blue team" << std::endl;
                     //calculate new position
                 newX = (ballPos.x()-1.0f < agentPos.x()-1.0f) ? ballPos.x()-1.0f : agentPos.x()-1.0f;
-                if (newX < -2.0f) newX = -2.0f;
+                if (newX < -3.5f) newX = -3.5f;
             } else {
                 std::cout << "(SPLRule) Out by red team" << std::endl;
                     //calculate new position
                 newX = (ballPos.x()+1.0f > agentPos.x()+1.0f) ? ballPos.x()+1.0f : agentPos.x()+1.0f;
-                if (newY > 2.0f) newY = 2.0f;
+                if (newX > 3.5f) newX = 3.5f;
             } //lastTouchRed
 
         }// out top/bottom
 
         if (ballOutBottom) {
-            newY = -1.80f;
+            newY = -2.60f;
         } else {
-            newY = 1.80f;
+            newY = 2.60f;
         }
 
         return Vector3f(newX, newY, 0);
