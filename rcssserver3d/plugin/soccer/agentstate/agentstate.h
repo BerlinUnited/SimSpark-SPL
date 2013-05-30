@@ -118,7 +118,7 @@ public:
     
     void Penalize(const TTime gameTime);
 
-    void unPenalize();
+    void UnPenalize();
 
     bool IsPenalized();
 

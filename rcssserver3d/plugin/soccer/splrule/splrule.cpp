@@ -35,6 +35,7 @@ using namespace oxygen;
 using namespace boost;
 using namespace std;
 using namespace salt;
+using namespace spl;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
   mReadyDuration(45),
@@ -159,13 +160,13 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
   // for penalized robots
 
   // Choose x side based on team
-  float xFac = (robot->GetTeamIndex() == TI_LEFT ? -1 : 1) * 0.5;
+  float xFac = (robot->GetTeamIndex() == TI_LEFT) ? -0.5f : 0.5f;
+  salt::Vector3f pos(xFac * robot->GetUniformNumber(), -1.f*(mFieldWidth / 2.f + 1.f), 0.4f);
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
   float height = agent_aspect->GetWorldTransform().Pos().z();
 
-  salt::Vector3f pos = Vector3f(xFac * robot->GetUniformNumber(), (mFieldWidth / 2 + 1) *-1, height);
   SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 
   robot->Penalize(mGameState->GetTime());
@@ -174,8 +175,7 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
 
 void SPLRule::UpdateReady()
 {
-
-    HideBall();
+  HideBall();
 
   if (mState->GetStateTime() > mReadyDuration)
   {
@@ -292,7 +292,7 @@ void SPLRule::UpdateSet()
     // TODO: it may not correct for the second half kickoff
 
     //static TTime lastTimeBeforePlacement = mGameState->GetTime();
-    //static float range = salt::NormalRNG<>(4.0, 1.5)();
+    //static float range = (float)salt::NormalRNG<>(4.0, 1.5)();
 
 
     //TTime timeNow = mGameState->GetTime();
@@ -431,7 +431,7 @@ void SPLRule::UpdatePlaying()
 
     if (!mBallState->GetBallOnField()) {
       TTime timeNow = mGameState->GetTime();
-      float crange = rangeRNG();
+      float crange = (float)rangeRNG();
       crange = salt::gClamp(crange, 0.5f, 5.0f);
 
       if (timeNow - lastTimeBallOnField > crange) {
@@ -509,11 +509,11 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
         //out right by red
         if (ballPos.x() > 3.0 && lastTouchRed) {
 
-            newX = (0 < agentPos.x()-1.0) ? 0 : agentPos.x()-1.0;
+            newX = (0 < agentPos.x()-1.0f) ? 0 : agentPos.x()-1.0f;
         //out left by blue
         } else if (ballPos.x() < 3.0 && !lastTouchRed) {
 
-            newX = (0 > agentPos.x()+1.0) ? 0 : agentPos.x()+1.0;
+            newX = (0 > agentPos.x()+1.0f) ? 0 : agentPos.x()+1.0f;
 
         //out top/bottom
         } else {
@@ -522,21 +522,22 @@ Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
             if(lastTouchRed) {
                 std::cout << "(SPLRule) Out by blue team" << std::endl;
                     //calculate new position
-                newX = (ballPos.x()-1.0 < agentPos.x()-1.0) ? ballPos.x()-1.0 : agentPos.x()-1.0;
-                if (newX < -2.0) newX = -2.0;
+                newX = (ballPos.x()-1.0f < agentPos.x()-1.0f) ? ballPos.x()-1.0f : agentPos.x()-1.0f;
+                if (newX < -3.5f) newX = -3.5f;
             } else {
                 std::cout << "(SPLRule) Out by red team" << std::endl;
                     //calculate new position
-                newX = (ballPos.x()+1.0 > agentPos.x()+1.0) ? ballPos.x()+1.0 : agentPos.x()+1.0;
-                if (newY > 2.0) newY = 2.0;
+                newX = (ballPos.x()+1.0f > agentPos.x()+1.0f) ? ballPos.x()+1.0f : agentPos.x()+1.0f;
+                if (newX > 3.5f) newX = 3.5f;
             } //lastTouchRed
 
         }// out top/bottom
 
-        if (ballOutBottom)
-            newY = -1.80;
-        else
-            newY = 1.80;
+        if (ballOutBottom) {
+            newY = -2.60f;
+        } else {
+            newY = 2.60f;
+        }
 
         return Vector3f(newX, newY, 0);
 
