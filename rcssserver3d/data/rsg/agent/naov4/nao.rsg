@@ -13,12 +13,28 @@
 
 (def $TorsoLength  0.1)
 (def $TorsoWidth   0.1)
-(def $TorsoHeight  0.18)
-(def $TorsoMass    1.2171)
+(def $TorsoHeight  0.195)
+(def $TorsoMass    1.02628)
 
-(def $TorsoInitX  0)
-(def $TorsoInitY  -1)
-(def $TorsoInitZ  1.5)
+(def $TorsoCGX     -0.00006)
+(def $TorsoCGY     -0.00480)
+(def $TorsoCGZ     -0.04227)
+(def $TorsoI11     0.00487953284)
+(def $TorsoI22     0.00470360698)
+(def $TorsoI33     0.00156713520)
+(def $TorsoI12     -0.00001428591)
+(def $TorsoI13     -0.00019545651)
+(def $TorsoI23     0.00002224589)
+
+(def $RobotInitX  0)
+(def $RobotInitY  -1)
+(def $RobotInitZ  1.5)
+(def $TorsoX (eval $RobotInitX + $TorsoCGX))
+(def $TorsoY (eval $RobotInitY + $TorsoCGY))
+(def $TorsoZ (eval $RobotInitZ + $TorsoCGZ))
+(def $GeoX (eval -1 * $TorsoCGX))
+(def $GeoY (eval -1 * $TorsoCGY))
+(def $GeoZ (eval -1 * $TorsoCGZ + 0.0125))
 
 (def $loadObj (eval Nao.UseTexture))
 ;
@@ -33,8 +49,10 @@
     ;
     (nd AgentAspect
         (setName body)
-        (setLocalPos $TorsoInitX $TorsoInitY $TorsoInitZ)
+        (setLocalPos $TorsoX $TorsoY $TorsoZ)
 
+	(nd Transform
+	    (setLocalPos $GeoX $GeoY $GeoZ)
         (switch $loadObj
           (true
             (nd Transform
@@ -50,6 +68,7 @@
             (importScene rsg/agent/naov4/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
           )
         )
+	)
 
         ;(importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
         (importScene rsg/agent/naov4/box_physics_nocollider.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
@@ -112,7 +131,7 @@
     ;
     ;The neck and head part
     ;
-    (importScene rsg/agent/naov4/naoneckhead.rsg $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+    (importScene rsg/agent/naov4/naoneckhead.rsg $RobotInitX $RobotInitY $RobotInitZ $loadObj)
     
 
     ;
@@ -120,28 +139,28 @@
     ;
     (importScene rsg/agent/naov4/naoarm.rsg
               1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
 
     ;
     ;The Left Arm
     ;
     (importScene rsg/agent/naov4/naoarm.rsg
               -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
     
     ;
     ;The Right Leg
     ;
     (importScene rsg/agent/naov4/naoleg.rsg
               1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
     
     ;
     ;The Left Leg
     ;
     (importScene rsg/agent/naov4/naoleg.rsg
               -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj)
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
 
 );end of nd Space
 
