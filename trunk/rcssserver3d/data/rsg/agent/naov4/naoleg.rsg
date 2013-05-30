@@ -20,12 +20,11 @@
     (def $AnkleName (join $LeftOrRight ankle))    
     (def $FootName  (join $LeftOrRight foot))
     
-    (def $Hip1BodyPath    (join ../../ $Hip1Name  /sphereBody))
-    (def $Hip2BodyPath    (join ../../ $Hip2Name  /sphereBody))
-    (def $ThighBodyPath   (join ../../ $ThighName /boxBody))
-    (def $ShankBodyPath   (join ../../ $ShankName /boxBody))
-    (def $AnkleBodyPath   (join ../../ $AnkleName /sphereBody))
-    (def $FootBodyPath    (join ../../ $FootName  /boxBody))                
+    (def $Hip1BodyPath    (join ../../ $Hip1Name  /body))
+    (def $Hip2BodyPath    (join ../../ $Hip2Name  /body))
+    (def $ThighBodyPath   (join ../../ $ThighName /body))
+    (def $ShankBodyPath   (join ../../ $ShankName /body))
+    (def $AnkleBodyPath   (join ../../ $AnkleName /body))
     
     (def $Joint1PerName   (join $LeftOrRight lj1))
     (def $Joint2PerName   (join $LeftOrRight lj2))

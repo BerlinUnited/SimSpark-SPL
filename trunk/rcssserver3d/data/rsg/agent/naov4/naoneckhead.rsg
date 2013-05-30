@@ -48,7 +48,7 @@
         
         (importScene rsg/agent/naov4/joint2.rsg 
                             hj1 he1
-                            ../capsuleBody ../../body/boxBody
+                            ../capsuleBody ../../torso/body
                             0 0 0
                             0 0 1
                             $he1_min $he1_max)

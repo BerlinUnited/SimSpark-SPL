@@ -48,7 +48,7 @@
     ;The torso part
     ;
     (nd AgentAspect
-        (setName body)
+        (setName torso)
         (setLocalPos $TorsoX $TorsoY $TorsoZ)
 
 	(nd Transform

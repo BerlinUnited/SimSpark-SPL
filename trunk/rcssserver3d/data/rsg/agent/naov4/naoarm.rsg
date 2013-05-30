@@ -18,9 +18,9 @@
     (def $ElbowName    (join $LeftOrRight elbow))
     (def $LowerarmName (join $LeftOrRight lowerarm))
 
-    (def $ShoulderBodyPath (join ../../ $ShoulderName /sphereBody))
-    (def $UpperarmBodyPath (join ../../ $UpperarmName /boxBody))
-    (def $ElbowBodyPath    (join ../../ $ElbowName    /sphereBody))
+    (def $ShoulderBodyPath (join ../../ $ShoulderName /body))
+    (def $UpperarmBodyPath (join ../../ $UpperarmName /body))
+    (def $ElbowBodyPath    (join ../../ $ElbowName    /body))
     (def $LowerarmBodyPath (join ../../ $LowerarmName /boxBody))
    
     (def $Joint1PerName (join $LeftOrRight aj1))
