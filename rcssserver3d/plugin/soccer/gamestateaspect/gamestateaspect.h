@@ -120,8 +120,6 @@ public:
     /** sets the game running state (paused or not) */
     void SetPaused(bool paused);
 
-    TTeamIndex GetLastKickOff() const { return mLastKickOff; }
-
 protected:
     /** setup the init positions for the agents */
     virtual void OnLink();
