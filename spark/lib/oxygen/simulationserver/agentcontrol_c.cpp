@@ -35,8 +35,22 @@ FUNCTION(AgentControl, setSyncMode)
     return true;
 }
 
+FUNCTION(AgentControl, setMultiThreaded)
+{
+    bool inSet;
+
+    if ((in.GetSize() != 1) || (!in.GetValue(in[0], inSet)))
+    {
+        return false;
+    }
+
+    obj->SetMultiThreaded(inSet);
+    return true;
+}
+
 void CLASS(AgentControl)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/NetControl);
     DEFINE_FUNCTION(setSyncMode);
+    DEFINE_FUNCTION(setMultiThreaded);
 }

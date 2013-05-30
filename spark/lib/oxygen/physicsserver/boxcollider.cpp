@@ -43,7 +43,7 @@ void BoxCollider::SetBoxLengths(const Vector3f& extents)
 bool BoxCollider::ConstructInternal()
 {
     if (mBoxColliderImp.get() == 0)
-        mBoxColliderImp = shared_dynamic_cast<BoxColliderInt>
+        mBoxColliderImp = dynamic_pointer_cast<BoxColliderInt>
             (GetCore()->New("BoxColliderImp"));
             
     if (mBoxColliderImp.get() == 0)

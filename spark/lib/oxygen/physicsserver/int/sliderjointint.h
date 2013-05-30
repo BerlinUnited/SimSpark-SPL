@@ -33,6 +33,8 @@ class RigidBody;
 class OXYGEN_API SliderJointInt
 {
 public:
+    virtual ~SliderJointInt() {}
+
     /** Creates a Slider Joint within the given world */
     virtual long CreateSliderJoint(long world) = 0;
 

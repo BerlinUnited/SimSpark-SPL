@@ -37,14 +37,16 @@ class OXYGEN_API WorldInt
     time, thus one reason to use separate worlds is to simulate
     systems at different rates.
 */
-    
+
 public:
+    virtual ~WorldInt() {}
+
     /** sets the gravity vector of this world */
     virtual void SetGravity(const salt::Vector3f& gravity, long worldID) = 0;
-    
+
     /** gets the gravity vector of this world */
     virtual salt::Vector3f GetGravity(long worldID) const = 0;
-    
+
     /** sets the Error Reduction Parameter of this world. The ERP
         specifies what proportion of a joint error will be fixed
         during the next simulation step. if ERP=0 then no correcting
@@ -57,10 +59,10 @@ public:
         is the default).
     */
     virtual void SetERP(float erp, long worldID) = 0;
-    
+
     /** returns the Error Reduction Parameter of this World. */
     virtual float GetERP(long worldID) const = 0;
-    
+
     /** sets the Constraint Force mixing (CFM) value. If CFM is set to
         zero, the constraint will be hard. If CFM is set to a positive
         value, it will be possible to violate the constraint by
@@ -71,18 +73,18 @@ public:
         have undesirable bad effects, such as instability.
     */
     virtual void SetCFM(float cfm, long worldID) = 0;
-    
+
     /** returns the Constraint Force mixing (CFM) value. */
     virtual float GetCFM(long worldID) const = 0;
-    
+
     /** steps the world deltatime forward, i.e. performs physics
         simulation for a deltaTime seconds interval.
     */
     virtual void Step(float deltaTime, long worldID) = 0;
-    
+
     virtual bool GetAutoDisableFlag(long worldID) const = 0;
     virtual void SetAutoDisableFlag(bool flag, long worldID) = 0;
-    
+
     /** Set and get the depth of the surface layer around all geometry
         objects. Contacts are allowed to sink into the surface layer up to
         the given depth before coming to rest. The default value is
@@ -92,10 +94,10 @@ public:
     */
     virtual void SetContactSurfaceLayer(float depth, long worldID) = 0;
     virtual float GetContactSurfaceLayer(long worldID) const = 0;
-    
+
     /** Create the world an return its ID */
     virtual long CreateWorld() = 0;
-    
+
     /** destroys the world */
     virtual void DestroyWorld(long worldID) = 0;
 };

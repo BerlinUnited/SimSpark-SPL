@@ -37,6 +37,8 @@ class Joint;
 class OXYGEN_API JointInt
 {
 public:
+    virtual ~JointInt() {}
+
     /** Returns a pointer to the Joint object that manages the joint
         specified by \param jointID.
     */

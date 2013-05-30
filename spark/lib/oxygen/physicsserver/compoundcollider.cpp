@@ -40,7 +40,7 @@ CompoundCollider::~CompoundCollider()
 bool CompoundCollider::ConstructInternal()
 {
     if (mCompoundColliderImp.get() == 0)
-        mCompoundColliderImp = shared_dynamic_cast<CompoundColliderInt>
+        mCompoundColliderImp = dynamic_pointer_cast<CompoundColliderInt>
             (GetCore()->New("CompoundColliderImp"));
             
     if (mCompoundColliderImp.get() == 0)

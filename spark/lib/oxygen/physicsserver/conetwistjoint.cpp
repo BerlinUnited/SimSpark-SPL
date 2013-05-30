@@ -43,7 +43,7 @@ void ConeTwistJoint::OnLink()
     Joint::OnLink();
 
     if (mConeTwistJointImp.get() == 0)
-        mConeTwistJointImp = shared_dynamic_cast<ConeTwistJointInt>
+        mConeTwistJointImp = dynamic_pointer_cast<ConeTwistJointInt>
             (GetCore()->New("ConeTwistJointImp"));
 }
 

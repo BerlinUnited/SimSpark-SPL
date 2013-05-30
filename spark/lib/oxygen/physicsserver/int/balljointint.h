@@ -33,27 +33,28 @@ class Joint;
 
 class OXYGEN_API BallJointInt
 {
-public:    
+public:
+    virtual ~BallJointInt() {}
 
     /** Set the joint anchor point. The joint will try to keep this
         point on each body together. The input is specified in local
         coordinates.
     */
     virtual void SetAnchor(const salt::Vector3f& anchor, long jointID) = 0;
-    
+
     /** Returns the joint anchor point in local coordinates on the first of
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
     virtual salt::Vector3f GetAnchor1(long jointID) = 0;
-    
+
     /** Returns the joint anchor point in local coordinates on the second of
         the two bodies. If the joint is perfectly satisfied, the joint
         anchor point will be the same for both bodies.
     */
     virtual salt::Vector3f GetAnchor2(long jointID) = 0;
-    
-    /** Creates a new BallJoint in the physics world specified 
+
+    /** Creates a new BallJoint in the physics world specified
         by \param worldID
     */
     virtual long CreateBallJoint(long worldID) =  0;

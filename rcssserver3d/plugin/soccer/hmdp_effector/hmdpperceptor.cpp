@@ -48,10 +48,10 @@ void HMDPPerceptor::OnLink()
 {
 
     messageOut = "";
-    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform> (
+    boost::shared_ptr<Transform> transformParent = static_pointer_cast<Transform> (
         FindParentSupportingClass<Transform> ().lock());
 
-    mBody = shared_static_cast<RigidBody> (transformParent->GetChildOfClass("RigidBody"));
+    mBody = static_pointer_cast<RigidBody> (transformParent->GetChildOfClass("RigidBody"));
 }
 
 void HMDPPerceptor::OnUnlink()

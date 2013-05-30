@@ -114,6 +114,12 @@ public:
     /** sets the current game scores. useful if you start a game in the middle */
     void SetScores(int scoreLeft, int scoreRight);
 
+    /** returns if the game is paused */
+    bool IsPaused() const;
+
+    /** sets the game running state (paused or not) */
+    void SetPaused(bool paused);
+
     TTeamIndex GetLastKickOff() const { return mLastKickOff; }
 
 protected:
@@ -157,10 +163,10 @@ protected:
     TGameHalf mGameHalf;
 
     /** the team that had the last KickOff */
-    TTeamIndex mLastKickOff;
+    TGameHalf mLastKickOffGameHalf;
 
-//     /** the team that has to start the second half */
-//     TTeamIndex mSecondHalfKickOff;
+    /** the team that has to start the next half */
+    TTeamIndex mNextHalfKickOff;
 
     /** the names of the two teams */
     std::string mTeamName[2];
@@ -179,8 +185,12 @@ protected:
 
     /** the radius of an agent */
     float mAgentRadius;
+
     /** flag if the simulation should be stopped */
     bool mFinished;
+
+    /** flag if the game is running or paused (e.g. in goal_left/right state) */
+    bool mGamePaused;
 };
 
 DECLARE_CLASS(GameStateAspect);

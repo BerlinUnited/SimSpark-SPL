@@ -32,6 +32,7 @@ namespace oxygen
 class OXYGEN_API CapsuleColliderInt
 {
 public:
+    virtual ~CapsuleColliderInt() {}
 
     /** sets the parameters of the capsule.
 
@@ -39,29 +40,29 @@ public:
        \param length is the height of the cylinder, not counting the caps
     */
     virtual void SetParams(float radius, float length, long geomID) = 0;
-    
+
     /** sets the radius of the capsule */
     virtual void SetRadius(float radius, long geomID) = 0;
-    
+
     /** sets the length of the capsule */
     virtual void SetLength(float length, long geomID) = 0;
-    
+
     /** gets the radius and the length of the capsule */
     virtual void GetParams(float& radius, float& length, long geomID) = 0;
-    
+
     /** returns the radius of the capsule */
     virtual float GetRadius(long geomID) = 0;
-    
+
     /** return the length of the capsule */
     virtual float GetLength(long geomID) = 0;
-    
+
     /** returns the depth of the given relative position in the
        managed capsule geom. Points inside the geom will have
        positive depth, points outside it will have negative depth, and
        points on the surface will have zero depth.
      */
     virtual float GetPointDepth(const salt::Vector3f& pos, long geomID) = 0;
-    
+
     /** Creates a new Capsule and returns the ID of the newly created capsule */
     virtual long CreateCapsule() = 0;
 };

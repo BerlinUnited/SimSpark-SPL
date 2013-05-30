@@ -14,7 +14,7 @@ include_directories(${SDL_INCLUDE_DIR})
 
 target_link_libraries(rcssserver3d ${SPARK_LIBRARIES} ${SALT_LIBRARIES}
    	${ZEITGEIST_LIBRARIES} ${OXYGEN_LIBRARIES} ${KEROSIN_LIBRARIES}
-    ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY})
+    ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY} ${Boost_LIBRARIES})
 
 set_target_properties(rcssserver3d PROPERTIES INSTALL_RPATH "${RPATH_DIRECTORIES}")
 install(TARGETS rcssserver3d DESTINATION ${BINDIR})
@@ -27,8 +27,8 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
 
 ########### install files ###############
 
-install(FILES  rcssserver3d.rb soccersim.rb naosoccersim.rb 
-  rcssserverspl.rb naosoccerspl.rb
+install(FILES  rcssserver3d.rb soccersim.rb naosoccersim.rb naorobottypes.rb 
+        rcssserverspl.rb naosoccerspl.rb
         internalsoccermonitor.rb internalsoccerbindings.rb
         DESTINATION ${DATADIR}/${CMAKE_PROJECT_NAME})
 

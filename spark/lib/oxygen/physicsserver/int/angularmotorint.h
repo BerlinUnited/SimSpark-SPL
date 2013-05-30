@@ -40,34 +40,36 @@ class Joint;
 class OXYGEN_API AngularMotorInt
 {
 public:
+    virtual ~AngularMotorInt() {}
+
     /** Creates a new angular motor within the physics world specified
         by \param worldID
-    */    
+    */
     virtual long CreateAngularMotor(long worldID) = 0;
-    
+
     /** Sets the mode of this angular motor to user mode */
     virtual void SetModeUserMode(long jointID) = 0;
-    
+
     /** Sets the mode of this angular motor to euler mode */
     virtual void SetModeEulerMode(long jointID) = 0;
-    
+
     /** returns the current motor mode - zero if motor is in user mode,
         or one if motor is in euler mode.
     */
     virtual int GetMode(long jointID) = 0;
-    
+
     /** sets the number of angular axes that will be controlled by the
         angular motor. \param num can range from 0 which effectively
         disables the motor to 3, which are automatically set in euler
         mode.
     */
     virtual void SetNumAxes(int num, long jointID) = 0;
-    
+
     /** returns the number of angular axes that are controlled by the
-        angular motor 
+        angular motor
     */
     virtual int GetNumAxes(long jointID) = 0;
-    
+
     /** sets one of the motor axis. \param idx gives the motor axis to
         be set. \param anchor gives the relative anchor mode of the
         axis. \param axis gives the axis vector relative to the joint node
@@ -79,25 +81,25 @@ public:
         to the first body, axis 2 must be anchored to the second body.
     */
     virtual void SetMotorAxis(int idx, int anchor, salt::Vector3f axis, long jointID) = 0;
-    
+
     /** returns the relative anchor mode of the motor axis \param idx */
     virtual int GetAxisAnchor(int idx, long jointID) = 0;
-    
+
     /** returns the motor axis \param idx */
     virtual salt::Vector3f GetMotorAxis(int idx, long jointID) = 0;
-    
+
     /** sets the current angle along axis \param idx. This function
         should only be called in 'user' mode, as in this mode the
         motor has no other way of knowing the joint angles.
     */
     virtual void SetAxisAngle(int idx, float degAngle, long jointID) = 0;
-    
+
     /** sets the current angle along axis \param idx. This function
         should only be called in 'user' mode, as in this mode the
         motor has no other way of knowing the joint angles.
     */
     virtual float GetAxisAngle(int idx, long jointID) = 0;
-    
+
     /** Return the current angle rate for axis anum. In dAMotorUser
         mode this is always zero, as not enough information is
         available. In dAMotorEuler mode this is the corresponding

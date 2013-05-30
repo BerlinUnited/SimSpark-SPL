@@ -615,20 +615,22 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     ERunScriptErrorType result = eNotFound;
 
     // Trying directory given in mRelPathPrefix
-    result = RunInitScriptInternal(mRelPathPrefix, fileName, validDotDir, dotDir);
-    if (result == eOK)
+    if (!mRelPathPrefix.empty())
     {
-        GetLog()->Debug() << "(ScriptServer) : Ran init script '"
-                          << mRelPathPrefix << salt::RFile::Sep() << fileName << "'\n";
-        return true;
+        result = RunInitScriptInternal(mRelPathPrefix, fileName, validDotDir, dotDir);
+        if (result == eOK)
+        {
+            GetLog()->Debug() << "(ScriptServer) : Ran init script '"
+                              << mRelPathPrefix << salt::RFile::Sep() << fileName << "'\n";
+            return true;
+        }
+        else if (result == eError)
+        {
+            GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+                              << mRelPathPrefix << salt::RFile::Sep() << fileName << "'\n";
+            return false;
+        }
     }
-    else if (result == eError)
-    {
-        GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
-                          << mRelPathPrefix << salt::RFile::Sep() << fileName << "'\n";
-        return false;
-    }
-
 
 
     if (validDotDir)

@@ -110,7 +110,7 @@ shared_ptr<salt::RFile> FileSystemRAR::Open(const string& inName)
                     RARSetCallback(handle, NULL, 0);
                     RARCloseArchive(handle);
 
-                    return shared_dynamic_cast<salt::RFile>(file);
+                    return dynamic_pointer_cast<salt::RFile>(file);
                 }
             else
                 {

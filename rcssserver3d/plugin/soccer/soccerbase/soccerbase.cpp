@@ -46,7 +46,7 @@ bool
 SoccerBase::GetSceneServer(const Leaf& base,
                            boost::shared_ptr<SceneServer>& scene_server)
 {
-    scene_server = shared_static_cast<SceneServer>
+    scene_server = static_pointer_cast<SceneServer>
         (base.GetCore()->Get("/sys/server/scene"));
 
     if (scene_server.get() == 0)
@@ -64,7 +64,7 @@ bool
 SoccerBase::GetTransformParent(const Leaf& base,
                                boost::shared_ptr<Transform>& transform_parent)
 {
-    transform_parent = shared_dynamic_cast<Transform>
+    transform_parent = dynamic_pointer_cast<Transform>
         ((base.FindParentSupportingClass<Transform>()).lock());
 
     if (transform_parent.get() == 0)
@@ -82,7 +82,7 @@ SoccerBase::GetAgentState(const boost::shared_ptr<Transform> transform,
                           boost::shared_ptr<AgentState>& agent_state)
 {
     agent_state =
-        shared_dynamic_cast<AgentState>(transform->GetChild("AgentState", true));
+        dynamic_pointer_cast<AgentState>(transform->GetChild("AgentState", true));
 
     if (agent_state.get() == 0)
     {
@@ -267,7 +267,7 @@ SoccerBase::GetAgentStates(const zeitgeist::Leaf& base,
          ++iter
          )
         {
-            agentState = shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
+            agentState = dynamic_pointer_cast<AgentState>((*iter)->GetChild("AgentState", true));
 
             if (
                 agentState.get() != 0 &&
@@ -288,7 +288,7 @@ bool
 SoccerBase::GetGameState(const Leaf& base,
                          boost::shared_ptr<GameStateAspect>& game_state)
 {
-    game_state = shared_dynamic_cast<GameStateAspect>
+    game_state = dynamic_pointer_cast<GameStateAspect>
         (base.GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
 
     if (game_state.get() == 0)
@@ -306,7 +306,7 @@ bool
 SoccerBase::GetSoccerRuleAspect(const Leaf& base,
                                 boost::shared_ptr<SoccerRuleAspect> & soccer_rule_aspect)
 {
-    soccer_rule_aspect = shared_dynamic_cast<SoccerRuleAspect>
+    soccer_rule_aspect = dynamic_pointer_cast<SoccerRuleAspect>
         (base.GetCore()->Get("/sys/server/gamecontrol/SoccerRuleAspect"));
 
     if (soccer_rule_aspect.get() == 0)
@@ -390,7 +390,7 @@ SoccerBase::GetBody(const Leaf& base, boost::shared_ptr<RigidBody>& body)
         return false;
     }
 
-  body = shared_dynamic_cast<RigidBody>(parent->FindChildSupportingClass<RigidBody>());
+  body = dynamic_pointer_cast<RigidBody>(parent->FindChildSupportingClass<RigidBody>());
 
   if (body.get() == 0)
     {
@@ -424,7 +424,7 @@ SoccerBase::GetBall(const Leaf& base, boost::shared_ptr<Ball>& ball)
 
     if (ballRef.get() == 0)
     {
-        ballRef = shared_dynamic_cast<Ball>
+        ballRef = dynamic_pointer_cast<Ball>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball"));
 
         if (ballRef.get() == 0)
@@ -462,7 +462,7 @@ SoccerBase::GetBallBody(const Leaf& base, boost::shared_ptr<RigidBody>& body)
 
     if (bodyRef.get() == 0)
     {
-        bodyRef = shared_dynamic_cast<RigidBody>
+        bodyRef = dynamic_pointer_cast<RigidBody>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball/physics"));
 
         if (bodyRef.get() == 0)
@@ -501,7 +501,7 @@ SoccerBase::GetBallCollider(const zeitgeist::Leaf& base,
 
     if (sphereRef.get() == 0)
     {
-        sphereRef = shared_dynamic_cast<SphereCollider>
+        sphereRef = dynamic_pointer_cast<SphereCollider>
             (base.GetCore()->Get(scene->GetFullPath() + "Ball/geometry"));
 
         if (sphereRef.get() == 0)
@@ -613,33 +613,12 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
     };
 }
 
-std::string SoccerBase::SPLState2Str(const spl::TSPLState state)
-{
-  switch (state)
-  {
-  case spl::Initial:
-    return STR_SPL_STATE_INITIAL;
-  case spl::Ready:
-    return STR_SPL_STATE_READY;
-  case spl::Set:
-    return STR_SPL_STATE_SET;
-  case spl::Playing:
-    return STR_SPL_STATE_PLAYING;
-  case spl::Finished:
-    return STR_SPL_STATE_FINISHED;
-  case spl::Penalized:
-    return STR_SPL_STATE_PENALIZED;
-  default:
-    return STR_SPL_STATE_UNKNOWN;
-  }
-}
-
 boost::shared_ptr<ControlAspect>
 SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
 {
   static const string gcsPath = "/sys/server/gamecontrol/";
 
-  boost::shared_ptr<ControlAspect> aspect = shared_dynamic_cast<ControlAspect>
+  boost::shared_ptr<ControlAspect> aspect = dynamic_pointer_cast<ControlAspect>
     (base.GetCore()->Get(gcsPath + name));
 
   if (aspect.get() == 0)
@@ -655,7 +634,9 @@ SoccerBase::GetControlAspect(const zeitgeist::Leaf& base,const string& name)
 bool
 SoccerBase::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& pos)
 {
-    boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+    Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
+
+    boost::shared_ptr<Transform> parent = dynamic_pointer_cast<Transform>
             (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
     if (parent.get() == 0)
@@ -677,16 +658,13 @@ SoccerBase::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f&
         return false;
     }
 
-    boost::shared_ptr<RigidBody> body;
-    GetAgentBody(agent_aspect, body);
-    const Vector3f& agentPos = body->GetPosition();
     Leaf::TLeafList::iterator iter = leafList.begin();
 
     // move all child bodies
     for (; iter != leafList.end(); ++iter)
     {
         boost::shared_ptr<RigidBody> childBody =
-            shared_dynamic_cast<RigidBody>(*iter);
+            dynamic_pointer_cast<RigidBody>(*iter);
 
         Vector3f childPos = childBody->GetPosition();
 
@@ -701,7 +679,7 @@ SoccerBase::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f&
 bool
 SoccerBase::MoveAndRotateAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& pos, float angle)
 {
-    boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> parent = dynamic_pointer_cast<Transform>
             (agent_aspect->FindParentSupportingClass<Transform>().lock());
 
     if (parent.get() == 0)
@@ -741,7 +719,7 @@ SoccerBase::MoveAndRotateAgent(boost::shared_ptr<Transform> agent_aspect, const 
          )
         {
 	       boost::shared_ptr<RigidBody> childBody =
-                shared_dynamic_cast<RigidBody>(*iter);
+                dynamic_pointer_cast<RigidBody>(*iter);
 
     	    Vector3f childPos = childBody->GetPosition();
             Matrix childR = childBody->GetRotation();
@@ -786,7 +764,7 @@ AABB3 SoccerBase::GetAgentBoundingBox(const Leaf& base)
 
     for (Leaf::TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
     {
-        boost::shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+        boost::shared_ptr<BaseNode> node = static_pointer_cast<BaseNode>(*i);
         boundingBox.Encapsulate(node->GetWorldBoundingBox());
     }
 
@@ -824,7 +802,7 @@ AABB2 SoccerBase::GetAgentBoundingRect(const Leaf& base)
 
     for (Leaf::TLeafList::iterator i = baseNodes.begin(); i!= baseNodes.end(); ++i)
     {
-        boost::shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+        boost::shared_ptr<BaseNode> node = static_pointer_cast<BaseNode>(*i);
         const AABB3 &box = node->GetWorldBoundingBox();
         boundingRect.Encapsulate(box.minVec.x(), box.minVec.y());
         boundingRect.Encapsulate(box.maxVec.x(), box.maxVec.y());

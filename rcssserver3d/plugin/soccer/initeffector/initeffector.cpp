@@ -55,7 +55,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         }
 
     boost::shared_ptr<InitAction> initAction =
-        shared_dynamic_cast<InitAction>(mAction);
+        dynamic_pointer_cast<InitAction>(mAction);
     mAction.reset();
 
     if (initAction.get() == 0)
@@ -66,7 +66,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     // search for the AgentState
-    boost::shared_ptr<AgentState> state = shared_static_cast<AgentState>
+    boost::shared_ptr<AgentState> state = static_pointer_cast<AgentState>
         (mAgentAspect->GetChildOfClass("AgentState", true));
 
     if (state.get() == 0)
@@ -95,7 +95,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 
     // agents may be encapsulated in their own collision spaces, so we need
     // to get the parent of the parent of the agent aspect in this case
-    boost::shared_ptr<Transform> parent = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> parent = dynamic_pointer_cast<Transform>
         (mAgentAspect->GetParentSupportingClass("Transform").lock());
     
     
@@ -133,7 +133,7 @@ InitEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
          )
         {    
             boost::shared_ptr<Body> childBody =
-                shared_dynamic_cast<Body>(*iter);
+                dynamic_pointer_cast<Body>(*iter);
                 
             Vector3f childPos = childBody->GetPosition();
             Matrix childR = childBody->GetRotation();
@@ -169,7 +169,7 @@ InitEffector::GetActionObject(const Predicate& predicate)
 
 void InitEffector::OnLink()
 {
-    mGameState = shared_dynamic_cast<GameStateAspect>
+    mGameState = dynamic_pointer_cast<GameStateAspect>
         (SoccerBase::GetControlAspect(*this,"GameStateAspect"));
     mAgentAspect = GetAgentAspect();
     if (mAgentAspect.get() == 0)
