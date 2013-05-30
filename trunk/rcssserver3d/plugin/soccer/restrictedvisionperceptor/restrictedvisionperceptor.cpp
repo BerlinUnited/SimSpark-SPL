@@ -177,7 +177,7 @@ RestrictedVisionPerceptor::OnLink()
             mAgentAspect = agent_aspect;
         }
         
-        mAgentState = shared_static_cast<AgentState>
+        mAgentState = static_pointer_cast<AgentState>
             (mAgentAspect->GetChildOfClass("AgentState",true));
         if (mAgentState == 0)
         {
@@ -214,7 +214,7 @@ RestrictedVisionPerceptor::SetStaticSenseAxis(bool static_axis)
 bool
 RestrictedVisionPerceptor::ConstructInternal()
 {
-    mRay = shared_static_cast<RayCollider>
+    mRay = static_pointer_cast<RayCollider>
         (GetCore()->New("oxygen/RayCollider"));
 
     if (mRay.get() == 0)
@@ -240,9 +240,9 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
     {
         ObjectData od;
 
-        od.mObj = shared_static_cast<ObjectState>(*i);
+        od.mObj = static_pointer_cast<ObjectState>(*i);
 
-        boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(mActiveScene);
+        boost::shared_ptr<BaseNode> node = dynamic_pointer_cast<BaseNode>(mActiveScene);
         boost::shared_ptr<AgentAspect> agent_aspect =
                 od.mObj->FindParentSupportingClass<AgentAspect>().lock();
         if (agent_aspect != 0)
@@ -261,7 +261,7 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 
             // GetLog()->Normal()
             //    << "skipping agentAspect " << agent_aspect->GetFullPath() << std::endl;
-            node = shared_dynamic_cast<BaseNode>(agent_aspect);
+            node = dynamic_pointer_cast<BaseNode>(agent_aspect);
         }
 
         if (od.mObj.get() == 0)
@@ -296,7 +296,7 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
     }
 
     boost::shared_ptr<AgentAspect> agent_aspect =
-        shared_dynamic_cast<AgentAspect>(node);
+        dynamic_pointer_cast<AgentAspect>(node);
     if (agent_aspect != 0)
     {        
         boost::shared_ptr<AgentAspect> aspect =
@@ -306,7 +306,7 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
             agent_aspect = aspect;
         }
         
-        boost::shared_ptr<AgentState> agent_state = shared_static_cast<AgentState>
+        boost::shared_ptr<AgentState> agent_state = static_pointer_cast<AgentState>
             (agent_aspect->GetChildOfClass("AgentState",true));
         if (agent_state.get() == 0 ||
             (agent_state->GetPerceptName(ObjectState::PT_Player).empty())
@@ -646,7 +646,7 @@ bool RestrictedVisionPerceptor::CheckOcclusion(const Vector3f& my_pos, const Obj
 
 //             dContactGeom contact;
 
-//             boost::shared_ptr<Collider> collider = shared_static_cast<Collider>
+//             boost::shared_ptr<Collider> collider = static_pointer_cast<Collider>
 //                 (i->mObj->GetChildSupportingClass("Collider"));
 
 //             if (mRay->Intersects(collider))
@@ -847,7 +847,7 @@ RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
   {
     LineData ld;
 
-    ld.mLine = shared_static_cast<Line > (*i);
+    ld.mLine = static_pointer_cast<Line > (*i);
 
     if (ld.mLine.get() == 0)
     {

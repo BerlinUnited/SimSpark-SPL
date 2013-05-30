@@ -43,6 +43,6 @@ void Body::OnLink()
     PhysicsObject::OnLink();
 
     if (mBodyImp.get() == 0)
-        mBodyImp = shared_dynamic_cast<BodyInt>
+        mBodyImp = dynamic_pointer_cast<BodyInt>
             (GetCore()->New("BodyImp"));
 }

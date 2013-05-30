@@ -160,7 +160,7 @@ void FPSController::UpdateStatic(float deltaTime)
     mBody->SetPosition(matrix.Pos());
     mBody->SetVelocity(velocity);
 
-    boost::shared_ptr<BaseNode> bodyParent = shared_static_cast<BaseNode>
+    boost::shared_ptr<BaseNode> bodyParent = static_pointer_cast<BaseNode>
         (mBody->GetParent().lock());
 
     if (bodyParent.get() != 0)

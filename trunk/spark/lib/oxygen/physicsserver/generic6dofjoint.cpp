@@ -41,6 +41,6 @@ void Generic6DOFJoint::OnLink()
     Joint::OnLink();
 
     if (mGeneric6DOFJointImp.get() == 0)
-        mGeneric6DOFJointImp = shared_dynamic_cast<Generic6DOFJointInt>
+        mGeneric6DOFJointImp = dynamic_pointer_cast<Generic6DOFJointInt>
             (GetCore()->New("Generic6DOFJointImp"));
 }

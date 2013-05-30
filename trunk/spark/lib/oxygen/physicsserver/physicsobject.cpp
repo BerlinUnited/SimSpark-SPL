@@ -45,7 +45,7 @@ PhysicsObject::~PhysicsObject()
 void PhysicsObject::OnLink()
 {
     if (mPhysicsObjectImp.get() == 0)
-        mPhysicsObjectImp = shared_dynamic_cast<PhysicsObjectInt>
+        mPhysicsObjectImp = dynamic_pointer_cast<PhysicsObjectInt>
             (GetCore()->New("PhysicsObjectImp"));
 }
 
@@ -64,7 +64,7 @@ boost::shared_ptr<World> PhysicsObject::GetWorld() const
             return boost::shared_ptr<World>();
         }
 
-    boost::shared_ptr<World> worldNode = shared_dynamic_cast<World>
+    boost::shared_ptr<World> worldNode = dynamic_pointer_cast<World>
         (scene->GetChildOfClass("World"));
     if (worldNode.get() == 0)
         {
@@ -91,7 +91,7 @@ boost::shared_ptr<Space> PhysicsObject::GetSpace()
             return boost::shared_ptr<Space>();
         }
 
-    boost::shared_ptr<Space> spaceNode = shared_dynamic_cast<Space>
+    boost::shared_ptr<Space> spaceNode = dynamic_pointer_cast<Space>
         (scene->GetChildOfClass("Space"));
     if (spaceNode.get() == 0)
         {

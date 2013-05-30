@@ -49,6 +49,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mAutomaticKickOff(false),
     mWaitBeforeKickOff(1.0),
     mSingleHalfTime(false),
+    mAutomaticQuit(true),
+    mChangeSidesInSecondHalf(true),
+    mAutoKickOffTimeOrigin(1000000.0),
     mSayMsgSize(20),
     mAudioCutDist(50.0),
     mFirstCollidingAgent(true),
@@ -65,7 +68,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMin2PlDistance(0),            // min dist for second closest of team before being repositioned
     mMin3PlDistance(0),            // min dist for third closest of team before being repositioned
     mMaxTouchGroupSize(1000),
-    mMaxFaultTime(0.0)               // maximum time allowed for a player to commit a positional fault before being repositioned
+    mMaxFoulTime(0.0),              // maximum time allowed for a player to commit a positional foul before being repositioned
+    mLastKickOffKickTime(0),
+    mCheckKickOffKickerFoul(false)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
 }
@@ -88,28 +93,24 @@ players inappropriate behavior (laying on the ground or not walking for too much
 void
 SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
 {
-    // Reset counters before kickoff
-    if (playMode == PM_BeforeKickOff)
+    // Reset counters and do not consider players' fouls when game is not
+    // running
+    if (mGameState->IsPaused())
     {
-        ResetFaultCounter(TI_LEFT);
-        ResetFaultCounter(TI_RIGHT);
+        ResetFoulCounter(TI_LEFT);
+        ResetFoulCounter(TI_RIGHT);
     }
     else
     {
         CalculateDistanceArrays(TI_LEFT);    	// Calculates distance arrays for left team
         CalculateDistanceArrays(TI_RIGHT);   	// Calculates distance arrays for right team
-        AnalyseFaults(TI_LEFT);   		// Analyzes simple faults for the left team
-        AnalyseFaults(TI_RIGHT);   		// Analyzes simple faults for the right team
-        AnalyseTouchGroups(TI_LEFT);
-        AnalyseTouchGroups(TI_RIGHT);
+        AnalyseFouls(TI_LEFT);   		// Analyzes simple fouls for the left team
+        AnalyseFouls(TI_RIGHT);   		// Analyzes simple fouls for the right team
+        AnalyseTouchGroups(TI_LEFT);            // Analyzes how many players are touching for the left team
+        AnalyseTouchGroups(TI_RIGHT);           // Analyzes whether too many players are touching for the right team
 
-        // Only apply rules during play-on, leaves some time for agents to
-        // solve it themselves
-        if (playMode == PM_PlayOn)
-        {
-          ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
-          ClearPlayersAutomatic(TI_RIGHT);  	// enforce standing and not overcrowding rules for right team
-        }
+        ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
+        ClearPlayersAutomatic(TI_RIGHT);  	// enforce standing and not overcrowding rules for right team
 
         // Reset touch groups
         ResetTouchGroups(TI_LEFT);
@@ -119,21 +120,21 @@ SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
 
 
 void
-SoccerRuleAspect::ResetFaultCounterPlayer(int unum, TTeamIndex idx)
+SoccerRuleAspect::ResetFoulCounterPlayer(int unum, TTeamIndex idx)
 {
     playerGround[unum][idx] = 0;
     playerNotStanding[unum][idx] = 0;
     playerStanding[unum][idx] = 5/0.02;   // Considers player has been standing for some time in playoff
     prevPlayerInsideOwnArea[unum][idx] = 0;
     playerInsideOwnArea[unum][idx] = 0;
-    playerFaultTime[unum][idx] = 0;
+    playerFoulTime[unum][idx] = 0;
 }
 
 void
-SoccerRuleAspect::ResetFaultCounter(TTeamIndex idx)
+SoccerRuleAspect::ResetFoulCounter(TTeamIndex idx)
 {
     for(int t=1; t<=11; t++) {
-	ResetFaultCounterPlayer(t,idx);
+	ResetFoulCounterPlayer(t,idx);
     }
 }
 
@@ -300,7 +301,8 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
 
             if (pl[idx] >= touchGroup->size() - pl[idx])
             {
-                playerFaultTime[(*i)->GetUniformNumber()][idx]++;
+                playerFoulTime[(*i)->GetUniformNumber()][idx]++;
+                playerLastFoul[(*i)->GetUniformNumber()][idx] = FT_Touching;
                 // Remove player from touch group so no more agents are replaced
                 touchGroup->erase(*i);
             }
@@ -308,7 +310,8 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             {
                 // I am the last one to enter the group, but the number of
                 // opponents in the group are more than us
-                playerFaultTime[(*oppIt)->GetUniformNumber()][oppIdx]++;
+                playerFoulTime[(*oppIt)->GetUniformNumber()][oppIdx]++;
+                playerLastFoul[(*oppIt)->GetUniformNumber()][oppIdx] = FT_Touching;
                 touchGroup->erase(*oppIt);
             }
         }
@@ -329,8 +332,8 @@ void SoccerRuleAspect::ResetTouchGroups(TTeamIndex idx)
     }
 }
 
-// Analyse Faults and Creates Fault Time Array
-void SoccerRuleAspect::AnalyseFaults(TTeamIndex idx)
+// Analyse Fouls and Creates Foul Time Array
+void SoccerRuleAspect::AnalyseFouls(TTeamIndex idx)
 {
     TTeamIndex idx2;
     if (idx == TI_LEFT)
@@ -344,13 +347,15 @@ void SoccerRuleAspect::AnalyseFaults(TTeamIndex idx)
         if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance &&
             (distArr[unum][idx] <= mMin3PlDistance + 0.01 && ordArr[unum][idx] == 3))
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_Crowding;
         }
         // I am the second closest player but i am too near the ball (and not the goalie)
         else if(unum != 1 && closestPlayerDist[idx2] < mMinOppDistance &&
                 distArr[unum][idx] <= mMin2PlDistance + 0.01 && ordArr[unum][idx] == 2 )
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_Crowding;
         }
         // Too many players inside my own penalty area and Im am the last one to enter or
         // the last one to enter was the goalie and I am the one further away from own goal
@@ -358,31 +363,36 @@ void SoccerRuleAspect::AnalyseFaults(TTeamIndex idx)
                 (prevPlayerInsideOwnArea[unum][idx] == 0 ||
                  (prevPlayerInsideOwnArea[1][idx] == 0 && playerInsideOwnArea[1][idx] == 1 && mMaxPlayersInsideOwnArea + 1 == ordGArr[unum][idx]))))
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_IllegalDefence;
         }
         // I am a field player and on the ground for too much time
         else if (unum != 1 && playerGround[unum][idx] > mGroundMaxTime / 0.02)
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_Incapable;
         }
         // I am a field player and I am not standing for too much time
         else if(unum!=1 && playerNotStanding[unum][idx] > mNotStandingMaxTime / 0.02)
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_Incapable;
         }
         // I am the goalie and I am on the ground for too much time
         else if (unum == 1 && playerGround[unum][idx] > mGoalieGroundMaxTime / 0.02)
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_Incapable;
         }
         // I am the goalie and I and not standing for too much time
         else if (unum == 1 && playerNotStanding[unum][idx] > mGoalieNotStandingMaxTime / 0.02)
         {
-            playerFaultTime[unum][idx]++;
+            playerFoulTime[unum][idx]++;
+            playerLastFoul[unum][idx] = FT_Incapable;
         }
         else
         {
-            playerFaultTime[unum][idx]=0;
+            playerFoulTime[unum][idx]=0;
         }
     }
 }
@@ -423,14 +433,16 @@ SoccerRuleAspect::ClearPlayersAutomatic(TTeamIndex idx)
         SoccerBase::GetTransformParent(**i, agent_aspect);
         Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
         int unum = (*i)->GetUniformNumber();
-        if (playerFaultTime[unum][idx] > mMaxFaultTime / 0.02)
+        if (playerFoulTime[unum][idx] > mMaxFoulTime / 0.02)
         {
             // I am not a very good soccer player... I am violating the rules...
             salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
             //Calculate my Reposition pos outside of the field
             SoccerBase::MoveAgent(agent_aspect, new_pos);
             //Oh my God!! I am flying!! I am going outside of the field
-            ResetFaultCounterPlayer(unum, idx);
+            ResetFoulCounterPlayer(unum, idx);
+            // Record faul
+            mFouls.push_back(Foul(mFouls.size() + 1, playerLastFoul[unum][idx], *i));
             //cout << "*********Player Repos Num: " << unum << "  Team: " << team << "  Pos: " << new_pos << endl;
         }
     }
@@ -576,6 +588,54 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 }
 
 void
+SoccerRuleAspect::SwapTeamSides()
+{
+    SoccerBase::TAgentStateList agent_states;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states))
+        return;
+
+    SoccerBase::TAgentStateList::iterator it;
+    for (it = agent_states.begin(); it != agent_states.end(); ++it)
+    {
+        (*it)->SetTeamIndex(SoccerBase::OpponentTeam((*it)->GetTeamIndex()));
+    }
+}
+
+void
+SoccerRuleAspect::PunishKickOffFoul(
+    boost::shared_ptr<oxygen::AgentAspect> agent)
+{
+    boost::shared_ptr<AgentState> agentState;
+    if (!SoccerBase::GetAgentState(agent, agentState))
+    {
+        GetLog()->Error() << "ERROR: (SoccerRuleAspect) Cannot get "
+                "AgentState from an AgentAspect\n";
+    }
+    else
+    {
+        TTeamIndex opp = SoccerBase::OpponentTeam(agentState->GetTeamIndex());
+        ClearPlayersBeforeKickOff(opp);
+
+        // put the ball back in the middle of the playing field
+        Vector3f pos(0, 0, mBallRadius);
+        MoveBall(pos);
+
+        mGameState->KickOff(opp);
+    }
+}
+
+inline bool SoccerRuleAspect::WasLastKickFromKickOff(
+    boost::shared_ptr<oxygen::AgentAspect> &lastKicker)
+{
+    TTime kickTime;
+    // notice that a kick is not necessarily an immediate action, it can
+    // take some time...
+    return mBallState->GetLastCollidingAgent(lastKicker, kickTime)
+            && kickTime - mLastKickOffKickTime < 0.1 // kick duration = 0.1
+            && lastKicker == mLastKickOffTaker;
+}
+
+void
 SoccerRuleAspect::ClearSelectedPlayers()
 {
     float min_dist = mFreeKickMoveDist;
@@ -615,6 +675,20 @@ SoccerRuleAspect::ClearSelectedPlayers()
             SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
     }
+}
+
+vector<SoccerRuleAspect::Foul>
+SoccerRuleAspect::GetFouls() const
+{
+    return mFouls;
+}
+
+vector<SoccerRuleAspect::Foul>
+SoccerRuleAspect::GetFoulsSince(unsigned index) const
+{
+    Foul f(index+1, (EFoulType)0, boost::shared_ptr<AgentState>());
+    vector<SoccerRuleAspect::Foul>::const_iterator low = lower_bound(mFouls.begin(), mFouls.end(), f);
+    return vector<Foul>(low, mFouls.end());
 }
 
 void
@@ -664,18 +738,11 @@ void
 SoccerRuleAspect::UpdateBeforeKickOff()
 {
     // get game control server to check agent count
-    static boost::shared_ptr<GameControlServer> game_control;
+    boost::shared_ptr<GameControlServer> game_control;
 
-    if  (game_control.get() == 0)
+    if (!SoccerBase::GetGameControlServer(*this, game_control))
     {
-        game_control = shared_dynamic_cast<GameControlServer>
-            (GetCore()->Get("/sys/server/gamecontrol"));
-
-        if (game_control.get() == 0)
-        {
-            GetLog()->Error() << "(SoccerRuleAspect) Error: can't get GameControlServer.\n";
-            return;
-        }
+        return;
     }
 
     // if no players are connected, just return
@@ -687,6 +754,7 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     Vector3f pos(0,0,mBallRadius);
     MoveBall(pos);
 
+    mGameState->SetPaused(true);
     ClearPlayers(mRightHalf, mFreeKickMoveDist, TI_LEFT);
     ClearPlayers(mLeftHalf, mFreeKickMoveDist, TI_RIGHT);
 
@@ -697,7 +765,13 @@ SoccerRuleAspect::UpdateBeforeKickOff()
     mInOffsideRightPlayers.clear();
 #endif
 
-    if (mAutomaticKickOff && mGameState->GetModeTime() > mWaitBeforeKickOff)
+    float kickOffWaitTime = 0;
+    if (mAutoKickOffTimeOrigin > mGameState->GetModeTime())
+        mAutoKickOffTimeOrigin = mGameState->GetModeTime();
+    else
+        kickOffWaitTime = mGameState->GetModeTime() - mAutoKickOffTimeOrigin;
+
+    if (mAutomaticKickOff && kickOffWaitTime > mWaitBeforeKickOff)
     {
         mGameState->KickOff();
     }
@@ -706,6 +780,8 @@ SoccerRuleAspect::UpdateBeforeKickOff()
 void
 SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
+    mGameState->SetPaused(false);
+
     ClearPlayersBeforeKickOff(idx);
 
     // if no player touched the ball for mDropBallTime, we move away
@@ -728,6 +804,14 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     }
     if (time > mGameState->GetLastModeChange())
     {
+        boost::shared_ptr<GameControlServer> game_control;
+        if (SoccerBase::GetGameControlServer(*this, game_control)
+                && game_control->GetAgentCount() > 2) // todo: remove this when there is a "penalty" playmode
+        {
+            mCheckKickOffKickerFoul = true;
+        }
+        mLastKickOffKickTime = time;
+        mLastKickOffTaker = agent;
         mGameState->SetPlayMode(PM_PlayOn);
     }
 }
@@ -738,8 +822,11 @@ SoccerRuleAspect::UpdateKickIn(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
+
     // move away opponent team
     ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
                  SoccerBase::OpponentTeam(idx));
@@ -787,8 +874,10 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
 //---------------
 
     salt::Vector2f ball_pos(mFreeKickPos.x(), mFreeKickPos.y());
@@ -857,8 +946,11 @@ SoccerRuleAspect::UpdateGoalKick(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
+
     // move away opponent team
     ClearPlayers(idx == TI_LEFT ? mLeftPenaltyArea : mRightPenaltyArea,
                  mFreeKickMoveDist, SoccerBase::OpponentTeam(idx));
@@ -913,8 +1005,11 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
     // do nothing for the duration of mKickInPauseTime
     if (mGameState->GetModeTime() < mKickInPauseTime)
     {
+        mGameState->SetPaused(true);
         return;
     }
+    mGameState->SetPaused(false);
+
     // move away opponent team
     ClearPlayers(mFreeKickPos, mFreeKickDist, mFreeKickMoveDist,
                  SoccerBase::OpponentTeam(idx));
@@ -1011,18 +1106,26 @@ SoccerRuleAspect::CheckBallLeftField()
             // check corner kick right team
             else if (last_touch_left && ball_left)
             {
+                // temp value for RoboCup 2012
+                // correct value: mFieldWidth / 2 - mBallRadius
+                const float cornerKickY = (mFieldWidth + mGoalWidth) / 4.0
+                        - mBallRadius;
                 mFreeKickPos[0] = -mFieldLength / 2 + mBallRadius;
                 mFreeKickPos[1] = ball_pos[1] > 0 ?
-                    mFieldWidth / 2 - 0.05 : -mFieldWidth / 2 + 0.05;
+                        cornerKickY : -cornerKickY;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_CORNER_KICK_RIGHT);
             }
             // check corner kick left team
             else
             {
+                // temp value for RoboCup 2012
+                // correct value: mFieldWidth / 2 - mBallRadius
+                const float cornerKickY = (mFieldWidth + mGoalWidth) / 4.0
+                        - mBallRadius;
                 mFreeKickPos[0] = mFieldLength / 2 - mBallRadius;
                 mFreeKickPos[1] = ball_pos[1] > 0 ?
-                    mFieldWidth / 2 - mBallRadius : -mFieldWidth / 2 + mBallRadius;
+                        cornerKickY : -cornerKickY;
                 mFreeKickPos[2] = mBallRadius;
                 mGameState->SetPlayMode(PM_CORNER_KICK_LEFT);
             }
@@ -1058,6 +1161,8 @@ SoccerRuleAspect::CheckGoal()
 
     if (idx == TI_NONE)
     {
+        // sometimes, ball can't record goals due to approximation errors,
+        // so we check for goals analytically
         const salt::Vector3f ballPos = mBallBody->GetPosition();
         const float xDist2Goal = fabs(ballPos.x()) - mGoalBallLineX;
 
@@ -1088,6 +1193,19 @@ SoccerRuleAspect::CheckGoal()
             return false;
     }
 
+    /* don't allow goals directly from kickoff
+     *
+     * todo it is allowed in FIFA rules, so we should get rid of it e.g. by
+     * adding noise to the beam effector so that kickoff kicks cannot be
+     * precisely planned
+     */
+    boost::shared_ptr<AgentAspect> agent;
+    if (WasLastKickFromKickOff(agent))
+    {
+        PunishKickOffFoul(agent);
+        return false;
+    }
+
     // score the lucky team
     mGameState->ScoreTeam((idx == TI_LEFT) ? TI_RIGHT : TI_LEFT);
     mGameState->SetPlayMode((idx == TI_LEFT) ? PM_Goal_Right : PM_Goal_Left);
@@ -1095,9 +1213,30 @@ SoccerRuleAspect::CheckGoal()
     return true;
 }
 
+bool
+SoccerRuleAspect::CheckKickOffTakerFoul()
+{
+    if (!mCheckKickOffKickerFoul)
+        return false;
+
+    boost::shared_ptr<AgentAspect> agent;
+    if (!WasLastKickFromKickOff(agent)) // second kick
+    {
+        mCheckKickOffKickerFoul = false;
+        if (agent == mLastKickOffTaker)
+        {
+            PunishKickOffFoul(mLastKickOffTaker);
+            return true;
+        }
+    }
+    return false;
+}
+
 void
 SoccerRuleAspect::UpdatePlayOn()
 {
+    mGameState->SetPaused(false);
+
     // check if the ball is in one of the goals
     if (CheckGoal())
     {
@@ -1118,12 +1257,19 @@ SoccerRuleAspect::UpdatePlayOn()
     }
 #endif
 
+    if (CheckKickOffTakerFoul())
+    {
+        return;
+    }
+
     // other checks go here...
 }
 
 void
 SoccerRuleAspect::UpdateGoal()
 {
+    mGameState->SetPaused(true);
+
     // check if the pause time after the goal has elapsed
     if (mGameState->GetModeTime() < mGoalPauseTime)
     {
@@ -1131,7 +1277,7 @@ SoccerRuleAspect::UpdateGoal()
     }
 
     // put the ball back in the middle of the playing field
-    Vector3f pos(0,0,mBallRadius);
+    Vector3f pos(0, 0, mBallRadius);
     MoveBall(pos);
 
     // kick off for the opposite team
@@ -1151,8 +1297,10 @@ SoccerRuleAspect::UpdateGoal()
 void
 SoccerRuleAspect::UpdateGameOver()
 {
+    mGameState->SetPaused(true);
+
     // wait for 10 seconds to finish
-    if (mGameState->GetModeTime() < 9)
+    if (mGameState->GetModeTime() < 9 || !mAutomaticQuit)
     {
         return;
     }
@@ -1161,7 +1309,7 @@ SoccerRuleAspect::UpdateGameOver()
     if (mGameState->GetModeTime() >= 10)
     {
         boost::shared_ptr<GameControlServer> gameControlServer =
-            shared_dynamic_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
+            dynamic_pointer_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
         gameControlServer->Quit();
     }
 }
@@ -1182,6 +1330,8 @@ SoccerRuleAspect::CheckTime()
             // the first game half is over
             mGameState->SetPlayMode(PM_BeforeKickOff);
             mGameState->SetGameHalf(GH_SECOND);
+            if (mChangeSidesInSecondHalf)
+                SwapTeamSides();
         }
     }
     else if ((half == GH_SECOND) && (now >= 2 * mHalfTime))
@@ -1346,6 +1496,8 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
+    SoccerBase::GetSoccerVar(*this,"AutomaticQuit",mAutomaticQuit);
+    SoccerBase::GetSoccerVar(*this,"ChangeSidesInSecondHalf",mChangeSidesInSecondHalf);
     SoccerBase::GetSoccerVar(*this,"UseOffside",mUseOffside);
     float penaltyLength, penaltyWidth;
     SoccerBase::GetSoccerVar(*this,"PenaltyLength",penaltyLength);
@@ -1361,7 +1513,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"Min2PlDistance",mMin2PlDistance);
     SoccerBase::GetSoccerVar(*this,"Min3PlDistance",mMin3PlDistance);
     SoccerBase::GetSoccerVar(*this,"MaxTouchGroupSize",mMaxTouchGroupSize);
-    //SoccerBase::GetSoccerVar(*this,"MaxFaultTime",mMaxFaultTime);
+    //SoccerBase::GetSoccerVar(*this,"MaxFoulTime",mMaxFoulTime);
 
 
     // cout << "MaxInside " << mMaxPlayersInsideOwnArea << endl << endl;

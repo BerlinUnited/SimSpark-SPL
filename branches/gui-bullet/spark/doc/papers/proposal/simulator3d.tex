@@ -1,0 +1,298 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{fancyheadings}
+\usepackage{natbib}
+\usepackage{pstricks}
+\usepackage{todo}
+
+\oddsidemargin0.5cm
+\textwidth15.5cm
+\topmargin0cm
+\textheight23cm
+%\headsep2cm
+\setlength{\parskip}{1ex plus0.5ex minus0.5ex} % Abstand zwischen zwei Absaetzen
+\parindent0cm % Einrueckung der ersten Zeile eines Absatzes
+
+%---------------------------------  DOCUMENT  --------------------------------
+\begin{document}
+
+\title{New Soccer Server Initiative}
+\author{Artur Merke, Oliver Obst, Martin Riedmiller, Tom Howard,
+  Patrick Riley, ...}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Main Statement}
+
+The current soccer-server is a suited testbed for principle research
+on noisy, dynamic, multi-agent environments. However, with respect to
+the goal in 2050, it lacks of important features like 3D, correct
+physical modelling, flexiblity in sensor and actor modelling.
+
+Therefore, we propose the following
+
+\begin{itemize}
+\item Freeze the current simulator. Keep it as a testbed for
+  challenging multi-agent research.  Idea: if we keep the soccer
+  environment stable as it is, we can really measure scientific
+  progress from year to year. Evaluation will become meaningful.  This
+  competition could become 'simulator classic' and can continue for
+  say, the next 10 years.  If the RoboCup organization or community
+  decides not to support this any more, also an independent
+  competition could be organized.
+\item Develop a new simulator from scratch (Features below)
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Features of the New Simulator}
+
+Central Idea: Open-Source Development of a new simulator environment
+in the following basic steps:
+
+\begin{itemize}
+\item basic environment, based on correct physical modelling, 3D
+\item step-wise refinement of sensors and actors
+\item finally, simulation of  humanoid robots
+\end{itemize}
+
+To be suited as a scientific testbed, the simulator should show the basic features:
+
+\begin{itemize}
+\item easy and reliable communication between clients and server (if
+  noise in communication is desired as a feature of reality, it should
+  be added explicitly)
+\item flexible time managemement: the simulator can both be
+  accelerated (asynchronous mode) to allow learning and other cycle
+  consuming scientific activities and slowed-down (to allow running on
+  slow machines or via the internet)
+\item flexible modelling of physical objects and environments
+\item 3 D
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Requirements and Directions}
+
+\begin{itemize}
+\item 3D- Monitor
+\item Simulator Base-System
+\item Sample Clients
+\item physical modelling
+\end{itemize}
+
+
+\subsection{Simulator Base System}
+\label{sec:sbs}
+
+The simulator base system contains the basic infrastructure for the
+core simulator of soccer server 3D. The key idea to gain flexibility
+with respect to the simulated robots, sensors, actuators and
+environment is to have a small number of extensible base entities by
+which the entire world model is made up. Base entities required are 3d
+physical objects, sensors and actuators. Extensibility of soccer server
+3D is achieved by using the
+concept of factories (from object-oriented programming) for each of
+these entity types and by deriving the needed entities from these
+entity base classes. A \emph{class server} is used to manage these
+factory classes; an approach like this and some of the additional
+modules to gain flexibility below have been described in
+\cite{ABF+02}\footnote{It's in German, so a summary of the concepts
+  follows}.
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Console Subsystem}
+
+The console subsystem is used for online configuration of soccer
+server 3D and for scripting facilities. % (eventually).
+The console subsystem is also responsible for printing and redirecting
+(error and warning) messages and uses a \emph{variable subsystem} to
+store configuration variables.
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Variable Subsystem}
+
+The variable subsystem stores the console variables and provides
+access to them via a variable server. Within this context, a variable
+is an object that stores type, value and other attributes of the
+variable.  Console variables also allow referencing other (C++)
+variables so that they can be used to access variables of other
+modules of soccer server 3D. The console variable callback mechanism
+can execute methods within soccer server 3D whenever the value of the
+respective console variable changes.
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Forwarder Subsystem}
+
+The forwarder subsystem is used to print and redirect messages
+intended to be read by humans.
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Scene Graph (Tree)}
+\label{sec:scene_graph}
+
+Entities and their spatial relation are stored in a tree
+structure (scene graph), where each node contains an entity, the pose
+of the entity with respect to the entity of the parent node and
+possibly a number of links to child nodes. To represent for instance a
+simple robot on a soccer field we use a terrain, a cylinder-like
+physical object, a visual sensor and a kick device (actuator). In the
+scene graph, the root node contains the terrain entity and one link to
+a child node, the robot representation. This child node contains the
+cylinder-like physical object, the relative pose of the physical
+object wrt the terrain, and two links to child nodes representing the
+actuator and the sensor of the robot. Each of the child nodes stores
+one entity again plus the pose of the respective entity wrt the
+robot. If the physical representation of the robot moves on the
+terrain, the actuator and the sensor of the robot keep their relative
+pose without further changes within the scene graph.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{World Objects}
+\label{sec:world_objects}
+
+\begin{itemize}
+\item entity\\
+  A base class for all entities occurring in the simulated world. All
+  entities have a name and can be stored in the scene graph.
+
+\item object3d\\
+  A base class for representation of three dimensional objects in the
+  world including the terrain; derived from the entity base class. object3d and derived
+  classes describe for instance (FIXME) the shape and the weight of 3d
+  objects (but not the pose of the object in the world).
+
+\item sensor\\
+  A base class for sensor devices, derived from the entity base class.
+  A sensor device consists at least of a method that, given a certain
+  pose in the world, creates some data simulating output from a sensor
+  device. A sensor has no spatial extension or other physical
+  properties like weight by itself. To represent for instance a
+  camera, a 3d physical object entity representing the camera and a
+  sensor entity have to be used together.
+
+\item actuator\\
+  A base class with a method creating a force that is applied to 3d
+  physical objects for some time, derived from the entity base class.
+  Actuators have a method for changing their current state, possibly
+  for some time only. Like a sensor, an actuator alone does not have a
+  spatial extension on its own.
+\end{itemize}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Rule System}
+
+The simulator will also need a way of representing the various rules that
+control the progession of the environement being simulated.  These are
+different from the rules that govern the actual phyical modeling of the objects
+in the simulator, which is taken care of by the underlying physics engine.
+The rule system will for instance allow rules such as when the ball crosses into
+the goal area, a point is awarded.
+
+The rule system will store the current rules and they will each be called each
+simulator step.  When a rule is called it is possible that it could remove itself
+or other rules from the store and/or create new rules in the store.  This allows
+the rule system to keep only a few current rules in the store making it easier to
+determine what rules are currently affecting the simulation.
+
+For instance, normally in a soccer match if a player kicks the ball into the goal,
+a point is awarded.  However, when an indirect free kick is taken and the player kicks,
+the ball into the goal, a goal kick (or corner kick if it's the players own goal) is
+awarded.  In this scenario when an indirect free kick is awarded the normal goal scoring
+rule is replaced with it's alternate.  When the indirect free kick goal scoring rule
+no longer applies (either because an other player kicked the ball or the state of play
+changed for another reason), it is replaced by the original goal scoring rule.
+
+\begin{itemize}
+\item Rule\\
+  An abstract base class for rules in the simulated environment that are not
+  handled by the underlying physics engine.
+  \begin{itemize}
+  \item virtual void evaluate() = 0;\\
+    Abstract method that evaluates the rules based on the current state of
+    the enviroment and possibly the previous states that this rule was also
+    evaluated for.
+
+    Evaluation may result in the rule making changes to the enviroment or the
+    rules in the RuleStore
+  \end{itemize}
+
+\item RuleFactory\\
+  A class for creating rules without needing to reference the concrete rule type
+
+\item RuleStore\\
+  Maintains a list of the current rules that need to be evaluated each simulator
+  step
+  \begin{itemize}
+  \item void evaluate();\\
+    Calls evaluate on each rule currently in the store
+  \item void add( Rule\& );\\
+    Adds a rule to the Store
+  \item void remove( Rule\& );\\
+    Removes a rule from the store
+  \end{itemize}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Robot Models}
+\label{sec:robot_models}
+% added by pfr@cs.cmu.edu aka patstg@users.sf.net 8/07/2002
+
+A robot model object should encapsulate the physical existence of a
+simulated robot, and all interaction between the agent's ``brain'' and
+the simulated body. The important components are:
+
+\begin{itemize}
+ \item The segment of the scene graph (Section~\ref{sec:scene_graph})
+  corresponding to this robot. \todo{It's actually not clear to me
+  where this data should live. Maybe there's a global graph that we
+  have a pointer into for this?}
+  
+ \item The control loop. This is a function which should get called
+  every simulator step (or at least on a small, regular interval)
+  which provides low level control of a robot. The idea is that the
+  control loops handles the physical manipulation of the robot given a
+  higher level command from the agent's brain. Notably, we can allow
+  violation of physics here. For example, we can have magic 'balancing
+  forces' to keep a humanoid standing upright. This allows us to do
+  things which aren't currently physically possible (such as a running
+  humanoid) and still get something that is physically somewhat
+  reasonable. The key is that this bit of magic is standard across all
+  agents, so even though it's not pure physics, it's still standard.
+  
+  For example, an agent may send a velocity request to the control
+  loop. The control loop then modifies the wheel torques to attempt to
+  reach that velocity. Alternatively, a magic force is applied to
+  accelerate the robot in the desired direction.
+
+  This allows us to have tight control loops (which are necessary for
+  good performance of the robot) while still not having to interact
+  with the agent's brain every simulator step (which would cause poor
+  efficiency in the simulation, especially if the brain is distributed
+  to a different machine).
+
+ \item Action request reception. The brain of the agent should send
+  higher level commands than joint angle requests and motor
+  voltages. Action requests are received here and change parameters
+  for the control loop, which then physically causes the
+  change. \todo{I'm not sure what format the action requests should
+    be. We could send a text string and let the robot model do the
+    parsing, but that seems ugly to have parsing all spread out like
+    that. Alternatively, we could have some virtual base Action class
+    that robot model actions have to inherit from. We'd get some
+    dynamic casting ugliness there though}
+
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{simulator3d}
+
+\bibliographystyle{plain}
+
+\end{document}
+%-----------------------------------------------------------------------------

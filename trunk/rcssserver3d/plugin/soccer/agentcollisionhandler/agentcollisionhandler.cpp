@@ -56,5 +56,5 @@ boost::shared_ptr<AgentState> AgentCollisionHandler::FindAgentState(BaseNode* no
         return boost::shared_ptr<AgentState>();
     }
     
-    return boost::shared_static_cast<AgentState>(agentAspect->FindChildSupportingClass<AgentState>(true));
+    return boost::static_pointer_cast<AgentState>(agentAspect->FindChildSupportingClass<AgentState>(true));
 }

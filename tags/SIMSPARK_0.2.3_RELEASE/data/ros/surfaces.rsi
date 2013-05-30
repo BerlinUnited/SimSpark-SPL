@@ -1,0 +1,270 @@
+<RoSiIncludeFile>
+  <!-- The apearances of all objects: -->
+  <AppearanceDefinition name="green">
+    <Color r="0" g="200" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="orange">
+    <Color r="250" g="150" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="background">
+    <Color r="178" g="178" b="178"/>
+<!--    <Color r="200" g="200" b="200"/> -->
+  </AppearanceDefinition>
+  <AppearanceDefinition name="white">
+    <Color r="255" g="255" b="255"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="pink">
+    <Color r="255" g="0" b="255"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="sky blue">
+    <Color r="128" g="204" b="255"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="yellow">
+    <Color r="255" g="255" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="red">
+    <Color r="153" g="0" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="blue">
+    <Color r="0" g="0" b="76"/>
+  </AppearanceDefinition>
+  <!-- ***************** ERS-7 surfaces ******************************* -->
+  <AppearanceDefinition name="body01.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body01.2">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body02.1">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body03.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body03.2">
+    <Color r="72" g="72" b="72"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body03.3">
+    <Color r="5" g="5" b="5"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body04.1">
+    <Color r="6" g="6" b="6"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body05.1">
+    <Color r="75" g="75" b="75"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="body06.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="chops.1">
+    <Color r="205" g="205" b="205"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="chops.2">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head01.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head02.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head02.2">
+    <Color r="5" g="5" b="5"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head03.1">
+    <Color r="26" g="26" b="26"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head04.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head04.2">
+    <Color r="56" g="63" b="66"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head05.1">
+    <Color r="135" g="135" b="135"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head05.2">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head06.1">
+    <Color r="135" g="135" b="135"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="head06.2">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lear01.1">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lear01.2">
+    <Color r="182" g="182" b="182"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lear02.1">
+    <Color r="221" g="235" b="239"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="neck.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rear01.1">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rear01.2">
+    <Color r="182" g="182" b="182"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rear02.1">
+    <Color r="221" g="235" b="239"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm01.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm02.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm02.2">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm03.1">
+    <Color r="163" g="163" b="163"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm03.2">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm03.3">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm04.1">
+    <Color r="140" g="147" b="158"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="larm04.2">
+    <Color r="56" g="63" b="66"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm01.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm02.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm02.2">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm03.1">
+    <Color r="163" g="163" b="163"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm03.2">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm03.3">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm04.1">
+    <Color r="140" g="147" b="158"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rarm04.2">
+    <Color r="56" g="63" b="66"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg01.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg02.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg02.2">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg03.1">
+    <Color r="163" g="163" b="163"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg03.2">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg03.3">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg04.1">
+    <Color r="140" g="147" b="158"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg04.2">
+    <Color r="56" g="63" b="66"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="lleg04.3">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg01.1">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg02.1">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg02.2">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg03.1">
+    <Color r="163" g="163" b="163"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg03.2">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg03.3">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg04.1">
+    <Color r="140" g="147" b="158"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg04.2">
+    <Color r="56" g="63" b="66"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="rleg04.3">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="tail01.1">
+    <Color r="73" g="73" b="73"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="tail01.2">
+    <Color r="68" g="68" b="68"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="tail02.1">
+    <Color r="221" g="235" b="239"/>
+  </AppearanceDefinition>
+  <!-- ***************** ERS-7 LED surfaces *************************** -->
+  <AppearanceDefinition name="dark back led">
+    <Color r="166" g="166" b="166"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="white back led">
+    <Color r="230" g="230" b="230"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="red back led">
+    <Color r="179" g="0" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="orange back led">
+    <Color r="204" g="102" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="blue back led">
+    <Color r="0" g="0" b="179"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="red white back led">
+    <Color r="230" g="153" b="128"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="orange white back led">
+    <Color r="255" g="179" b="128"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="blue white back led">
+    <Color r="128" g="128" b="230"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="dark orange led">
+    <Color r="38" g="31" b="26"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="dark blue led">
+    <Color r="26" g="26" b="51"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="yellow head led">
+    <Color r="204" g="204" b="51"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="pink head led">
+    <Color r="204" g="77" b="204"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="turquoise head led">
+    <Color r="77" g="204" b="204"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="green head led">
+    <Color r="77" g="230" b="77"/>
+  </AppearanceDefinition>
+</RoSiIncludeFile>

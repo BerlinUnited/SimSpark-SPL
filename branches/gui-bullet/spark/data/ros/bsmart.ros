@@ -1,0 +1,568 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RoSi.xsd">
+	<!-- The apearances of all objects: -->
+	<AppearanceDefinition name="field green">
+		<Color r="0" g="200" b="0"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="orange">
+		<Color r="250" g="150" b="0"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="yellow">
+		<Color r="255" g="255" b="0"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="green">
+		<Color r="0" g="255" b="0"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="background">
+		<Color r="200" g="200" b="200"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="hide">
+		<Color r="170" g="170" b="170"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="white">
+		<Color r="255" g="255" b="255"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="LightGray">
+		<Color r="150" g="150" b="150"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="VeryDarkGray">
+		<Color r="20" g="20" b="20"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="MediumGray">
+		<Color r="100" g="100" b="100"/>
+	</AppearanceDefinition>
+	<AppearanceDefinition name="HullColor">
+		<Color r="0" g="0" b="0"/>
+	</AppearanceDefinition>
+	<MaterialDefinition name="golfball">
+		<FrictionCoefficient otherMaterial="gummi" value="10"/>
+	</MaterialDefinition>
+	<VertexList name="field coords">
+		<Vertex name="fieldOwnLeft" x="-2.46" y="1.71" z="0"/>
+		<Vertex name="fieldOwnRight" x="-2.46" y="-1.71" z="0"/>
+		<Vertex name="fieldOpponentLeft" x="2.46" y="1.71" z="0"/>
+		<Vertex name="fieldOpponentRight" x="2.46" y="-1.71" z="0"/>
+		<Vertex name="cornerOwnLeft" x="-2.45" y="1.7" z="0"/>
+		<Vertex name="cornerOwnRight" x="-2.45" y="-1.7" z="0"/>
+		<Vertex name="cornerOpponentLeft" x="2.45" y="1.7" z="0"/>
+		<Vertex name="cornerOpponentRight" x="2.45" y="-1.7" z="0"/>
+		<Vertex name="middleOwnLeft" x="-0.005" y="1.7" z="0"/>
+		<Vertex name="middleOwnRight" x="-0.005" y="-1.7" z="0"/>
+		<Vertex name="middleOpponentLeft" x="0.005" y="1.7" z="0"/>
+		<Vertex name="middleOpponentRight" x="0.005" y="-1.7" z="0"/>
+		<Vertex name="middleCircleA" x="0" y="0.4" z="0"/>
+		<Vertex name="middleCircleB" x="0.069" y="0.394" z="0"/>
+		<Vertex name="middleCircleC" x="0.137" y="0.376" z="0"/>
+		<Vertex name="middleCircleD" x="0.2" y="0.346" z="0"/>
+		<Vertex name="middleCircleE" x="0.257" y="0.306" z="0"/>
+		<Vertex name="middleCircleF" x="0.306" y="0.257" z="0"/>
+		<Vertex name="middleCircleG" x="0.346" y="0.2" z="0"/>
+		<Vertex name="middleCircleH" x="0.376" y="0.137" z="0"/>
+		<Vertex name="middleCircleI" x="0.394" y="0.069" z="0"/>
+		<Vertex name="middleCircleJ" x="0.4" y="0" z="0"/>
+		<Vertex name="middleCirclea" x="0" y="0.39" z="0"/>
+		<Vertex name="middleCircleb" x="0.068" y="0.384" z="0"/>
+		<Vertex name="middleCirclec" x="0.133" y="0.366" z="0"/>
+		<Vertex name="middleCircled" x="0.195" y="0.338" z="0"/>
+		<Vertex name="middleCirclee" x="0.251" y="0.299" z="0"/>
+		<Vertex name="middleCirclef" x="0.299" y="0.251" z="0"/>
+		<Vertex name="middleCircleg" x="0.338" y="0.195" z="0"/>
+		<Vertex name="middleCircleh" x="0.366" y="0.133" z="0"/>
+		<Vertex name="middleCirclei" x="0.384" y="0.068" z="0"/>
+		<Vertex name="middleCirclej" x="0.39" y="0" z="0"/>
+		<Vertex name="penaltyCircleA" x="0" y="0.5" z="0"/>
+		<Vertex name="penaltyCircleB" x="0.087" y="0.492" z="0"/>
+		<Vertex name="penaltyCircleC" x="0.171" y="0.47" z="0"/>
+		<Vertex name="penaltyCircleD" x="0.25" y="0.433" z="0"/>
+		<Vertex name="penaltyCircleE" x="0.321" y="0.383" z="0"/>
+		<Vertex name="penaltyCircleF" x="0.383" y="0.321" z="0"/>
+		<Vertex name="penaltyCircleG" x="0.433" y="0.25" z="0"/>
+		<Vertex name="penaltyCircleH" x="0.47" y="0.171" z="0"/>
+		<Vertex name="penaltyCircleI" x="0.492" y="0.087" z="0"/>
+		<Vertex name="penaltyCircleJ" x="0.5" y="0" z="0"/>
+		<Vertex name="penaltyCirclea" x="0" y="0.49" z="0"/>
+		<Vertex name="penaltyCircleb" x="0.085" y="0.483" z="0"/>
+		<Vertex name="penaltyCirclec" x="0.168" y="0.46" z="0"/>
+		<Vertex name="penaltyCircled" x="0.245" y="0.424" z="0"/>
+		<Vertex name="penaltyCirclee" x="0.315" y="0.375" z="0"/>
+		<Vertex name="penaltyCirclef" x="0.375" y="0.315" z="0"/>
+		<Vertex name="penaltyCircleg" x="0.424" y="0.245" z="0"/>
+		<Vertex name="penaltyCircleh" x="0.46" y="0.168" z="0"/>
+		<Vertex name="penaltyCirclei" x="0.483" y="0.085" z="0"/>
+		<Vertex name="penaltyCirclej" x="0.49" y="0" z="0"/>
+	</VertexList>
+	<!-- The ball -->
+	<Macro name="ball">
+		<Movable name="ball">
+			<Elements>
+				<Sphere name="ball" radius="0.0215">
+					<Appearance ref="orange"/>
+					<Material name="golfball"/>
+					<PhysicalAttributes>
+						<Mass value="0.046"/>
+					</PhysicalAttributes>
+				</Sphere>
+			</Elements>
+		</Movable>
+	</Macro>
+	<!-- The field -->
+	<Macro name="quarter circle 40">
+		<ComplexShape name="lines">
+			<Translation x="0" y="0" z="0.0005"/>
+			<Appearance ref="white"/>
+			<GraphicalRepresentation vertexList="field coords">
+				<Polygon>
+					<Vertex ref="middleCircleA"/>
+					<Vertex ref="middleCircleB"/>
+					<Vertex ref="middleCircleb"/>
+					<Vertex ref="middleCirclea"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleB"/>
+					<Vertex ref="middleCircleC"/>
+					<Vertex ref="middleCirclec"/>
+					<Vertex ref="middleCircleb"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleC"/>
+					<Vertex ref="middleCircleD"/>
+					<Vertex ref="middleCircled"/>
+					<Vertex ref="middleCirclec"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleD"/>
+					<Vertex ref="middleCircleE"/>
+					<Vertex ref="middleCirclee"/>
+					<Vertex ref="middleCircled"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleE"/>
+					<Vertex ref="middleCircleF"/>
+					<Vertex ref="middleCirclef"/>
+					<Vertex ref="middleCirclee"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleF"/>
+					<Vertex ref="middleCircleG"/>
+					<Vertex ref="middleCircleg"/>
+					<Vertex ref="middleCirclef"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleG"/>
+					<Vertex ref="middleCircleH"/>
+					<Vertex ref="middleCircleh"/>
+					<Vertex ref="middleCircleg"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleH"/>
+					<Vertex ref="middleCircleI"/>
+					<Vertex ref="middleCirclei"/>
+					<Vertex ref="middleCircleh"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="middleCircleI"/>
+					<Vertex ref="middleCircleJ"/>
+					<Vertex ref="middleCirclej"/>
+					<Vertex ref="middleCirclei"/>
+				</Polygon>
+			</GraphicalRepresentation>
+			<PhysicalRepresentation/>
+		</ComplexShape>
+	</Macro>
+	<Macro name="quarter circle 50">
+		<ComplexShape name="lines">
+			<Translation x="0" y="0" z="0.0005"/>
+			<Appearance ref="white"/>
+			<GraphicalRepresentation vertexList="field coords">
+				<Polygon>
+					<Vertex ref="penaltyCircleA"/>
+					<Vertex ref="penaltyCircleB"/>
+					<Vertex ref="penaltyCircleb"/>
+					<Vertex ref="penaltyCirclea"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleB"/>
+					<Vertex ref="penaltyCircleC"/>
+					<Vertex ref="penaltyCirclec"/>
+					<Vertex ref="penaltyCircleb"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleC"/>
+					<Vertex ref="penaltyCircleD"/>
+					<Vertex ref="penaltyCircled"/>
+					<Vertex ref="penaltyCirclec"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleD"/>
+					<Vertex ref="penaltyCircleE"/>
+					<Vertex ref="penaltyCirclee"/>
+					<Vertex ref="penaltyCircled"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleE"/>
+					<Vertex ref="penaltyCircleF"/>
+					<Vertex ref="penaltyCirclef"/>
+					<Vertex ref="penaltyCirclee"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleF"/>
+					<Vertex ref="penaltyCircleG"/>
+					<Vertex ref="penaltyCircleg"/>
+					<Vertex ref="penaltyCirclef"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleG"/>
+					<Vertex ref="penaltyCircleH"/>
+					<Vertex ref="penaltyCircleh"/>
+					<Vertex ref="penaltyCircleg"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleH"/>
+					<Vertex ref="penaltyCircleI"/>
+					<Vertex ref="penaltyCirclei"/>
+					<Vertex ref="penaltyCircleh"/>
+				</Polygon>
+				<Polygon>
+					<Vertex ref="penaltyCircleI"/>
+					<Vertex ref="penaltyCircleJ"/>
+					<Vertex ref="penaltyCirclej"/>
+					<Vertex ref="penaltyCirclei"/>
+				</Polygon>
+			</GraphicalRepresentation>
+			<PhysicalRepresentation/>
+		</ComplexShape>
+	</Macro>
+	<Macro name="field half">
+		<Compound>
+			<Elements>
+				<ComplexShape name="lines">
+					<Translation x="0" y="0" z="0.0005"/>
+					<Appearance ref="white"/>
+					<GraphicalRepresentation vertexList="field coords">
+						<Polygon>
+							<Vertex ref="cornerOwnLeft"/>
+							<Vertex ref="fieldOwnLeft"/>
+							<Vertex ref="fieldOwnRight"/>
+							<Vertex ref="cornerOwnRight"/>
+						</Polygon>
+						<Polygon>
+							<Vertex ref="fieldOwnLeft"/>
+							<Vertex ref="cornerOwnLeft"/>
+							<Vertex ref="cornerOpponentLeft"/>
+							<Vertex ref="fieldOpponentLeft"/>
+						</Polygon>
+					</GraphicalRepresentation>
+					<PhysicalRepresentation/>
+				</ComplexShape>
+				<Use macroName="quarter circle 40" instanceName="quarter1"/>
+				<Use macroName="quarter circle 40" instanceName="quarter2">
+					<Rotation x="0" y="0" z="90"/>
+				</Use>
+				<Use macroName="quarter circle 50" instanceName="quarter3">
+					<Translation x="-2.45" y="0" z="0"/>
+					<Rotation x="0" y="0" z="-90"/>
+				</Use>
+				<Use macroName="quarter circle 50" instanceName="quarter3">
+					<Translation x="-2.45" y="0" z="0"/>
+					<Rotation x="0" y="0" z="0"/>
+				</Use>
+				<Box name="side wall" length="5.52" width="0.01" height="0.1">
+					<Translation x="0" y="2.005" z="0.05"/>
+					<Appearance ref="white"/>
+				</Box>
+				<Box name="goal wall" length="0.01" width="4" height="0.1">
+					<Translation x="2.755" y="0" z="0.05"/>
+					<Appearance ref="white"/>
+				</Box>
+			</Elements>
+		</Compound>
+	</Macro>
+	<Macro name="goal side">
+		<Box length="0.18" width="0.01" height="0.15"/>
+	</Macro>
+	<Macro name="goal back">
+		<Box length="0.01" width="0.72" height="0.15"/>
+	</Macro>
+	<Macro name="goal">
+		<Compound>
+			<Elements>
+				<Use macroName="goal side" instanceName="goal side 1">
+					<Translation x="0.09" y="0.355" z="0.075"/>
+				</Use>
+				<Use macroName="goal side" instanceName="goal side 2">
+					<Translation x="0.09" y="-0.355" z="0.075"/>
+				</Use>
+				<Use macroName="goal back" instanceName="goal back">
+					<Translation x="0.185" y="0" z="0.075"/>
+				</Use>
+			</Elements>
+		</Compound>
+	</Macro>
+	<Macro name="field">
+		<Compound>
+			<Elements>
+				<Use macroName="field half" instanceName="own side"/>
+				<Use macroName="field half" instanceName="opponent side">
+					<Rotation x="0" y="0" z="180"/>
+				</Use>
+				<ComplexShape name="middle line">
+					<Translation x="0" y="0" z="0.0005"/>
+					<Appearance ref="white"/>
+					<GraphicalRepresentation vertexList="field coords">
+						<Polygon>
+							<Vertex ref="middleOwnLeft"/>
+							<Vertex ref="middleOwnRight"/>
+							<Vertex ref="middleOpponentRight"/>
+							<Vertex ref="middleOpponentLeft"/>
+						</Polygon>
+					</GraphicalRepresentation>
+					<PhysicalRepresentation/>
+				</ComplexShape>
+				<Box name="Green carpet" length="5.5" width="4" height="0.005">
+					<Translation x="0" y="0" z="-0.0025"/>
+					<Appearance ref="field green"/>
+					<PhysicalAttributes>
+						<Mass value="10"/>
+					</PhysicalAttributes>
+				</Box>
+				<Use macroName="goal" instanceName="own goal">
+					<Translation x="2.45" y="0" z="0"/>
+					<SubstituteAllSurfaces with="white"/>
+				</Use>
+				<Use macroName="goal" instanceName="opponent goal">
+					<Rotation x="0" y="0" z="180"/>
+					<Translation x="-2.45" y="0" z="0"/>
+					<SubstituteAllSurfaces with="white"/>
+				</Use>
+			</Elements>
+		</Compound>
+	</Macro>
+	<!-- The robot -->
+	<Macro name="roll">
+		<Hinge name="roll">
+			<AnchorPoint x="0.022" y="0" z="0"/>
+			<Axis x="0" y="1" z="0"/>
+			<Elements>
+				<Cylinder radius="0.006" height="0.004">
+					<Rotation x="90" y="0" z="0"/>
+					<Appearance ref="VeryDarkGray"/>
+					<PhysicalAttributes>
+						<Mass value="0.005"/>
+					</PhysicalAttributes>
+				</Cylinder>
+			</Elements>
+		</Hinge>
+	</Macro>
+	<Macro name="wheel">
+		<Hinge name="whelAxis">
+			<AnchorPoint x="0.0" y="0" z="0"/>
+			<Axis x="0" y="0" z="1">
+				<VelocityMotor name="motor" maxVelocity="2" maxForce="0.6"/>
+			</Axis>
+			<Elements>
+				<Cylinder name="axis" radius="0.0025" height="0.02">
+					<Translation x="0" y="0" z="0.06"/>
+					<Appearance ref="LightGray"/>
+				</Cylinder>
+				<Cylinder name="hub" radius="0.015" height="0.004">
+					<Translation x="0" y="0" z="0.08"/>
+					<Appearance ref="LightGray"/>
+					<PhysicalAttributes>
+						<Mass value="0.005"/>
+					</PhysicalAttributes>
+					<Elements>
+						<Use macroName="roll" instanceName="roll1">
+							<Rotation x="0" y="0" z="0"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll2">
+							<Rotation x="0" y="0" z="45"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll3">
+							<Rotation x="0" y="0" z="90"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll4">
+							<Rotation x="0" y="0" z="135"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll5">
+							<Rotation x="0" y="0" z="180"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll6">
+							<Rotation x="0" y="0" z="225"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll7">
+							<Rotation x="0" y="0" z="270"/>
+						</Use>
+						<Use macroName="roll" instanceName="roll8">
+							<Rotation x="0" y="0" z="315"/>
+						</Use>
+					</Elements>
+				</Cylinder>
+			</Elements>
+		</Hinge>
+	</Macro>
+	<Macro name="dribbler">
+		<Hinge name="dribblerAxis">
+			<AnchorPoint x="0.0" y="0" z="0"/>
+			<Axis x="0" y="0" z="1">
+				<VelocityMotor name="motor" maxVelocity="4" maxForce="0.6"/>
+			</Axis>
+			<Elements>
+				<Cylinder name="axis" radius="0.009" height="0.08">
+					<Appearance ref="MediumGray"/>
+					<Material name="gummi"/>
+					<PhysicalAttributes>
+						<Mass value="0.1"/>
+					</PhysicalAttributes>
+				</Cylinder>
+			</Elements>
+		</Hinge>
+	</Macro>
+	<Macro name="Robot">
+		<Movable name="Robot">
+			<Elements>
+				<Box length="0.05" width="0.05" height="0.05">
+					<Translation x="0" y="0" z="0.1"/>
+					<Appearance ref="MediumGray"/>
+					<PhysicalAttributes>
+						<Mass value="1"/>
+					</PhysicalAttributes>
+					<Elements>
+				<!--		<Use macroName="dribbler" instanceName="dribbleRoll">
+							<Translation x="0.07" y="0.0" z="-0.01"/>
+							<Rotation x="90" y="0" z="0"/>
+						</Use>-->
+						<Use macroName="wheel" instanceName="wheel1">
+							<Translation x="0.02" y="0.0" z="-0.02"/>
+							<Rotation x="0" y="90" z="75"/>
+						</Use>
+						<Use macroName="wheel" instanceName="wheel2">
+							<Translation x="0.02" y="0.0" z="-0.02"/>
+							<Rotation x="0" y="90" z="180"/>
+						</Use>
+						<Use macroName="wheel" instanceName="wheel3">
+							<Translation x="0.02" y="0.0" z="-0.02"/>
+							<Rotation x="0" y="90" z="285"/>
+						</Use>
+						<ComplexShape name="robotHull">
+							<VertexList name="robotHullVertices">
+								<Vertex name="t1" x="0.06" y="0.07" z="0.08"/>
+								<Vertex name="t2" x="0.0" y="0.08" z="0.08"/>
+								<Vertex name="t3" x="-0.07" y="0.03" z="0.08"/>
+								<Vertex name="t4" x="-0.07" y="-0.03" z="0.08"/>
+								<Vertex name="t5" x="0.0" y="-0.08" z="0.08"/>
+								<Vertex name="t6" x="0.06" y="-0.07" z="0.08"/>
+								<Vertex name="s1" x="0.06" y="0.07" z="0.02"/>
+								<Vertex name="s2" x="0.0" y="0.08" z="0.02"/>
+								<Vertex name="s3" x="-0.07" y="0.03" z="0.02"/>
+								<Vertex name="s4" x="-0.07" y="-0.03" z="0.02"/>
+								<Vertex name="s5" x="0.0" y="-0.08" z="0.02"/>
+								<Vertex name="s6" x="0.06" y="-0.07" z="0.02"/>
+								<Vertex name="b1" x="0.06" y="0.07" z="-0.04"/>
+								<Vertex name="b2" x="0.0" y="0.08" z="-0.04"/>
+								<Vertex name="b3" x="-0.07" y="0.03" z="-0.04"/>
+								<Vertex name="b4" x="-0.07" y="-0.03" z="-0.04"/>
+								<Vertex name="b5" x="0.0" y="-0.08" z="-0.04"/>
+								<Vertex name="b6" x="0.06" y="-0.07" z="-0.04"/>
+							</VertexList>
+							<Appearance ref="HullColor"/>
+							<GraphicalRepresentation vertexList="robotHullVertices">
+								<Polygon>
+									<Vertex ref="t1"/>
+									<Vertex ref="t2"/>
+									<Vertex ref="t3"/>
+									<Vertex ref="t4"/>
+									<Vertex ref="t5"/>
+									<Vertex ref="t6"/>
+								</Polygon>
+								<Polygon>
+									<Vertex ref="b1"/>
+									<Vertex ref="b2"/>
+									<Vertex ref="b3"/>
+									<Vertex ref="b4"/>
+									<Vertex ref="b5"/>
+									<Vertex ref="b6"/>
+								</Polygon>
+								<TriangleStrip>
+									<Vertex ref="t1"/>
+									<Vertex ref="s1"/>
+									<Vertex ref="t2"/>
+									<Vertex ref="s2"/>
+									<Vertex ref="t3"/>
+									<Vertex ref="s3"/>
+									<Vertex ref="t4"/>
+									<Vertex ref="s4"/>
+									<Vertex ref="t5"/>
+									<Vertex ref="s5"/>
+									<Vertex ref="t6"/>
+									<Vertex ref="s6"/>
+									<Vertex ref="t1"/>
+									<Vertex ref="s1"/>
+								</TriangleStrip>
+								<TriangleStrip>
+									<Vertex ref="s2"/>
+									<Vertex ref="b2"/>
+									<Vertex ref="s3"/>
+									<Vertex ref="b3"/>
+								</TriangleStrip>
+								<TriangleStrip>
+									<Vertex ref="s4"/>
+									<Vertex ref="b4"/>
+									<Vertex ref="s5"/>
+									<Vertex ref="b5"/>
+								</TriangleStrip>
+							</GraphicalRepresentation>
+							<PhysicalRepresentation/>
+						</ComplexShape>
+						<Cylinder name="centerMarker" radius="0.025" height="0.01">
+							<Translation x="0" y="0" z="0.08"/>
+							<Appearance ref="yellow"/>
+						</Cylinder>
+						<Cylinder name="whiteMarker1" radius="0.02" height="0.01">
+							<Translation x="-0.037" y="-0.027" z="0.08"/>
+							<Appearance ref="white"/>
+						</Cylinder>
+						<Cylinder name="greenMarker1" radius="0.02" height="0.01">
+							<Translation x="-0.037" y="0.027" z="0.08"/>
+							<Appearance ref="green"/>
+						</Cylinder>
+						<Cylinder name="whiteMarker2" radius="0.02" height="0.01">
+							<Translation x="0.027" y="0.044" z="0.08"/>
+							<Appearance ref="white"/>
+						</Cylinder>
+						<Cylinder name="greenMarker2" radius="0.02" height="0.01">
+							<Translation x="0.027" y="-0.044" z="0.08"/>
+							<Appearance ref="green"/>
+						</Cylinder>
+						<!--<Use macroName="wheel" instanceName="wheel2">
+							<Translation x="-0.08" y="0.08" z="-0.02"/>
+							<Rotation x="-90" y="0" z="0"/>
+						</Use>
+						<Use macroName="wheel" instanceName="wheel3">
+							<Translation x="0.08" y="-0.08" z="-0.02"/>
+							<Rotation x="-90" y="0" z="180"/>
+						</Use>
+						<Use macroName="wheel" instanceName="wheel4">
+							<Translation x="-0.08" y="-0.08" z="-0.02"/>
+							<Rotation x="-90" y="0" z="180"/>
+						</Use>-->
+					</Elements>
+				</Box>
+			</Elements>
+		</Movable>
+	</Macro>
+	<Scene name="B-Smart">
+		<Background surface="background"/>
+		<AmbientLightColor r="150" g="150" b="150"/>
+		<DefaultAppearance ref="orange"/>
+		<GlobalPhysicalParameters gravity="-1" erp="0.2" cfm="0.0001"/>
+		<SimulationParameters stepLength="0.033" standardLength="0.1"/>
+		<Elements>
+			<Use macroName="ball" instanceName="ball">
+				<Translation x="0.0" y="0" z="0.03"/>
+			</Use>
+			<Use macroName="field" instanceName="field"/>
+			<Use macroName="Robot" instanceName="robot1">
+				<Translation x="-0.50" y="0.0" z="0.0"/>
+			</Use>
+		</Elements>
+	</Scene>
+</Simulation>

@@ -1,0 +1,290 @@
+<Simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="RoSi.xsd">
+  <AppearanceDefinition name="red">
+    <Color r="255" g="0" b="0"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="dark blue">
+    <Color r="0" g="0" b="128"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="green">
+    <Color r="0" g="200" b="0"/>
+<!--    <Alpha a="0.5"/> -->
+  </AppearanceDefinition>
+  <AppearanceDefinition name="yellow">
+    <Color r="220" g="220" b="0"/>
+  </AppearanceDefinition>
+    <AppearanceDefinition name="orange">
+        <Color r="250" g="150" b="0"/>
+    </AppearanceDefinition>
+  <AppearanceDefinition name="glass">
+    <Color r="200" g="200" b="200"/>
+    <Alpha a="0.3"/>
+  </AppearanceDefinition>
+  <AppearanceDefinition name="background">
+    <Color r="200" g="200" b="200"/>
+  </AppearanceDefinition>
+
+  <Scene name="BlockWorld" description="Weird block world with a pendulum and some sensors.">
+    <Background surface="background"/>
+    <AmbientLightColor r="150" g="150" b="150"/>
+    <DefaultAppearance ref="dark blue"/>
+    <GlobalPhysicalParameters gravity="-0.0005" erp="0.2" cfm="0.0001" defaultRollingFrictionCoefficient="0.0001"/>
+    <SimulationParameters stepLength="0.33" standardLength="0.1" applyDynamicsForceFactor="10.0"/>
+    <Elements>
+            <Box name="Ground" length="2.1" width="2.1" height="0.2">
+                <Translation x="0" y="0" z="-0.1"/>
+                <Appearance ref="dark blue"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side1" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side2" length="2.1" width="0.1" height="0.2">
+                <Translation x="0.0" y="-1.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side3" length="0.1" width="2" height="0.2">
+                <Translation x="1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+            <Box name="Side4" length="0.1" width="2" height="0.2">
+                <Translation x="-1.0" y="0.0" z="0.1"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+
+
+            <Box name="SwingPole1" length="0.1" width="0.1" height="0.4">
+                <Translation x="0" y="-0.2" z="0.2"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+            <Box name="SwingPole2" length="0.1" width="0.1" height="0.4">
+                <Translation x="0" y="0.2" z="0.2"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+            </Box>
+            <Box name="SwingBar" length="0.1" width="0.5" height="0.1">
+                <Translation x="0" y="0" z="0.45"/>
+                <Appearance ref="red"/>
+                <PhysicalAttributes>
+                    <Mass value="10"/>
+                </PhysicalAttributes>
+                <Elements>
+                <Hinge name="SwingJoint">
+                    <AnchorPoint x="0.0" y="0.0" z="0.0" />
+                    <Axis x="0.0" y="1.0" z="0.0"/>
+                    <Elements>
+                    <Movable name="swing">
+                    <Elements>
+                        <Box name="Pendulum" length="0.04" width="0.04" height="0.04">
+                            <Translation x="0.1" y="0.0" z="0.25"/>
+                            <Appearance ref="orange"/>
+                            <PhysicalAttributes>
+                                <Mass value="1"/>
+                            </PhysicalAttributes>
+                            <Elements>
+                              <Camera name="cam1">
+                                        <Translation x="0.0" y="0.0" z="-0.07"/>
+                                        <Rotation x="0.0"  y="90" z="0.0"/>
+                                        <Resolution x="100" y="100"/>
+                                        <OpeningAngles x="90" y="90"/>
+                                        <Range near="0.01" far="10"/>
+                                        <PerspectiveProjection/>
+                                </Camera>
+                            </Elements>
+                        </Box>
+                    </Elements>
+                    </Movable>
+
+                    </Elements>
+                </Hinge>
+                </Elements>
+            </Box>
+            <Movable name="dominostone1">
+            <Elements>
+                <Box name="Stone1" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.1" y="0.0" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone2">
+            <Elements>
+                <Box name="Stone2" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.25" y="0.0" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone3">
+            <Elements>
+                <Box name="Stone3" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.4" y="0.0" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone4">
+            <Elements>
+                <Box name="Stone4" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.55" y="0.0" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="cylinder1">
+            <Elements>
+                <Cylinder name="Cylinder" radius="0.04" height="0.2">
+                    <Translation x="-0.4" y="0.57" z="0.04"/>
+                    <Rotation x="90" y="0" z="0"/>
+                    <Appearance ref="green"/>
+                    <PhysicalAttributes>
+                        <Mass value="3"/>
+                    </PhysicalAttributes>
+                </Cylinder>
+            </Elements>
+            </Movable>
+            <Movable name="seesaw">
+            <Elements>
+                <Box name="Seesaw" length="0.4" width="0.08" height="0.02">
+                    <Translation x="-0.4" y="0.5" z="0.2"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="2"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="ball">
+            <Elements>
+                <Sphere name="Ball" radius="0.06">
+                    <Translation x="-0.2" y="0.5" z="0.28"/>
+                    <Appearance ref="orange"/>
+                    <PhysicalAttributes>
+                        <Mass value="1"/>
+                    </PhysicalAttributes>
+                    <Elements>
+                      <Camera name="hallo">
+                        <Translation x="0.0" y="0.0" z="-0.07"/>
+                        <Rotation x="0.0"  y="90" z="0.0"/>
+                        <Resolution x="100" y="100"/>
+                        <OpeningAngles x="90" y="90"/>
+                        <Range near="0.01" far="10"/>
+                        <PerspectiveProjection/>
+                      </Camera>
+                                <DistanceSensor name="halloDistance">
+                                        <Translation x="0.0" y="0.0" z="-0.07"/>
+                                        <Rotation x="0.0"  y="90" z="0.0"/>
+                                        <Resolution x="40" y="1"/>
+                                        <OpeningAngles x="90" y="2"/>
+                                        <Range near="0.01" far="10"/>
+                                        <SphericalProjection/>
+                                </DistanceSensor>
+                    </Elements>
+                </Sphere>
+            </Elements>
+            </Movable>
+            <Movable name="ball2">
+            <Elements>
+                <Sphere name="Ball2" radius="0.05">
+                    <Translation x="-0.6" y="0.5" z="0.4"/>
+                    <Appearance ref="red"/>
+                    <PhysicalAttributes>
+                        <Mass value="10"/>
+                    </PhysicalAttributes>
+                </Sphere>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone5">
+            <Elements>
+                <Box name="Stone5" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.1" y="-0.5" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone6">
+            <Elements>
+                <Box name="Stone6" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.2" y="-0.5" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone7">
+            <Elements>
+                <Box name="Stone7" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.3" y="-0.5" z="0.1"/>
+                    <Appearance ref="orange"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="dominostone8">
+            <Elements>
+                <Box name="Stone8" length="0.02" width="0.08" height="0.2">
+                    <Translation x="0.4" y="-0.5" z="0.1"/>
+                    <Appearance ref="yellow"/>
+                    <PhysicalAttributes>
+                        <Mass value="0.1"/>
+                    </PhysicalAttributes>
+                </Box>
+            </Elements>
+            </Movable>
+            <Movable name="capsule">
+            <Elements>
+                <Capsule name="Capsule" radius="0.05" height="0.15">
+                    <Translation x="0.3" y="-0.5" z="0.5"/>
+                    <Rotation x="0" y="80" z="0"/>
+                    <Appearance ref="green"/>
+                    <PhysicalAttributes>
+                        <Mass value="1"/>
+                    </PhysicalAttributes>
+                </Capsule>
+            </Elements>
+            </Movable>
+    </Elements>
+  </Scene>
+</Simulation>

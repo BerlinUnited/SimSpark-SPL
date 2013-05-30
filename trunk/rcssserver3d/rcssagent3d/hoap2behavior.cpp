@@ -58,7 +58,7 @@ string Hoap2Behavior::Init()
 {
     mZG.GetCore()->ImportBundle("sexpparser");
 
-    mParser = shared_static_cast<BaseParser>
+    mParser = static_pointer_cast<BaseParser>
         (mZG.GetCore()->New("SexpParser"));
 
     if (mParser.get() == 0)

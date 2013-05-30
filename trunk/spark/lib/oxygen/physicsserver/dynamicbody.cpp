@@ -40,6 +40,6 @@ void DynamicBody::OnLink()
     Body::OnLink();
 
     if (mDynamicBodyImp.get() == 0)
-        mDynamicBodyImp = shared_dynamic_cast<DynamicBodyInt>
+        mDynamicBodyImp = dynamic_pointer_cast<DynamicBodyInt>
             (GetCore()->New("DynamicBodyImp"));
 }

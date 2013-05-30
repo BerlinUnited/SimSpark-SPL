@@ -64,7 +64,7 @@ KickEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     boost::shared_ptr<KickAction> kickAction =
-        shared_dynamic_cast<KickAction>(mAction);
+        dynamic_pointer_cast<KickAction>(mAction);
     mAction.reset();
 
     if (kickAction.get() == 0)
@@ -181,7 +181,7 @@ KickEffector::OnLink()
     SoccerBase::GetBall(*this,mBall);
     SoccerBase::GetBallBody(*this,mBallBody);
 
-    mAgent = shared_dynamic_cast<AgentAspect>(GetParent().lock());
+    mAgent = dynamic_pointer_cast<AgentAspect>(GetParent().lock());
 
     if (mAgent.get() == 0)
     {
@@ -191,7 +191,7 @@ KickEffector::OnLink()
     }
 
     boost::shared_ptr<SphereCollider> geom =
-        shared_dynamic_cast<SphereCollider>(mAgent->GetChild("geometry"));
+        dynamic_pointer_cast<SphereCollider>(mAgent->GetChild("geometry"));
     if (geom.get() == 0)
     {
         GetLog()->Error()
@@ -212,7 +212,7 @@ KickEffector::OnLink()
 
     if (mBallStateAspect.get() == 0)
     {
-        mBallStateAspect = shared_dynamic_cast<BallStateAspect>
+        mBallStateAspect = dynamic_pointer_cast<BallStateAspect>
             (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
         if (mBallStateAspect.get() == 0) return;
     }

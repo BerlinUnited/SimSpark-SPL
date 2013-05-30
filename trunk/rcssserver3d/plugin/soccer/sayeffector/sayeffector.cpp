@@ -64,7 +64,7 @@ SayEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     boost::shared_ptr<SayAction> sayAction =
-        shared_dynamic_cast<SayAction>(action);
+        dynamic_pointer_cast<SayAction>(action);
 
     if (sayAction.get() == 0)
     {
@@ -142,7 +142,7 @@ SayEffector::OnLink()
     SoccerBase::GetAgentState(*this,mAgentState);
     SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
 
-    mAgent = shared_dynamic_cast<AgentAspect>(GetParent().lock());
+    mAgent = dynamic_pointer_cast<AgentAspect>(GetParent().lock());
 
     if (mAgent.get() == 0)
     {

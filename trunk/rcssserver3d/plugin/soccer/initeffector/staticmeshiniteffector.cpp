@@ -58,7 +58,7 @@ StaticMeshInitEffector::PrePhysicsUpdateInternal(float deltaTime)
     InitEffector::PrePhysicsUpdateInternal(deltaTime);
     
     // search for the AgentState
-    boost::shared_ptr<AgentState> state = shared_static_cast<AgentState>
+    boost::shared_ptr<AgentState> state = static_pointer_cast<AgentState>
         (mAgentAspect->GetChildOfClass("AgentState",true));
 
     if (state.get() == 0)
@@ -86,7 +86,7 @@ StaticMeshInitEffector::PrePhysicsUpdateInternal(float deltaTime)
     string unumMat = "matNum" + lexical_cast<string>(unum);
     
     // get parent of the agent aspect
-    boost::shared_ptr<Node> parent = shared_dynamic_cast<Node>
+    boost::shared_ptr<Node> parent = dynamic_pointer_cast<Node>
         (mAgentAspect->GetParent().lock());
 
     if (parent.get() == 0)
@@ -107,14 +107,14 @@ StaticMeshInitEffector::PrePhysicsUpdateInternal(float deltaTime)
         ++iter
         )
     {
-        boost::shared_ptr<StaticMesh> m = shared_static_cast<StaticMesh>(*iter);
+        boost::shared_ptr<StaticMesh> m = static_pointer_cast<StaticMesh>(*iter);
         m->ChangeMaterial("matTeam",teamMat);
         m->ChangeMaterial("matNum",unumMat);
     }
     
     // set the scene modified, the monitor will update
     boost::shared_ptr<SceneServer> sceneServer =
-        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+        dynamic_pointer_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() ==0)
     {

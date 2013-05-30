@@ -50,7 +50,7 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
     }
 
     boost::shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(GetParent().lock());
+        dynamic_pointer_cast<BaseNode>(GetParent().lock());
 
     if (parent.get() == 0)
     {
@@ -59,7 +59,7 @@ DriveEffector::Realize(boost::shared_ptr<ActionObject> action)
         return false;
     }
 
-    boost::shared_ptr<DriveAction> driveAction = shared_dynamic_cast<DriveAction>(action);
+    boost::shared_ptr<DriveAction> driveAction = dynamic_pointer_cast<DriveAction>(action);
 
     if (driveAction.get() == 0)
     {
@@ -117,7 +117,7 @@ DriveEffector::OnLink()
     SoccerBase::GetAgentState(*this,mAgentState);
 
     boost::shared_ptr<SphereCollider> geom =
-        shared_dynamic_cast<SphereCollider>(mTransformParent->GetChild("geometry"));
+        dynamic_pointer_cast<SphereCollider>(mTransformParent->GetChild("geometry"));
 
     mMaxDistance = 0.001;
     if (geom.get() == 0)

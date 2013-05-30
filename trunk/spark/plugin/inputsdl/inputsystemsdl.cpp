@@ -136,7 +136,7 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
     std::string mangledName = deviceName + "SDL";
 
     boost::shared_ptr<InputDevice> device =
-        shared_static_cast<InputDevice>(GetCore()->New(mangledName));
+        static_pointer_cast<InputDevice>(GetCore()->New(mangledName));
 
     if (device.get() == NULL)
         {
@@ -158,7 +158,7 @@ bool InputSystemSDL::CreateDevice(const std::string &deviceName)
     // some special case handling for the timer (FIXME)
     if (mangledName.compare("TimerSDL") == 0)
         {
-            mTimer = shared_static_cast<TimerSDL>(device);
+            mTimer = static_pointer_cast<TimerSDL>(device);
         }
     else
         {
@@ -185,7 +185,7 @@ int InputSystemSDL::EventFilter(const SDL_Event *event)
     // loop through all children
     for (TLeafList::iterator i = mChildren.begin(); i!=mChildren.end(); ++i)
         {
-            boost::shared_ptr<InputDeviceSDL> device = shared_static_cast<InputDeviceSDL>(*i);
+            boost::shared_ptr<InputDeviceSDL> device = static_pointer_cast<InputDeviceSDL>(*i);
             // every device gets a chance to filter the event, the first one
             // who claims it, gets it
             if (device->EventFilter(event) == 0)

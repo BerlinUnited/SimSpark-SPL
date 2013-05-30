@@ -167,22 +167,22 @@ public:
             boost::weak_ptr<Leaf> lookup = core->GetCachedInternal(key);
             if (! lookup.expired())
                 {
-                    leaf = boost::shared_dynamic_cast<_CLASS>(lookup.lock());
+                    leaf = boost::dynamic_pointer_cast<_CLASS>(lookup.lock());
                     return;
                 }
 
-            leaf = boost::shared_dynamic_cast<_CLASS>
+            leaf = boost::dynamic_pointer_cast<_CLASS>
                 (core->GetUncachedInternal(key));
         }
 
         boost::shared_ptr<_CLASS> get()
         {
-            return boost::shared_static_cast<_CLASS>(leaf.lock());
+            return boost::static_pointer_cast<_CLASS>(leaf.lock());
         }
 
         _CLASS* operator -> ()
         {
-            return boost::shared_static_cast<_CLASS>(leaf.lock()).get();
+            return boost::static_pointer_cast<_CLASS>(leaf.lock()).get();
         }
     };
 

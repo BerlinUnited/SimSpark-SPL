@@ -1,0 +1,27 @@
+<root>
+  <name>InternalSoccerSim</name>
+  <addplugins reloadall="true">
+    <frame caption="Simulation" name="simulationframe" attachment="center_attachment">
+      <attachments>
+        <attachment>left_attachment</attachment>
+      </attachments>
+    </frame>
+    <frame caption="SceneGraph" name="scenegraphframe" attachment="left_attachment"/>
+    <frame caption="Soccer" name="soccercontrolframe" attachment="right_attachment"/>
+    <frame caption="Log" reload="false" name="logframe" attachment="bottom_attachment">
+      <attachments>
+        <attachment>right_attachment</attachment>
+      </attachments>
+    </frame>
+  </addplugins>
+  <removeplugins removeall="true"/>
+  <tasks>
+    <serverthread third="spark.rb" second="rcssserver3dinternal.rb" priority="7" first="" name="Server"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_1"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_2"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_3"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_4"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_5"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_6"/>
+  </tasks>
+</root>

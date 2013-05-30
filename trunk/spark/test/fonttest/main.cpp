@@ -51,19 +51,19 @@ int main(int argc, char **argv)
         boost::shared_ptr<CoreContext> context = zg.CreateContext();
         Kerosin                                 kCore(zg);
 
-        boost::shared_ptr<ScriptServer> scriptServer = shared_static_cast<ScriptServer>(context->Get("/sys/server/script"));
+        boost::shared_ptr<ScriptServer> scriptServer = static_pointer_cast<ScriptServer>(context->Get("/sys/server/script"));
         scriptServer->Run("script/init.rb");
 
         scriptServer->Run("script/fonttest.rb");
 
-        boost::shared_ptr<FontServer> fontServer = shared_static_cast<FontServer>(context->Get("/sys/server/font"));
+        boost::shared_ptr<FontServer> fontServer = static_pointer_cast<FontServer>(context->Get("/sys/server/font"));
         if (fontServer.get() == NULL) return 1;
 
         boost::shared_ptr<kerosin::Font> font = fontServer->GetFont("fonts/VeraMono.ttf", 24);
         if (font.get() == NULL) return 1;
 
-        boost::shared_ptr<ImageServer> imageServer = shared_static_cast<ImageServer>(context->New("kerosin/ImageServer", "/sys/server/image"));
-        boost::shared_ptr<TextureServer> textureServer = shared_static_cast<TextureServer>(context->New("kerosin/TextureServer", "/sys/server/texture"));
+        boost::shared_ptr<ImageServer> imageServer = static_pointer_cast<ImageServer>(context->New("kerosin/ImageServer", "/sys/server/image"));
+        boost::shared_ptr<TextureServer> textureServer = static_pointer_cast<TextureServer>(context->New("kerosin/TextureServer", "/sys/server/texture"));
 
         imageServer->Load("data/image/jpg.jpg");
         /* imageServer->Save(image, "jpg.tga");
