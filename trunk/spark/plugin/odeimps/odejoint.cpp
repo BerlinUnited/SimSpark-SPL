@@ -295,6 +295,12 @@ float JointImp::GetAngularMotorVelocity(int idx, long jointID) const
     return gRadToDeg(GetParameter(dParamVel + (idx * dParamGroup), jointID));
 }
 
+float JointImp::GetAngularMotorAngle(int idx, long jointID) const
+{
+    dJointID JointImp = (dJointID) jointID;
+    return gRadToDeg(dJointGetAMotorAngle(JointImp, idx));
+}
+
 void JointImp::SetMaxMotorForce(int idx, float f, long jointID)
 {
     SetParameter(dParamFMax + (idx * dParamGroup), f, jointID);

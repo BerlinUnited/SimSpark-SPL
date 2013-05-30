@@ -73,6 +73,7 @@
 #include <oxygen/physicsserver/sliderjoint.h>
 #include <oxygen/physicsserver/universaljoint.h>
 #include <oxygen/physicsserver/hinge2joint.h>
+#include <oxygen/physicsserver/battery.h>
 
 #include <oxygen/sceneserver/basenode.h>
 #include <oxygen/sceneserver/camera.h>

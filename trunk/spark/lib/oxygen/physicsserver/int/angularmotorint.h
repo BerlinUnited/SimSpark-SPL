@@ -106,6 +106,9 @@ public:
         euler angle rate.
     */
     virtual float GetAxisAngleRate(int idx, long jointID) = 0;
+
+    /** returns the torque on the joint */
+    virtual float GetTorque(long jointID) const = 0;
 };
 
 } //namespace oxygen

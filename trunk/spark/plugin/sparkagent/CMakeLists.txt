@@ -27,6 +27,16 @@ set(sparkagent_LIB_SRCS
    universaljointperceptor.h
    universaljointperceptor.cpp
    universaljointperceptor_c.cpp
+   angularmotoreffector.h
+   angularmotoreffector.cpp
+   angularmotoreffector_c.cpp
+   angularmotorperceptor.h
+   angularmotorperceptor.cpp
+   angularmotorperceptor_c.cpp
+   stiffnessaction.h
+   stiffnesseffector.h
+   stiffnesseffector.cpp
+   stiffnesseffector_c.cpp
 )
 
 add_library(sparkagent MODULE ${sparkagent_LIB_SRCS})
