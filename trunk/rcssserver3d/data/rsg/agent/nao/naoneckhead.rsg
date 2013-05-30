@@ -86,28 +86,50 @@
                               1 0 0
                               $he2_min $he2_max)
 
-        (nd RestrictedVisionPerceptor
-            (setViewCones 120 120)
-            (setSenseMyPos false)
-            (setSenseBallPos false)
-            (setStaticSenseAxis false)
-            (addNoise true)
-            (setInterval 3)
-            (setSenseLine true)
-        )
+							  
+							  
+; simulate the omni-vision
+;	(nd Transform
+; 	    (setLocalPos 0 $Head_Radius 0)
+;		(setLocalRotation -40 0 0)
+;
+;		(nd VisionPerceptor
+;			(setViewCones 48 37)
+;			(setSenseMyPos true)
+;			(setStaticSenseAxis false)
+;			(addNoise false)
+;			(setInterval 3)
+;			(setSenseLine true)
+;		)
+;	)
 
-	;; (nd Transform
-	;;     (setLocalPos 0 $Head_Radius 0)
-	;;     (setLocalRotation 0 0 0)
-	;;     (nd ImagePerceptor
-	;; 	(setInterval 3)
-	;; 	(setOffScreen false)
-	;; 	(setResolution 320 240)
-	;; 	(setFOV 58)
-	;; 	(setZNear 0.003)
-	;; 	(setZFar 50)
-	;; 	)
-	;;     )
+	(nd Transform
+		(setLocalPos 0 $Head_Radius 0)
+		(setLocalRotation -40 0 0)
+
+		(nd RestrictedVisionPerceptor
+			(setViewCones 48 37)
+			(setSenseMyPos false)
+			(setStaticSenseAxis false)
+			(addNoise true)
+			(setInterval 3)
+			(setSenseLine true)
+		)
+	)
+
+; simulate the lower camera of Nao
+;	(nd Transform
+;	    (setLocalPos 0 $Head_Radius 0)
+;	    (setLocalRotation -40 0 0)
+;	    (nd ImagePerceptor
+;		(setInterval 3)
+;		(setOffScreen false)
+;		(setResolution 320 240)
+;		(setFOV 58)
+;		(setZNear 0.003)
+;		(setZFar 50)
+;		)
+;	    )
 
         (nd ObjectState
             (setID head)
