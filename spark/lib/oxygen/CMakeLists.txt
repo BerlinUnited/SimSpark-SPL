@@ -53,6 +53,7 @@ set(oxygen_LIB_HDRS
     physicsserver/universaljoint.h
     physicsserver/hinge2joint.h
     physicsserver/angularmotor.h
+    physicsserver/battery.h
     
     #interfaces
     physicsserver/int/angularmotorint.h
@@ -227,6 +228,8 @@ set(oxygen_LIB_SRCS
     physicsserver/hinge2joint_c.cpp
     physicsserver/angularmotor.cpp
     physicsserver/angularmotor_c.cpp
+    physicsserver/battery.cpp
+    physicsserver/battery_c.cpp
     
     sceneserver/basenode.cpp
     sceneserver/basenode_c.cpp

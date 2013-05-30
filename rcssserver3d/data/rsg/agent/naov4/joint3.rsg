@@ -1,0 +1,33 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+ (templ  $PerName     $EffName   
+	 $Path_Body1  $Path_Body2
+	 $Anchor_X    $Anchor_Y   $Anchor_Z
+	 $Axis_X      $Axis_Y     $Axis_Z
+	 $MinDeg      $MaxDeg
+	 )
+
+ (def $PI 3.14159265)
+ (def $RMP2RPS (eval $PI / 30))
+
+ (def $MaxAbsSpeed (eval 61.1 * $RMP2RPS))
+ (def $Ke (eval 3.4 * $RMP2RPS))
+ (def $Kt 2.8)
+ (def $R  6.44)
+ (def $Ct 0.0198)
+ (def $Ch 43.6)
+ (def $Te 27)
+ (def $FMax 7.8)
+
+ (importScene rsg/agent/naov4/hingejoint.rsg
+	      $PerName     $EffName   
+	      $Path_Body1  $Path_Body2
+	      $Anchor_X    $Anchor_Y   $Anchor_Z
+	      $Axis_X      $Axis_Y     $Axis_Z
+	      $MinDeg      $MaxDeg
+	      $Ke          $Kt         $R
+	      $Te          $Ct         $Ch
+	      $FMax        $MaxAbsSpeed)
+ )
