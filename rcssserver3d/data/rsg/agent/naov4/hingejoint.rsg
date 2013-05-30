@@ -52,7 +52,7 @@
 	    (setProtectionTempeature  80)
 
 	    (enableFeedback true)
-	    (setBattery ../../../body/Battery)
+	    (setBattery ../../../torso/Battery)
 	    
 	    (nd AngularMotorPerceptor (setName $PerName)
 		(setSenseAngle true)
