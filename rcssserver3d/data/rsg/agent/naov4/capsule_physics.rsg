@@ -14,6 +14,6 @@
     (nd CapsuleCollider
         (setParams $radius $length)
 
-        (importScene rsg/agent/nao/contactjointhandler.rsg)
+        (importScene rsg/agent/naov4/contactjointhandler.rsg)
     )
  )
