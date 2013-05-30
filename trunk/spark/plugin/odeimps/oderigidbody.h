@@ -46,7 +46,7 @@ public:
     void UseGravity(bool f, long bodyID);
     bool UsesGravity(long bodyID) const;
     void SetMass(float mass, long bodyID);
-    void SetMassParameters(const oxygen::GenericMass& mass, long bodyID);
+    void SetMassParameters(const oxygen::GenericMass* mass, long bodyID);
     float GetMass(long bodyID) const;
     void SetSphere(float density, float radius, long bodyID);
     salt::Vector3f AddSphere(float density, float radius, const salt::Matrix& matrix,
@@ -90,7 +90,8 @@ public:
     void BodySetData(oxygen::RigidBody* rb, long bodyID);
     oxygen::RigidBody* BodyGetData(long bodyID);    
     long CreateBody(long worldID);
-    oxygen::GenericMass& CreateMass(float mass, salt::Vector3f cVector);
+    oxygen::GenericMass* CreateMass(float mass, salt::Vector3f cVector);
+    oxygen::GenericMass* CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const;
     void SetInertiaTensorAt(int i, float value, oxygen::GenericMass& mass);
     
 protected:

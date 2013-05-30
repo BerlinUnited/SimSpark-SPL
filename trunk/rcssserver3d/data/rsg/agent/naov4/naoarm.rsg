@@ -7,7 +7,7 @@
     ;@param LRFactor is (left_leg ? -1 : 1)
     ;    
     (templ  $LRFactor $LeftOrRight
-            $Torso_X $Torso_Y $Torso_Z $loadObj
+            $RobotX $RobotY $RobotZ $loadObj
     )
     
     ;
@@ -34,101 +34,151 @@
     (def $Joint4EffName (join $LeftOrRight ae4))
     
     ;
-    ;Position Parameters
+    ;Size and Mass Parameters
+    ;
+    (def $ShoulderRadius 0.03)
+    (def $ShoulderMass   0.06984)
+    (def $ShoulderCGX    0.02507)
+    (def $ShoulderCGY    -0.00178)
+    (def $ShoulderCGZ    0.00019)
+    (def $ShoulderI11    0.00007101854)
+    (def $ShoulderI22    0.00001404920)
+    (def $ShoulderI33    0.00007314467)
+    (def $ShoulderI12    -0.00000202458)
+    (def $ShoulderI13    -0.00000001713)
+    (def $ShoulderI23    -0.00000004410)
+    
+    (def $UpperArmSizeX  0.06)
+    (def $UpperArmSizeY  0.09)
+    (def $UpperArmSizeZ  0.06)
+    (def $UpperArmMass   0.12166)
+    (def $UpperArmCGX    -0.00388)
+    (def $UpperArmCGY    0.02067)
+    (def $UpperArmCGZ    0.00362)
+    (def $UpperArmI11    0.00005931793)
+    (def $UpperArmI22    0.00020221058)
+    (def $UpperArmI33    0.00018421556)
+    (def $UpperArmI12    -0.00000193929)
+    (def $UpperArmI13    0.00001564503)
+    (def $UpperArmI23    -0.00000368731)
+    
+    (def $ElbowRadius    0.03)
+    (def $ElbowMass      0.05959)
+    (def $ElbowCGX       0.00001)
+    (def $ElbowCGY       -0.02573)
+    (def $ElbowCGZ       -0.00020)
+    (def $ElbowI11       0.00000549462)
+    (def $ElbowI22       0.00006224789)
+    (def $ElbowI33       0.00006323010)
+    (def $ElbowI12       -0.00000002242)
+    (def $ElbowI13       -0.00000006771)
+    (def $ElbowI23       0.00000000559)
+    
+    (def $LowerArmSizeX  0.06)
+    (def $LowerArmSizeY  0.150)
+    (def $LowerArmSizeZ  0.06)
+    (def $LowerArmMass   0.11282)
+    (def $LowerArmCGX    -0.00096)
+    (def $LowerArmCGY    0.06992)
+    (def $LowerArmCGZ    -0.00114)
+    (def $LowerArmI11    0.00005395190)
+    (def $LowerArmI22    0.00023077622)
+    (def $LowerArmI33    0.00022789726)
+    (def $LowerArmI12    0.00000538205)
+    (def $LowerArmI13    0.00000356087)
+    (def $LowerArmI23    -0.00000004722)
+
+    ;
+    ; Position Parameters
     ;
     (def $ShoulderRelTorso_X (eval $LRFactor * 0.098))
     (def $ShoulderRelTorso_Y 0)
-    (def $ShoulderRelTorso_Z 0.075)
+    (def $ShoulderRelTorso_Z 0.100)
     
-    (def $UpperarmRelShoulderX (eval $LRFactor * 0.01))
-    (def $UpperarmRelShoulderY 0.02)
+    (def $UpperarmRelShoulderX 0)
+    (def $UpperarmRelShoulderY 0.045)
     (def $UpperarmRelShoulderZ 0)
     
-    (def $ElbowRelUpperArm_X (eval $LRFactor * -0.01))
-    (def $ElbowRelUpperArm_Y 0.07)
-    (def $ElbowRelUpperArm_Z 0.009)
+    (def $ElbowRelUpperArm_X 0)
+    (def $ElbowRelUpperArm_Y 0.045)
+    (def $ElbowRelUpperArm_Z 0)
     
     (def $LowerarmRelElbow_X 0)
-    (def $LowerarmRelElbow_Y 0.05)
+    (def $LowerarmRelElbow_Y 0.060)
     (def $LowerarmRelElbow_Z 0)
     
-    (def $Shoulder_X (eval $Torso_X + $ShoulderRelTorso_X))
-    (def $Shoulder_Y (eval $Torso_Y + $ShoulderRelTorso_Y))
-    (def $Shoulder_Z (eval $Torso_Z + $ShoulderRelTorso_Z))
+    (def $Shoulder_X (eval $RobotX + $ShoulderRelTorso_X + (eval $LRFactor * $ShoulderCGX)))
+    (def $Shoulder_Y (eval $RobotY + $ShoulderRelTorso_Y + $ShoulderCGY))
+    (def $Shoulder_Z (eval $RobotZ + $ShoulderRelTorso_Z + $ShoulderCGZ))
+
+    (def $Upperarm_X (eval $RobotX + $ShoulderRelTorso_X + $UpperarmRelShoulderX + (eval $LRFactor * $UpperArmCGX)))
+    (def $Upperarm_Y (eval $RobotY + $ShoulderRelTorso_Y + $UpperarmRelShoulderY + $UpperArmCGY))
+    (def $Upperarm_Z (eval $RobotZ + $ShoulderRelTorso_Z + $UpperarmRelShoulderZ + $UpperArmCGZ))
+
+    (def $Elbow_X    (eval $RobotX + $ShoulderRelTorso_X + $UpperarmRelShoulderX + $ElbowRelUpperArm_X + (eval $LRFactor * $ElbowCGX)))
+    (def $Elbow_Y    (eval $RobotY + $ShoulderRelTorso_Y + $UpperarmRelShoulderY + $ElbowRelUpperArm_Y + $ElbowCGY))
+    (def $Elbow_Z    (eval $RobotZ + $ShoulderRelTorso_Z + $UpperarmRelShoulderZ + $ElbowRelUpperArm_Z + $ElbowCGZ))
     
-    (def $Upperarm_X (eval $Shoulder_X + $UpperarmRelShoulderX))
-    (def $Upperarm_Y (eval $Shoulder_Y + $UpperarmRelShoulderY))
-    (def $Upperarm_Z (eval $Shoulder_Z + $UpperarmRelShoulderZ))
-    
-    (def $Elbow_X    (eval $Upperarm_X + $ElbowRelUpperArm_X))
-    (def $Elbow_Y    (eval $Upperarm_Y + $ElbowRelUpperArm_Y))
-    (def $Elbow_Z    (eval $Upperarm_Z + $ElbowRelUpperArm_Z))
-    
-    (def $LowerArm_X (eval $Elbow_X + $LowerarmRelElbow_X))
-    (def $LowerArm_Y (eval $Elbow_Y + $LowerarmRelElbow_Y))
-    (def $LowerArm_Z (eval $Elbow_Z + $LowerarmRelElbow_Z))
-    
-    ;
-    ;Size and Mass Parameters
-    ;
-    (def $ShoulderRadius 0.01)
-    (def $ShoulderMass   0.07)
-    
-    (def $UpperArmSizeX  0.07)
-    (def $UpperArmSizeY  0.08)
-    (def $UpperArmSizeZ  0.06)
-    (def $UpperArmMass   0.150)
-    
-    (def $ElbowRadius    0.01)
-    (def $ElbowMass      0.035)
-    
-    (def $LowerArmSizeX  0.05)
-    (def $LowerArmSizeY  0.11)
-    (def $LowerArmSizeZ  0.05)
-    (def $LowerArmMass   0.2)
-    
-        
+    (def $LowerArm_X (eval $RobotX + $ShoulderRelTorso_X + $UpperarmRelShoulderX + $ElbowRelUpperArm_X + $LowerarmRelElbow_X + (eval $LRFactor * $LowerArmCGX)))
+    (def $LowerArm_Y (eval $RobotY + $ShoulderRelTorso_Y + $UpperarmRelShoulderY + $ElbowRelUpperArm_Y + $LowerarmRelElbow_Y + $LowerArmCGY))
+    (def $LowerArm_Z (eval $RobotZ + $ShoulderRelTorso_Z + $UpperarmRelShoulderZ + $ElbowRelUpperArm_Z + $LowerarmRelElbow_Z + $LowerArmCGZ))
+
     ;
     ;Joint Parameters
     ;
-    (def $aj1_min -120)
-    (def $aj1_max 120)
+    (def $aj1_min -119.5)
+    (def $aj1_max 119.5)
+    (def $aj1X (eval -1 * $LRFactor * $ShoulderCGX))
+    (def $aj1Y (eval -1 * $ShoulderCGY))
+    (def $aj1Z (eval -1 * $ShoulderCGZ))
     
-    (def $right_aj2_min     -95)
-    (def $left_aj2_min      -1)
+    (def $right_aj2_min     -94.5)
+    (def $left_aj2_min      0.5)
     (def $aj2_min_c1        (eval (eval $right_aj2_min + $left_aj2_min) * 0.5))
     (def $aj2_min_c2        (eval (eval $right_aj2_min - $left_aj2_min) * 0.5))
     (def $aj2_min           (eval $aj2_min_c1 + (eval $LRFactor * $aj2_min_c2)))
     
-    (def $right_aj2_max     1)
-    (def $left_aj2_max      95)
+    (def $right_aj2_max     -0.5)
+    (def $left_aj2_max      94.5)
     (def $aj2_max_c1        (eval (eval $right_aj2_max + $left_aj2_max) * 0.5))
     (def $aj2_max_c2        (eval (eval $right_aj2_max - $left_aj2_max) * 0.5))
     (def $aj2_max           (eval $aj2_max_c1 + (eval $LRFactor * $aj2_max_c2)))
+    (def $aj2X (eval -1 * $LRFactor * $UpperArmCGX))
+    (def $aj2Y (eval -1 * $UpperArmCGY))
+    (def $aj2Z (eval -1 * $UpperArmCGZ))
+
+    (def $aj3_min           -119.5)
+    (def $aj3_max           119.5)
+    (def $aj3X (eval -1 * $LRFactor * $ElbowCGX))
+    (def $aj3Y (eval -1 * $ElbowCGY))
+    (def $aj3Z (eval -1 * $ElbowCGZ))
     
-    (def $aj3_min           -120)
-    (def $aj3_max           120)
-    
-    (def $right_aj4_min     -1)
-    (def $left_aj4_min      -90)
+    (def $right_aj4_min     0.5)
+    (def $left_aj4_min      -89.5)
     (def $aj4_min_c1        (eval (eval $right_aj4_min + $left_aj4_min) * 0.5))
     (def $aj4_min_c2        (eval (eval $right_aj4_min - $left_aj4_min) * 0.5))
     (def $aj4_min           (eval $aj4_min_c1 + (eval $LRFactor * $aj4_min_c2)))
 
-    (def $right_aj4_max     90)
-    (def $left_aj4_max      1)
+    (def $right_aj4_max     89.5)
+    (def $left_aj4_max      -0.5)
     (def $aj4_max_c1        (eval (eval $right_aj4_max + $left_aj4_max) * 0.5))
     (def $aj4_max_c2        (eval (eval $right_aj4_max - $left_aj4_max) * 0.5))
     (def $aj4_max           (eval $aj4_max_c1 + (eval $LRFactor * $aj4_max_c2)))
-    
+    (def $aj4X (eval -1 * $LRFactor * $LowerArmCGX))
+    (def $aj4Y (eval -1 * $LowerArmCGY))
+    (def $aj4Z (eval -1 * $LowerArmCGZ))    
 
-    (def $aj2_Anchor_X      (eval -1 * $UpperarmRelShoulderX))
-    (def $aj2_Anchor_Y      (eval -1 * $UpperarmRelShoulderY))
-    (def $aj2_Anchor_Z      (eval -1 * $UpperarmRelShoulderZ))
+    (def $aj2_Anchor_X      (eval $aj2X - $UpperarmRelShoulderX))
+    (def $aj2_Anchor_Y      (eval $aj2Y - $UpperarmRelShoulderY))
+    (def $aj2_Anchor_Z      (eval $aj2Z - $UpperarmRelShoulderZ))
     
-    (def $aj4_Anchor_X      (eval -1 * $LowerarmRelElbow_X))
-    (def $aj4_Anchor_Y      (eval -1 * $LowerarmRelElbow_Y))
-    (def $aj4_Anchor_Z      (eval -1 * $LowerarmRelElbow_Z))
+    (def $aj4_Anchor_X      (eval $aj4X - $LowerarmRelElbow_X))
+    (def $aj4_Anchor_Y      (eval $aj4Y - $LowerarmRelElbow_Y))
+    (def $aj4_Anchor_Z      (eval $aj4Z - $LowerarmRelElbow_Z))
+
+    (def $aj4GeoX $aj4_Anchor_X)
+    (def $aj4GeoY (eval $aj4_Anchor_Y + (eval $LowerArmSizeY * 0.5)))
+    (def $aj4GeoZ $aj4_Anchor_Z)
     
     ;
     ;Models obj
@@ -143,62 +193,94 @@
         (setName $ShoulderName)
         (setLocalPos $Shoulder_X $Shoulder_Y $Shoulder_Z)
         
-        (importScene rsg/agent/naov4/sphere_appearance.rsg $ShoulderRadius matYellow)
-        ;(importScene rsg/agent/nao/sphere_physics.rsg $ShoulderRadius $ShoulderMass)
-        (importScene rsg/agent/naov4/sphere_physics_nocollider.rsg $ShoulderRadius $ShoulderMass)
+	(nd Transform
+	    (setLocalRotation 0 90 0)
+	    (setLocalPos (eval -0.04 * $LRFactor) 0 0)
+	    (importScene rsg/agent/naov4/capsule_appearance.rsg
+			 (eval 0.7 * $ShoulderRadius)
+			 0.01
+			 matDarkGrey)
+	    )
+
+
+	;; (nd Transform
+	;;     (setLocalPos $aj1X $aj1Y $aj1Z)
+	;;     (importScene rsg/agent/naov4/sphere_appearance.rsg $ShoulderRadius matYellow)
+	;; )
+
+        (importScene rsg/agent/naov4/body_physics.rsg $ShoulderMass 0 0 0 $ShoulderI11 $ShoulderI22 $ShoulderI33 $ShoulderI12 $ShoulderI13 $ShoulderI23)
+	(nd TransformCollider
+	    (nd SphereCollider
+		(setRadius $ShoulderRadius)
+		(setLocalPosition $aj1X $aj1Y $aj1Z)
+		(importScene rsg/agent/naov4/contactjointhandler.rsg)
+		)
+	    )
 
         (importScene rsg/agent/naov4/joint2.rsg
                               $Joint1PerName $Joint1EffName
-                              ../sphereBody ../../body/boxBody 
-                              0 0 0
-                              1 0 0 ;1 -1 -1
+                              ../body ../../torso/body 
+                              $aj1X $aj1Y $aj1Z
+                              1 0 0
                               $aj1_min $aj1_max)
     )                  
            
     ;               
-    ;Construct UpperArm
+    ; Construct UpperArm
     ;
     (nd Transform
         (setName $UpperarmName)
         (setLocalPos $Upperarm_X $Upperarm_Y $Upperarm_Z)
         
+	(nd Transform
+	    (setLocalPos $aj2X $aj2Y $aj2Z)
         (switch $loadObj
           (true
             (nd StaticMesh (load $UpperArmObj) (setScale $UpperArmSizeX $UpperArmSizeX $UpperArmSizeX))
           )
 
           (false
-            (importScene rsg/agent/naov/box_appearance.rsg $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ matBlue)
+            (importScene rsg/agent/naov4/box_appearance.rsg $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ matBlue)
           )
         )
+	)
 
-        (importScene rsg/agent/naov4/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
+        (importScene rsg/agent/naov4/body_physics.rsg $UpperArmMass 0 0 0 $UpperArmI11 $UpperArmI22 $UpperArmI33 $UpperArmI12 $UpperArmI13 $UpperArmI23)
+	(nd TransformCollider
+	    (nd BoxCollider
+		(setBoxLengths $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ)
+		(setLocalPosition $aj2X $aj2Y $aj2Z)
+		(importScene rsg/agent/naov4/contactjointhandler.rsg)
+		)
+	    )
         
         (importScene rsg/agent/naov4/joint4.rsg
                                 $Joint2PerName $Joint2EffName
-                                ../boxBody $ShoulderBodyPath
+                                ../body $ShoulderBodyPath
                                 $aj2_Anchor_X $aj2_Anchor_Y $aj2_Anchor_Z
-                                0 0 1 ;2 -1 -1
+                                0 0 1
                                 $aj2_min $aj2_max)
      )
      
     ;
-    ;Construct ELbow
+    ; Construct ELbow
     ;
     (nd Transform
         (setName $ElbowName)
         (setLocalPos $Elbow_X $Elbow_Y $Elbow_Z)
         
+	;; (nd Transform
+	;;     (setLocalPos $aj3X $aj3Y $aj3Z)
+	;;     (importScene rsg/agent/naov4/sphere_appearance.rsg $ElbowRadius matYellow)
+	;; )
 
-        (importScene rsg/agent/naov4/sphere_appearance.rsg $ElbowRadius matYellow)
-        ;(importScene rsg/agent/nao/sphere_physics.rsg $ElbowRadius $ElbowMass)
-        (importScene rsg/agent/naov4/sphere_physics_nocollider.rsg $ElbowRadius $ElbowMass)
+        (importScene rsg/agent/naov4/body_physics.rsg $ElbowMass 0 0 0 $ElbowI11 $ElbowI22 $ElbowI33 $ElbowI12 $ElbowI13 $ElbowI23)
         
         (importScene rsg/agent/naov4/joint2.rsg
                                 $Joint3PerName $Joint3EffName
-                                ../sphereBody $UpperarmBodyPath
-                                0 0 0
-                                0 1 0 ;1 -1 -1
+                                ../body $UpperarmBodyPath
+                                $aj3X $aj3Y $aj3Z
+                                0 1 0
                                 $aj3_min $aj3_max)
     )
     
@@ -209,6 +291,8 @@
         (setName $LowerarmName)
         (setLocalPos $LowerArm_X $LowerArm_Y $LowerArm_Z)
 
+	(nd Transform
+	    (setLocalPos $aj4GeoX $aj4GeoY $aj4GeoZ)
         (switch $loadObj
           (true
             (nd StaticMesh (load $LowerArmObj) (setScale $LowerArmSizeX $LowerArmSizeX $LowerArmSizeX))
@@ -217,14 +301,22 @@
             (importScene rsg/agent/naov4/box_appearance.rsg $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ matRed)
           )
         )
+	)
 
-        (importScene rsg/agent/naov4/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
+        (importScene rsg/agent/naov4/body_physics.rsg $LowerArmMass 0 0 0 $LowerArmI11 $LowerArmI22 $LowerArmI33 $LowerArmI12 $LowerArmI13 $LowerArmI23)
+	(nd TransformCollider
+	    (nd BoxCollider
+		(setBoxLengths $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ)
+		(setLocalPosition $aj4GeoX $aj4GeoY $aj4GeoZ)
+		(importScene rsg/agent/naov4/contactjointhandler.rsg)
+		)
+	    )
         
         (importScene rsg/agent/naov4/joint4.rsg
                                 $Joint4PerName $Joint4EffName
-                                ../boxBody $ElbowBodyPath
+                                ../body $ElbowBodyPath
                                 $aj4_Anchor_X $aj4_Anchor_Y $aj4_Anchor_Z
-                                0 0 1 ;2 -1 -1
+                                0 0 1
                                 $aj4_min $aj4_max)
 
         (nd ObjectState

@@ -147,11 +147,11 @@ Vector3f RigidBodyImp::AddMass(const dMass& ODEMass, const Matrix& matrix, Vecto
     return massTrans - trans2;
 }
 
-void RigidBodyImp::SetMassParameters(const GenericMass& mass, long bodyID)
+void RigidBodyImp::SetMassParameters(const GenericMass* mass, long bodyID)
 {
     dBodyID ODEBody = (dBodyID) bodyID;
-    dMass& ODEMass = (dMass&) mass;
-    dBodySetMass(ODEBody, &ODEMass);
+    const ODEMass* odeMass = (const ODEMass*)(mass);
+    dBodySetMass(ODEBody, odeMass);
 }
 
 void RigidBodyImp::PrepareSphere(dMass& mass, float density, float radius) const
@@ -456,16 +456,27 @@ void RigidBodyImp::TranslateMass(const Vector3f& v, long bodyID)
     dMassTranslate(&m,v[0],v[1],v[2]);
 }
 
-GenericMass& RigidBodyImp::CreateMass(float mass, salt::Vector3f cVector)
+GenericMass* RigidBodyImp::CreateMass(float mass, salt::Vector3f cVector)
 {
-    dMass ODEMass;
-    ODEMass.mass = mass;
-    ODEMass.c[0] = cVector[0];
-    ODEMass.c[1] = cVector[1];
-    ODEMass.c[2] = cVector[2];
+    ODEMass* odeMass = new ODEMass;
+    odeMass->mass = mass;
+    odeMass->c[0] = cVector[0];
+    odeMass->c[1] = cVector[1];
+    odeMass->c[2] = cVector[2];
     
-    GenericMass& massRef = (GenericMass&) ODEMass;
-    return massRef;
+    return odeMass;
+}
+
+oxygen::GenericMass* RigidBodyImp::CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const
+{
+  ODEMass* odeMass = new ODEMass;
+
+  dMassSetParameters(odeMass, mass,
+    cg.x(), cg.y(),  cg.z(),
+    Ixx.x(), Ixx.y(), Ixx.z(),
+    Ixy.x(), Ixy.y(), Ixy.z());
+
+  return odeMass;
 }
 
 void RigidBodyImp::SetInertiaTensorAt(int i, float value, GenericMass& mass)

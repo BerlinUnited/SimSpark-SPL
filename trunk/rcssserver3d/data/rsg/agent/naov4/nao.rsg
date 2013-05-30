@@ -70,13 +70,21 @@
         )
 	)
 
-        ;(importScene rsg/agent/nao/box_physics.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
-        (importScene rsg/agent/naov4/box_physics_nocollider.rsg $TorsoLength $TorsoWidth $TorsoHeight $TorsoMass)
-        (nd BoxCollider
-            (setName TorsoCollider)
-            (setBoxLengths $TorsoLength $TorsoWidth $TorsoHeight)
-            (importScene rsg/agent/naov4/contactjointhandler.rsg)
-        )
+        (importScene rsg/agent/naov4/body_physics.rsg $TorsoMass 0 0 0 $TorsoI11 $TorsoI22 $TorsoI33 $TorsoI12 $TorsoI13 $TorsoI23)
+	(nd TransformCollider
+	    (nd BoxCollider
+		(setName TorsoCollider)
+		(setBoxLengths $TorsoLength $TorsoWidth $TorsoHeight)
+		(setLocalPosition $GeoX $GeoY $GeoZ)
+		(importScene rsg/agent/naov4/contactjointhandler.rsg)
+		)
+	    )
+	;(nd Transform
+	;    (setLocalRotation 0 0 90)
+	;    (nd GPS
+;		(setName torso)
+;		)
+;	    )
 
 	(nd Battery
 	    (setName Battery)

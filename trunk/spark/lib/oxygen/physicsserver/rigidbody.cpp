@@ -146,7 +146,7 @@ float RigidBody::GetMass() const
     return mRigidBodyImp->GetMass(mBodyID);
 }
 
-void RigidBody::SetMassParameters(const GenericMass& mass)
+void RigidBody::SetMassParameters(const GenericMass* mass)
 {
     mRigidBodyImp->SetMassParameters(mass, mBodyID);
 }
@@ -390,9 +390,14 @@ void RigidBody::TranslateMass(const Vector3f& v)
     mRigidBodyImp->TranslateMass(v, mBodyID);
 }
 
-GenericMass& RigidBody::CreateMass(float mass, salt::Vector3f cVector)
+GenericMass* RigidBody::CreateMass(float mass, salt::Vector3f cVector)
 {
     return mRigidBodyImp->CreateMass(mass, cVector);
+}
+
+GenericMass* RigidBody::CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const
+{
+  return mRigidBodyImp->CreateMass(mass, cg, Ixx, Ixy);
 }
 
 void RigidBody::SetInertiaTensorAt(int i, float value, GenericMass& mass)
