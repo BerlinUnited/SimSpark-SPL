@@ -810,3 +810,25 @@ AABB2 SoccerBase::GetAgentBoundingRect(const Leaf& base)
 
     return boundingRect;
 }
+
+
+std::string SoccerBase::SPLState2Str(const spl::TSPLState state)
+{
+  switch (state)
+  {
+  case spl::Initial:
+    return STR_SPL_STATE_INITIAL;
+  case spl::Ready:
+    return STR_SPL_STATE_READY;
+  case spl::Set:
+    return STR_SPL_STATE_SET;
+  case spl::Playing:
+    return STR_SPL_STATE_PLAYING;
+  case spl::Finished:
+    return STR_SPL_STATE_FINISHED;
+  case spl::Penalized:
+    return STR_SPL_STATE_PENALIZED;
+  default:
+    return STR_SPL_STATE_UNKNOWN;
+  }
+}
