@@ -14,6 +14,6 @@
     (nd BoxCollider
         (setBoxLengths $lenX $lenY $lenZ)
 
-        (importScene rsg/agent/nao/touchperceptorhandler.rsg)
+        (importScene rsg/agent/naov4/touchperceptorhandler.rsg)
     )
 )

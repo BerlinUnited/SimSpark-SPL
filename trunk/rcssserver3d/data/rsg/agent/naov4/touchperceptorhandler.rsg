@@ -3,6 +3,8 @@
 (RSG 0 1)
 (
     (nd TouchPerceptorHandler
+	(setName TouchPerceptorHandler)
+
         (setContactBounceMode false)
         (setContactBounceValue 0.001)
         (setMinBounceVel 10)
@@ -15,5 +17,7 @@
 
         (setContactSlipMode true)
         (setContactSlip 5e-3)
+
+	(setContactMu 1e4)
     )
 )
