@@ -47,7 +47,7 @@ class SimSpark : public Spark
 public:
     SimSpark() :
         Spark(),
-        mScriptPath("rcssserver3d.rb")
+        mScriptPath("rcssserverspl.rb")
     {};
 
     /** called once after Spark finished it's init */
