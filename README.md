@@ -21,4 +21,12 @@ Improvements
 Installation
 ------------
 
-* PPA for Ubuntu: https://launchpad.net/~xu-informatik/+archive/simspark-spl
+* Ubuntu
+
+  ```sh
+  sudo add-apt-repository ppa:xu-informatik/simspark-spl
+  sudo apt-get update
+  sudo apt-get install rcssserver3d-spl
+  ```
+
+  PPA: https://launchpad.net/~xu-informatik/+archive/simspark-spl
