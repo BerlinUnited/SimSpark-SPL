@@ -772,7 +772,8 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
             Vector3f Xf(ip.x(), focalLength, ip.y());
             float CXf = Xf.Length();
             float XfEf = (Xf - Ef).Length();
-            float XfCEf = acos((CXf * CXf + CEf * CEf - XfEf * XfEf) / (2 * CXf * CEf));
+            float cosXfCEf = (CXf * CXf + CEf * CEf - XfEf * XfEf) / (2 * CXf * CEf);
+            float XfCEf = acos(salt::gClamp(cosXfCEf, -1.0f, 1.0f));
             float CXE = gPI - CEB - XfCEf;
             float EX = CE / sin(CXE) * sin(XfCEf);
             X[inum] = ep3 + (bp3 - ep3) * (EX / BE);
