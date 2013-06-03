@@ -43,7 +43,7 @@ $defaultOpenGLBundle = 'openglsyssdl'
 $agentStep = 0.02
 $agentType = 'tcp'
 $agentPort = 3100
-$agentSyncMode = false
+$agentSyncMode = true
 $threadedAgentControl = true
 
 # (MonitorControl) constants
