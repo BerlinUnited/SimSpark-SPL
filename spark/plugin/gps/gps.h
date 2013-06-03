@@ -21,7 +21,7 @@
 #define GPS_H
 
 #include <oxygen/agentaspect/perceptor.h>
-#include <oxygen/physicsserver/rigidbody.h>
+#include <oxygen/sceneserver/transform.h>
 
 class GPS : public oxygen::Perceptor
 {
@@ -37,8 +37,7 @@ public:
 
 private:
 
-    //! reference to the body of which the perceptor is measuring the angle change rate    
-    boost::shared_ptr<oxygen::RigidBody> mBody;
+    boost::shared_ptr<oxygen::Transform> mTransformParent;
 };
 
 DECLARE_CLASS(GPS);
