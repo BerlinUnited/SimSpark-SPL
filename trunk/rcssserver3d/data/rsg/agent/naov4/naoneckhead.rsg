@@ -158,12 +158,12 @@
 	    )
 
 
-	;(nd Transform
-	;    (setLocalRotation 0 0 90)
-	;    (nd GPS
-;		(setName head)
-;		)
-;	    )
+	(nd Transform
+	   (setLocalRotation 0 0 90)
+	   (nd GPS
+		(setName head)
+		)
+	    )
 
 	;; (nd Transform
 	;;     (setLocalPos 0 $Head_Radius 0)
