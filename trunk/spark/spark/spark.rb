@@ -678,3 +678,6 @@ importBundle "imageperceptor"
 
 #
 importBundle "batteryperceptor"
+
+#
+importBundle "gps"
