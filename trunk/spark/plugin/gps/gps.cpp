@@ -39,17 +39,14 @@ GPS::~GPS()
 void 
 GPS::OnLink()
 {
-    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform>
-        (FindParentSupportingClass<Transform>().lock());
-
-    mBody = shared_static_cast<RigidBody>
-        (transformParent->GetChildOfClass("RigidBody"));     
+    mTransformParent = shared_static_cast<Transform>
+        (FindParentSupportingClass<Transform>().lock());   
 }
 
 void 
 GPS::OnUnlink()
 {
-    mBody.reset();
+    mTransformParent.reset();
 }
 
 bool
@@ -63,8 +60,7 @@ GPS::Percept(boost::shared_ptr<PredicateList> predList)
     nameElement.AddValue(std::string("n"));
     nameElement.AddValue(GetName());       
 
-    Matrix tf = mBody->GetRotation();
-    tf.Pos() = mBody->GetPosition();
+    const Matrix& tf = mTransformParent->GetWorldTransform();
 
     ParameterList &tfElement = predicate.parameter.AddList();
     tfElement.AddValue(std::string("tf"));
