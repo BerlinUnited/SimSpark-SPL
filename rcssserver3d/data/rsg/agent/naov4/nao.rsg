@@ -79,12 +79,12 @@
 		(importScene rsg/agent/naov4/contactjointhandler.rsg)
 		)
 	    )
-	;(nd Transform
-	;    (setLocalRotation 0 0 90)
-	;    (nd GPS
-;		(setName torso)
-;		)
-;	    )
+	(nd Transform
+	   (setLocalRotation 0 0 90)
+	   (nd GPS
+		(setName torso)
+		)
+	    )
 
 	(nd Battery
 	    (setName Battery)
