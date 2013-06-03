@@ -91,6 +91,9 @@ void SPLRule::Update(float /*deltaTime*/)
       mSPLLeftHalf = salt::AABB2(Vector2f(-mFieldLength/2.0f, -mFieldWidth/2.0f),
                                  Vector2f(0                 ,  mFieldWidth/2.0f));
 
+      SoccerBase::GetSoccerVar(*this,"ReadyDuration",mReadyDuration);
+      SoccerBase::GetSoccerVar(*this,"SetDuration",mSetDuration);
+
       // debug ----
       /*float factor = 0.1;
       mReadyDuration *= factor;
