@@ -38,6 +38,7 @@ using namespace salt;
 
 RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseMyPos(false),
+                                     mSenseMyOrien(false),
                                      mSenseBallPos(false),
                                      mAddNoise(true),
                                      mStaticSenseAxis(true),
@@ -160,7 +161,7 @@ RestrictedVisionPerceptor::OnLink()
     SoccerBase::GetTransformParent(*this,mTransformParent);
 //     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetActiveScene(*this,mActiveScene);
-    
+
     boost::shared_ptr<AgentAspect> agent_aspect =
         FindParentSupportingClass<AgentAspect>().lock();
     if (agent_aspect == 0)
@@ -176,7 +177,7 @@ RestrictedVisionPerceptor::OnLink()
         {
             mAgentAspect = agent_aspect;
         }
-        
+
         mAgentState = static_pointer_cast<AgentState>
             (mAgentAspect->GetChildOfClass("AgentState",true));
         if (mAgentState == 0)
@@ -272,7 +273,7 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
         }
 
         boost::shared_ptr<Transform> j = od.mObj->GetTransformParent();
-        
+
         if (j.get() == 0)
         {
             continue; // this should never happen
@@ -280,7 +281,7 @@ RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 
         od.mRelPos = j->GetWorldTransform().Pos() - myPos;
         od.mDist   = od.mRelPos.Length();
-        
+
         visibleNodes[node].push_back(od);
 	}
 }
@@ -298,14 +299,14 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
     boost::shared_ptr<AgentAspect> agent_aspect =
         dynamic_pointer_cast<AgentAspect>(node);
     if (agent_aspect != 0)
-    {        
+    {
         boost::shared_ptr<AgentAspect> aspect =
             agent_aspect->FindParentSupportingClass<AgentAspect>().lock();
         if (aspect != 0)
         {
             agent_aspect = aspect;
         }
-        
+
         boost::shared_ptr<AgentState> agent_state = static_pointer_cast<AgentState>
             (agent_aspect->GetChildOfClass("AgentState",true));
         if (agent_state.get() == 0 ||
@@ -314,7 +315,7 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
         {
             return;
         }
-        
+
         ParameterList& element = predicate.parameter.AddList();
         element.AddValue(std::string("P"));
 
@@ -461,21 +462,32 @@ RestrictedVisionPerceptor::StaticAxisPercept(boost::shared_ptr<PredicateList> pr
         element.AddValue(sensedMyPos[2]);
     }
 
+    if (mSenseMyOrien)
+    {
+        // Orientation
+        TTeamIndex  ti      = mAgentState->GetTeamIndex();
+        Vector3f sensedMyUp = SoccerBase::FlipView(mTransformParent->GetWorldTransform().Up(), ti);
+
+        ParameterList& element = predicate.parameter.AddList();
+        element.AddValue(std::string("myorien"));
+        element.AddValue(gRadToDeg(gArcTan2(sensedMyUp[1], sensedMyUp[0])));
+    }
+
     if (mSenseBallPos)
     {
       TTeamIndex  ti       = mAgentState->GetTeamIndex();
       boost::shared_ptr<Ball> ball;
       SoccerBase::GetBall(*this, ball);
       Vector3f sensedBallPos = SoccerBase::FlipView(ball->GetWorldTransform().Pos(), ti);
-      
+
       ParameterList& element = predicate.parameter.AddList();
       element.AddValue(std::string("ballpos"));
       element.AddValue(sensedBallPos[0]);
       element.AddValue(sensedBallPos[1]);
       element.AddValue(sensedBallPos[2]);
-      
+
     }
-    
+
     if (mSenseLine)
     {
         SenseLine(predicate);
@@ -578,21 +590,32 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         element.AddValue(sensedMyPos[2]);
     }
 
+    if (mSenseMyOrien)
+    {
+        // Orientation
+        TTeamIndex  ti      = mAgentState->GetTeamIndex();
+        Vector3f sensedMyUp = SoccerBase::FlipView(mTransformParent->GetWorldTransform().Up(), ti);
+
+        ParameterList& element = predicate.parameter.AddList();
+        element.AddValue(std::string("myorien"));
+        element.AddValue(gRadToDeg(gArcTan2(sensedMyUp[1], sensedMyUp[0])));
+    }
+
     if (mSenseBallPos)
     {
       TTeamIndex  ti       = mAgentState->GetTeamIndex();
       boost::shared_ptr<Ball> ball;
       SoccerBase::GetBall(*this, ball);
       Vector3f sensedBallPos = SoccerBase::FlipView(ball->GetWorldTransform().Pos(), ti);
-      
+
       ParameterList& element = predicate.parameter.AddList();
       element.AddValue(std::string("ballpos"));
       element.AddValue(sensedBallPos[0]);
       element.AddValue(sensedBallPos[1]);
       element.AddValue(sensedBallPos[2]);
-      
+
     }
-    
+
     if (mSenseLine)
     {
       SenseLine(predicate);
@@ -665,6 +688,12 @@ RestrictedVisionPerceptor::SetSenseMyPos(bool sense)
 }
 
 void
+RestrictedVisionPerceptor::SetSenseMyOrien(bool sense)
+{
+    mSenseMyOrien = sense;
+}
+
+void
 RestrictedVisionPerceptor::SetSenseBallPos(bool sense)
 {
     mSenseBallPos = sense;
@@ -691,7 +720,7 @@ bool RestrictedVisionPerceptor::CheckVisuable(RestrictedVisionPerceptor::ObjectD
     // object is too close
     return false;
   }
-  
+
   const int hAngle_2 = mHViewCone >> 1;
   if (gAbs(od.mTheta) > hAngle_2)
   {
@@ -737,7 +766,7 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
     {
       Vector3f bp3 = ld.mBeginPoint.mRelPos;
       Vector3f ep3 = ld.mEndPoint.mRelPos;
-      
+
       if ( bp3.y() < focalLength && ep3.y() >= focalLength )
       {
         float t = ( focalLength - ep3.y() ) / ( bp3.y() - ep3.y() );
@@ -807,7 +836,7 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
         }
       }
     }
-    
+
     if (seeBeginPoint && seeEndPoint)
     {
       // make some noise
