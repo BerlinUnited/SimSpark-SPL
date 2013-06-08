@@ -38,14 +38,21 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mFupTime = 0;
     mLastModeChange = 0;
     mGameHalf = GH_FIRST;
+    mRobotTypeCount[0].push_back(0); // add count for type 0 (default type)
+    mRobotTypeCount[1].push_back(0);
+    mHeteroCount[0] = 0;
+    mHeteroCount[1] = 0;
     mScore[0] = 0;
     mScore[1] = 0;
     mLastKickOffGameHalf = GH_NONE;
     mNextHalfKickOff = TI_NONE;
     mLeftInit = Vector3f(0,0,0);
     mRightInit = Vector3f(0,0,0);
+    mAgentRadius = 3.5;
     mFinished = false;
     mGamePaused = true;
+    mMaxHeteroTypeCount = 3;
+    mMaxTotalHeteroCount = 9;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -266,6 +273,82 @@ GameStateAspect::EraseUnum(TTeamIndex idx, int unum)
 }
 
 bool
+GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
+{
+    int i;
+
+    switch (idx)
+    {
+    case TI_LEFT:
+        i = 0;
+        break;
+    case TI_RIGHT:
+        i = 1;
+        break;
+    default:
+        return false;
+    }
+
+    if (type) // heterogeneous player
+    {
+        if (mHeteroCount[i] == mMaxTotalHeteroCount)
+        {
+            GetLog()->Error()
+                << "ERROR: (GameStateAspect::InsertRobotType) Hetero player"
+                        " count limit reached.\n";
+            return false;
+        }
+
+        ++mHeteroCount[i];
+
+        if (mRobotTypeCount[i].size() <= type)
+            mRobotTypeCount[i].resize(type+1);
+
+        if (mRobotTypeCount[i][type] == mMaxHeteroTypeCount)
+        {
+            GetLog()->Error()
+                << "ERROR: (GameStateAspect::InsertRobotType) No more robots "
+                        "of type " << type << " are allowed.\n";
+            return false;
+        }
+    }
+
+    ++mRobotTypeCount[i][type];
+
+    return true;
+}
+
+bool
+GameStateAspect::EraseRobotType(TTeamIndex idx, int type)
+{
+    int i;
+
+    switch (idx)
+    {
+    case TI_LEFT:
+        i = 0;
+        break;
+    case TI_RIGHT:
+        i = 1;
+        break;
+    default:
+        return false;
+    }
+
+    if (mRobotTypeCount[i].size() <= type || !mRobotTypeCount[i][type])
+    {
+        return false;
+    }
+
+    if (type) // heterogeneous player
+        --mHeteroCount[i];
+
+    --mRobotTypeCount[i][type];
+
+    return true;
+}
+
+bool
 GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
                                 std::string teamName, unsigned int unum)
 {
@@ -297,6 +380,15 @@ GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
         return false;
     }
 
+    if (!InsertRobotType(idx, agentState->GetRobotType()))
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::RequestUniform) cannot insert robot"
+            " of type " << agentState->GetRobotType() << " to team "
+            << teamName << "\n";
+        return false;
+    }
+
     agentState->SetUniformNumber(unum);
     agentState->SetTeamIndex(idx);
     //agentState->SetPerceptName(teamName, ObjectState::PT_Default);
@@ -311,13 +403,21 @@ GameStateAspect::RequestUniform(boost::shared_ptr<AgentState> agentState,
 }
 
 bool
-GameStateAspect::ReturnUniform(TTeamIndex ti, unsigned int unum)
+GameStateAspect::ReturnUniform(TTeamIndex ti, unsigned int unum, int type)
 {
     if (! EraseUnum(ti,unum))
     {
         GetLog()->Error()
             << "ERROR: (GameStateAspect::ReturnUniform) cannot erase uniform"
             " number " << unum << " from team " << ti << "\n";
+        return false;
+    }
+
+    if (!EraseRobotType(ti, type))
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::ReturnUniform) cannot erase robot "
+            " type " << type << " from team " << ti << "\n";
         return false;
     }
 
@@ -445,6 +545,9 @@ GameStateAspect::OnLink()
     SoccerBase::GetSoccerVar(*this, "CoinTossForKickOff", coinTossKickOff);
     if (!coinTossKickOff)
         mNextHalfKickOff = TI_LEFT;
+
+    SoccerBase::GetSoccerVar(*this, "MaxHeteroTypeCount", mMaxHeteroTypeCount);
+    SoccerBase::GetSoccerVar(*this, "MaxTotalHeteroCount", mMaxTotalHeteroCount);
 }
 
 int

@@ -60,6 +60,8 @@ addSoccerVar('ChangeSidesInSecondHalf', true)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
+addSoccerVar('MaxHeteroTypeCount', 3)
+addSoccerVar('MaxTotalHeteroCount', 9)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.042)
