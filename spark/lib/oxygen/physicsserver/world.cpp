@@ -102,7 +102,7 @@ float World::GetContactSurfaceLayer() const
 bool World::ConstructInternal()
 {
     if (mWorldImp.get() == 0)
-        mWorldImp = shared_dynamic_cast<WorldInt>
+        mWorldImp = dynamic_pointer_cast<WorldInt>
             (GetCore()->New("WorldImp"));
 
     mWorldID = mWorldImp->CreateWorld();
@@ -150,11 +150,11 @@ void World::DestroyWorldObjects()
   const bool recursive = true;
   scene->ListChildrenSupportingClass<PhysicsObject>(objects, recursive);
 
-  boost::shared_ptr<World> self = shared_static_cast<World>(GetSelf().lock());
+  boost::shared_ptr<World> self = static_pointer_cast<World>(GetSelf().lock());
 
   for (TLeafList::iterator iter = objects.begin(); iter != objects.end(); ++iter)
   {
-    boost::shared_ptr<PhysicsObject> object = shared_static_cast<PhysicsObject>(*iter);
+    boost::shared_ptr<PhysicsObject> object = static_pointer_cast<PhysicsObject>(*iter);
     if (object == self)
     {
       continue;

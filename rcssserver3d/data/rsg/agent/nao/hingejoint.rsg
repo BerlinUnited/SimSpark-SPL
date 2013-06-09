@@ -6,14 +6,9 @@
             $Path_Body1  $Path_Body2
             $Anchor_X    $Anchor_Y   $Anchor_Z
             $Axis_X      $Axis_Y     $Axis_Z
-            $Min         $Max
+            $MinDeg      $MaxDeg
+            $MaxAbsSpeed
     )
-
-    (def $PI 3.14159265)
-    ;(def $MinDeg (eval $Min * (eval 180.0 / $PI)))
-    ;(def $MaxDeg (eval $Max * (eval 180.0 / $PI)))
-    (def $MinDeg $Min)
-    (def $MaxDeg $Max)
     
     ; There are 2 types of motor installed on the real Nao, each type has 
     ; 2 types of "Reduction ratio". 
@@ -23,7 +18,7 @@
     ; We don't need to follow them totally that different hingeeffector is using 
     ; different types of motor.
     ; All the hingeeffector uses the 351.77
-    (def $MaxAbsSpeed (eval $PI * (eval 351.77 / 180.0)))
+    ; (def $MaxAbsSpeed (eval $PI * (eval 351.77 / 180.0)))
 
     ;
     ;Hinge Joint Parameters

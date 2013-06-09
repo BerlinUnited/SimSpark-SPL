@@ -105,7 +105,10 @@ public:
     //! Turn sensing of agent position on/off
     void SetSenseMyPos(bool sense);
 
-    //! Turn sensing of agent position on/off
+    //! Turn sensing of agent orientation on/off
+    void SetSenseMyOrien(bool sense);
+
+    //! Turn sensing of ball position on/off
     void SetSenseBallPos(bool sense);
 
     // turn sensing of lines on/off
@@ -211,6 +214,9 @@ protected:
 
     //! true, if the absolute position of the agent is sensed.
     bool mSenseMyPos;
+
+    //! true, if the absolute orientation of the agent's camera in the x-y plane is sensed.
+    bool mSenseMyOrien;
     
     //! true, if the absolute position of the ball is sensed.
     bool mSenseBallPos;

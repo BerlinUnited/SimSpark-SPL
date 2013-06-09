@@ -121,7 +121,7 @@ public:
         for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
             {
                 // check if we have found a match and return it
-                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                boost::shared_ptr<CLASS> child = boost::dynamic_pointer_cast<CLASS>(*i);
                 if (child.get() != 0)
                     {
                         return child;
@@ -199,19 +199,19 @@ public:
     FindParentSupportingClass() const;
 //     {
 //         boost::shared_ptr<Node> node
-//             = boost::shared_static_cast<Node>(GetParent().lock());
+//             = boost::static_pointer_cast<Node>(GetParent().lock());
 
 //         while (node.get() != 0)
 //         {
 //             boost::shared_ptr<CLASS> test =
-//                 boost::shared_dynamic_cast<CLASS>(node);
+//                 boost::dynamic_pointer_cast<CLASS>(node);
 
 //             if (test.get() != 0)
 //             {
 //                 return test;
 //             }
 
-//             node = boost::shared_static_cast<Node>(node->GetParent().lock());
+//             node = boost::static_pointer_cast<Node>(node->GetParent().lock());
 //         }
 
 //         return boost::shared_ptr<CLASS>();
@@ -308,7 +308,7 @@ protected:
         for (TLeafList::iterator i = begin(); i != lstEnd; ++i)
             {
                 // check if we have found a match and add it
-                boost::shared_ptr<CLASS> child = boost::shared_dynamic_cast<CLASS>(*i);
+                boost::shared_ptr<CLASS> child = boost::dynamic_pointer_cast<CLASS>(*i);
                 if (child.get() != 0)
                     {
                         list.push_back(child);

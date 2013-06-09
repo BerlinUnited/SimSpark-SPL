@@ -37,6 +37,7 @@ set(soccer_LIB_HDRS
    soccercontrolaspect/soccercontrolaspect.h
    soccernode/soccernode.h
    soccerruleaspect/soccerruleaspect.h
+   soccerruleaspect/soccerruleitem.h
    trainercommandparser/trainercommandparser.h
    gametimeperceptor/gametimeperceptor.h
    visionperceptor/visionperceptor.h
@@ -106,6 +107,8 @@ set(soccer_LIB_SRCS
    soccernode/soccernode_c.cpp
    soccerruleaspect/soccerruleaspect.cpp
    soccerruleaspect/soccerruleaspect_c.cpp
+   soccerruleaspect/soccerruleitem.cpp
+   soccerruleaspect/soccerruleitem_c.cpp
    trainercommandparser/trainercommandparser.cpp
    trainercommandparser/trainercommandparser_c.cpp
    visionperceptor/visionperceptor.cpp

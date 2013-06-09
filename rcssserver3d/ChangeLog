@@ -1,3 +1,50 @@
+2013-06-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	* plugin/soccer/agentstate/agentstate.cpp (AgentState::OnUnlink): 
+	* rcssserver3d/naosoccersim.rb: 
+	- control the number of heterogeneous players each team can use. It limits
+	  both the total number of heterogeneous players of each team
+	  (MaxTotalHeteroCount variable in naosoccersim.rb), and the number of 
+	  heterogeneous players of each type (MaxHeteroTypeCount variable)
+ 
+2013-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor_c.cpp: 
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	- added MyOrientation sensing by Patrick (setSenseMyOrien in rsg file)
+	
+2013-04-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	* plugin/soccer/agentstate/agentstate.h: 
+	* plugin/soccer/agentstate/agentstate.cpp: 
+	* plugin/soccer/agentstate/agentstate_c.cpp: 
+	- added robot type to agent state
+
+2012-11-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	- nao_hetero.rsg can be used to create different variants of Nao robot
+	- nao.rsg a compatbility scene to create default Nao type (type 0)
+	
+	* rcssserver3d/naorobottypes.rb: 
+	* rcssserver3d/naosoccersim.rb: 
+	* rcssserver3d/CMakeLists.txt: 
+	- added naorobottypes.rb to initialize Nao heterogeneous robot parameters
+
+2012-06-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- let a player kick the ball more than once in kickoff if there are not 
+	  more than 2 players inside the game. Should be removed when a proper 
+	  "Penalty mode" is added to the simulator
+	- small cleanup: call SoccerBase::GetGameControlServer() to access 
+	  game control server 
+
 2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 

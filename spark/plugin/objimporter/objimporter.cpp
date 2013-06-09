@@ -445,7 +445,7 @@ bool ObjImporter::SetupMaterials(string & matLibName, TObjMatValueVector & matVe
     // register them.
 
     // get reference to the MaterialServer
-    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = dynamic_pointer_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -468,7 +468,7 @@ bool ObjImporter::SetupMaterials(string & matLibName, TObjMatValueVector & matVe
             // a MaterialSolid is sufficient (we only support diffuse textures for now)
             if (iter->diffuseTexture.size())
                 {
-                    material = shared_dynamic_cast<Material2DTexture>
+                    material = dynamic_pointer_cast<Material2DTexture>
                         (GetCore()->New("/kerosin/Material2DTexture"));
 
                     if (material.get() == 0)
@@ -482,11 +482,11 @@ bool ObjImporter::SetupMaterials(string & matLibName, TObjMatValueVector & matVe
                                       << iter->name << "\n";
 
                     //we only support diffuse textures for now
-                    (shared_dynamic_cast<Material2DTexture>(material))->SetDiffuseTexture(iter->diffuseTexture);
+                    (dynamic_pointer_cast<Material2DTexture>(material))->SetDiffuseTexture(iter->diffuseTexture);
                 }
             else
                 {
-                    material = shared_dynamic_cast<MaterialSolid>
+                    material = dynamic_pointer_cast<MaterialSolid>
                         (GetCore()->New("/kerosin/MaterialSolid"));
 
                     if (material.get() == 0)

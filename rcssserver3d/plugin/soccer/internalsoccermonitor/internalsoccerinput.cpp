@@ -66,7 +66,7 @@ void InternalSoccerInput::OnLink()
     scriptServer->CreateVariable("Command.PreviousCamera", CmdPreviousCamera);
     
     // get the GameStateAspect
-    mGameState = shared_dynamic_cast<GameStateAspect>
+    mGameState = dynamic_pointer_cast<GameStateAspect>
         (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
 
     if (mGameState.get() == 0)
@@ -75,7 +75,7 @@ void InternalSoccerInput::OnLink()
         }
 
     // get the SoccerRuleAspect
-    mSoccerRule = shared_dynamic_cast<SoccerRuleAspect>
+    mSoccerRule = dynamic_pointer_cast<SoccerRuleAspect>
         (GetCore()->Get("/sys/server/gamecontrol/SoccerRuleAspect"));
 
     if (mSoccerRule.get() == 0)
@@ -84,7 +84,7 @@ void InternalSoccerInput::OnLink()
         }
 
     // get the GameControlServer
-    mGameControl = shared_dynamic_cast<GameControlServer>
+    mGameControl = dynamic_pointer_cast<GameControlServer>
         (GetCore()->Get("/sys/server/gamecontrol"));
 
     if (mGameControl.get() == 0)
@@ -93,7 +93,7 @@ void InternalSoccerInput::OnLink()
         }
 
     // get camera body
-    mCameraBody = shared_dynamic_cast<RigidBody>
+    mCameraBody = dynamic_pointer_cast<RigidBody>
         (GetCore()->Get("/usr/scene/camera/physics"));
 
     if (mCameraBody.get() == 0)
@@ -103,7 +103,7 @@ void InternalSoccerInput::OnLink()
     }
 
     // get fps controller
-    mFPS = shared_dynamic_cast<FPSController>
+    mFPS = dynamic_pointer_cast<FPSController>
         (GetCore()->Get("/usr/scene/camera/physics/controller"));
 
     if (mFPS.get() == 0)
@@ -113,7 +113,7 @@ void InternalSoccerInput::OnLink()
     }
     
     // get render server
-    mRenderServer = shared_dynamic_cast<RenderServer>
+    mRenderServer = dynamic_pointer_cast<RenderServer>
         (GetCore()->Get("/sys/server/render"));
 
     if (mRenderServer.get() == 0)
@@ -271,7 +271,7 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                     {
                         // search for the first agent of the left/right side
                         boost::shared_ptr<AgentState> agentState =
-                            shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
+                            dynamic_pointer_cast<AgentState>((*iter)->GetChild("AgentState", true));
 
                         if (agentState.get() == 0)
                         {
@@ -306,7 +306,7 @@ void InternalSoccerInput::ProcessInput(const Input& input)
                     {
                         // search for the first agent of the left/right side
                         boost::shared_ptr<AgentState> agentState =
-                            shared_dynamic_cast<AgentState>((*iter)->GetChild("AgentState", true));
+                            dynamic_pointer_cast<AgentState>((*iter)->GetChild("AgentState", true));
 
                         if (agentState.get() == 0)
                         {

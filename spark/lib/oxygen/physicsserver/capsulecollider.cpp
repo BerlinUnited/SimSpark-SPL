@@ -67,7 +67,7 @@ float CapsuleCollider::GetLength()
 bool CapsuleCollider::ConstructInternal()
 {
     if (mCapsuleColliderImp.get() == 0)
-        mCapsuleColliderImp = shared_dynamic_cast<CapsuleColliderInt>
+        mCapsuleColliderImp = dynamic_pointer_cast<CapsuleColliderInt>
             (GetCore()->New("CapsuleColliderImp"));
             
     if (mCapsuleColliderImp.get() == 0)

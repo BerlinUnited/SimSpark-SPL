@@ -52,7 +52,7 @@ void SceneServer::OnLink()
 {
     boost::shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
-    mPhysicsServer = shared_static_cast<PhysicsServer>
+    mPhysicsServer = static_pointer_cast<PhysicsServer>
         (context->Get("/sys/server/physics"));
         
     if (mPhysicsServer.get() == 0)
@@ -66,7 +66,7 @@ bool SceneServer::CreateScene(const std::string &location)
 {
     boost::shared_ptr<CoreContext> context = GetCore()->CreateContext();
 
-    boost::shared_ptr<Scene> scene = shared_static_cast<Scene>
+    boost::shared_ptr<Scene> scene = static_pointer_cast<Scene>
         (context->New("oxygen/Scene", location));
 
     ResetCache();
@@ -252,7 +252,7 @@ bool SceneServer::ImportScene(const string& fileName, boost::shared_ptr<BaseNode
          )
         {
             boost::shared_ptr<SceneImporter> importer =
-                shared_static_cast<SceneImporter>(*iter);
+                static_pointer_cast<SceneImporter>(*iter);
 
             importer->SetSceneDict(&SceneDict::GetInstance());
 
@@ -289,7 +289,7 @@ bool SceneServer::ImportScene(const string& fileName, boost::shared_ptr<BaseNode
 void SceneServer::ReparentTransformChildren(boost::shared_ptr<Transform> node)
 {
     boost::shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(node->GetParent().lock());
+        dynamic_pointer_cast<BaseNode>(node->GetParent().lock());
 
     // while not empty
     while (node->begin() != node->end())
@@ -297,7 +297,7 @@ void SceneServer::ReparentTransformChildren(boost::shared_ptr<Transform> node)
             boost::shared_ptr<Leaf> child = (*node->begin());
 
             boost::shared_ptr<Transform> tChild
-                = shared_dynamic_cast<Transform>(child);
+                = dynamic_pointer_cast<Transform>(child);
 
             if (tChild.get() != 0)
                 {
@@ -333,14 +333,14 @@ void SceneServer::RemoveTransformPaths(boost::shared_ptr<Leaf> root)
             RemoveTransformPaths(*iter);
         }
 
-    boost::shared_ptr<Transform> trans = shared_dynamic_cast<Transform>(root);
+    boost::shared_ptr<Transform> trans = dynamic_pointer_cast<Transform>(root);
     bool tRoot = (trans.get() != 0);
     bool tChildOnly = true;
 
     TLeafList::iterator iter = root->begin();
     while (iter != root->end())
         {
-            boost::shared_ptr<Transform> tChild = shared_dynamic_cast<Transform>(*iter);
+            boost::shared_ptr<Transform> tChild = dynamic_pointer_cast<Transform>(*iter);
             if (tChild.get() == 0)
                 {
                     tChildOnly = false;
@@ -370,7 +370,7 @@ void SceneServer::RemoveTransformPaths(boost::shared_ptr<Leaf> root)
 bool SceneServer::InitSceneImporter(const std::string& importerName)
 {
     boost::shared_ptr<SceneImporter> importer
-        = shared_dynamic_cast<SceneImporter>(GetCore()->New(importerName));
+        = dynamic_pointer_cast<SceneImporter>(GetCore()->New(importerName));
 
     if (importer.get() == 0)
         {

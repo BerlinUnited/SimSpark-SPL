@@ -61,7 +61,7 @@ boost::shared_ptr<Object> Class::Create()
 
     if (obj.get())
     {
-        if (obj->Construct(obj, shared_static_cast<Class>
+        if (obj->Construct(obj, static_pointer_cast<Class>
                            (GetSelf().lock())) == true)
         {
             // successfully constructed
@@ -157,7 +157,7 @@ Class::TCmdProc Class::GetCmdProc(const std::string &functionName) const
     {
         // this should get the base class object (it has to live on
         // the same level of the hierarchy as this class object)
-        boost::shared_ptr<Class> theClass = shared_static_cast<Class>
+        boost::shared_ptr<Class> theClass = static_pointer_cast<Class>
             (GetCore()->Get(*baseClass, classDir));
 
         if (theClass)
@@ -204,7 +204,7 @@ bool Class::SupportsClass(const std::string &name) const
          ++i
          )
     {
-        boost::shared_ptr<Class> theClass = shared_static_cast<Class>
+        boost::shared_ptr<Class> theClass = static_pointer_cast<Class>
             (GetCore()->Get(*i, classDir));
 
         if (theClass)

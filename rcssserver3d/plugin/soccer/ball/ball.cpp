@@ -46,7 +46,7 @@ Ball::SetAcceleration(int steps, const salt::Vector3f& force,
 
     if (mBody.get() == 0)
     {
-        mBody = shared_dynamic_cast<RigidBody>(GetChildOfClass("RigidBody"));
+        mBody = dynamic_pointer_cast<RigidBody>(GetChildOfClass("RigidBody"));
     }
 }
 
@@ -60,7 +60,7 @@ Ball::PrePhysicsUpdateInternal(float deltaTime)
     // mBallStateAspect during OnLink
     if (mBallStateAspect.get() == 0)
     {
-        mBallStateAspect = shared_dynamic_cast<BallStateAspect>
+        mBallStateAspect = dynamic_pointer_cast<BallStateAspect>
             (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
         if (mBallStateAspect.get() == 0) return;
     }

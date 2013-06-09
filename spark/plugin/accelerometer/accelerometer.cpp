@@ -40,10 +40,10 @@ Accelerometer::~Accelerometer()
 
 void Accelerometer::OnLink()
 {
-    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+    boost::shared_ptr<Transform> transformParent = static_pointer_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
-    mBody = shared_static_cast<const RigidBody>
+    mBody = static_pointer_cast<const RigidBody>
         (transformParent->GetChildOfClass("RigidBody"));
 
     mGravity = mBody->GetWorld()->GetGravity();
