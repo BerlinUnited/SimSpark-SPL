@@ -60,6 +60,8 @@ addSoccerVar('ChangeSidesInSecondHalf', true)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
+addSoccerVar('MaxHeteroTypeCount', 3)
+addSoccerVar('MaxTotalHeteroCount', 9)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.042)
@@ -124,8 +126,12 @@ end
 monitorServer = get($serverPath+'monitor')
 if (monitorServer != nil)
   monitorServer.registerMonitorItem('GameStateItem')
+  monitorServer.registerMonitorItem('SoccerRuleItem')
 end
 
 # install the TrainerCommandParser to parse commands received from a
 # monitor client
 sparkRegisterMonitorCmdParser 'TrainerCommandParser'
+
+# Load parameters for heterogeneous Nao robots
+run "naorobottypes.rb"

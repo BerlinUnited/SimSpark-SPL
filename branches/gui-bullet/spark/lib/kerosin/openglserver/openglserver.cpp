@@ -122,7 +122,7 @@ OpenGLServer::Init(const string& openGLSysName)
     if (! openGLSysName.empty())
     {
         // create the OpenGLSystem
-        mGLSystem = shared_dynamic_cast<OpenGLSystem>
+        mGLSystem = dynamic_pointer_cast<OpenGLSystem>
             (GetCore()->New(openGLSysName));
 
         if (mGLSystem.get() == 0)

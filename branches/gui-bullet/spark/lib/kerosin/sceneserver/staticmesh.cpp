@@ -176,7 +176,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
     mMaterials.clear();
     CalcBoundingBox();
 
-    boost::shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
+    boost::shared_ptr<GeometryServer> geometryServer = dynamic_pointer_cast<GeometryServer>
         (GetCore()->Get("/sys/server/geometry"));
 
     if (geometryServer.get() == 0)
@@ -186,7 +186,7 @@ bool StaticMesh::Load(const std::string& name, const ParameterList& parameter)
             return false;
         }
 
-    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = dynamic_pointer_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -303,7 +303,7 @@ void StaticMesh::ChangeMaterial(const std::string& oldMat,
                                 const std::string& newMat)
 {
     boost::shared_ptr<MaterialServer> materialServer =
-        shared_dynamic_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
+        dynamic_pointer_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
     {
@@ -345,7 +345,7 @@ std::vector<std::string> StaticMesh::GetMaterialNames() const
 void StaticMesh::ResetMaterials(const std::vector<std::string>& names)
 {
     boost::shared_ptr<MaterialServer> materialServer =
-        shared_dynamic_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
+        dynamic_pointer_cast<MaterialServer>(GetCore()->Get("/sys/server/material"));
     if (materialServer.get() == 0)
     {
         GetLog()->Error()

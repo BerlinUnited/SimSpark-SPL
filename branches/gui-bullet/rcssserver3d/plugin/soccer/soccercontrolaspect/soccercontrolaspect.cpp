@@ -58,7 +58,7 @@ boost::shared_ptr<RecorderHandler> SoccerControlAspect::GetBallRecorder()
 {
     string ballRecorder;
     SoccerBase::GetSoccerVar(*this,"BallRecorder",ballRecorder);
-    boost::shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
+    boost::shared_ptr<RecorderHandler> node = dynamic_pointer_cast<RecorderHandler>
         (GetCore()->Get(mScenePath + ballRecorder));
 
     if (node.get() == 0)
@@ -74,7 +74,7 @@ boost::shared_ptr<RecorderHandler> SoccerControlAspect::GetLeftGoalRecorder()
 {
     string goalRecorder;
     SoccerBase::GetSoccerVar(*this,"LeftGoalRecorder",goalRecorder);
-    boost::shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
+    boost::shared_ptr<RecorderHandler> node = dynamic_pointer_cast<RecorderHandler>
         (GetCore()->Get(mScenePath + goalRecorder));
 
     if (node.get() == 0)
@@ -90,7 +90,7 @@ boost::shared_ptr<RecorderHandler> SoccerControlAspect::GetRightGoalRecorder()
 {
     string goalRecorder;
     SoccerBase::GetSoccerVar(*this,"RightGoalRecorder",goalRecorder);
-    boost::shared_ptr<RecorderHandler> node = shared_dynamic_cast<RecorderHandler>
+    boost::shared_ptr<RecorderHandler> node = dynamic_pointer_cast<RecorderHandler>
         (GetCore()->Get(mScenePath + goalRecorder));
 
     if (node.get() == 0)

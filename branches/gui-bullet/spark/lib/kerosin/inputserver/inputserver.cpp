@@ -185,7 +185,7 @@ bool InputServer::Init(const std::string &inputSysName)
 
     // create the inputsystem
     boost::shared_ptr<InputSystem> inputSystem =
-        shared_dynamic_cast<InputSystem>(GetCore()->New(inputSysName));
+        dynamic_pointer_cast<InputSystem>(GetCore()->New(inputSysName));
 
     if(inputSystem.get() == 0)
         {
@@ -220,7 +220,7 @@ bool InputServer::Init(const std::string &inputSysName)
 
 boost::shared_ptr<InputSystem> InputServer::GetInputSystem()
 {
-    boost::shared_ptr<InputSystem> inputSystem = shared_dynamic_cast<InputSystem>
+    boost::shared_ptr<InputSystem> inputSystem = dynamic_pointer_cast<InputSystem>
         (GetChild("inputsystem"));
 
     return inputSystem;

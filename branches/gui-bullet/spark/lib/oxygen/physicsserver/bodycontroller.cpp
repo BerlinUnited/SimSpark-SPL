@@ -42,7 +42,7 @@ void BodyController::UpdateCached()
 {
     mBody.reset();
 
-    mBody = shared_dynamic_cast<RigidBody>
+    mBody = dynamic_pointer_cast<RigidBody>
         (GetParentSupportingClass("RigidBody").lock());
 
     if (mBody.get() == 0)

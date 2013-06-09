@@ -49,7 +49,7 @@ void PhysicsServer::ResetCache()
 void PhysicsServer::OnLink()
 { 
     if (mPhysicsServerImp.get() == 0)
-        mPhysicsServerImp = shared_dynamic_cast<PhysicsServerInt>
+        mPhysicsServerImp = dynamic_pointer_cast<PhysicsServerInt>
             (GetCore()->New("PhysicsServerImp"));
         
     mPhysicsServerImp->InitEngine();  
@@ -60,14 +60,14 @@ void PhysicsServer::UpdateCache(boost::shared_ptr<Scene> activeScene)
     if (mActiveSpace.get() == 0)
         {
             // cache the space reference
-            mActiveSpace = shared_dynamic_cast<Space>
+            mActiveSpace = dynamic_pointer_cast<Space>
                 (activeScene->GetChildOfClass("Space"));
         }
 
     if (mActiveWorld.get() == 0)
         {
             // cache the world reference
-            mActiveWorld = shared_dynamic_cast<World>
+            mActiveWorld = dynamic_pointer_cast<World>
                 (activeScene->GetChildOfClass("World"));
         }
 }

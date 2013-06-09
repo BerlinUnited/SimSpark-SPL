@@ -85,7 +85,7 @@ void HMDPEffector::PrePhysicsUpdateInternal(float deltaTime)
         return;
     }
 
-    boost::shared_ptr<HMDPAction> hMDPAction = shared_dynamic_cast<HMDPAction>(mAction);
+    boost::shared_ptr<HMDPAction> hMDPAction = dynamic_pointer_cast<HMDPAction>(mAction);
     mAction.reset();
     if (hMDPAction.get() == 0)
     {
@@ -141,7 +141,7 @@ void HMDPEffector::OnLink()
 
     // parent should be a transform, or some other node, which has a
     // Body-child
-    mBody = shared_dynamic_cast<RigidBody>(parent->GetChildOfClass("RigidBody"));
+    mBody = dynamic_pointer_cast<RigidBody>(parent->GetChildOfClass("RigidBody"));
 
     if (mBody.get() == 0)
     {
@@ -216,7 +216,7 @@ void HMDPEffector::ReadOutJointList()
 
         boost::shared_ptr<Leaf> join = *j_it;
         boost::shared_ptr<BaseNode> jparent =
-            shared_dynamic_cast<BaseNode>(join->GetParent().lock());
+            dynamic_pointer_cast<BaseNode>(join->GetParent().lock());
         std::cout << i << "    " << jparent->GetName() << std::endl;
         i++;
 
@@ -259,7 +259,7 @@ void HMDPEffector::controlPosServo() // for controlling servos
     for (TLeafList::iterator j_it = jointList.begin(); j_it != jointList.end(); j_it++)
     {
 
-        boost::shared_ptr<HingeJoint> joint = shared_static_cast<HingeJoint> (*j_it);
+        boost::shared_ptr<HingeJoint> joint = static_pointer_cast<HingeJoint> (*j_it);
         servo_angle[i] = joint->GetAngle() - zeroPosServo(i);
         double tpos = servo_target_pos[i];
         float err = servo_gain[i] * (tpos - servo_angle[i]);

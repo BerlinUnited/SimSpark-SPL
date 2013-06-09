@@ -99,7 +99,7 @@ AgentAspect::QueryPerceptors()
          ++iter
          )
         {
-            boost::shared_ptr<Perceptor> pct = shared_static_cast<Perceptor>(*iter);
+            boost::shared_ptr<Perceptor> pct = static_pointer_cast<Perceptor>(*iter);
             if ( mPerceptorCycle % pct->GetInterval() == 0 )
                 pct->Percept(predList);
         }
@@ -135,7 +135,7 @@ AgentAspect::UpdateEffectorMap()
          ++iter
          )
         {
-            boost::shared_ptr<Effector> effector = shared_static_cast<Effector>(*iter);
+            boost::shared_ptr<Effector> effector = static_pointer_cast<Effector>(*iter);
             mEffectorMap[effector->GetPredicate()] = effector;
         }
 }
@@ -145,7 +145,7 @@ AgentAspect::Init(const string& createEffector, int id)
 {
     mID = id;
 
-    boost::shared_ptr<Effector> create = shared_dynamic_cast<Effector>
+    boost::shared_ptr<Effector> create = dynamic_pointer_cast<Effector>
         (GetCore()->New(createEffector));
 
     if (create.get() == 0)

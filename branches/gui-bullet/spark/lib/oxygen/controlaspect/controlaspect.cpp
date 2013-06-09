@@ -42,7 +42,7 @@ boost::shared_ptr<Scene>
 ControlAspect::GetActiveScene()
 {
     boost::shared_ptr<SceneServer> sceneServer =
-        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+        dynamic_pointer_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
     {

@@ -193,7 +193,7 @@ bool SimulationServer::InitControlNode(const std::string& className, const std::
         }
 
     boost::shared_ptr<SimControlNode> control
-        = shared_dynamic_cast<SimControlNode>(GetCore()->New(className));
+        = dynamic_pointer_cast<SimControlNode>(GetCore()->New(className));
 
     if (control.get() == 0)
         {
@@ -222,7 +222,7 @@ bool SimulationServer::InitTimerSystem(const std::string& className)
             return false;
         }
 
-    mTimerSystem = shared_dynamic_cast<TimerSystem>(GetCore()->New(className));
+    mTimerSystem = dynamic_pointer_cast<TimerSystem>(GetCore()->New(className));
     SetAutoTimeMode(false);
 
     if (!mTimerSystem)
@@ -243,7 +243,7 @@ boost::shared_ptr<SimControlNode>
 SimulationServer::GetControlNode(const string& controlName)
 {
     boost::shared_ptr<SimControlNode> ctrNode =
-        shared_dynamic_cast<SimControlNode>(GetChild(controlName));
+        dynamic_pointer_cast<SimControlNode>(GetChild(controlName));
 
     if (ctrNode.get() == 0)
         {
@@ -311,7 +311,7 @@ void SimulationServer::ControlEvent(EControlEvent event)
          )
         {
             boost::shared_ptr<SimControlNode> ctrNode =
-                shared_dynamic_cast<SimControlNode>(*iter);
+                dynamic_pointer_cast<SimControlNode>(*iter);
 
             if (ctrNode.get() == 0)
                 {
@@ -503,7 +503,7 @@ void SimulationServer::RunMultiThreaded()
     int count = 1;
     for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
         {
-            if (shared_dynamic_cast<SimControlNode>(*iter))
+            if (dynamic_pointer_cast<SimControlNode>(*iter))
                 count++;
         }
     mThreadBarrier = new barrier(count);
@@ -512,7 +512,7 @@ void SimulationServer::RunMultiThreaded()
     boost::thread_group ctrThrdGroup;
     for ( TLeafList::iterator iter=begin(); iter != end(); ++iter )
         {
-            boost::shared_ptr<SimControlNode> ctrNode =  shared_dynamic_cast<SimControlNode>(*iter);
+            boost::shared_ptr<SimControlNode> ctrNode =  dynamic_pointer_cast<SimControlNode>(*iter);
             if (ctrNode.get() == 0) continue;
 
             ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread,

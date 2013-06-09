@@ -80,6 +80,22 @@ FUNCTION(RestrictedVisionPerceptor,setSenseMyPos)
     return true;
 }
 
+FUNCTION(RestrictedVisionPerceptor,setSenseMyOrien)
+{
+    bool inSenseMyOrien;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSenseMyOrien))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSenseMyOrien(inSenseMyOrien);
+    return true;
+}
+
 FUNCTION(RestrictedVisionPerceptor,setSenseBallPos)
 {
     bool inSenseBallPos;
@@ -188,6 +204,7 @@ void CLASS(RestrictedVisionPerceptor)::DefineClass()
     DEFINE_FUNCTION(setNoiseParams);
     DEFINE_FUNCTION(addNoise);
     DEFINE_FUNCTION(setSenseMyPos);
+    DEFINE_FUNCTION(setSenseMyOrien);
     DEFINE_FUNCTION(setSenseBallPos);
     DEFINE_FUNCTION(setStaticSenseAxis);
     DEFINE_FUNCTION(setViewCones);

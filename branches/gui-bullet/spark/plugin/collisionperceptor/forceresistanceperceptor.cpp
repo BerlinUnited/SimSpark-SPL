@@ -39,7 +39,7 @@ void ForceResistancePerceptor::OnLink()
 {
     Perceptor::OnLink();
 
-    mBody = shared_static_cast<Transform>(FindParentSupportingClass<Transform>().lock());
+    mBody = static_pointer_cast<Transform>(FindParentSupportingClass<Transform>().lock());
 
     if (mBody.get() == 0)
         GetLog()->Error()

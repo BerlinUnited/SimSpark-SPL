@@ -46,7 +46,7 @@ void ContactJointHandler::OnLink()
     CollisionHandler::OnLink();
 
     if (mContactJointHandlerImp.get() == 0)
-        mContactJointHandlerImp = shared_dynamic_cast<ContactJointHandlerInt>
+        mContactJointHandlerImp = dynamic_pointer_cast<ContactJointHandlerInt>
             (GetCore()->New("ContactJointHandlerImp"));
             
     //no failsaving here

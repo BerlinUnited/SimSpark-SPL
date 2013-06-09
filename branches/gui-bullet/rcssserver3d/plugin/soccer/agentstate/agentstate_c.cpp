@@ -25,8 +25,25 @@
 using namespace boost;
 using namespace oxygen;
 
+FUNCTION(AgentState,setRobotType)
+{
+    int inType;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inType))
+        )
+        {
+            return false;
+        }
+
+    obj->SetRobotType(inType);
+    return true;
+}
+
 void
 CLASS(AgentState)::DefineClass()
 {
     DEFINE_BASECLASS(ObjectState);
+    DEFINE_FUNCTION(setRobotType);
 }

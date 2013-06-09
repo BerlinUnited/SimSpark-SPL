@@ -92,7 +92,7 @@ VisionPerceptor::OnLink()
             mAgentAspect = agent_aspect;
         }
         
-        mAgentState = shared_static_cast<AgentState>
+        mAgentState = static_pointer_cast<AgentState>
             (mAgentAspect->GetChildOfClass("AgentState",true));
         if (mAgentState == 0)
         {
@@ -135,7 +135,7 @@ VisionPerceptor::SetStaticSenseAxis(bool static_axis)
 bool
 VisionPerceptor::ConstructInternal()
 {
-    mRay = shared_static_cast<oxygen::RayCollider>
+    mRay = static_pointer_cast<oxygen::RayCollider>
         (GetCore()->New("oxygen/RayCollider"));
 
     if (mRay.get() == 0)
@@ -159,7 +159,7 @@ VisionPerceptor::SetupVisibleObjects(TObjectList& visibleObjects)
          i != objectList.end(); ++i)
         {
             ObjectData od;
-            od.mObj = shared_static_cast<ObjectState>(*i);
+            od.mObj = static_pointer_cast<ObjectState>(*i);
 
             if (od.mObj.get() == 0)
                 {
@@ -411,7 +411,7 @@ bool VisionPerceptor::CheckOcclusion(const Vector3f& my_pos, const ObjectData& o
 
 //             dContactGeom contact;
 
-//             boost::shared_ptr<Collider> collider = shared_static_cast<Collider>
+//             boost::shared_ptr<Collider> collider = static_pointer_cast<Collider>
 //                 (i->mObj->GetChildSupportingClass("Collider"));
 
 //             if (mRay->Intersects(collider))

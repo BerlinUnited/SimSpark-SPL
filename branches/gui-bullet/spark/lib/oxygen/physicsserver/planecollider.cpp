@@ -53,7 +53,7 @@ void PlaneCollider::SetParams(float a, float b, float c, float d)
 bool PlaneCollider::ConstructInternal()
 {
     if (mPlaneColliderImp.get() == 0)
-        mPlaneColliderImp = shared_dynamic_cast<PlaneColliderInt>
+        mPlaneColliderImp = dynamic_pointer_cast<PlaneColliderInt>
             (GetCore()->New("PlaneColliderImp"));
             
     if (mPlaneColliderImp.get() == 0)

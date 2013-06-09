@@ -180,7 +180,7 @@ bool Space::IsGlobalSpace()
 bool Space::ConstructInternal()
 {
     if (mSpaceImp.get() == 0)
-        mSpaceImp = shared_dynamic_cast<SpaceInt>
+        mSpaceImp = dynamic_pointer_cast<SpaceInt>
             (GetCore()->New("SpaceImp"));
 
     mContactGroupID = mSpaceImp->CreateContactGroup();

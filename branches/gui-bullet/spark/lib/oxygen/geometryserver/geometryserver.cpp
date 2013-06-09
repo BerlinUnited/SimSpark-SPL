@@ -51,7 +51,7 @@ bool
 GeometryServer::InitMeshImporter(const string& importerName)
 {
     boost::shared_ptr<MeshImporter> importer
-        = shared_dynamic_cast<MeshImporter>(GetCore()->New(importerName));
+        = dynamic_pointer_cast<MeshImporter>(GetCore()->New(importerName));
 
     if (importer.get() == 0)
     {
@@ -100,7 +100,7 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
          )
     {
         boost::shared_ptr<MeshImporter> importer =
-            shared_static_cast<MeshImporter>(*iter);
+            static_pointer_cast<MeshImporter>(*iter);
 
         string str = importer->MangleName(name, parameter);
 
@@ -123,7 +123,7 @@ GeometryServer::GetMesh(const string& name, const::ParameterList& parameter)
          )
     {
         boost::shared_ptr<MeshImporter> importer =
-            shared_static_cast<MeshImporter>(*iter);
+            static_pointer_cast<MeshImporter>(*iter);
 
         boost::shared_ptr<TriMesh> mesh = importer->ImportMesh(name,parameter);
 
@@ -192,7 +192,7 @@ GeometryServer::RegisterMesh(boost::shared_ptr<TriMesh> mesh)
     {
         GetLog()->Debug() << "(GeometryServer) additionally registered mesh "
                            << name << " via MeshExporter '" << (*bi)->GetName() << "'\n";
-        boost::shared_ptr<MeshExporter> mb = shared_static_cast<MeshExporter>(*bi);
+        boost::shared_ptr<MeshExporter> mb = static_pointer_cast<MeshExporter>(*bi);
         mb->RegisterMesh(mesh);
     }
 }
@@ -201,7 +201,7 @@ bool
 GeometryServer::InitMeshExporter(const string& name)
 {
     boost::shared_ptr<MeshExporter> exporter
-        = shared_dynamic_cast<MeshExporter>(GetCore()->New(name));
+        = dynamic_pointer_cast<MeshExporter>(GetCore()->New(name));
 
     if (exporter.get() == 0)
     {

@@ -47,7 +47,7 @@ void MaterialServer::RegisterMaterial(boost::shared_ptr<Material> material)
 
     // remove any previous material with the same name
     boost::shared_ptr<Material> previous =
-        shared_dynamic_cast<Material>(GetChild(material->GetName()));
+        dynamic_pointer_cast<Material>(GetChild(material->GetName()));
 
     if (previous.get() != 0)
     {
@@ -67,7 +67,7 @@ void MaterialServer::RegisterMaterial(boost::shared_ptr<Material> material)
 boost::shared_ptr<Material> MaterialServer::GetMaterial(const std::string& name)
 {
     boost::shared_ptr<Material> material =
-        shared_dynamic_cast<Material>(GetChild(name));
+        dynamic_pointer_cast<Material>(GetChild(name));
 
     if (material.get() == 0)
     {
@@ -85,7 +85,7 @@ MaterialServer::ResetMaterials()
     UnlinkChildren();
 
     // (re)create the default material
-    boost::shared_ptr<MaterialSolid> defMat = shared_dynamic_cast<MaterialSolid>
+    boost::shared_ptr<MaterialSolid> defMat = dynamic_pointer_cast<MaterialSolid>
         (GetCore()->New("kerosin/MaterialSolid"));
 
     defMat->SetName("default");
@@ -103,7 +103,7 @@ bool
 MaterialServer::InitMaterialExporter(const std::string& name)
 {
     boost::shared_ptr<MaterialExporter> exporter
-        = shared_dynamic_cast<MaterialExporter>(GetCore()->New(name));
+        = dynamic_pointer_cast<MaterialExporter>(GetCore()->New(name));
 
     if (exporter.get() == 0)
     {
@@ -129,7 +129,7 @@ MaterialServer::ExportAllMaterial()
 
     for (TLeafList::const_iterator mi = materials.begin(); mi != materials.end(); ++mi)
     {
-        boost::shared_ptr<Material> m = shared_static_cast<Material>(*mi);
+        boost::shared_ptr<Material> m = static_pointer_cast<Material>(*mi);
         ExportMaterial(m);
     }
     GetLog()->Debug() << "(MaterialServer) ExportAllMaterial done\n";
@@ -143,7 +143,7 @@ MaterialServer::ExportMaterial(boost::shared_ptr<Material> material)
 
     for (TLeafList::const_iterator bi = exporters.begin(); bi != exporters.end(); ++bi)
     {
-        boost::shared_ptr<MaterialExporter> mb = shared_static_cast<MaterialExporter>(*bi);
+        boost::shared_ptr<MaterialExporter> mb = static_pointer_cast<MaterialExporter>(*bi);
         mb->RegisterMaterial(material);
     }
 }

@@ -46,7 +46,7 @@ void InternalSoccerRender::OnLink()
 {
     // get the FontServer
     mFontServer =
-        shared_static_cast<FontServer>(GetCore()->Get("/sys/server/font"));
+        static_pointer_cast<FontServer>(GetCore()->Get("/sys/server/font"));
 
     if (mFontServer.get() == 0)
         {
@@ -65,7 +65,7 @@ void InternalSoccerRender::OnLink()
         }
 
     // get the TextureServer
-    mTextureServer = shared_static_cast<TextureServer>(GetCore()->Get("/sys/server/texture"));
+    mTextureServer = static_pointer_cast<TextureServer>(GetCore()->Get("/sys/server/texture"));
 
     if (mTextureServer.get() == 0)
         {
@@ -73,7 +73,7 @@ void InternalSoccerRender::OnLink()
         }
 
     // get the GameStateAspect
-    mGameState = shared_dynamic_cast<GameStateAspect>
+    mGameState = dynamic_pointer_cast<GameStateAspect>
         (SoccerBase::GetControlAspect(*this, "GameStateAspect"));
 
     if (mGameState.get() == 0)
@@ -199,7 +199,7 @@ void InternalSoccerRender::Render()
 
 #if 0
     // get texture -- has to be square and power of 2 in size!!!
-    boost::shared_ptr<Texture2D> tex = shared_static_cast<Texture2D>
+    boost::shared_ptr<Texture2D> tex = static_pointer_cast<Texture2D>
                                     (mTextureServer->GetTexture("test.tga"));
 
     glEnable2D();

@@ -42,7 +42,7 @@ void CreateEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
 
   boost::shared_ptr<CreateAction> createAction =
-    shared_dynamic_cast<CreateAction>(mAction);
+    dynamic_pointer_cast<CreateAction>(mAction);
     mAction.reset();
   if (createAction.get() == 0)
     {

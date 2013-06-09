@@ -132,20 +132,20 @@ boost::weak_ptr<CLASS>
 Leaf::FindParentSupportingClass() const
 {
     boost::shared_ptr<Node> node
-        = boost::shared_static_cast<Node>(GetParent().lock());
+        = boost::static_pointer_cast<Node>(GetParent().lock());
 
     while (node.get() != 0)
     {
         boost::shared_ptr<CLASS> test =
-            boost::shared_dynamic_cast<CLASS>(node);
+            boost::dynamic_pointer_cast<CLASS>(node);
 
         if (test.get() != 0)
         {
             return test;
         }
 
-        //node = boost::shared_static_cast<Node>(node->GetParent().lock());
-        node = boost::shared_static_cast<Node>(node->GetParent().lock());
+        //node = boost::static_pointer_cast<Node>(node->GetParent().lock());
+        node = boost::static_pointer_cast<Node>(node->GetParent().lock());
 
     }
 

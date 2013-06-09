@@ -50,7 +50,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     boost::shared_ptr<BaseNode> parent =
-        shared_dynamic_cast<BaseNode>(GetParent().lock());
+        dynamic_pointer_cast<BaseNode>(GetParent().lock());
 
     if (parent.get() == 0)
     {
@@ -60,7 +60,7 @@ PanTiltEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     boost::shared_ptr<PanTiltAction> panTiltAction =
-        shared_dynamic_cast<PanTiltAction>(mAction);
+        dynamic_pointer_cast<PanTiltAction>(mAction);
     mAction.reset();
 
     if (panTiltAction.get() == 0)

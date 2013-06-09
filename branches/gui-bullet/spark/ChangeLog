@@ -1,3 +1,9 @@
+2012-11-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/sceneeffector/sceneaction.h: 
+	* plugin/sceneeffector/sceneeffector.cpp:
+	- added the ability to receive and apply scene parameters
+	 
 2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 	
 	* lib/kerosin/CMakeLists.txt: 

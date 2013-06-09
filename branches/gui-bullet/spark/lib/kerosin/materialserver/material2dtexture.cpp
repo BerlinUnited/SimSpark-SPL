@@ -58,7 +58,7 @@ void Material2DTexture::OnLink()
 bool Material2DTexture::LoadTexture(const std::string& texName, boost::shared_ptr<Texture>& store)
 {
     boost::shared_ptr<ScriptServer> scriptServer = GetCore()->GetScriptServer();
-    boost::shared_ptr<TextureServer> textureServer = shared_dynamic_cast<TextureServer>
+    boost::shared_ptr<TextureServer> textureServer = dynamic_pointer_cast<TextureServer>
         (GetCore()->Get("/sys/server/texture"));
 
     store.reset();

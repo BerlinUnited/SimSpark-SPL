@@ -47,7 +47,7 @@ GameControlServer::~GameControlServer()
 bool
 GameControlServer::InitParser(const std::string& parserName)
 {
-    mParser = shared_dynamic_cast<BaseParser>(GetCore()->New(parserName));
+    mParser = dynamic_pointer_cast<BaseParser>(GetCore()->New(parserName));
 
     if (mParser.get() == 0)
     {
@@ -69,7 +69,7 @@ bool
 GameControlServer::InitControlAspect(const string& aspectName)
 {
     boost::shared_ptr<ControlAspect> aspect
-        = shared_dynamic_cast<ControlAspect>(GetCore()->New(aspectName));
+        = dynamic_pointer_cast<ControlAspect>(GetCore()->New(aspectName));
 
     if (aspect.get() == 0)
     {
@@ -94,7 +94,7 @@ boost::shared_ptr<Scene>
 GameControlServer::GetActiveScene()
 {
     boost::shared_ptr<SceneServer> sceneServer =
-        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+        dynamic_pointer_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
     {
@@ -140,7 +140,7 @@ GameControlServer::AgentConnect(int id)
 
     // create a new AgentAspect for the ID in the scene and add it to
     // our map of AgentAspects
-    boost::shared_ptr<AgentAspect> aspect = shared_dynamic_cast<AgentAspect>
+    boost::shared_ptr<AgentAspect> aspect = dynamic_pointer_cast<AgentAspect>
         (GetCore()->New("oxygen/AgentAspect"));
 
     if (aspect.get() == 0)
@@ -353,7 +353,7 @@ GameControlServer::Update(float deltaTime)
         )
     {
         boost::shared_ptr<ControlAspect> aspect =
-            shared_static_cast<ControlAspect>(*iter);
+            static_pointer_cast<ControlAspect>(*iter);
 
         aspect->Update(deltaTime);
     }

@@ -61,7 +61,7 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     boost::shared_ptr<BeamAction> beamAction =
-        shared_dynamic_cast<BeamAction>(mAction);
+        dynamic_pointer_cast<BeamAction>(mAction);
 
    mAction.reset();
 

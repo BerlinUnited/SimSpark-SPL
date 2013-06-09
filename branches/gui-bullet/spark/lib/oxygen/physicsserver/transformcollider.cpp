@@ -38,7 +38,7 @@ TransformCollider::TransformCollider() : Collider()
 bool TransformCollider::ConstructInternal()
 {    
     if (mTransformColliderImp.get() == 0)
-        mTransformColliderImp = shared_dynamic_cast<TransformColliderInt>
+        mTransformColliderImp = dynamic_pointer_cast<TransformColliderInt>
             (GetCore()->New("TransformColliderImp"));
 
     if (! Collider::ConstructInternal())

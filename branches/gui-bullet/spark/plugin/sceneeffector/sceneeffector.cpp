@@ -45,7 +45,7 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         return;
 
     boost::shared_ptr<SceneAction> sceneAction =
-        shared_dynamic_cast<SceneAction>(mAction);
+        dynamic_pointer_cast<SceneAction>(mAction);
     mAction.reset();
 
     if (sceneAction.get() == 0)
@@ -65,9 +65,8 @@ void SceneEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             return;
         }
 
-    boost::shared_ptr<ParameterList> parameter(new ParameterList());
-
-    aspect->ImportScene(sceneAction->GetScene(), parameter);
+    aspect->ImportScene(sceneAction->GetScene(),
+        sceneAction->GetSceneParameters());
 
 }
 
@@ -89,5 +88,10 @@ SceneEffector::GetActionObject(const Predicate& predicate)
             return boost::shared_ptr<ActionObject>();
         };
 
-    return boost::shared_ptr<ActionObject>(new SceneAction(GetPredicate(),scene));
+    boost::shared_ptr<ParameterList> parameters(
+        new ParameterList(predicate.parameter));
+    parameters->Pop_Front();
+
+    return boost::shared_ptr<ActionObject>(
+        new SceneAction(GetPredicate(), scene, parameters));
 }

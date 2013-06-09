@@ -44,7 +44,7 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
         }
 
     boost::shared_ptr<HingeAction> hingeAction =
-        shared_dynamic_cast<HingeAction>(action);
+        dynamic_pointer_cast<HingeAction>(action);
 
     if (hingeAction.get() == 0)
     {

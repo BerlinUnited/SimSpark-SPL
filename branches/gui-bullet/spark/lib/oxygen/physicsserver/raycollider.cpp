@@ -42,7 +42,7 @@ void RayCollider::SetParams(salt::Vector3f pos,
 bool RayCollider::ConstructInternal()
 {
     if (mRayColliderImp.get() == 0)
-        mRayColliderImp = shared_dynamic_cast<RayColliderInt>
+        mRayColliderImp = dynamic_pointer_cast<RayColliderInt>
             (GetCore()->New("RayColliderImp"));
             
     if (mRayColliderImp.get() == 0)
