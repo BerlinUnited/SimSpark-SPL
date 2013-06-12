@@ -76,6 +76,8 @@ addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
 
+addSoccerVar('UseCharging', true)
+
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       
 addSoccerVar('GoalieNotStandingMaxTime',60)
