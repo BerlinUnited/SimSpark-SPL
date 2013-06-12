@@ -52,7 +52,7 @@ FOREACH(LIB ${sparkgui_RELEASE_LIBS})
   target_link_libraries(sparkgui optimized ${LIB})
 ENDFOREACH(LIB) 
 
-target_link_libraries(sparkgui )
+target_link_libraries(sparkgui ${Boost_LIBRARIES})
 
 set_target_properties(sparkgui PROPERTIES INSTALL_RPATH "${RPATH_DIRECTORIES}")
 install(TARGETS sparkgui DESTINATION ${BINDIR})

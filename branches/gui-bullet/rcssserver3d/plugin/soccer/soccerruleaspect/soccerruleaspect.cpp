@@ -812,7 +812,7 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     if (time > mGameState->GetLastModeChange())
     {
         mLastKickOffKickTime = time;
-        mCheckKickOffKickerFault = true;
+        mCheckKickOffKickerFoul = true;
         mLastKickOffTaker = agent;
         mGameState->SetPlayMode(PM_PlayOn);
     }

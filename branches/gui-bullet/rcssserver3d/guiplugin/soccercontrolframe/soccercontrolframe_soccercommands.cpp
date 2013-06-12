@@ -23,11 +23,11 @@
 
 #include <sparkcommandqueue.h>
 #include <simspark.h>
-#include <cutelogger\logger.h>
+#include <cutelogger/logger.h>
 
-#include <gamestateaspect\gamestateaspect.h>
-#include <ballstateaspect\ballstateaspect.h>
-#include <soccerruleaspect\soccerruleaspect.h>
+#include <gamestateaspect/gamestateaspect.h>
+#include <ballstateaspect/ballstateaspect.h>
+#include <soccerruleaspect/soccerruleaspect.h>
 
 using namespace boost;
 using namespace zeitgeist;
