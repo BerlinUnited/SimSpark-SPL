@@ -1,3 +1,13 @@
+2013-06-12  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	* rcssserver3d/naosoccersim.rb: 
+	- added Patrick's charging foul rules, plus soccervar parameters
+	to enable and configure them. these fouls are not penalized, only
+	recorded and sent to the monitor
+	
+
 2013-06-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/gamestateaspect/gamestateaspect.h:
