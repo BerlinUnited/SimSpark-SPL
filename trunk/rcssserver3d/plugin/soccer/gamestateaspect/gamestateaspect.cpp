@@ -20,6 +20,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "gamestateaspect.h"
+#include <algorithm>
 #include <zeitgeist/logserver/logserver.h>
 #include <soccerbase/soccerbase.h>
 #include <agentstate/agentstate.h>
@@ -53,6 +54,9 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mGamePaused = true;
     mMaxHeteroTypeCount = 3;
     mMaxTotalHeteroCount = 9;
+    mInternalIndex[TI_NONE] = -1;
+    mInternalIndex[TI_LEFT] = 0;
+    mInternalIndex[TI_RIGHT] = 1;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -163,30 +167,19 @@ GameStateAspect::GetLastModeChange() const
 void
 GameStateAspect::SetTeamName(TTeamIndex idx, const std::string& name)
 {
-    switch (idx)
-    {
-    case TI_LEFT:
-        mTeamName[0] = name;
-        break;
-    case TI_RIGHT:
-        mTeamName[1] = name;
-        break;
-    }
+    int i = GetInternalIndex(idx);
+    if (i > -1)
+        mTeamName[i] = name;
     return;
 }
 
 std::string
 GameStateAspect::GetTeamName(TTeamIndex idx) const
 {
-    switch (idx)
-    {
-    case TI_LEFT:
-        return mTeamName[0];
-    case TI_RIGHT:
-        return mTeamName[1];
-    default:
+    int i = GetInternalIndex(idx);
+    if (i < 0)
         return "";
-    }
+    return mTeamName[i];
 }
 
 TTeamIndex
@@ -197,34 +190,30 @@ GameStateAspect::GetTeamIndex(const std::string& teamName)
         if (mTeamName[i].empty())
         {
             mTeamName[i] = teamName;
-            return static_cast<TTeamIndex>(i + TI_LEFT);
+            return GetInternalIndex(TI_LEFT) == i ? TI_LEFT : TI_RIGHT;
         }
 
         if (mTeamName[i] == teamName)
         {
-            return static_cast<TTeamIndex>(i + TI_LEFT);
+            return GetInternalIndex(TI_LEFT) == i ? TI_LEFT : TI_RIGHT;
         }
     }
 
     return TI_NONE;
 }
 
+inline int
+GameStateAspect::GetInternalIndex(TTeamIndex idx) const
+{
+    return mInternalIndex[idx];
+}
+
 bool
 GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
 {
-    int i;
-
-    switch (idx)
-    {
-    case TI_LEFT:
-        i = 0;
-        break;
-    case TI_RIGHT:
-        i = 1;
-        break;
-    default:
+    int i = GetInternalIndex(idx);
+    if (i < 0)
         return false;
-    }
 
     TUnumSet& set = mUnumSet[i];
 
@@ -244,19 +233,9 @@ GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
 bool
 GameStateAspect::EraseUnum(TTeamIndex idx, int unum)
 {
-    int i;
-
-    switch (idx)
-    {
-    case TI_LEFT:
-        i = 0;
-        break;
-    case TI_RIGHT:
-        i = 1;
-        break;
-    default:
+    int i = GetInternalIndex(idx);
+    if (i < 0)
         return false;
-    }
 
     TUnumSet& set = mUnumSet[i];
 
@@ -275,19 +254,9 @@ GameStateAspect::EraseUnum(TTeamIndex idx, int unum)
 bool
 GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
 {
-    int i;
-
-    switch (idx)
-    {
-    case TI_LEFT:
-        i = 0;
-        break;
-    case TI_RIGHT:
-        i = 1;
-        break;
-    default:
+    int i = GetInternalIndex(idx);
+    if (i < 0)
         return false;
-    }
 
     if (type) // heterogeneous player
     {
@@ -321,19 +290,9 @@ GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
 bool
 GameStateAspect::EraseRobotType(TTeamIndex idx, int type)
 {
-    int i;
-
-    switch (idx)
-    {
-    case TI_LEFT:
-        i = 0;
-        break;
-    case TI_RIGHT:
-        i = 1;
-        break;
-    default:
+    int i = GetInternalIndex(idx);
+    if (i < 0)
         return false;
-    }
 
     if (mRobotTypeCount[i].size() <= type || !mRobotTypeCount[i][type])
     {
@@ -447,30 +406,21 @@ GameStateAspect::GetGameHalf() const
 void
 GameStateAspect::ScoreTeam(TTeamIndex idx)
 {
-    switch (idx)
-    {
-    case TI_LEFT:
-        ++mScore[0];
-        break;
-    case TI_RIGHT:
-        ++mScore[1];
-        break;
-    }
-    return;
+    int i = GetInternalIndex(idx);
+    if (i < 0)
+        return;
+
+    ++mScore[i];
 }
 
 int
 GameStateAspect::GetScore(TTeamIndex idx) const
 {
-    switch (idx)
-    {
-    case TI_LEFT:
-        return mScore[0];
-    case TI_RIGHT:
-        return mScore[1];
-    default:
+    int i = GetInternalIndex(idx);
+    if (i < 0)
         return 0;
-    }
+
+    return mScore[i];
 }
 
 Vector3f
@@ -553,18 +503,9 @@ GameStateAspect::OnLink()
 int
 GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
 {
-    int idx;
-    switch (ti)
-    {
-    case TI_LEFT:
-        idx = 0;
-        break;
-    case TI_RIGHT:
-        idx = 1;
-        break;
-    default:
+    int idx = GetInternalIndex(ti);
+    if (idx < 0)
         return 0;
-    }
 
     for (int i = 1; i <=11; ++i)
       if (mUnumSet[idx].find(i) == mUnumSet[idx].end())
@@ -592,4 +533,9 @@ bool GameStateAspect::IsPaused() const
 void GameStateAspect::SetPaused(bool paused)
 {
     mGamePaused = paused;
+}
+
+void GameStateAspect::SwapTeamIndexes()
+{
+    swap(mInternalIndex[TI_LEFT], mInternalIndex[TI_RIGHT]);
 }

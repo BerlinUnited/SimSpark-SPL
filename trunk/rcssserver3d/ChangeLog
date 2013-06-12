@@ -1,3 +1,14 @@
+2013-06-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- added a note about fixing side changing bug in 0.6.7 release
+	 
+	* rcssserver3d/naosoccersim.rb: 
+	- disabled ChangeSidesInSecondHalf by default for 0.6.7 release, since this
+	  is what we use currently in competitions. But it should work fine if
+	  enabled.
+
 2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 
@@ -11,9 +22,17 @@
 	* rcssserver3d/naorobottypes.rb: 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
 	- re-formatted for better readability & consistency
+	(SoccerRuleAspect::SwapTeamSides): 
+	- swap gamestateaspect internal team data too (should fix bugs related to
+	  changing team's sides in the second half)
 
 	* rcssserver3d/naosoccersim.rb: 
-	- add charging foul parameters to silent 'variable not found' errors
+	- added charging foul parameters to silent 'variable not found' errors
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- added new functions to swap teams internal data structures when they
+	  change sides
 
 2013-06-12  Sander van Dijk  <sgvandijk@gmail.com>
 

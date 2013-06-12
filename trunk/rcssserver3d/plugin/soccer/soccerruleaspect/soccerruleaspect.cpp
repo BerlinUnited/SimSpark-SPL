@@ -138,8 +138,9 @@ SoccerRuleAspect::ResetFoulCounterPlayer(int unum, TTeamIndex idx)
 void
 SoccerRuleAspect::ResetFoulCounter(TTeamIndex idx)
 {
-    for(int t=1; t<=11; t++) {
-	ResetFoulCounterPlayer(t,idx);
+    for (int t = 1; t <= 11; t++)
+    {
+        ResetFoulCounterPlayer(t, idx);
     }
 }
 
@@ -800,11 +801,17 @@ SoccerRuleAspect::SwapTeamSides()
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states))
         return;
 
+    mGameState->SwapTeamIndexes();
+
     SoccerBase::TAgentStateList::iterator it;
     for (it = agent_states.begin(); it != agent_states.end(); ++it)
     {
         (*it)->SetTeamIndex(SoccerBase::OpponentTeam((*it)->GetTeamIndex()));
     }
+
+    // make sure that team names (and probably other things) are updated on
+    // monitors
+    GetActiveScene()->SetModified(true);
 }
 
 void
