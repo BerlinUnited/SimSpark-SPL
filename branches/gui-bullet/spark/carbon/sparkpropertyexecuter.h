@@ -27,7 +27,7 @@
 
 #include "isimcontrol.h"
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <QObject>
 #include <QSemaphore>
 #include <list>

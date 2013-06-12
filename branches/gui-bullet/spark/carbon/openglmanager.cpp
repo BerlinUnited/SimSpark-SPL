@@ -98,7 +98,7 @@ int OpenGLManager::getGLWidgetFlags(GLWidget* widget)
             break;
         }
     }
-    
+
     unlockWidgets();
     return ret;
 }
@@ -118,7 +118,7 @@ bool OpenGLManager::hasGLWidgetFlag(GLWidget* widget, EGLWidgetFlags flag)
             break;
         }
     }
-    
+
     unlockWidgets();
     return ret;
 }
@@ -190,7 +190,7 @@ bool OpenGLManager::unregisterGLWidget(GLWidget* widget)
 {
     if (!lockWidgets())
         return false;
-    
+
     for (auto it = mWidgets.begin(); it != mWidgets.end(); )
     {
         if (it->mWidget == widget)
@@ -278,10 +278,10 @@ bool OpenGLManager::lockGLWidget(GLWidget* widget, EGLStateSignal lockSignal, bo
     }
 
     //Send signal for receiver thread to prepare external opengl access
-    sendGLStateSignal(widget, lockSignal, blockedLock); 
+    sendGLStateSignal(widget, lockSignal, blockedLock);
 
     //Disable resize/repaint updates
-    widget->setUpdatesEnabled(false); 
+    widget->setUpdatesEnabled(false);
 
     //Make the target gl context current in this thread
     widget->makeCurrent();
@@ -340,7 +340,7 @@ void OpenGLManager::sendGLStateSignal(GLWidget* widget, EGLStateSignal signal, b
         }
     }
 
- 
+
 }
 
 void OpenGLManager::glWidgetDestroyed(QObject* widget)
@@ -350,12 +350,12 @@ void OpenGLManager::glWidgetDestroyed(QObject* widget)
         LOG_WARNING() << "Could not remove destroyed GlWidget from list because list access is locked.";
         return;
     }
-        
+
     for (auto it = mWidgets.begin(); it != mWidgets.end(); )
     {
         if (it->mWidget == widget)
         {
-            LOG_WARNING() << "Removing registered GLWidget 0x" << QString::number((int)widget, 16).toStdString().c_str() << 
+            LOG_WARNING() << "Removing registered GLWidget 0x" << QString::number((intptr_t)widget, 16).toStdString().c_str() <<
                 " because it was destroyed. Call unregisterGLWidget() before destruction.";
             it = mWidgets.erase(it);
         }

@@ -28,18 +28,18 @@
 #include "windowdefinition.h"
 
 #include <QString>
-#include <Map>
+#include <map>
 
 /*!
   \brief Export macro to export a main window layout from a shared library.
 
   <b>Parameter:</b>\n
-  CLASS: Class name of the QMainWindow derived class. 
+  CLASS: Class name of the QMainWindow derived class.
 
   <b>Usage:</b>\n
   Define a class derived from QMainWindow.
-  Use the export macro in a separate export-header file. 
-  Using the export macro in a file with a Qt derived file (a file that will be parsed by the qt meta object compiler) 
+  Use the export macro in a separate export-header file.
+  Using the export macro in a file with a Qt derived file (a file that will be parsed by the qt meta object compiler)
   won't work.
 
   The main application will call the export function defined by this macro.

@@ -106,14 +106,16 @@ protected:
           mMessage(message), mType(got_type), mExpectedType(expected_type)
           { hasMessage = mMessage.compare("") != 0; }
 
-          /*!
+        ~IllegalTaskTypeException() throw() {}
+
+        /*!
            \brief Returns the error message.
-          */
-          virtual QString message()
-          {
-              return (hasMessage? mMessage + " " : "") + QString("Illegal thread definition: ") + TaskDefinition::getTypeString(mType) + QString(" Expected type: ") + 
-              TaskDefinition::getTypeString(mExpectedType);
-          }
+         */
+        virtual QString message()
+        {
+            return (hasMessage? mMessage + " " : "") + QString("Illegal thread definition: ") + TaskDefinition::getTypeString(mType) + QString(" Expected type: ") +
+                    TaskDefinition::getTypeString(mExpectedType);
+        }
 
     private:
         const TaskDefinition::ETaskType mType;         /*!< Type received. */
@@ -124,7 +126,7 @@ protected:
 
 public:
     //static public functions & members
-        
+
     /*!
      \brief Creates a new SimulationTask with the type specified in the given TaskDefinition.
 
@@ -133,7 +135,7 @@ public:
      \param definition definition to create task from
     */
     static SimulationTask* createSimulationTask(boost::shared_ptr<TaskDefinition> definition);
-    
+
     /*!
      \brief Returns the next unique task Id.
 
@@ -148,7 +150,7 @@ public:
      \brief Destructor.
     */
     virtual ~SimulationTask();
-    
+
     /*!
      \brief Returns the messenger for the SimulationTask.
 
@@ -173,12 +175,12 @@ public:
      \brief Returns the task as SimulationProcess. Returns 0 if it actually is no process.
     */
     SimulationProcess* toProcess() const;
-    
+
     /*!
      \brief Returns the task id.
     */
     int getId() const;
-    
+
     bool isThread() const;         /*!< \brief Returns true if the task is a SimulationThread.*/
     bool isProcess() const;        /*!< \brief Returns true if the task is a SimulationProcess.*/
 
@@ -194,57 +196,57 @@ protected: //slots
     //protected slot functions (called indirectly via SimulationTaskMessenger)
 
     /*!
-     \brief Informs the Task, that the execution state changed. 
-     
+     \brief Informs the Task, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadInitialized().
      Originates from Simulation or the derived classes.
     */
     void updateInitialized();
     /*!
-     \brief Informs the Task internally, that the execution state changed. 
-     
+     \brief Informs the Task internally, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadRunning().
      Originates from the derived classes.
     */
     void updateRunning();
     /*!
-     \brief Informs the Task internally, that the execution state changed. 
-     
+     \brief Informs the Task internally, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadPaused() if the pause state is true, or threadRunning() otherwise.
      Originates from the derived classes.
     */
     void updatePaused(bool state);
     /*!
-     \brief Informs the Task internally, that the execution state changed. 
-     
+     \brief Informs the Task internally, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadPaused().
      Originates from the derived classes.
     */
     void updatePaused();
     /*!
-     \brief Informs the Task internally, that the execution state changed. 
-     
+     \brief Informs the Task internally, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadStopped().
      Originates from the derived classes.
     */
     void updateStopped();
     /*!
-     \brief Informs the ThreadState, that the execution state changed. 
-     
+     \brief Informs the ThreadState, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadFinished().
      Originates from the derived classes.
     */
     void updateFinished();
     /*!
-     \brief Informs the ThreadState, that the execution state changed. 
-     
+     \brief Informs the ThreadState, that the execution state changed.
+
      Emits the SimulationTaskMessengers respective signal threadTerminated().
      Originates from the derived classes.
     */
     void updateTerminated();
     /*!
-     \brief Informs the ThreadState, that the thread definition has changed. 
-     
+     \brief Informs the ThreadState, that the thread definition has changed.
+
      Emits the SimulationTaskMessengers respective signal threadDefinitionChanged().
      Originates from the derived classes.
     */
@@ -290,7 +292,7 @@ protected:
     Threads run() function. Starts processes.
    */
    virtual void run() = 0;
-    
+
 protected:
     // protected functions
 
@@ -305,7 +307,7 @@ protected:
      \brief Changes the task definition.
 
      Used for reinitialization of processes or threads after the taskdefinition was changed.
-     The data of the old definition will be changed to the reference definitions data. 
+     The data of the old definition will be changed to the reference definitions data.
      Connections of both definition remain as they are.
 
      \param definition new definition

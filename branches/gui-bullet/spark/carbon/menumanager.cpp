@@ -27,7 +27,7 @@
 #include "menuobjectmenu.h"
 #include "menuobjecttoolbar.h"
 #include "menuobjectfile.h"
-#include "windowManager.h"
+#include "windowmanager.h"
 #include "settingsdialog.h"
 #include "plugindialog.h"
 #include "numberedactionreceiver.h"
@@ -92,7 +92,7 @@ bool MenuManager::initMenu()
     }
 
     QAction* action;
-    
+
     //------------------------------------------------------
     // Init Menu
     //------------------------------------------------------
@@ -110,7 +110,7 @@ bool MenuManager::initMenu()
     action->setToolTip("Load a simulation state.");
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     connect(action, SIGNAL(triggered()), this, SLOT(load()));
-    
+
     action = mFileMenu->addAction(QIcon(":save"), tr("&Save"));
     action->setToolTip("Save the current simulation state.");
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
@@ -135,7 +135,7 @@ bool MenuManager::initMenu()
     action = mFileMenu->addAction(QIcon(":folder"), tr("&Load Clean"));
     action->setToolTip("Load a simulation state without loading data files for the plugins.");
     connect(action, SIGNAL(triggered()), this, SLOT(loadClean()));
-    
+
     action = mFileMenu->addAction(QIcon(":save"), tr("&Save Clean"));
     action->setToolTip("Save the current simulation setup without saving data files for the plugins.");
     connect(action, SIGNAL(triggered()), this, SLOT(saveClean()));
@@ -149,7 +149,7 @@ bool MenuManager::initMenu()
     action = mFileMenu->addAction(tr("&Exit"));
     action->setToolTip("Close the program.");
     connect(action, SIGNAL(triggered()), this, SLOT(exit()));
-    
+
     addNamedMenu(mFileMenu, "File");
     //------------------------------------------------------
 
@@ -196,7 +196,7 @@ bool MenuManager::initMenu()
     addNamedMenu(mToolsMenu, "Tools");
 
     //------------------------------------------------------
-    
+
     //------------------------------------------------------
     //Log Menu
     //------------------------------------------------------
@@ -207,7 +207,7 @@ bool MenuManager::initMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(sendInitMessages()));
 
     mLogMenu->addSeparator();
-    
+
     mSparkDebugLevelAction = mLogMenu->addAction(tr("Set SimSpark log level: Debug"));
     connect(mSparkDebugLevelAction, SIGNAL(triggered()), this, SLOT(setSparkLogLevelDebug()));
 
@@ -219,7 +219,7 @@ bool MenuManager::initMenu()
 
     mSparkErrorLevelAction = mLogMenu->addAction(tr("Set SimSpark log level: Error"));
     connect(mSparkErrorLevelAction, SIGNAL(triggered()), this, SLOT(setSparkLogLevelError()));
-    
+
     addNamedMenu(mLogMenu, "Log");
     //------------------------------------------------------
 
@@ -232,21 +232,21 @@ bool MenuManager::initMenu()
     //TODO: Add Help menu
     //action = mHelpMenu->addAction(tr("&View Help"));
     //connect(action, SIGNAL(triggered()), this, SLOT(help()));
-    
+
     action = mHelpMenu->addAction(tr("&About"));
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
 
     action = mHelpMenu->addAction(tr("&Whats this?"));
     action->setShortcut(Qt::CTRL + Qt::Key_W);
     connect(action, SIGNAL(triggered()), this, SLOT(whatsThis()));
-    
+
     addNamedMenu(mHelpMenu, "Help");
     //------------------------------------------------------
 
     //------------------------------------------------------
     // Init ToolBars
     //------------------------------------------------------
- 
+
     //------------------------------------------------------
     // File Toolbar
     //------------------------------------------------------
@@ -382,7 +382,7 @@ MenuSystem::Menu* MenuManager::provideMenu(const AbstractPlugin* caller, const Q
     if (caller->hasVisualRepresentation() == false)
     {
         callerWidget = 0;
-        target = 0; 
+        target = 0;
         if (location == MOL_LOCAL)
         {
             LOG_WARNING() << "Cant provide 'Local' menu objects in a plugin without visual representation. Ignoring this flag.";
@@ -573,7 +573,7 @@ MenuSystem::File* MenuManager::provideSourceFile(const AbstractPlugin* caller, c
 
 void MenuManager::cleanEntries(const AbstractPlugin* origin)
 {
-    
+
     TMenuObjects::iterator it = mMenuObjects.begin();
     while (it != mMenuObjects.end())
     {
@@ -726,7 +726,7 @@ void MenuManager::saveCleanAs()
 void MenuManager::reload()
 {
     SimulationManager* manager = mParent->getSimulationManager();
-    QString currentSimulation = manager->getSimulation()->getFilename(); 
+    QString currentSimulation = manager->getSimulation()->getFilename();
     manager->initializeSimulationFromFile(currentSimulation, true);
 }
 
@@ -857,7 +857,7 @@ void MenuManager::setSparkLogLevel(int level)
     //Set log level for all spark controllers
     for (auto it = mSparkController.begin(); it != mSparkController.end(); it++)
     {
-        (*it)->setLogProperties((Logger::LogLevel) level);          
+        (*it)->setLogProperties((Logger::LogLevel) level);
     }
 }
 
@@ -935,7 +935,7 @@ void MenuManager::createPlugin(int classId)
         LOG_INFO() << "Cant create another plugin of class " << pos->second->getName();
         return;
     }
-    
+
     //Choose attachment and parameters
     QString parameter = "";
     QString attachment = "";
@@ -945,7 +945,7 @@ void MenuManager::createPlugin(int classId)
         if (attachmentPoint)
             attachment = attachmentPoint->getName();
     }
-    
+
     //Create plugin definition
     boost::shared_ptr<PluginDefinition> definition(new PluginDefinition(
         pos->second->getName(), pos->second->getName(), pos->second->getPluginType(), PluginDefinition::RD_INHERIT, parameter, attachment));
@@ -1004,7 +1004,7 @@ void MenuManager::updatePluginToolBar()
             default: break;
         }
         action->setWhatsThis("Create a new " + typeText + " of class '" + it->second->getName() + "'.\n" \
-            "The maximum amount for plugins of this class is " + QString::number(it->second->getMaxInstanceCount()) + "." 
+            "The maximum amount for plugins of this class is " + QString::number(it->second->getMaxInstanceCount()) + "."
             + descriptionHeader + description);
 
         //Connect button

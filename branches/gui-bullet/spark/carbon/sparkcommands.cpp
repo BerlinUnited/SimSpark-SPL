@@ -22,14 +22,14 @@
 #include "sparkcommandqueue.h"
 #include "sparkcontroller.h"
 #include "simspark.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
-#include <oxygen\sceneserver\sceneimporter.h>
-#include <oxygen\sceneserver\basenode.h>
-#include <oxygen\sceneserver\scenedict.h>
-#include <zeitgeist\scriptserver\scriptserver.h>
-#include <zeitgeist\leaf.h>
-#include <zeitgeist\node.h>
+#include <oxygen/sceneserver/sceneimporter.h>
+#include <oxygen/sceneserver/basenode.h>
+#include <oxygen/sceneserver/scenedict.h>
+#include <zeitgeist/scriptserver/scriptserver.h>
+#include <zeitgeist/leaf.h>
+#include <zeitgeist/node.h>
 
 using namespace boost;
 using namespace zeitgeist;

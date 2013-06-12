@@ -29,7 +29,7 @@
 
 #include <QString>
 #include <QSemaphore>
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <list>
 
 class SparkController;

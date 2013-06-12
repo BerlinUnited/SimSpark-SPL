@@ -22,7 +22,7 @@
 #include "sparkpropertymanager.h"
 #include "sparkpropertydata.h"
 #include "sparkproperty.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 #include <salt/vector.h>
 #include <salt/bounds.h>
@@ -43,7 +43,7 @@
 #include <oxygen/physicsserver/dragcontroller.h>
 #include <kerosin/materialserver/materialsolid.h>
 
-#include <QstringList>
+#include <QStringList>
 
 using namespace oxygen;
 using namespace kerosin;
@@ -165,7 +165,7 @@ bool BasicControl::genProperties(TLeafPtr leaf, ClassDescriptor& descriptor, TPr
 
     if (!ok)
     {
-        LOG_ERROR() << "Control '" << mName.toStdString().c_str() << ": Generating property for class " << 
+        LOG_ERROR() << "Control '" << mName.toStdString().c_str() << ": Generating property for class " <<
             descriptor.mName.toStdString().c_str() << "(" << descriptor.mId << ") failed.";
         return false;
     }
@@ -176,7 +176,7 @@ bool BasicControl::genProperties(TLeafPtr leaf, ClassDescriptor& descriptor, TPr
 //--------------------------------------------------------------
 // Protected virtual
 //--------------------------------------------------------------
-    
+
 bool BasicControl::updateProperty(boost::shared_ptr<Property> prop)
 {
     if (!supports(prop->getClassNc()))
@@ -212,12 +212,12 @@ bool BasicControl::updateProperty(boost::shared_ptr<Property> prop)
         {
             if (it->second == prop->getClass().mId)
             {
-                LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Reading property " << 
+                LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Reading property " <<
                     prop->getCaption() << " for class " << it->first << " failed.";
                 return false;
             }
         }
-        LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Reading property " << 
+        LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Reading property " <<
             prop->getCaption() << " failed.";
         return false;
     }
@@ -272,12 +272,12 @@ bool BasicControl::applyPropertyChange(boost::shared_ptr<Property> prop)
         {
             if (it->second == prop->getClass().mId)
             {
-                LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Writing property " << 
+                LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Writing property " <<
                     prop->getCaption() << " for class " << it->first << " failed.";
                 return false;
             }
         }
-        LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Writing property " << 
+        LOG_WARNING() << "Control '" << mName.toStdString().c_str() << ": Writing property " <<
             prop->getCaption() << " failed.";
         return false;
 
@@ -296,7 +296,7 @@ bool BasicControl::applyPropertyChange(boost::shared_ptr<Property> prop)
 bool BasicControl::genLeaf(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     ADD_READ_PROPERTY("GetFullPath", "FullPath", new DString());
-    
+
     //Created from source file?
     const SceneDict::FileRef* ref
         = SceneDict::GetInstance().Lookup(leaf);
@@ -311,8 +311,8 @@ bool BasicControl::genLeaf(TLeafPtr leaf, const ClassDescriptor& descriptor, TPr
 }
 bool BasicControl::updateLeaf(TLeafPtr leaf, Property& prop) const
 {
-    if (prop.getName().compare("GetFullPath") == 0) 
-    { 
+    if (prop.getName().compare("GetFullPath") == 0)
+    {
         SET_VALUE(new DString(leaf->GetFullPath()));
     }
     else if (prop.getName().compare("RsgFile") == 0)
@@ -341,7 +341,7 @@ bool BasicControl::applyChangeLeaf(TLeafPtr leaf, Property& prop) const
 //=====================
 // Class
 
-bool BasicControl::genClass(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const               
+bool BasicControl::genClass(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     ADD_READ_PROPERTY("GetBundle", "Bundle", new DString(), QObject::tr("Originating bundle."));
     ADD_READ_PROPERTY("GetBaseClasses", "BaseClasses", new DString());
@@ -349,12 +349,12 @@ bool BasicControl::genClass(TLeafPtr leaf, const ClassDescriptor& descriptor, TP
     return true;
 }
 
-bool BasicControl::updateClass(TLeafPtr leaf, Property& prop) const              
+bool BasicControl::updateClass(TLeafPtr leaf, Property& prop) const
 {
     const Class& cl = *shared_static_cast<Class>(leaf);
 
-    if (prop.getName().compare("GetBundle") == 0) 
-    { 
+    if (prop.getName().compare("GetBundle") == 0)
+    {
         // originating bundle
         boost::shared_ptr<salt::SharedLibrary> bundle = cl.GetBundle();
         SET_VALUE((bundle.get() != 0) ? new DString(bundle->GetName()) : new DString(std::string("<None>")));
@@ -385,12 +385,12 @@ bool BasicControl::updateClass(TLeafPtr leaf, Property& prop) const
         }
         SET_VALUE(new DString(concat));
     }
-    else 
+    else
         return false; //Getter not supported
     return true;
 }
 
-bool BasicControl::applyChangeClass(TLeafPtr leaf, Property& prop) const              
+bool BasicControl::applyChangeClass(TLeafPtr leaf, Property& prop) const
 {
     //No Supported setters
     return false;
@@ -399,14 +399,14 @@ bool BasicControl::applyChangeClass(TLeafPtr leaf, Property& prop) const
 //=====================
 // BaseNode
 
-bool BasicControl::genBaseNode(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const            
+bool BasicControl::genBaseNode(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     boost::shared_ptr<BaseNode> baseNode = boost::shared_static_cast<BaseNode>(leaf);
     ADD_READ_PROPERTY("GetWorldBoundingBox", "WorldBoundingBox", new DAABB3());
     return true;
 }
 
-bool BasicControl::updateBaseNode(TLeafPtr leaf, Property& prop) const           
+bool BasicControl::updateBaseNode(TLeafPtr leaf, Property& prop) const
 {
     boost::shared_ptr<BaseNode> baseNode = boost::shared_static_cast<BaseNode>(leaf);
     if (prop.getName().compare("GetWorldBoundingBox") == 0) {SET_VALUE(new DAABB3(baseNode->GetWorldBoundingBox()));}
@@ -414,7 +414,7 @@ bool BasicControl::updateBaseNode(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeBaseNode(TLeafPtr leaf, Property& prop) const           
+bool BasicControl::applyChangeBaseNode(TLeafPtr leaf, Property& prop) const
 {
     //No Supported setters
     return false;
@@ -423,7 +423,7 @@ bool BasicControl::applyChangeBaseNode(TLeafPtr leaf, Property& prop) const
 //=====================
 // Transform
 
-bool BasicControl::genTransform(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const           
+bool BasicControl::genTransform(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const Transform& trans = *shared_static_cast<Transform>(leaf);
     ADD_READ_PROPERTY("GetChangedMark"   , "ChangedMark",    new DInt());
@@ -432,7 +432,7 @@ bool BasicControl::genTransform(TLeafPtr leaf, const ClassDescriptor& descriptor
     return true;
 }
 
-bool BasicControl::updateTransform(TLeafPtr leaf, Property& prop) const          
+bool BasicControl::updateTransform(TLeafPtr leaf, Property& prop) const
 {
     const Transform& trans = *shared_static_cast<Transform>(leaf);
     if      (prop.getName().compare("GetChangedMark") == 0)    {SET_VALUE(new DInt(trans.GetChangedMark()));}
@@ -442,7 +442,7 @@ bool BasicControl::updateTransform(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeTransform(TLeafPtr leaf, Property& prop) const          
+bool BasicControl::applyChangeTransform(TLeafPtr leaf, Property& prop) const
 {
     Transform& trans = *shared_static_cast<Transform>(leaf);
     //Supported setters
@@ -455,7 +455,7 @@ bool BasicControl::applyChangeTransform(TLeafPtr leaf, Property& prop) const
 //=====================
 // RigidBody
 
-bool BasicControl::genRigidBody(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const           
+bool BasicControl::genRigidBody(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const RigidBody& body = *shared_static_cast<RigidBody>(leaf);
     ADD_READWRITE_PROPERTY("GetMass",            "Mass",            new DFloat   (), Data::doubleValidator(0));
@@ -465,7 +465,7 @@ bool BasicControl::genRigidBody(TLeafPtr leaf, const ClassDescriptor& descriptor
     return true;
 }
 
-bool BasicControl::updateRigidBody(TLeafPtr leaf, Property& prop) const          
+bool BasicControl::updateRigidBody(TLeafPtr leaf, Property& prop) const
 {
     const RigidBody& body = *shared_static_cast<RigidBody>(leaf);
     if      (prop.getName().compare("GetMass") == 0)            {SET_VALUE(new DFloat   (body.GetMass())           );}
@@ -476,7 +476,7 @@ bool BasicControl::updateRigidBody(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeRigidBody(TLeafPtr leaf, Property& prop) const          
+bool BasicControl::applyChangeRigidBody(TLeafPtr leaf, Property& prop) const
 {
     RigidBody& body = *shared_static_cast<RigidBody>(leaf);
     if      (prop.getName().compare("GetMass") == 0)            {body.SetMass           (GET_VALUE(DFloat));}
@@ -490,7 +490,7 @@ bool BasicControl::applyChangeRigidBody(TLeafPtr leaf, Property& prop) const
 //=====================
 // Joint
 
-bool BasicControl::genJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const               
+bool BasicControl::genJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     ADD_READ_PROPERTY("FeedBackEnabled", "FeedBackEnabled", new DBool());
 
@@ -525,7 +525,7 @@ bool BasicControl::genJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TP
     return true;
 }
 
-bool BasicControl::updateJoint(TLeafPtr leaf, Property& prop) const              
+bool BasicControl::updateJoint(TLeafPtr leaf, Property& prop) const
 {
     const Joint& joint = *shared_static_cast<Joint>(leaf);
     if (prop.getName().compare("FeedBackEnabled") == 0)     {SET_VALUE(new DFloat(joint.FeedBackEnabled()));}
@@ -559,7 +559,7 @@ bool BasicControl::updateJoint(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeJoint(TLeafPtr leaf, Property& prop) const              
+bool BasicControl::applyChangeJoint(TLeafPtr leaf, Property& prop) const
 {
     //No Supported setters
     return false;
@@ -568,7 +568,7 @@ bool BasicControl::applyChangeJoint(TLeafPtr leaf, Property& prop) const
 //=====================
 // HingeJoint
 
-bool BasicControl::genHingeJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const          
+bool BasicControl::genHingeJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const HingeJoint& hinge = *shared_static_cast<HingeJoint>(leaf);
     ADD_READ_PROPERTY("GetAngle",     "Angle",     new DFloat()); //todo
@@ -576,7 +576,7 @@ bool BasicControl::genHingeJoint(TLeafPtr leaf, const ClassDescriptor& descripto
     return true;
 }
 
-bool BasicControl::updateHingeJoint(TLeafPtr leaf, Property& prop) const         
+bool BasicControl::updateHingeJoint(TLeafPtr leaf, Property& prop) const
 {
     const HingeJoint& hinge = *shared_static_cast<HingeJoint>(leaf);
     if      (prop.getName().compare("GetAngle") == 0)     {SET_VALUE(new DFloat(hinge.GetAngle()));}
@@ -585,7 +585,7 @@ bool BasicControl::updateHingeJoint(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeHingeJoint(TLeafPtr leaf, Property& prop) const         
+bool BasicControl::applyChangeHingeJoint(TLeafPtr leaf, Property& prop) const
 {
     //No Supported setters
     return false;
@@ -594,7 +594,7 @@ bool BasicControl::applyChangeHingeJoint(TLeafPtr leaf, Property& prop) const
 //=====================
 // UniversalJoint
 
-bool BasicControl::genUniversalJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const      
+bool BasicControl::genUniversalJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const UniversalJoint& univ = *shared_static_cast<UniversalJoint>(leaf);
     ADD_READ_PROPERTY("GetAngle(0)",     "Angle(0)",     new DFloat()); //todo
@@ -604,18 +604,18 @@ bool BasicControl::genUniversalJoint(TLeafPtr leaf, const ClassDescriptor& descr
     return true;
 }
 
-bool BasicControl::updateUniversalJoint(TLeafPtr leaf, Property& prop) const     
+bool BasicControl::updateUniversalJoint(TLeafPtr leaf, Property& prop) const
 {
     const UniversalJoint& univ = *shared_static_cast<UniversalJoint>(leaf);
-    if      (prop.getName().compare("GetAngle(0)") == 0)     {SET_VALUE(new DFloat(univ.GetAngle(Joint::AI_FIRST)));}     
-    else if (prop.getName().compare("GetAngle(1)") == 0)     {SET_VALUE(new DFloat(univ.GetAngle(Joint::AI_SECOND)));}    
-    else if (prop.getName().compare("GetAngleRate(0)") == 0) {SET_VALUE(new DFloat(univ.GetAngleRate(Joint::AI_FIRST)));} 
+    if      (prop.getName().compare("GetAngle(0)") == 0)     {SET_VALUE(new DFloat(univ.GetAngle(Joint::AI_FIRST)));}
+    else if (prop.getName().compare("GetAngle(1)") == 0)     {SET_VALUE(new DFloat(univ.GetAngle(Joint::AI_SECOND)));}
+    else if (prop.getName().compare("GetAngleRate(0)") == 0) {SET_VALUE(new DFloat(univ.GetAngleRate(Joint::AI_FIRST)));}
     else if (prop.getName().compare("GetAngleRate(1)") == 0) {SET_VALUE(new DFloat(univ.GetAngleRate(Joint::AI_SECOND)));}
     else return false; //Getter not supported
     return true;
 }
 
-bool BasicControl::applyChangeUniversalJoint(TLeafPtr leaf, Property& prop) const     
+bool BasicControl::applyChangeUniversalJoint(TLeafPtr leaf, Property& prop) const
 {
     //No Supported setters
     return false;
@@ -624,7 +624,7 @@ bool BasicControl::applyChangeUniversalJoint(TLeafPtr leaf, Property& prop) cons
 //=====================
 // ContactJointHandler
 
-bool BasicControl::genContactJointHandler(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const 
+bool BasicControl::genContactJointHandler(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
     ADD_READ_PROPERTY     ("GetContactMode",    "ContactMode",    new DString());
@@ -642,23 +642,23 @@ bool BasicControl::updateContactJointHandler(TLeafPtr leaf, Property& prop) cons
 {
     const ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
 
-    if      (prop.getName().compare("GetContactMode"   ) == 0) 
-    { 
+    if      (prop.getName().compare("GetContactMode"   ) == 0)
+    {
         int mode = cjh.GetContactMode();
         QString strMode = //replace ODE constants with their actual values
-            FORMAT_FLAG(mode, 1    ) + /*dContactMu2*/      
-            FORMAT_FLAG(mode, 2    ) + /*dContactFDir1*/    
-            FORMAT_FLAG(mode, 4    ) + /*dContactBounce*/   
-            FORMAT_FLAG(mode, 8    ) + /*dContactSoftERP*/  
-            FORMAT_FLAG(mode, 16   ) + /*dContactSoftCFM*/  
-            FORMAT_FLAG(mode, 32   ) + /*dContactMotion1*/  
-            FORMAT_FLAG(mode, 64   ) + /*dContactMotion2*/  
-            FORMAT_FLAG(mode, 256  ) + /*dContactSlip1*/    
-            FORMAT_FLAG(mode, 512  ) + /*dContactSlip2*/    
-            FORMAT_FLAG(mode, 0    ) + /*dContactApprox0*/  
+            FORMAT_FLAG(mode, 1    ) + /*dContactMu2*/
+            FORMAT_FLAG(mode, 2    ) + /*dContactFDir1*/
+            FORMAT_FLAG(mode, 4    ) + /*dContactBounce*/
+            FORMAT_FLAG(mode, 8    ) + /*dContactSoftERP*/
+            FORMAT_FLAG(mode, 16   ) + /*dContactSoftCFM*/
+            FORMAT_FLAG(mode, 32   ) + /*dContactMotion1*/
+            FORMAT_FLAG(mode, 64   ) + /*dContactMotion2*/
+            FORMAT_FLAG(mode, 256  ) + /*dContactSlip1*/
+            FORMAT_FLAG(mode, 512  ) + /*dContactSlip2*/
+            FORMAT_FLAG(mode, 0    ) + /*dContactApprox0*/
             FORMAT_FLAG(mode, 4096 ) + /*dContactApprox1_1*/
             FORMAT_FLAG(mode, 8192 ) + /*dContactApprox1_2*/
-            FORMAT_FLAG(mode, 12288);  /*dContactApprox1*/  
+            FORMAT_FLAG(mode, 12288);  /*dContactApprox1*/
 
         SET_VALUE(new DString(strMode));
     }
@@ -690,12 +690,12 @@ bool BasicControl::applyChangeContactJointHandler(TLeafPtr leaf, Property& prop)
 //=====================
 // World
 
-bool BasicControl::genWorld(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const               
+bool BasicControl::genWorld(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const World& world = *shared_static_cast<World>(leaf);
-    ADD_READWRITE_PROPERTY("GetGravity",  "Gravity", new DVector3f(), Data::vector3fValidator(), 
+    ADD_READWRITE_PROPERTY("GetGravity",  "Gravity", new DVector3f(), Data::vector3fValidator(),
         "Gravity Vector");
-    ADD_READWRITE_PROPERTY("GetERP",      "ERP",     new DFloat(),    Data::doubleValidator(0.0, 1.0), 
+    ADD_READWRITE_PROPERTY("GetERP",      "ERP",     new DFloat(),    Data::doubleValidator(0.0, 1.0),
         "Error Reduction Parameter of the world. Specifies what proportion of a joint error will be fixed during the next simulation step.\n" \
         "ERP=0: no correcting force, bodies will eventually drift apart.\n" \
         "ERP=1: attempt to fix all joint error during the next step. Not recommended. Error wont be fixed completely due to various internal approximations.\n" \
@@ -706,7 +706,7 @@ bool BasicControl::genWorld(TLeafPtr leaf, const ClassDescriptor& descriptor, TP
     return true;
 }
 
-bool BasicControl::updateWorld(TLeafPtr leaf, Property& prop) const              
+bool BasicControl::updateWorld(TLeafPtr leaf, Property& prop) const
 {
     const World& world = *shared_static_cast<World>(leaf);
     if      (prop.getName().compare("GetGravity") == 0) {SET_VALUE(new DVector3f(world.GetGravity()));}
@@ -716,27 +716,27 @@ bool BasicControl::updateWorld(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeWorld(TLeafPtr leaf, Property& prop) const              
+bool BasicControl::applyChangeWorld(TLeafPtr leaf, Property& prop) const
 {
     World& world = *shared_static_cast<World>(leaf);
-    if      (prop.getName().compare("GetGravity") == 0)  {world.SetGravity(GET_VALUE(DVector3f));} 
-    else if (prop.getName().compare("GetERP") == 0)      {world.SetERP    (GET_VALUE(DFloat));} 
-    else if (prop.getName().compare("GetCFM") == 0)      {world.SetCFM    (GET_VALUE(DFloat));} 
-    else return false;//Setter not supported                          
+    if      (prop.getName().compare("GetGravity") == 0)  {world.SetGravity(GET_VALUE(DVector3f));}
+    else if (prop.getName().compare("GetERP") == 0)      {world.SetERP    (GET_VALUE(DFloat));}
+    else if (prop.getName().compare("GetCFM") == 0)      {world.SetCFM    (GET_VALUE(DFloat));}
+    else return false;//Setter not supported
     return true;
 }
 
 //=====================
 // CollisionHandler
 
-bool BasicControl::genCollisionHandler(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const    
+bool BasicControl::genCollisionHandler(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     boost::shared_ptr<CollisionHandler> ch = shared_static_cast<CollisionHandler>(leaf);
     ADD_READ_PROPERTY("IsSymmetricHandler", "SymmetricHandler", new DBool());
     return true;
 }
 
-bool BasicControl::updateCollisionHandler(TLeafPtr leaf, Property& prop) const   
+bool BasicControl::updateCollisionHandler(TLeafPtr leaf, Property& prop) const
 {
     boost::shared_ptr<CollisionHandler> ch = shared_static_cast<CollisionHandler>(leaf);
     if (prop.getName().compare("IsSymmetricHandler") == 0) {SET_VALUE(new DBool(ch->IsSymmetricHandler()));}
@@ -744,7 +744,7 @@ bool BasicControl::updateCollisionHandler(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeCollisionHandler(TLeafPtr leaf, Property& prop) const   
+bool BasicControl::applyChangeCollisionHandler(TLeafPtr leaf, Property& prop) const
 {
     //No Supported setters
     return false;
@@ -753,7 +753,7 @@ bool BasicControl::applyChangeCollisionHandler(TLeafPtr leaf, Property& prop) co
 //=====================
 // DragController
 
-bool BasicControl::genDragController(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const      
+bool BasicControl::genDragController(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const DragController& dc = *shared_static_cast<DragController>(leaf);
     ADD_READWRITE_PROPERTY("GetLinearDrag",  "LinearDrag",  new DFloat(dc.GetLinearDrag()),  Data::doubleValidator());
@@ -761,7 +761,7 @@ bool BasicControl::genDragController(TLeafPtr leaf, const ClassDescriptor& descr
     return true;
 }
 
-bool BasicControl::updateDragController(TLeafPtr leaf, Property& prop) const     
+bool BasicControl::updateDragController(TLeafPtr leaf, Property& prop) const
 {
     const DragController& dc = *shared_static_cast<DragController>(leaf);
     if      (prop.getName().compare("GetLinearDrag") == 0)  {SET_VALUE(new DFloat(dc.GetLinearDrag()));}
@@ -770,19 +770,19 @@ bool BasicControl::updateDragController(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeDragController(TLeafPtr leaf, Property& prop) const     
-{    
+bool BasicControl::applyChangeDragController(TLeafPtr leaf, Property& prop) const
+{
     DragController& dc = *shared_static_cast<DragController>(leaf);
-    if      (prop.getName().compare("GetLinearDrag") == 0)  {dc.SetLinearDrag (GET_VALUE(DFloat));} 
-    else if (prop.getName().compare("GetAngularDrag") == 0) {dc.SetAngularDrag(GET_VALUE(DFloat));} 
-    else return false; //Setter not supported                             
+    if      (prop.getName().compare("GetLinearDrag") == 0)  {dc.SetLinearDrag (GET_VALUE(DFloat));}
+    else if (prop.getName().compare("GetAngularDrag") == 0) {dc.SetAngularDrag(GET_VALUE(DFloat));}
+    else return false; //Setter not supported
     return true;
 }
 
 //=====================
 // MaterialSolid
 
-bool BasicControl::genMaterialSolid(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const       
+bool BasicControl::genMaterialSolid(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
     const MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
     ADD_READWRITE_PROPERTY("GetAmbient",  "Ambient",  new DRGBA(), Data::rgbaValidator());
@@ -791,7 +791,7 @@ bool BasicControl::genMaterialSolid(TLeafPtr leaf, const ClassDescriptor& descri
     return true;
 }
 
-bool BasicControl::updateMaterialSolid(TLeafPtr leaf, Property& prop) const      
+bool BasicControl::updateMaterialSolid(TLeafPtr leaf, Property& prop) const
 {
     const MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
     if      (prop.getName().compare("GetAmbient") == 0)  {SET_VALUE(new DRGBA(mat.GetAmbient()));}
@@ -801,14 +801,14 @@ bool BasicControl::updateMaterialSolid(TLeafPtr leaf, Property& prop) const
     return true;
 }
 
-bool BasicControl::applyChangeMaterialSolid(TLeafPtr leaf, Property& prop) const      
+bool BasicControl::applyChangeMaterialSolid(TLeafPtr leaf, Property& prop) const
 {
     MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
     //Supported setters
     if      (prop.getName().compare("GetAmbient") == 0)  {mat.SetAmbient (GET_VALUE(DRGBA));}
     else if (prop.getName().compare("GetDiffuse") == 0)  {mat.SetDiffuse (GET_VALUE(DRGBA));}
     else if (prop.getName().compare("GetSpecular") == 0) {mat.SetSpecular(GET_VALUE(DRGBA));}
-    else return false; //Setter not supported                         
+    else return false; //Setter not supported
     return true;
 }
 

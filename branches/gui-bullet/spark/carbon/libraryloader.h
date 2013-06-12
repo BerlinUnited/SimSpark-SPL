@@ -33,7 +33,7 @@
 #include <QDir>
 #include <QMainWindow>
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 /*!
  \brief Class that manages include directories and files for plugin and main window shared libraries.

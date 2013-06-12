@@ -330,7 +330,8 @@ bool File::loadObjects(QDomElement* source)
             //Create menu object and provide to Manager
             MenuManager::EMenuObjectLocation menuLocation;
             QString menuName;
-            QMenu* newMenu = loadMenu(&(n.toElement()), menuName, menuLocation);
+            QDomElement el = n.toElement();
+            QMenu* newMenu = loadMenu(&el, menuName, menuLocation);
             if (newMenu == 0)
             {
                 LOG_ERROR() << "Could not create menu object from file.";
@@ -352,7 +353,8 @@ bool File::loadObjects(QDomElement* source)
             //Create toolbar object and provide to Manager
             MenuManager::EMenuObjectLocation toolBarLocation;
             QString toolBarName("");
-            QToolBar* newToolBar = loadToolBar(&(n.toElement()), toolBarName, toolBarLocation);
+            QDomElement el = n.toElement();
+            QToolBar* newToolBar = loadToolBar(&el, toolBarName, toolBarLocation);
             if (newToolBar == 0)
             {
                 LOG_ERROR() << "Could not create toolbar object from file.";
@@ -438,7 +440,8 @@ QMenu* File::loadMenu(QDomElement* source, QString& nameRef, MenuManager::EMenuO
         if (nodeName.compare("action") == 0)
         {
             //Create action and add to menu
-            bool success = loadAction(&(n.toElement()), newMenu);
+            QDomElement el = n.toElement();
+            bool success = loadAction(&el, newMenu);
             if (!success)
             {
                 LOG_ERROR() << "Could not create an action object from file.";
@@ -519,7 +522,8 @@ QToolBar* File::loadToolBar(QDomElement* source, QString& nameRef, MenuManager::
         if (nodeName.compare("tool") == 0)
         {
             //Create tool action and add to menu
-            bool success = loadTool(&(n.toElement()), newToolBar);
+            QDomElement el = n.toElement();
+            bool success = loadTool(&el, newToolBar);
             if (!success)
             {
                 LOG_ERROR() << "Could not create an tool action object from file.";
@@ -895,7 +899,7 @@ bool File::loadConnections(QDomElement* source, QObject* object, const QString& 
                         {
                             if (run >= (int)typeList.size())
                             {
-                                LOG_WARNING() << "Specified more arguments than given in Definition of target function " << slotStr << 
+                                LOG_WARNING() << "Specified more arguments than given in Definition of target function " << slotStr <<
                                     ". Ignoring the following arguments.";
                                 break;
                             }
@@ -985,7 +989,7 @@ bool File::loadVarNode(QDomElement* parent, QString& name, QString& type, QStrin
         else
             typeStr = typeAttr.value();
 
-        if ((typeStr.compare("qstring", Qt::CaseInsensitive) != 0) && 
+        if ((typeStr.compare("qstring", Qt::CaseInsensitive) != 0) &&
             (typeStr.compare("bool", Qt::CaseInsensitive) != 0) &&
             (typeStr.compare("int", Qt::CaseInsensitive) != 0) &&
             (typeStr.compare("float", Qt::CaseInsensitive) != 0))

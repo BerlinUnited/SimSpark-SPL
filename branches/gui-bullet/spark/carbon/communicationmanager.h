@@ -28,7 +28,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QList>
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class Topic;
 class AbstractPlugin;

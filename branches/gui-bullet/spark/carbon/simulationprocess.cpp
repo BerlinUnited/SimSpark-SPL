@@ -21,7 +21,7 @@
 #include "simulationprocess.h"
 #include "carbon.h"
 #include "simulationmanager.h"
-#include "cutelogger\logstream.h"
+#include "cutelogger/logstream.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -44,7 +44,7 @@ SimulationProcess::SimulationProcess(boost::shared_ptr<TaskDefinition> definitio
     SimulationTaskMessenger* messenger = getMessenger(); //messenger notifies SimulationTask
 
     //finished(id) and terminated(id) are emitted by invoking updateFinished() and updateTerminated() from the QProcess' finished(int, QProcess::ExitStatus) signal
-    connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(updateFinished(int, QProcess::ExitStatus))); 
+    connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(updateFinished(int, QProcess::ExitStatus)));
     connect(this, SIGNAL(started()), messenger, SLOT(updateRunning())); //running(id) is emitted by invoking updateRunning() from the QProcess' started() signal. Sent after state() returned "Running"
     //paused is never emitted
 
@@ -84,7 +84,7 @@ bool SimulationProcess::startProcess(const QString& program, const QStringList& 
     QDir workingDir(path);
     workingDir.cdUp();
     QString workingDirPath = workingDir.absolutePath();
-    
+
     //Start the process
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     //env.insert("PATH", env.value("Path") + path);
@@ -92,7 +92,7 @@ bool SimulationProcess::startProcess(const QString& program, const QStringList& 
     setWorkingDirectory(workingDirPath);
     start(path, arguments); //Errors are sent via signal
 
-    if (mError && error() == QProcess::FailedToStart) 
+    if (mError && error() == QProcess::FailedToStart)
         return false;
 
     return true;
@@ -147,7 +147,7 @@ bool SimulationProcess::stopProcess()
 bool SimulationProcess::pauseProcess(bool state)
 {
     LOG_INFO() << "Cant pause external process.";
-    
+
     return false;
 }
 
@@ -195,13 +195,13 @@ void SimulationProcess::fetchErrorMessage()
     {
         QString message(readLine());
         std::string msg = message.toStdString();
-        
+
         while (msg.size() != 0 && msg.back() == ('\n'))
             msg = msg.substr(0, msg.size()-2);
-    
+
         if (msg.size() == 0)
             continue;
-    
+
         if (mLogSourceId != -1)
             LOG_S_ERROR(mLogSourceId) << msg.c_str();
         else
@@ -221,7 +221,7 @@ void SimulationProcess::fetchOutputMessage()
 
         while (msg.size() != 0 && msg.back() == ('\n'))
             msg = msg.substr(0, msg.size()-2);
-    
+
         if (msg.size() == 0)
             continue;
 

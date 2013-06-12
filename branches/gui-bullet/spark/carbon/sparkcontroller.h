@@ -25,13 +25,13 @@
  * \brief Contains SparkController class, a QObject derived class used to initialize, run and control SimSpark.
  */
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <QObject>
 #include <QStringList>
 #include <QSemaphore>
 #include <vector>
 
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 #include "guisimcontrol.h"
 #include "sparkcommands.h"
 
@@ -119,7 +119,7 @@ public:
      \param restart if true, SimSpark is restarted if neccessary
      \param logSourceName if not empty, spark logging is initialized after creating/reinitializing SimSpark
     */
-    int initSpark(const QString& scriptPath, const QString& secondaryScriptPath, const QStringList& additionalScripts, const QStringList& parameters, 
+    int initSpark(const QString& scriptPath, const QString& secondaryScriptPath, const QStringList& additionalScripts, const QStringList& parameters,
         EResourceLocation location, bool restart = false, const QString& logSourceName = QString("Spark"));
     /*!
      \brief Initialize spark with a single additional resource location definition.
@@ -145,7 +145,7 @@ public:
      \param restart if true, SimSpark is restarted if neccessary
      \param logSourceName if not empty, spark logging is initialized after creating/reinitializing SimSpark
     */
-    int initSpark(const QString& scriptPath, const QString& secondaryScriptPath, const QStringList& additionalScripts, const QStringList& parameters, 
+    int initSpark(const QString& scriptPath, const QString& secondaryScriptPath, const QStringList& additionalScripts, const QStringList& parameters,
         const std::vector<std::string>& resourceLocations, bool restart = false, const QString& logSourceName = QString("Spark"));
 
     /*!
@@ -332,7 +332,7 @@ private:
      Registers LogStreams in the spark LogServer. The LogStreams send log messages with the respective log level and the given sourceId specifying
      SimSpark as source as provided by the caller.
 
-     Does not acquire the log-semaphore. 
+     Does not acquire the log-semaphore.
      Therefore has to be called only by the SparkCommandQueue, or after locking the mLogAccessSemaphore.
 
      \param logLevel minimum level to log
@@ -377,7 +377,7 @@ public: signals:
     */
     void logLevelChanged(SparkController* controller, Logger::LogLevel level);
 
-protected slots:	
+protected slots:
     //protected slots
 
     /*!

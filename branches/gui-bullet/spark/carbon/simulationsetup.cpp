@@ -137,22 +137,22 @@ SimulationSetup::TTaskDefinitions& SimulationSetup::getTaskDefinitions()
     return mTaskDefinitions;
 }
 
-const QString& SimulationSetup::getName() const                                    
+const QString& SimulationSetup::getName() const
 {
     return mName;
 }
 
-const QString& SimulationSetup::getFileName() const                                
+const QString& SimulationSetup::getFileName() const
 {
     return mFileName;
 }
 
-bool SimulationSetup::getReloadAll() const                                         
+bool SimulationSetup::getReloadAll() const
 {
     return mReloadAll;
 }
 
-bool SimulationSetup::getRemoveAll() const                                         
+bool SimulationSetup::getRemoveAll() const
 {
     return mRemoveAll;
 }
@@ -210,16 +210,16 @@ int SimulationSetup::findNextSparkDefinition(int startIndex) const
             return i;
         }
     }
-    
+
     return -1;
 }
 
-shared_ptr<PluginDefinition> SimulationSetup::insertAddPlugin(PluginDefinition& addplugin)
-{    
+shared_ptr<PluginDefinition> SimulationSetup::insertAddPlugin(const PluginDefinition& addplugin)
+{
     //Only plugin definitions that specify a plugin completely can be used as "addPlugin" definition
     shared_ptr<PluginDefinition> plugin(new PluginDefinition(addplugin));
     bool success = insertAddPlugin(plugin);
-    
+
     if (success)
         return plugin;
 
@@ -246,14 +246,14 @@ bool SimulationSetup::insertAddPlugin(boost::shared_ptr<PluginDefinition> addplu
     return true;
 }
 
-shared_ptr<PluginDefinition> SimulationSetup::insertRemovePlugin(PluginDefinition& removeplugin)
+shared_ptr<PluginDefinition> SimulationSetup::insertRemovePlugin(const PluginDefinition& removeplugin)
 {
     //Vague plugin definitions that specify a range of plugins can be used as "removePlugin" definition
     //Detailed data (like task definitions) are not needed
 
     shared_ptr<PluginDefinition> plugin(new PluginDefinition(removeplugin));
     bool success = insertRemovePlugin(plugin);
-    
+
     if (success)
         return plugin;
 
@@ -264,7 +264,7 @@ bool SimulationSetup::insertRemovePlugin(boost::shared_ptr<PluginDefinition> rem
 {
     //Vague plugin definitions that specify a range of plugins can be used as "removePlugin" definition
     //Detailed data (like task definitions) are not needed
-    
+
     removeplugin->clearParameters();
 
     //add
@@ -275,7 +275,7 @@ bool SimulationSetup::insertRemovePlugin(boost::shared_ptr<PluginDefinition> rem
     return true;
 }
 
-shared_ptr<TaskDefinition> SimulationSetup::insertTask(TaskDefinition& task)
+shared_ptr<TaskDefinition> SimulationSetup::insertTask(const TaskDefinition& task)
 {
     mTaskDefinitions.push_back(boost::shared_ptr<TaskDefinition>(new TaskDefinition(task)));
     mSaved = false;
@@ -284,7 +284,7 @@ shared_ptr<TaskDefinition> SimulationSetup::insertTask(TaskDefinition& task)
     return mTaskDefinitions.back();
 }
 
-void SimulationSetup::insertAddPlugins(TPluginDefinitions& addplugins)             
+void SimulationSetup::insertAddPlugins(TPluginDefinitions& addplugins)
 {
     if (addplugins.size() == 0)
         return;
@@ -295,7 +295,7 @@ void SimulationSetup::insertAddPlugins(TPluginDefinitions& addplugins)
     }
 }
 
-void SimulationSetup::insertRemovePlugins(TPluginDefinitions& removeplugins)       
+void SimulationSetup::insertRemovePlugins(TPluginDefinitions& removeplugins)
 {
     if (removeplugins.size() == 0)
         return;
@@ -306,7 +306,7 @@ void SimulationSetup::insertRemovePlugins(TPluginDefinitions& removeplugins)
     }
 }
 
-void SimulationSetup::insertTasks(TTaskDefinitions& tasks)                   
+void SimulationSetup::insertTasks(TTaskDefinitions& tasks)
 {
     if (tasks.size() == 0)
         return;
@@ -488,7 +488,7 @@ void SimulationSetup::clearTasks()
     updateDataChanged(SD_TASKLIST);
 }
 
-void SimulationSetup::setRemoveAll(bool removeall)                                 
+void SimulationSetup::setRemoveAll(bool removeall)
 {
     if (mRemoveAll != removeall)
     {
@@ -498,7 +498,7 @@ void SimulationSetup::setRemoveAll(bool removeall)
     }
 }
 
-void SimulationSetup::setReloadAll(bool reloadall)                                 
+void SimulationSetup::setReloadAll(bool reloadall)
 {
     if (mReloadAll != reloadall)
     {

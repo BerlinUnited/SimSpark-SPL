@@ -33,7 +33,7 @@
 #include <string>
 #include <sstream>
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class SimulationTimer;
 class LogStream;

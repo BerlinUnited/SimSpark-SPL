@@ -32,7 +32,7 @@
 #include <carbon.h>
 #include <windowmanager.h>
 
-#include <zeitgeist\leaf.h>
+#include <zeitgeist/leaf.h>
 
 #include <QMenu>
 #include <QFileDialog>
@@ -131,7 +131,7 @@ void SceneGraphWidget::updateDisplay(boost::shared_ptr<SparkSimulationThread> th
     if (thread->getTaskDefinition().getType() == TaskDefinition::TT_SERVERTHREAD)
     {
         //Initialize or update model data
-        
+
         //Update scene graph display
         if (mSparkController->getSpark().get())
             updateDisplay(mSparkController);
@@ -225,7 +225,7 @@ void SceneGraphWidget::pickLeaf(const QString& path)
     searchKeys.push_front("/"); //Root
 
     QModelIndex found = findLeaf(searchKeys, ui.sceneGraphTreeView->rootIndex(), 0);
-   
+
     if( found.isValid())
     {
         //SelectItem
@@ -265,13 +265,13 @@ QModelIndex SceneGraphWidget::findLeaf(const QStringList& keys, const QModelInde
             }
         }
     }
-    
+
     //Last comparison not reached, search recursively
     QModelIndex found = QModelIndex();
     for (int i = 0; i < mModel->rowCount(index); i++)
     {
         QModelIndex child = mModel->index(i,0, index);
-        
+
         //call recursively
         QModelIndex returned = findLeaf(keys, child, listIndex+1);
         if (returned.isValid())
@@ -280,7 +280,7 @@ QModelIndex SceneGraphWidget::findLeaf(const QStringList& keys, const QModelInde
             break;
         }
     }
-   
+
     return found;
 }
 
@@ -405,12 +405,12 @@ void SceneGraphWidget::printItem(const QModelIndex& index, boost::shared_ptr<zei
     QString message = QString("Current tree index:> Row: %1, Col: %2, Ptr: 0x%3\n").
         arg(mCurrentIndex.row()).
         arg(mCurrentIndex.column()).
-        arg(QString::number((int)mCurrentIndex.internalPointer(), 16));
+        arg(QString::number((intptr_t)mCurrentIndex.internalPointer(), 16));
     SparkTreeItem* item = (SparkTreeItem*)index.internalPointer();
     message.append(QString("Tree item data:> Name: %1, Class: %2, Ptr: 0x%3\n").
         arg(item->data(0).toString()).
         arg(item->data(1).toString()).
-        arg(QString::number((int)item, 16)));
+        arg(QString::number((intptr_t)item, 16)));
 
     if (leaf.get() == 0)
     {
@@ -425,7 +425,7 @@ void SceneGraphWidget::printItem(const QModelIndex& index, boost::shared_ptr<zei
             arg(QString::fromStdString(leaf->GetFullPath())).
             arg(parent.get() ? QString("%1").arg(parent->GetNumberOfChildren()-1) : QString("(no parent)")).
             arg(leaf->GetNumberOfChildren()).
-            arg(QString::number((int)&*leaf, 16)).
+            arg(QString::number((intptr_t)&*leaf, 16)).
             arg(leaf.use_count() - 1)
             );
     }
@@ -441,7 +441,7 @@ void SceneGraphWidget::deleteItem(const QModelIndex& index, boost::shared_ptr<ze
         LOG_INFO() << "Cant execute delete command. Leaf was already deleted.";
         return;
     }
-        
+
     //Queue the delete command
     SparkCommand::RemoveLeaf* command = new SparkCommand::RemoveLeaf(leaf);
     mSparkController->queueCommand(command, 100, this, SLOT(onRemoveLeaf(int, bool)));
@@ -460,7 +460,7 @@ void SceneGraphWidget::inspectItem(const QModelIndex& index, boost::shared_ptr<z
     propertyFrame->inspectLeaf(leaf);
 }
 
-void SceneGraphWidget::cutItem(const QModelIndex& index, boost::shared_ptr<zeitgeist::Leaf> leaf) 
+void SceneGraphWidget::cutItem(const QModelIndex& index, boost::shared_ptr<zeitgeist::Leaf> leaf)
 {
     if (leaf.get() == 0)
     {
@@ -502,7 +502,7 @@ void SceneGraphWidget::loadInItem(const QModelIndex& index, boost::shared_ptr<ze
     }
 
     //Open file dialog
-    QFileDialog dialog((QWidget*)mParent->getCarbon()->getWindowManager()->getMainWindow(), tr("Load scene from file."), 
+    QFileDialog dialog((QWidget*)mParent->getCarbon()->getWindowManager()->getMainWindow(), tr("Load scene from file."),
         mParent->mLastSceneFileDirectory);
     dialog.setNameFilters(mParent->mSceneFileNameFilters);
     dialog.setFileMode(QFileDialog::ExistingFile);
@@ -522,12 +522,12 @@ void SceneGraphWidget::loadInItem(const QModelIndex& index, boost::shared_ptr<ze
 
         //Queue the import command
         boost::shared_ptr<zeitgeist::ParameterList> list(new zeitgeist::ParameterList());
-        
+
         mSparkController->queueCommand(new SparkCommand::ImportScene(file, bn, list), 100, this, SLOT(onImportScene(int, bool)));
     }
 }
 
-void SceneGraphWidget::saveItem(const QModelIndex& index, boost::shared_ptr<zeitgeist::Leaf> leaf)   
+void SceneGraphWidget::saveItem(const QModelIndex& index, boost::shared_ptr<zeitgeist::Leaf> leaf)
 {
     if (leaf.get() == 0)
     {
@@ -576,7 +576,7 @@ void SceneGraphWidget::showItemContextMenu(QPoint pos)
 
     QMenu menu(this);
     clearActionReceivers();
-    
+
     //Add command ids to list
     addContextMenuItem(&menu, CMD_EXPAND);
     addContextMenuItem(&menu, CMD_COLLAPSE);
@@ -592,11 +592,11 @@ void SceneGraphWidget::showItemContextMenu(QPoint pos)
     addContextMenuItem(&menu, CMD_DELETE);
     menu.addSeparator();
 
-    //Get popup position 
+    //Get popup position
     QPoint globalpos = ui.sceneGraphTreeView->mapToGlobal(pos);
-    
+
     //Open menu
-    menu.exec(globalpos);    
+    menu.exec(globalpos);
 }
 
 void SceneGraphWidget::onItemContextMenuClick(int commandId)

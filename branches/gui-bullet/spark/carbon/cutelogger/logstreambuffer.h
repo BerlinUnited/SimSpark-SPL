@@ -68,7 +68,7 @@ public:
     /*!
      \brief Returns the buffer size.
     */
-    unsigned int getSize() const;        
+    unsigned int getSize() const;
     /*!
      \brief Returns the log level of messages in this buffer.
     */
@@ -76,7 +76,7 @@ public:
     /*!
      \brief Returns the source id for messages in this buffer.
     */
-    unsigned int getLogSource() const;   
+    unsigned int getLogSource() const;
 
 protected:
     // virtual protected functions
@@ -120,11 +120,11 @@ private:
      \brief Sends out complete internal buffer.
     */
     void PutBuffer();
-    
+
     /*!
      \brief Sends out a single character.
     */
-    void LogStreamBuffer::PutChar(TIntType chr);
+    void PutChar(TIntType chr);
 
 private:
     //private members

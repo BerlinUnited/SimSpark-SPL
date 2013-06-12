@@ -20,6 +20,16 @@
 
 #include "monitorframe_sparkglwidget.h"
 
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QResizeEvent>
+#include <QHideEvent>
+#include <QShowEvent>
+#include <QFocusEvent>
+#include <QMoveEvent>
+
 #include <openglmanager.h>
 #include <simspark.h>
 #include <sparkcontroller.h>
@@ -32,16 +42,6 @@
 #include <kerosin/inputserver/inputsystem.h>
 #include <kerosin/renderserver/renderserver.h>
 #include <kerosin/renderserver/rendernode.h>
-
-#include <QKeyEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QResizeEvent>
-#include <QHideEvent>
-#include <QShowEvent>
-#include <QFocusEvent>
-#include <QMoveEvent>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -95,7 +95,7 @@ void SparkGLWidget::reset()
 
 void SparkGLWidget::initializeGL()
 {
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
     {
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " Before initialization.";
     }
@@ -109,12 +109,12 @@ void SparkGLWidget::initializeGL()
 
     LOG_INFO() << "Initializing SparkGLWidget...";
 
-    glClearColor( 0.5, 0.5, 0.5, 0.0 ); 
+    glClearColor( 0.5, 0.5, 0.5, 0.0 );
     mRender->setAmbientColor(0.5, 0.5, 0.5, 0.0); // Background color
 
     glShadeModel( GL_SMOOTH );          // Shading
 
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
     {
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " After initialization.";
     }
@@ -127,12 +127,12 @@ void SparkGLWidget::paintGL()
         GLWidget::paintGL();
         return;
     }
-    
+
     //Prevent deletion in simspark
     if (mController->tryAcquireRuntimeAccess(1000, false))
     {
 
-        if (mErr = glGetError()) 
+        if (mErr = glGetError())
             LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " Before rendering.";
 
         mRender->render(size().width(), size().height());
@@ -169,15 +169,15 @@ void SparkGLWidget::mouseDoubleClickEvent(QMouseEvent* e)
         {
             //Make current
             makeCurrent();
-            if (mErr = glGetError()) 
+            if (mErr = glGetError())
                 LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " Before picking.";
 
             //Pick a node and swap buffers
             boost::weak_ptr<kerosin::RenderNode> picked(mRender->pickNode(e->x(), e->y(), size().width(), size().height()));
             swapBuffers();
-            if (mErr = glGetError()) 
+            if (mErr = glGetError())
                 LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " After picking.";
-            
+
             boost::shared_ptr<kerosin::RenderNode> locked(picked.lock());
             if (locked.get())
                 emit renderNodePick(QString(locked->GetFullPath().c_str()));
@@ -193,7 +193,7 @@ void SparkGLWidget::mouseDoubleClickEvent(QMouseEvent* e)
     }
     else if (e->button() == Qt::RightButton)
     {
-    } 
+    }
 
     GLWidget::mouseDoubleClickEvent(e);
 }
@@ -317,7 +317,7 @@ void SparkGLWidget::keyReleaseEvent(QKeyEvent* e)
     }
 
     e->accept();
-    
+
     //GLWidget::keyReleaseEvent(e);
 }
 
@@ -376,7 +376,7 @@ void SparkGLWidget::showEvent(QShowEvent* e)
 //--------------------------------------------------------------
 
 bool SparkGLWidget::initSpark(boost::shared_ptr<SparkController> controller,
-    const QString& cameraPath, const QString& sceneServerPath, 
+    const QString& cameraPath, const QString& sceneServerPath,
     const QString& renderServerPath, const QString& renderControlPath)
 {
     mController = controller;
@@ -394,7 +394,7 @@ bool SparkGLWidget::initSpark(boost::shared_ptr<SparkController> controller,
     if (inputServer.get() != 0)
     {
         mInputSystem = inputServer->GetInputSystem();
-    } 
+    }
     else
     {
         LOG_ERROR() << "InputSystem not found.";
@@ -404,7 +404,7 @@ bool SparkGLWidget::initSpark(boost::shared_ptr<SparkController> controller,
     //Create renderer
     mRender = boost::shared_ptr<SparkGLRender>(
         new SparkGLRender(
-            cameraPath.toStdString(), sceneServerPath.toStdString(), 
+            cameraPath.toStdString(), sceneServerPath.toStdString(),
             renderServerPath.toStdString(), renderControlPath.toStdString())
         );
 

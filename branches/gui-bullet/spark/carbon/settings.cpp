@@ -22,7 +22,7 @@
 #include "abstractplugin.h"
 #include "carbon.h"
 
-#include <QThread.h>
+#include <QThread>
 
 //--------------------------------------------------------------
 // Static

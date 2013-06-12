@@ -32,7 +32,7 @@
 #include <QSettings>
 #include <QObject>
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class ServerThread;
 
@@ -108,9 +108,9 @@ public:
     /*!
      \brief Returns pointer to the SimulationSetup.
 
-     \warning The SimulationSetup is used by plugins to read and edit data of the current Simulations. 
-     Changing the setup during a running simulation might result in undefined behaviour. 
-     It is meant to update the definitions of the current Simulation whenever the actual state of the Simulation was edited (like adding a new plugin or a new task). 
+     \warning The SimulationSetup is used by plugins to read and edit data of the current Simulations.
+     Changing the setup during a running simulation might result in undefined behaviour.
+     It is meant to update the definitions of the current Simulation whenever the actual state of the Simulation was edited (like adding a new plugin or a new task).
      When changing the currently initialized setup make sure that the Simulation itself applies the same changes.
     */
     boost::shared_ptr<SimulationSetup>& getSetupNc();
@@ -170,7 +170,7 @@ public:
     /*!
      \brief Runs or unpauses the Simulation.
 
-     The Simulation can be executed without starting all of the tasks. If the Simulation contains a server, it is dependent on the server. 
+     The Simulation can be executed without starting all of the tasks. If the Simulation contains a server, it is dependent on the server.
      When a simulation with a server definition is started, the server is always started. The other tasks are optional.
 
      \param runTasks if true, all of the SimulationTasks are started too
@@ -238,7 +238,7 @@ public:
     bool removeTask(const SimulationTask* task);
 
     /*!
-     \brief Emits pluginListChanged(). 
+     \brief Emits pluginListChanged().
     */
     void updatePluginListChanged();
 
@@ -254,7 +254,7 @@ private:
     /*!
      \brief Adds a task to the currently initialized list of tasks.
 
-     The task will keep a pointer to the task definition. 
+     The task will keep a pointer to the task definition.
      It has to be exactly the definition that is stored in the SimulationSetup of the initialized Simulation.
      Otherwise changes by the gui in the definition will most likely not be stored in the setup and cant be saved in a savestate or a preset SimulationSetup.
 
@@ -278,7 +278,7 @@ private:
      \param restart if true, a running task is restarted
     */
     void startTask(boost::shared_ptr<SimulationTask> task, bool restart);
-    
+
 public: signals:
     //public signals
 
@@ -304,7 +304,7 @@ public: signals:
     void paused();
 
     /*!
-     \brief Emitted when the Simulation was saved. 
+     \brief Emitted when the Simulation was saved.
 
      \param path path of the file
     */

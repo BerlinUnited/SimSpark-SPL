@@ -28,7 +28,7 @@
 #include <attachableframe.h>
 #include <simulationtask.h>
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 #include "ui_simulationframe.h"

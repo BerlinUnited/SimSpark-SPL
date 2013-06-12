@@ -19,7 +19,7 @@
 */
 
 #include "sparkpropertydata.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 #include "simspark.h"
 
 #include <QStringList>

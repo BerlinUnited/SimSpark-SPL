@@ -20,7 +20,7 @@
 
 #include "topicregistration.h"
 #include "abstractplugin.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 //--------------------------------------------------------------
 // Static

@@ -57,7 +57,7 @@ bool SettingsDialog::registerToSettingWidget(QString topic, QString page, Abstra
 
     shared_ptr<PageDefinition> pagePtr(getPageDefinition(topic, page));
 
-    if (pagePtr == 0) 
+    if (pagePtr == 0)
         return false;
 
     LOG_DEBUG() << "Registering plugin " << registree->getCaption() << " to topic " << topic << " and page " << page << ".";
@@ -70,7 +70,7 @@ bool SettingsDialog::registerToSettingWidget(QString topic, QString page, Abstra
 
 void SettingsDialog::includeSettingWidget(QString topicname, QString pagename, SettingsWidget** widget, AbstractPlugin* creator, QString topicicon)
 {
-    LOG_DEBUG() << "Including new settings widget" << 
+    LOG_DEBUG() << "Including new settings widget" <<
         " with topic " << topicname << " and page " << pagename << " to settings dialog.";
     if (creator != 0)
         LOG_DEBUG() << "Plugin: " << creator->getCaption();
@@ -126,7 +126,7 @@ void SettingsDialog::removeSettingWidgets(AbstractPlugin* creator)
             //Compare creator
             if (page->containsReferencer(creator))
             {
-                LOG_DEBUG() << "Removing settings widget reference of plugin " << creator->getCaption() << " to topic " << t_it->get()->mTopicName << 
+                LOG_DEBUG() << "Removing settings widget reference of plugin " << creator->getCaption() << " to topic " << t_it->get()->mTopicName <<
                     " and page " << p_it->get()->mPageName << " from settings dialog.";
 
                 //Remove one reference
@@ -160,7 +160,7 @@ void SettingsDialog::removeSettingWidgets(AbstractPlugin* creator)
             }
             if (!erased)
             {
-                p_it++; 
+                p_it++;
             }
         }
 
@@ -195,12 +195,12 @@ void SettingsDialog::removeSettingWidgets(AbstractPlugin* creator)
     }
 }
 
-bool SettingsDialog::hasTopic(QString& topicname)
+bool SettingsDialog::hasTopic(const QString& topicname)
 {
     return getTopicDefinition(topicname) != 0;
 }
 
-bool SettingsDialog::hasPage(QString& topicname, QString& pagename)
+bool SettingsDialog::hasPage(const QString& topicname, const QString& pagename)
 {
     return getPageDefinition(topicname, pagename) != 0;
 }
@@ -226,7 +226,7 @@ boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::getCurrentTop
 // Protected
 //--------------------------------------------------------------
 
-boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::getTopicDefinition(QString& topicname)
+boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::getTopicDefinition(const QString& topicname)
 {
     for (TTopicList::iterator t_it = mTopicList.begin(); t_it != mTopicList.end(); t_it++ )
     {
@@ -238,7 +238,7 @@ boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::getTopicDefin
     return shared_ptr<TopicDefinition>();
 }
 
-boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::getPageDefinition(QString& topicname, QString& pagename)
+boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::getPageDefinition(const QString& topicname, const QString& pagename)
 {
     shared_ptr<TopicDefinition> topic(getTopicDefinition(topicname));
     if (topic == 0)
@@ -254,9 +254,9 @@ boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::getPageDefinit
     return shared_ptr<PageDefinition>();
 }
 
-boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::getPageDefinition(TopicDefinition& topic, QString& pagename)
+boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::getPageDefinition(const TopicDefinition& topic, const QString& pagename)
 {
-    for (TPageList::iterator it = topic.mPageList.begin(); it != topic.mPageList.end(); it++ )
+    for (TPageList::const_iterator it = topic.mPageList.begin(); it != topic.mPageList.end(); it++ )
     {
         if (it->get()->mPageName.compare(pagename) == 0)
         {
@@ -266,7 +266,7 @@ boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::getPageDefinit
     return shared_ptr<PageDefinition>();
 }
 
-boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::createTopic(QString& topicname, QString& iconpath)
+boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::createTopic(const QString& topicname, const QString& iconpath)
 {
     shared_ptr<TopicDefinition> topic(getTopicDefinition(topicname));
     if (topic.get() == 0)
@@ -317,7 +317,7 @@ boost::shared_ptr<SettingsDialog::TopicDefinition> SettingsDialog::createTopic(Q
     return topic;
 }
 
-boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::createPage(QString& topicname, QString& pagename)
+boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::createPage(const QString& topicname, const QString& pagename)
 {
     shared_ptr<TopicDefinition> topic(getTopicDefinition(topicname));
     if (topic.get() == 0)
@@ -328,14 +328,14 @@ boost::shared_ptr<SettingsDialog::PageDefinition> SettingsDialog::createPage(QSt
     {
         page = shared_ptr<PageDefinition>(new PageDefinition(pagename, 0, 0, topic)); //stores topic as parent. other parameters are defined later
         topic->mPageList.push_back(shared_ptr<PageDefinition>(page));
-        page->mWidget = 0; 
+        page->mWidget = 0;
         page->mTabIndex = 0;
     }
 
     return page;
 }
 
-QWidget* SettingsDialog::getStackedWidgetPage(QString& topicname)
+QWidget* SettingsDialog::getStackedWidgetPage(const QString& topicname)
 {
     int index = getStackedWidgetPageIndex(topicname);
     if (index == -1) return 0; //not found
@@ -347,7 +347,7 @@ QWidget* SettingsDialog::getStackedWidgetPage(QString& topicname)
     return (SettingsWidget*)(ui.stackedWidget->widget(index));
 }
 
-int SettingsDialog::getStackedWidgetPageIndex(QString& topicname)
+int SettingsDialog::getStackedWidgetPageIndex(const QString& topicname)
 {
     int run = 0;
     for (TTopicList::iterator it = mTopicList.begin(); it != mTopicList.end(); it++)
@@ -394,7 +394,7 @@ void SettingsDialog::updateTabWidgetPage(PageDefinition& page)
         name = QString("%1 (%2)").arg(page.mPageName).arg(page.mReferencers.size());
         toolTip = QString(tr("Used by %1 plugin/s.")).arg(page.mReferencers.size());
     }
-    
+
     shared_ptr<TopicDefinition> topic = page.mTopic.lock();
     if (topic.get())
     {

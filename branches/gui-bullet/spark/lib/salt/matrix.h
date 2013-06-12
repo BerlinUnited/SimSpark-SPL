@@ -24,7 +24,7 @@
 
 #include "salt_defines.h"
 #include "vector.h"
-#include <cassert>
+#include <memory.h>
 
 namespace salt
 {

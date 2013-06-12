@@ -21,6 +21,11 @@
 #include "monitorframe_sparkglrender.h"
 #include "monitorframe_glconstants.h"
 
+#include <carbon.h>
+#include <sparkcontext.h>
+#include <simspark.h>
+#include <openglmanager.h>
+
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <oxygen/physicsserver/joint.h>
@@ -32,11 +37,6 @@
 #include <kerosin/sceneserver/singlematnode.h>
 #include <kerosin/sceneserver/axis.h>
 #include <kerosin/materialserver/material.h>
-
-#include <simspark.h>
-#include <carbon.h>
-#include <openglmanager.h>
-#include <sparkcontext.h>
 
 using namespace boost;
 using namespace zeitgeist;
@@ -62,7 +62,7 @@ SparkGLRender::RenderSelectionContext::~RenderSelectionContext()
 
 // ---- SparkGLRender
 
-SparkGLRender::SparkGLRender(const std::string& cameraPath, const std::string& sceneServerPath, 
+SparkGLRender::SparkGLRender(const std::string& cameraPath, const std::string& sceneServerPath,
     const std::string& renderServerPath, const std::string& renderControlPath) :
     mCameraPath(cameraPath),
     mSceneServerPath(sceneServerPath),
@@ -156,17 +156,17 @@ weak_ptr<RenderNode> SparkGLRender::pickNode(int pos_x, int pos_y, int width, in
     //Enable Picking
     double pickRange = 0.2;
     mRenderServer->EnablePicking(true, salt::Vector2f(pos_x, pos_y), pickRange);
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " after EnablePicking";
 
     //Render in selection mode
     render(width, height);
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " after Pick-rendering";
 
     //Disable Picking
     mRenderServer->DisablePicking();
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " after DisablePicking";
 
     //Find and return picked node (if any)
@@ -183,7 +183,7 @@ void SparkGLRender::render()
         return;
     }
 
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " at start of rendering.";
 
     glMatrixMode( GL_PROJECTION );
@@ -192,28 +192,28 @@ void SparkGLRender::render()
     glLoadIdentity();
     glEnable( GL_DEPTH_TEST );
 
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " before SetViewport";
 
     //Set the camera viewport
     mCamera->SetViewport(0, 0, mWidth, mHeight);
 
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " before Render";
 
     //Update OpenGLSystem
     //mOpenGLServer->Update(); //OpenGLServers is OpenGLSystemQt, which does not do anything
-    
+
     //Render Scene
     mRenderServer->Render(true);
 
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " after Render";
 
     //Render CustomRender plugins
     mRenderControl->RenderCustom();
 
-    if (mErr = glGetError()) 
+    if (mErr = glGetError())
         LOG_ERROR() << OpenGLManager::getErrorMessageStd(mErr).c_str() << " after rendering";
 }
 

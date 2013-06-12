@@ -20,7 +20,7 @@
 
 #include "sparkpropertyexecuter.h"
 #include "sparkpropertycontrol.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 namespace SparkProperty
 {

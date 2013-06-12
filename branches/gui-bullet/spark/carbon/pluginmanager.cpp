@@ -96,7 +96,7 @@ void PluginManager::initializeSettingWidget()
     if (mPluginSettingsWidget == 0)
     {
         mPluginSettingsWidget = new GuiSettings::PluginSettings(mSettings);
-        Carbon::get()->getSettingsDialog()->includeSettingWidget(tr("Gui"), tr("Plugin Manager"), 
+        Carbon::get()->getSettingsDialog()->includeSettingWidget(tr("Gui"), tr("Plugin Manager"),
             (SettingsWidget**)&mPluginSettingsWidget, 0, ":config");
 
         //Setting connections
@@ -155,7 +155,7 @@ bool PluginManager::init()
 
         if (mPluginIncludeDirectories.contains(*it))
             continue;
-        
+
         mPluginIncludeDirectories.push_back(dir.absolutePath());
         listChanged = true;
     }
@@ -166,7 +166,7 @@ bool PluginManager::init()
         mPluginIncludeDirectories.push_back(mDefaultPluginPath);
         listChanged = true;
     }
-    
+
     if (listChanged)
     {
         if (mSettings->beginGroup("gui_PluginManager", true)) //lock
@@ -267,7 +267,7 @@ bool PluginManager::loadPlugins(const SimulationSetup::TPluginDefinitions& addLi
             else
             for (SimulationSetup::TPluginDefinitions::const_iterator p_it = addList.begin(); p_it != addList.end(); p_it++)
             {
-                //This is a plugin that matches a remove definition? Remove this! 
+                //This is a plugin that matches a remove definition? Remove this!
                 if (p_it->get()->pluginMatches(plugin, true))
                 {
                     //definition matches, delete
@@ -339,7 +339,7 @@ bool PluginManager::deletePlugin(int pluginId, bool removeDefFromSimulation)
         //Nothing to delete, return
         return false;
     }
-    
+
     LOG_DEBUG() << "Deleting plugin with id " << pluginId << ".";
 
     return deletePlugin(it->second->getClassId(), pluginId, true, removeDefFromSimulation);
@@ -354,7 +354,7 @@ AbstractPlugin* PluginManager::reloadPlugin(AbstractPlugin& plugin, PluginDefini
         //Nothing to reload, return
         return 0;
     }
-    
+
     LOG_DEBUG() << "Reloading plugin with id " << plugin.getPluginId() << " (" << plugin.getCaption() << ").";
 
     //Store data
@@ -411,7 +411,7 @@ AbstractPlugin* PluginManager::reinitPlugin(AbstractPlugin& plugin, PluginDefini
         //Not in managed list, return
         return 0;
     }
-    
+
     LOG_DEBUG() << "Reinitializing plugin with id " << plugin.getPluginId() << " (" << plugin.getCaption() << ").";
 
     //If a new definition is given, use the new parameters and attachments
@@ -603,7 +603,7 @@ SignalPlugin* PluginManager::createSignalPlugin(const QString& name, const QStri
 
     //Calling init function
     plugin->init(parameters);
-    
+
     //Store instantiation info
     addInstanceIndex(plugin->getClassId(), plugin->getPluginId());
     emit pluginAdded(plugin->getPluginId());
@@ -615,14 +615,14 @@ SignalPlugin* PluginManager::createSignalPlugin(const QString& name, const QStri
 
 AttachableFrame* PluginManager::createAttachableFrame(const QString& name, const QString& caption, const QStringList& targets, const QStringList& parameters)
 {
-    LOG_DEBUG() << "Trying to create plugin " << caption << " of class " << name << " at attachmentpoint " << 
+    LOG_DEBUG() << "Trying to create plugin " << caption << " of class " << name << " at attachmentpoint " <<
         (targets.size() > 0 ? targets.at(0) : " <undefined>.");
 
     if (targets.size() == 0)
     {
         LOG_WARNING() << "No attachment targets defined for Plugin with class name " << name << ". Using default attachments.";
         FrameAttachmentPoint* point = mParent->getWindowManager()->findDefaultFrameAttachmentPoint(true);
-        if (!point) 
+        if (!point)
         {
             LOG_ERROR() << "could not create plugin. No free default attachment point found.";
             return 0;
@@ -640,7 +640,7 @@ AttachableFrame* PluginManager::createAttachableFrame(const QString& name, const
         if (i != targets.size() -1)
             targetlist.append(", ");
     }
-    
+
     LOG_ERROR() << "Could not create Plugin class with name " << name << " because none of the attachment points specified could be found: " << targetlist;
     return 0;
 }
@@ -713,7 +713,7 @@ AbstractPlugin* PluginManager::findPlugin(const QString& name, const QString& ca
 
     if (!searchName && !searchCaption && !searchType)
     {
-        LOG_WARNING() << "Plugin search query matches with any plugin. Specify class name, plugin caption and/or type."; 
+        LOG_WARNING() << "Plugin search query matches with any plugin. Specify class name, plugin caption and/or type.";
     }
 
     std::vector<AbstractPlugin*> matches = findPlugins(name, caption, type);
@@ -828,7 +828,7 @@ bool PluginManager::declareExtensionPlugin(int pluginId, bool extension, bool up
                 if (ok)
                     LOG_DEBUG() << "Plugin definition moved from current Simulation Setup to Extension Plugin list.";
                 else
-                    LOG_WARNING() << "Plugin definition not found current Simulation Setup. Cant remove it to update Extension Plugin list.";                
+                    LOG_WARNING() << "Plugin definition not found current Simulation Setup. Cant remove it to update Extension Plugin list.";
             }
         }
     }
@@ -942,7 +942,7 @@ int PluginManager::getMaxInstanceCount(int classId) const
     return PluginFactory::getFactory().getMaxInstanceCount(classId);
 }
 
-void PluginManager::createPluginContextMenu(QMenu* menu, std::vector<NumberedActionReceiver*>& actionReceivers, 
+void PluginManager::createPluginContextMenu(QMenu* menu, std::vector<NumberedActionReceiver*>& actionReceivers,
     QObject* signalTarget, const char* slot, const PluginDefinition& matchDefinition)
 {
     //Add plugins identifications to list
@@ -959,7 +959,7 @@ void PluginManager::createPluginContextMenu(QMenu* menu, std::vector<NumberedAct
 
 QVariant PluginManager::getPluginClassInfo(int classId, AbstractPlugin::EPluginInfo info)
 {
-    return getPluginClassInfo(classId, AbstractPlugin::getClassInfoName(info));    
+    return getPluginClassInfo(classId, AbstractPlugin::getClassInfoName(info));
 }
 
 QVariant PluginManager::getPluginClassInfo(int classId, const QString& field)
@@ -974,7 +974,7 @@ QVariant PluginManager::getPluginClassInfo(int classId, const QString& field)
     if (mSettings->beginGroup("gui_PluginInfo", true)) //lock
     {
         mSettings->beginGroup(name);
-    
+
         QVariant returning;
 
         returning = mSettings->value(field, QVariant());
@@ -992,7 +992,7 @@ QVariant PluginManager::getPluginClassInfo(int classId, const QString& field)
 
 void PluginManager::setPluginClassInfo(int classId, AbstractPlugin::EPluginInfo info, const QVariant& value)
 {
-    setPluginClassInfo(classId, AbstractPlugin::getClassInfoName(info), value);    
+    setPluginClassInfo(classId, AbstractPlugin::getClassInfoName(info), value);
 }
 
 void PluginManager::setPluginClassInfo(int classId, const QString& field, const QVariant& value)
@@ -1023,7 +1023,7 @@ bool PluginManager::loadData(boost::shared_ptr<Settings> data)
     for (auto it = mPluginMap.begin(); it != mPluginMap.end(); it++)
     {
         bool loadedOne = it->second->loadData(data);
-        if (loadedOne) 
+        if (loadedOne)
             loaded = true;
     }
     return loaded;
@@ -1065,11 +1065,11 @@ bool PluginManager::addPluginIncludeDirectory()
 {
     //Choose Path from dialog
     QFileDialog dialog((QWidget*)Carbon::get()->getWindowManager()->getMainWindow(),
-        QString(tr("Add plugin include directory")), 
+        QString(tr("Add plugin include directory")),
         mDefaultPluginPath);
     dialog.setFilter(QDir::Dirs);
     dialog.setToolTip(tr("Choose a directory with plugin libraries to include. All libraries in the directory will be linked to the application."));
-    
+
     //Execute dialog
     bool accepted = dialog.exec();
     if (!accepted)
@@ -1156,11 +1156,11 @@ bool PluginManager::addPluginIncludeFile()
 {
     //Choose File from dialog
     QFileDialog dialog((QWidget*)Carbon::get()->getWindowManager()->getMainWindow(),
-        QString(tr("Add plugin library")), 
+        QString(tr("Add plugin library")),
         mDefaultPluginPath);
     dialog.setFilter(QDir::Files);
     dialog.setToolTip(tr("Choose a plugin libraries to include. The libraries will be linked to the application."));
-    
+
     //Execute dialog
     bool accepted = dialog.exec();
     if (!accepted)
@@ -1263,11 +1263,11 @@ bool PluginManager::removePluginIncludeFile(const QString& path)
 void PluginManager::initLibraries()
 {
     //Add all single files
-    mLibraryLoader->addFiles(mPluginIncludeFiles); 
-    
+    mLibraryLoader->addFiles(mPluginIncludeFiles);
+
     //Add all include directories
     for (auto it = mPluginIncludeDirectories.begin(); it != mPluginIncludeDirectories.end(); it++)
-        mLibraryLoader->addDirectory(*it); 
+        mLibraryLoader->addDirectory(*it);
 
     //Link all included plugin libraries (one by one for detailed log infos)
     for (auto it = mLibraryLoader->librariesBegin(); it != mLibraryLoader->librariesEnd(); it++)
@@ -1555,7 +1555,7 @@ QVariant PluginTableModel::data (const QModelIndex & index, int role) const
 
         switch(col)
         {
-        case 0: 
+        case 0:
             //Extension
             return plugin->isExtension() ? Qt::Checked : Qt::Unchecked;
             break;
@@ -1563,7 +1563,7 @@ QVariant PluginTableModel::data (const QModelIndex & index, int role) const
         case 2: //fall
         case 3: //fall
         case 4: //fall
-        default: 
+        default:
             break;
         }
     }
@@ -1575,31 +1575,31 @@ QVariant PluginTableModel::data (const QModelIndex & index, int role) const
 
         switch(col)
         {
-        case 0: 
+        case 0:
             //Extension
             return QVariant(tr("The location where the plugin definition is saved.\n" \
                 "If checked, the plugin will be an 'Extension' and loaded with every simulation instead of only the current simulation setup.\n" \
                 "Otherwise it will be stored in the current simulation setup."));
             break;
-        case 1: 
+        case 1:
             //Caption
             return QVariant(tr("The caption of the plugin instance. Used to display a name for the plugin instance and to store settings for the plugin instance with."));
             break;
-        case 2: 
+        case 2:
             //Class
             return QVariant(tr("The name of the plugin class."));
             break;
-        case 3: 
+        case 3:
             //Type
             return QVariant(tr("The type of the plugin class.\n" \
                 "Simple-Plugins are usually used to be executed in a Plugin-Thread, Signal-Plugins can be used to communicate with each other, \n" \
                 "and Frame-Plugins are visual plugins that can be attached to and moved between the Gui attachment points."));
             break;
-        case 4: 
+        case 4:
             //Attachment
             return QVariant(tr("Name of the current attachment point the plugin is attached to. Only Frame-Plugins can be attached."));
             break;
-        default: 
+        default:
             return QVariant(tr("#Illegal column Index#"));
             break;
         }
@@ -1666,7 +1666,7 @@ bool PluginTableModel::setData (const QModelIndex & index, const QVariant & valu
 
         switch (col)
         {
-        case 0: 
+        case 0:
             mPluginManager->declareExtensionPlugin(plugin->getPluginId(), value.toBool(), true);
             break;
         case 1: //fall
@@ -1750,31 +1750,31 @@ QVariant PluginTableModel::headerData (int section, Qt::Orientation orientation,
     {
         switch(section)
         {
-        case 0: 
+        case 0:
             //Extension
             return QVariant(tr("The location where the plugin definition is saved.\n" \
                 "If checked, the plugin will be an 'Extension' and loaded with every simulation instead of only the current simulation setup.\n \
                 Otherwise it will be stored in the SimulationSetup."));
             break;
-        case 1: 
+        case 1:
             //Caption
             return QVariant(tr("The caption of the plugin instance. Used to display a name for the plugin instance and to store settings for the plugin instance with."));
             break;
-        case 2: 
+        case 2:
             //Class
             return QVariant(tr("The name of the plugin class."));
             break;
-        case 3: 
+        case 3:
             //Type
             return QVariant(tr("The type of the plugin class.\n" \
                 "Simple-Plugins are usually used to be executed in a Plugin-Thread, Signal-Plugins can be used to communicate with each other, \n" \
                 "and Frame-Plugins are visual plugins that can be attached to and moved between the Gui attachment points."));
             break;
-        case 4: 
+        case 4:
             //Attachment
             return QVariant(tr("Name of the current attachment point the plugin is attached to. Only Frame-Plugins can be attached."));
             break;
-        default: 
+        default:
             return QVariant(tr("#Illegal column Index#"));
             break;
         }

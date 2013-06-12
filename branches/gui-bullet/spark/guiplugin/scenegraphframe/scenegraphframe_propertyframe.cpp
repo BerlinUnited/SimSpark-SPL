@@ -27,8 +27,8 @@
 #include <sparkcontroller.h>
 #include <carbon.h>
 
-#include <zeitgeist\leaf.h>
-#include <zeitgeist\node.h>
+#include <zeitgeist/leaf.h>
+#include <zeitgeist/node.h>
 
 #include <QLayout>
 
