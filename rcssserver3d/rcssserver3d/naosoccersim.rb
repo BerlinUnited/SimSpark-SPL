@@ -76,7 +76,11 @@ addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
 
+# charging foul parameters
 addSoccerVar('UseCharging', true)
+addSoccerVar('ChargingMinSpeed', 0.2)
+addSoccerVar('ChargingMinBallDist', 0.2)
+addSoccerVar('IllegalInterceptMinAngle', 70)
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       

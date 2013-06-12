@@ -290,7 +290,8 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
         {
             boost::shared_ptr<TouchGroup> touchGroup = (*asIt)->GetTouchGroup();
 
-            if (touchGroup->size() != 2) {
+            if (touchGroup->size() != 2)
+            {
                 continue;
             }
 
@@ -299,7 +300,7 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             float s[2]; //agentSpeed
             float d[2]; //agentDistToBall
             float a[2]; //agentAngleOfSpeedVectorToBall
-            float agentAngleOfSpeedVectorToOpponent[2]; 
+            float agentAngleOfSpeedVectorToOpponent[2];
             float m; //mutualAngleOfSpeed
             int agentUNum[2];
             int agentTeamIndex[2];
@@ -310,7 +311,7 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             for (TouchGroup::iterator agentIt = touchGroup->begin();
                  agentIt != touchGroup->end(); ++agentIt)
             {
-                
+
                 boost::shared_ptr<Transform> transform_parent;
                 boost::shared_ptr<RigidBody> agent_body;
 
@@ -321,105 +322,157 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
                 agentPos[i] = agent_body->GetPosition();
 
                 // Compute agent distance to ball
-                d[i] = sqrt(pow(agentPos[i].x()-ballPos.x(),2)+pow(agentPos[i].y()-ballPos.y(),2));           
-                 
+                d[i] = sqrt(pow(agentPos[i].x() - ballPos.x(), 2)
+                            + pow(agentPos[i].y() - ballPos.y(), 2));
+
                 // Get agent velocity
                 agentVel[i] = agent_body->GetVelocity();
 
                 // Compute agent speed
-                s[i] = sqrt(pow(agentVel[i].x(),2)+pow(agentVel[i].y(),2));
+                s[i] = sqrt(pow(agentVel[i].x(), 2) + pow(agentVel[i].y(), 2));
 
                 // Compute speed vector angle to ball
-                a[i] = abs(salt::gRadToDeg(salt::gNormalizeRad(salt::gArcTan2(agentVel[i].y(), agentVel[i].x()) - salt::gArcTan2(ballPos.y()-agentPos[i].y(), ballPos.x()-agentPos[i].x()))));
+                a[i] = abs(salt::gRadToDeg(salt::gNormalizeRad(
+                    salt::gArcTan2(agentVel[i].y(), agentVel[i].x()) -
+                    salt::gArcTan2(ballPos.y()-agentPos[i].y(), ballPos.x()-agentPos[i].x())
+                    )));
 
                 // Get agent uniform number and team index
                 agentUNum[i] = (*agentIt)->GetUniformNumber();
                 agentTeamIndex[i] = (*agentIt)->GetTeamIndex();
-                 
-                std::cout << "Agent " << agentUNum[i] << " team " << agentTeamIndex[i]  << ":\tposition = " << agentPos[i] << "\tvelocity = " << agentVel[i] << std::endl;
+
+//                GetLog()->Debug() << "Agent " << agentUNum[i] << " team "
+//                        << agentTeamIndex[i] << ":\tposition = " << agentPos[i]
+//                        << "\tvelocity = " << agentVel[i] << "\n";
 
                 i++;
             }
 
-        
+
             // Check if these are opponent agents meaning they have different team indexes
             bool haveOpponent = agentTeamIndex[0] != agentTeamIndex[1];
 
-            if (haveOpponent) {       
+            if (haveOpponent)
+            {
                 // Compute speed vector angle to opponent
-                for (i = 0; i <= 1; i++) {
-                    agentAngleOfSpeedVectorToOpponent[i] = abs(salt::gRadToDeg(salt::gNormalizeRad(salt::gArcTan2(agentVel[i].y(), agentVel[i].x()) - salt::gArcTan2(agentPos[1-i].y()-agentPos[i].y(), agentPos[1-i].x()-agentPos[i].x()))));
+                for (i = 0; i <= 1; i++)
+                {
+                    agentAngleOfSpeedVectorToOpponent[i] = abs(
+                        salt::gRadToDeg(salt::gNormalizeRad(
+                            salt::gArcTan2(agentVel[i].y(), agentVel[i].x()) -
+                            salt::gArcTan2(agentPos[1-i].y()-agentPos[i].y(),
+                                agentPos[1-i].x()-agentPos[i].x()))
+                        ));
                 }
 
                 // Compute mutual angle of speed
-                m = abs(salt::gRadToDeg(salt::gNormalizeRad(salt::gArcTan2(agentVel[0].y(), agentVel[0].x()) - salt::gArcTan2(agentVel[1].y(), agentVel[1].x()))));
+                m = abs(salt::gRadToDeg(salt::gNormalizeRad(
+                        salt::gArcTan2(agentVel[0].y(), agentVel[0].x()) -
+                        salt::gArcTan2(agentVel[1].y(), agentVel[1].x())
+                    )));
 
                 bool agentFoul[2]; // Boolean if an agent had committed a foul
 
-                for (int i = 0; i <= 1; i++) {
+                for (int i = 0; i <= 1; i++)
+                {
                     // Minimum requirements for a foul
-                    std::cout << "Agent " << agentUNum[i] << " team " << agentTeamIndex[i]  << ":\tspeed = " << s[i] << "\tdist_from_ball = " << d[i] << "\tangle_speed_to_opp = " << agentAngleOfSpeedVectorToOpponent[i] << std::endl;
-                    agentFoul[i] = s[i] >= mChargingMinSpeed && d[i] >= mChargingMinBallDist && agentAngleOfSpeedVectorToOpponent[i] < mChargingMaxOppSpeedAngle;
+//                    GetLog()->Debug() << "Agent " << agentUNum[i] << " team "
+//                            << agentTeamIndex[i] << ":\tspeed = " << s[i]
+//                            << "\tdist_from_ball = " << d[i]
+//                            << "\tangle_speed_to_opp = "
+//                            << agentAngleOfSpeedVectorToOpponent[i]
+//                            << "\n";
+                    agentFoul[i] = s[i] >= mChargingMinSpeed
+                            && d[i] >= mChargingMinBallDist
+                            && agentAngleOfSpeedVectorToOpponent[i]
+                                    < mChargingMaxOppSpeedAngle;
                 }
 
-                if (d[0] < mChargingMinBallDist || d[1] < mChargingMinBallDist) {
+                if (d[0] < mChargingMinBallDist || d[1] < mChargingMinBallDist)
+                {
                     // Don't call a foul if at least one of the agents is close to the ball
                     continue;
                 }
 
-                if (agentFoul[0] && agentFoul[1]) {
+                if (agentFoul[0] && agentFoul[1])
+                {
                     // Handle case where both agent's are thought to have committed a foul
-                    std::cout << "m = " << m << std::endl;
-                    if (m < mChargingIllInterceptMinMutualSpeedAngel) {
+//                    GetLog()->Debug() << "m = " << m << "\n";
+                    if (m < mChargingIllInterceptMinMutualSpeedAngel)
+                    {
                         // Handle foul from player behind case
-                        salt::Vector3f midpoint = ((agentPos[0]+agentVel[0])+(agentPos[1]+agentVel[1]))/2.0;
+                        salt::Vector3f midpoint = ((agentPos[0] + agentVel[0])
+                                + (agentPos[1] + agentVel[1])) / 2.0;
 
                         float agentDistFromMidpoint[2];
-                        for (int i = 0; i <= 1; i++) {
-                            agentDistFromMidpoint[i] = sqrt(pow(agentPos[i].x()-midpoint.x(),2)+pow(agentPos[i].y()-midpoint.y(),2));
-                            std::cout << "Agent " << agentUNum[i] << " team " << agentTeamIndex[i]  << ":\tdistance from midpoint = " << agentDistFromMidpoint[i] << std::endl;
+                        for (int i = 0; i <= 1; i++)
+                        {
+                            agentDistFromMidpoint[i] = sqrt(
+                                pow(agentPos[i].x() - midpoint.x(), 2)
+                                        + pow(agentPos[i].y() - midpoint.y(), 2));
+//                            GetLog()->Debug() << "Agent " << agentUNum[i]
+//                                    << " team " << agentTeamIndex[i]
+//                                    << ":\tdistance from midpoint = "
+//                                    << agentDistFromMidpoint[i] << "\n";
                         }
 
 
-                        if (agentDistFromMidpoint[0] < agentDistFromMidpoint[1]) {
+                        if (agentDistFromMidpoint[0] < agentDistFromMidpoint[1])
+                        {
                             agentFoul[0] = false;
-                        } else if (agentDistFromMidpoint[1] < agentDistFromMidpoint[0]) {
+                        }
+                        else if (agentDistFromMidpoint[1] < agentDistFromMidpoint[0])
+                        {
                             agentFoul[1] = false;
-                        } else {
+                        }
+                        else
+                        {
                             // Mutual foul so no call
                             agentFoul[0] = false;
                             agentFoul[1] = false;
                         }
-                            
 
-                    } else {
+                    }
+                    else
+                    {
                         // Handle illegal interception case
-                        for (int i = 0; i <= 1; i++) {
-                            std::cout << "Agent " << agentUNum[i] << " team " << agentTeamIndex[i]  << ":\tangle of speed vector to ball = " << a[i] << std::endl;
-                        }
-     
-                        if (a[0] < a[1]) {
+//                        for (int i = 0; i <= 1; i++) {
+//                            GetLog()->Debug() << "Agent " << agentUNum[i]
+//                                    << " team " << agentTeamIndex[i]
+//                                    << ":\tangle of speed vector to ball = "
+//                                    << a[i] << "\n";
+//                        }
+
+                        if (a[0] < a[1])
+                        {
                             agentFoul[0] = false;
-                        } else if (a[1] < a[0]) {
+                        }
+                        else if (a[1] < a[0])
+                        {
                             agentFoul[1] = false;
-                        } else {
+                        }
+                        else
+                        {
                             // Mutual foul so no call
                             agentFoul[0] = false;
                             agentFoul[1] = false;
                         }
                     }
                 }
-            
-                for (int i = 0; i <= 1; i++) {
-                    if (agentFoul[i]) {
+
+                for (int i = 0; i <= 1; i++)
+                {
+                    if (agentFoul[i])
+                    {
                         playerFoulTime[agentUNum[i]][agentTeamIndex[i]]++;
                         playerLastFoul[agentUNum[i]][agentTeamIndex[i]] = FT_Charging;
-                        std::cout << "FOUL on agent " << agentUNum[i] << " team " << agentTeamIndex[i] << std::endl;
+                        GetLog()->Debug() << "FOUL on agent " << agentUNum[i]
+                                << " team " << agentTeamIndex[i] << "\n";
                         // Should we remove fouling player from touch group?
-                
+
                     }
                 }
-            
+
             }
         }
         // END FOUL DETECTION
@@ -1671,7 +1724,6 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"ChargingMinSpeed",mChargingMinSpeed);
     SoccerBase::GetSoccerVar(*this,"ChargingMinBallDist",mChargingMinBallDist);
     SoccerBase::GetSoccerVar(*this,"IllegalInterceptMinAngle",mChargingIllInterceptMinMutualSpeedAngel);
-    SoccerBase::GetSoccerVar(*this,"UseCharging",mUseCharging);
 
 
     // cout << "MaxInside " << mMaxPlayersInsideOwnArea << endl << endl;

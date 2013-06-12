@@ -1,3 +1,20 @@
+2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	* CMakeLists.txt:
+	- Updated for 0.6.7 release
+
+	* rcssagent3d/naobehavior.cpp:
+	- use the new style scene command to load standard Nao 
+
+	* rcssserver3d/naorobottypes.rb: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- re-formatted for better readability & consistency
+
+	* rcssserver3d/naosoccersim.rb: 
+	- add charging foul parameters to silent 'variable not found' errors
+
 2013-06-12  Sander van Dijk  <sgvandijk@gmail.com>
 
 	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
@@ -6,7 +23,6 @@
 	- added Patrick's charging foul rules, plus soccervar parameters
 	to enable and configure them. these fouls are not penalized, only
 	recorded and sent to the monitor
-	
 
 2013-06-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
@@ -18,7 +34,7 @@
 	  both the total number of heterogeneous players of each team
 	  (MaxTotalHeteroCount variable in naosoccersim.rb), and the number of 
 	  heterogeneous players of each type (MaxHeteroTypeCount variable)
- 
+
 2013-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h: 
