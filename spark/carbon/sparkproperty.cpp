@@ -30,17 +30,17 @@ namespace SparkProperty
 // Constructor
 //--------------------------------------------------------------
 
-Property::Property(boost::shared_ptr<zeitgeist::Leaf> leaf, ClassDescriptor descriptor, const QString& name, const QString& caption, 
+Property::Property(boost::shared_ptr<zeitgeist::Leaf> leaf, ClassDescriptor descriptor, const QString& name, const QString& caption,
     Data* value, bool editable, QValidator* validator, const QString& help) :
-        mLeaf(leaf), mClass(descriptor), mName(name), mCaption(caption), mValue(value), mEditable(editable), 
+        mLeaf(leaf), mClass(descriptor), mName(name), mCaption(caption), mValue(value), mEditable(editable),
         mValidator(validator), mHelp(help), mParent(0), mUpdateFlag(UF_NONE), mValueSemaphore(1)
 {
     createStringValue();
 }
 
-Property::Property(boost::shared_ptr<zeitgeist::Leaf> leaf, ClassDescriptor descriptor, const QString& name, const QString& caption, 
+Property::Property(boost::shared_ptr<zeitgeist::Leaf> leaf, ClassDescriptor descriptor, const QString& name, const QString& caption,
     Data* value, const QString& help) :
-        mLeaf(leaf), mClass(descriptor), mName(name), mCaption(caption), mValue(value), mEditable(false), 
+        mLeaf(leaf), mClass(descriptor), mName(name), mCaption(caption), mValue(value), mEditable(false),
         mValidator(0), mHelp(help), mParent(0), mUpdateFlag(UF_NONE), mValueSemaphore(1)
 {
     createStringValue();
@@ -50,7 +50,7 @@ Property::~Property()
 {
     if (mValidator != 0)
     {
-        mValidator->deleteLater(); 
+        mValidator->deleteLater();
         mValidator = 0;
     }
 }
@@ -139,7 +139,7 @@ bool Property::setValue(const QString& dataString)
             LOG_ERROR() << "Data String " << dataString << " is not a valid value for Property " << mCaption;
             ok = false;
         }
-        
+
         if (ok)
         {
             boost::shared_ptr<Data> data(Data::createData(getDataType(), dataString));
@@ -169,19 +169,21 @@ bool Property::isValid(Data* data)
         return true;
 
     int n = 0;
+    QString str;
     if (data == 0)
-        return mValidator->validate(mStringValue, n);
+        str = mStringValue;
     else
-        return mValidator->validate(data->toString(), n);
+        str = data->toString();
+    return mValidator->validate(str, n) == QValidator::Acceptable;
 }
 
-bool Property::isValid(const QString& dataString)
+bool Property::isValid(QString dataString)
 {
     if (mValidator == 0)
         return true;
 
     int n = 0;
-    return mValidator->validate(QString(dataString), n);
+    return mValidator->validate(dataString, n) == QValidator::Acceptable;
 }
 
 ClassDescriptor& Property::getClassNc()
@@ -251,7 +253,7 @@ void Property::setValueProtected(boost::shared_ptr<Data> data)
 
     if (ok)
         mTempValue = boost::shared_ptr<Data>(data);
-    
+
     mValueSemaphore.release();
 }
 
@@ -264,7 +266,7 @@ bool Property::startUpdate(EUpdateFlag flag)
     }
 
     if (mValueSemaphore.tryAcquire(1, 100))
-    {   
+    {
         if (mUpdateFlag != UF_NONE)
         {
             //Updating already queued

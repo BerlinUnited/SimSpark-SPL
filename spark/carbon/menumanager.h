@@ -31,7 +31,7 @@
 #include <QString>
 #include <QMenuBar>
 #include <QSize>
-#include <Map>
+#include <map>
 #include <vector>
 
 class Carbon;
@@ -60,7 +60,7 @@ namespace MenuSystem
  At time of frame instantiation they provide the MenuManager with additional Menus, Actions and Toolboxes for their control.
  Tools, Menus and so on are named and stored as MenuObject.
 
- While Plugins and SignalPlugins may only provide global toolboxes and menu entries, AttachableFrames can create and provide local entries that are build in 
+ While Plugins and SignalPlugins may only provide global toolboxes and menu entries, AttachableFrames can create and provide local entries that are build in
  into their frame at a specified location.
 */
 class MenuManager : public QObject
@@ -144,7 +144,7 @@ public:
      \brief Returns the main MenuBar of the active MenuManager.
     */
     static QMenuBar* getMenuBar();
-    
+
      /*!
      \brief Changes a toolbar style to a fixed style.
 
@@ -290,7 +290,7 @@ public slots:
     //-----------------------------
     // File Menu / Tools
     //-----------------------------
-    
+
     /*!
      \brief Load simulation.
     */

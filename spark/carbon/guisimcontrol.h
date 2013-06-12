@@ -25,8 +25,8 @@
  * \brief Contains GuiSimControl class, an oxygen SimulationControlNode for the Gui.
  */
 
-#include <oxygen\simulationserver\simcontrolnode.h>
-#include <boost\shared_ptr.hpp>
+#include <oxygen/simulationserver/simcontrolnode.h>
+#include <boost/shared_ptr.hpp>
 #include <QList>
 
 class ISimControl;
@@ -91,7 +91,7 @@ protected:
 
 private:
     //private functions
-    
+
     /*!
      \brief Called once when the simulation is started.
     */

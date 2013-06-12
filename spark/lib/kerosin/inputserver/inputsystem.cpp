@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2004 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: inputsystem.cpp 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 */
 #include "inputsystem.h"
 
-#include <boost\thread\locks.hpp>
+#include <boost/thread/locks.hpp>
 
 using namespace kerosin;
 using namespace zeitgeist;

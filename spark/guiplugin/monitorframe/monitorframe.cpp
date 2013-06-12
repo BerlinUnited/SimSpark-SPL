@@ -35,7 +35,7 @@
 #include <QToolBar>
 #include <QSize>
 #include <QLayout>
-#include <QToolbutton>
+#include <QToolButton>
 #include <QGLContext>
 
 using namespace boost;
@@ -47,12 +47,12 @@ using namespace MonitorFrameUtil;
 
 //Factory registration
 REGISTER_EXPORT_FRAME(MonitorFrame, "monitorframe", "Monitor", 1)
- 
+
 //Static class information
 void MonitorFrame::saveClassInfo()
 {
     //Description
-    setClassInfo(mClassId, AbstractPlugin::PI_DESCRIPTION, 
+    setClassInfo(mClassId, AbstractPlugin::PI_DESCRIPTION,
         tr("The monitor frame offers an OpenGL window to the OpenGL-Manager of the application.\n"
         "By default it is rendering an example scene, but it can be used to render an externally initialized scene like a simspark simulation server scene."));
 
@@ -147,7 +147,7 @@ void MonitorFrame::updateState(EMonitorFrameState state)
         }
         else
             LOG_ERROR() << "GLWidget registration failed.";
-        
+
         mDefaultState = state;
         mState = state;
     }
@@ -177,7 +177,7 @@ void MonitorFrame::updateState(EMonitorFrameState state)
         }
         else
             LOG_ERROR() << "GLWidget registration failed.";
-        
+
         ui.headerWidget->setVisible(false);
 
         mState = state;
@@ -225,7 +225,7 @@ void MonitorFrame::initRendering()
 {
     if (mRenderingInitialized)
         return;
-    
+
     boost::shared_ptr<ServerThread> server = mSimulationManager->getSparkServerThread();
     if (!server.get())
     {
@@ -246,8 +246,8 @@ void MonitorFrame::initRendering()
         return;
     }
 
-    QString cameraPath        = "/usr/scene/camera/camera";      
-    QString sveneServerPath   = "/sys/server/scene"; 
+    QString cameraPath        = "/usr/scene/camera/camera";
+    QString sveneServerPath   = "/sys/server/scene";
     QString renderServerPath  = "/sys/server/render";
     QString renderControlPath = "/sys/server/simulation/RenderControl";
 
@@ -270,7 +270,7 @@ void MonitorFrame::initRendering()
     mGL->getTimer().stop();
 
     //Init spark gl widget
-    LOG_INFO() << "Initializing SparkGLWidget. Using node paths:\n" 
+    LOG_INFO() << "Initializing SparkGLWidget. Using node paths:\n"
         << "SparkCameraPath = " << cameraPath << "\n"
         << "SparkSveneServerPath = " << sveneServerPath << "\n"
         << "SparkRenderServerPath = " << renderServerPath << "\n"
@@ -345,11 +345,11 @@ void MonitorFrame::cleanup(bool destructor)
         return;
 
     mClosed = true;
-   
+
     //Save settings
     saveSettings();
-    
-    //Unregister GL 
+
+    //Unregister GL
     getCarbon()->getOpenGLManager()->unregisterGLWidget(mGL);
 
     //Close Gl

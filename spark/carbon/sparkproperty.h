@@ -292,7 +292,7 @@ public:
      \param dataString string to convert
      \return true if valid
     */
-    bool isValid(const QString& dataString);
+    bool isValid(QString dataString);
 
     ClassDescriptor& getClassNc();           /*!< Returns Description for the class the property was created for. Used to identify the corrent PropertyControl.*/
     const ClassDescriptor& getClass() const; /*!< Returns Description for the class the property was created for. Used to identify the corrent PropertyControl.*/
@@ -350,7 +350,7 @@ protected:
      Updates string value.
     */
     void rejectTempValue();
-    
+
     /*!
      \brief Define the parent property list of this property.
 

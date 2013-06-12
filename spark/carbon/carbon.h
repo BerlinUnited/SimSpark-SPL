@@ -29,11 +29,11 @@
 #include <QObject>
 #include <QStringList>
 
-#include "cutelogger/Logger.h"
-#include "cutelogger/ConsoleAppender.h"
-#include "cutelogger/FileAppender.h"
-#include "cutelogger/DebugAppender.h"
-#include "cutelogger/FunctionAppender.h"
+#include "cutelogger/logger.h"
+#include "cutelogger/consoleappender.h"
+#include "cutelogger/fileappender.h"
+#include "cutelogger/debugappender.h"
+#include "cutelogger/functionappender.h"
 
 #include <map>
 #include <boost/shared_ptr.hpp>
@@ -49,6 +49,7 @@
         #define LIB_IMPORT
 #endif
 
+class QApplication;
 class QMainWindow;
 class MenuManager;
 class WindowManager;
@@ -65,7 +66,7 @@ class Settings;
 /*!
  \brief Main controller class of the Carbon library.
 
- Controls Initialization of the Logging System, and the manager elements. 
+ Controls Initialization of the Logging System, and the manager elements.
  Only one carbon instance may be initialized at a time. After initialization the controller is globally accesible with Carbon::get().
 
  \sa MenuManager
@@ -194,7 +195,7 @@ public:
      \brief Initialized with commandline options.
 
      Called once.
-     
+
      \param argc commandline parameter count
      \param argv commandline argument list
     */
@@ -236,7 +237,7 @@ public:
      /brief Notification from the logger that a new log source was added.
 
      Emits logSourceAdded.
-     
+
      \param id id of the log source
     */
     void updateLogSourceAdded(int id);
@@ -309,7 +310,7 @@ public:
     */
     static void registerStaticCarbonPointer(Carbon* carbon);
 
-private: 
+private:
     // private functions
 
     /*!
@@ -331,7 +332,7 @@ private:
     */
     bool initSettingsWidgets();
     /*!
-     \brief Returns the log appender collection for the static carbon instance, or the static log control object if no cotnroller was found. 
+     \brief Returns the log appender collection for the static carbon instance, or the static log control object if no cotnroller was found.
     */
     static boost::shared_ptr<CarbonLogControl> getLogControl();
 

@@ -70,7 +70,7 @@ bool PluginThread::hasPlugin()
 void PluginThread::run()
 {
     bool success = initPlugin();
-    
+
     if (!success)
     {
         LOG_ERROR() << "Could not run plugin because plugin creation failed.";
@@ -106,7 +106,7 @@ void PluginThread::pause(bool state)
     //Pause/Unpause plugin
     bool success = mPlugin->pause(state);
 
-    if (success) 
+    if (success)
         emit updatePaused(state);
 }
 
@@ -146,7 +146,7 @@ bool PluginThread::initPlugin()
     PluginManager* manager = Carbon::get()->getPluginManager();
 
     //For new plugins, executable denotes the executable plugin, class mainScript the plugin caption and secondary script the plugin type (as integer)
-    AbstractPlugin* plugin = manager->findPlugin(getTaskDefinition().getFirst(), getTaskDefinition().getSecond(), 
+    AbstractPlugin* plugin = manager->findPlugin(getTaskDefinition().getFirst(), getTaskDefinition().getSecond(),
         getTaskDefinition().getThird().compare("") == 0 ? -1 : getTaskDefinition().getThird().toInt());
 
     if (plugin == 0)

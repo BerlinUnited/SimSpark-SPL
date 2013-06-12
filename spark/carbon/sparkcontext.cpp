@@ -19,7 +19,7 @@
 */
 
 #include "sparkcontext.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 #include <zeitgeist/leaf.h>
 #include <oxygen/sceneserver/scenedict.h>

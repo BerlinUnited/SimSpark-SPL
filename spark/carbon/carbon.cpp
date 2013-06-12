@@ -28,7 +28,7 @@
 #include "attachableframe.h"
 #include "settingsdialog.h"
 #include "settings.h"
-#include "cutelogger\logmessage.h"
+#include "cutelogger/logmessage.h"
 #include "simulationtask.h"
 #include "sparkproperty.h"
 #include "topic.h"

@@ -126,7 +126,7 @@ void SimulationManager::init()
         }
         addSetupIncludePath(*it);
     }
-    
+
     bool changed = false;
 
     //Add commandline given paths for script include directories
@@ -141,14 +141,14 @@ void SimulationManager::init()
                 continue;
             }
             QString path = dir.absolutePath();
-        
+
             if (!mScriptIncludeDirectories.contains(path))
             {
                 mScriptIncludeDirectories.push_back(*it);
                 changed = true;
-            }  
+            }
          }
-         
+
         if (changed)
             mSettings->setValue("mScriptPaths", mScriptIncludeDirectories);
 
@@ -169,14 +169,14 @@ void SimulationManager::init()
                 continue;
             }
             QString path = dir.absolutePath();
-        
+
             if (!mExecutableIncludeDirectories.contains(path))
             {
                 mExecutableIncludeDirectories.push_back(*it);
                 changed = true;
-            }  
+            }
          }
-         
+
         if (changed)
             mSettings->setValue("mExecutablePaths", mExecutableIncludeDirectories);
 
@@ -200,7 +200,7 @@ int SimulationManager::getSetupIndex(const QString& name) const
         }
         i++;
     }
-    
+
     return -1;
 }
 
@@ -216,7 +216,7 @@ int SimulationManager::getSetupIndexByFilePath(const QString& path) const
         }
         i++;
     }
-    
+
     return -1;
 }
 
@@ -673,7 +673,7 @@ shared_ptr<SimulationSetup> SimulationManager::loadSimulationSetup(const QString
     else
     {
         LOG_DEBUG() << "Opened Simulation Setup File " << path << ".";
-    }   
+    }
     QString fname = file.fileName();
 
     QDomDocument setupDocument;
@@ -717,7 +717,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetup(boost::shared
     int err;
 
     returning = saveSimulationSetupProtected(setup, err, overwrite, rememberPath);
-            
+
     if (err == 0)
     {
         //Saved
@@ -725,7 +725,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetup(boost::shared
     }
     else if (err == 1)
     {
-        LOG_ERROR() << "Failed to save simulation setup " << setup->getName().toStdString().c_str() << " to " << setup->getFileName();        
+        LOG_ERROR() << "Failed to save simulation setup " << setup->getName().toStdString().c_str() << " to " << setup->getFileName();
     }
     else if (err == 2)
     {
@@ -762,10 +762,10 @@ bool SimulationManager::saveAllSimulationSetups(bool askForAll, bool askForEach)
         }
         i++;
     }
-    
+
     LOG_DEBUG() << "Found " << count << " unsaved files. " << skippedcount << " skipped.";
 
-    if (count == 0) 
+    if (count == 0)
         return true;
 
     if (askForAll && count == 1)
@@ -778,13 +778,13 @@ bool SimulationManager::saveAllSimulationSetups(bool askForAll, bool askForEach)
     if (askForAll)
     {
         QMessageBox messageBox;
-        messageBox.setWindowTitle("Save Simulation Setups"); 
+        messageBox.setWindowTitle("Save Simulation Setups");
         messageBox.setText(QString(tr("Do you want to save all unsaved Simulation Setup files?")));
         messageBox.setInformativeText(QString(tr("Unsaved Setups: %1%2")).arg(namelist).arg(
             askForEach ? "\n (Press no to decide for each setup individually)" : ""));
         messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         messageBox.setDefaultButton(QMessageBox::No);
-        messageBox.setIcon(QMessageBox::Question);       
+        messageBox.setIcon(QMessageBox::Question);
 
         int result = messageBox.exec();
         if (result == QMessageBox::Yes)
@@ -802,14 +802,14 @@ bool SimulationManager::saveAllSimulationSetups(bool askForAll, bool askForEach)
         {
             //Ask individually
             QMessageBox messageBox;
-            messageBox.setWindowTitle(tr("Save Simulation Setup")); 
+            messageBox.setWindowTitle(tr("Save Simulation Setup"));
             messageBox.setText(QString(tr("Do you want to save unsaved Simulation Setup '%1'?")).arg(mSetupList.at(*it)->getName()));
             messageBox.setInformativeText(QString(tr("File: %1")).
-                arg(mSetupList.at(*it)->getFileName().compare("") != 0 ? 
+                arg(mSetupList.at(*it)->getFileName().compare("") != 0 ?
                     QString("'%1'").arg(mSetupList.at(*it)->getFileName()) : QString("(not defined)")));
             messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             messageBox.setDefaultButton(QMessageBox::No);
-            messageBox.setIcon(QMessageBox::Question);       
+            messageBox.setIcon(QMessageBox::Question);
 
             int result = messageBox.exec();
             if (result == QMessageBox::Yes)
@@ -852,7 +852,7 @@ bool SimulationManager::updateSimulationSetup(int index, const SimulationSetup& 
     emit setupListEntryChanged(index);
 
     //Current setup changed?
-    if (simulationInitialized() && 
+    if (simulationInitialized() &&
         (mSimulation->getSetup()->getName().compare(setup.getName()) == 0) &&
         askReloadCurrent)
     {
@@ -1037,7 +1037,7 @@ bool SimulationManager::initializeSimulation(const QString& name, bool reinitial
     return true;
 }
 
-bool SimulationManager::runSimulation(bool runTasks)  
+bool SimulationManager::runSimulation(bool runTasks)
 {
     if (!simulationInitialized())
     {
@@ -1057,7 +1057,7 @@ bool SimulationManager::runSimulation(bool runTasks)
     return true;
 }
 
-bool SimulationManager::stopSimulation(bool stopall) 
+bool SimulationManager::stopSimulation(bool stopall)
 {
     if (!simulationRunning() && !stopall)
         return false;
@@ -1074,14 +1074,14 @@ bool SimulationManager::pauseSimulation()
 
     if (paused)
        emit setupPaused(mSimulation->getSetup()->getName());
-    
+
     return paused;
 }
 
 bool SimulationManager::restartSimulation()
 {
     bool restarted = mSimulation->restart();
-    
+
     return restarted;
 }
 
@@ -1107,7 +1107,7 @@ shared_ptr<TaskDefinition> SimulationManager::newTaskDefinition(TaskDefinition::
         return shared_ptr<TaskDefinition>(new TaskDefinition());
     }
 
-    return shared_ptr<TaskDefinition>(new TaskDefinition(type, 
+    return shared_ptr<TaskDefinition>(new TaskDefinition(type,
         list->at(0).toString(), //name
         (QThread::Priority)list->at(1).toInt(), //threadpriority
         list->at(2).toString(), //executable
@@ -1127,12 +1127,12 @@ QString SimulationManager::findExecutable(const QString& name) const
     return findFile(name, mExecutableIncludeDirectories, mExecutableIncludeFiles, "Executable", mExecutableSuffix);
 }
 
-bool SimulationManager::hasScript(const QString& name) const     
+bool SimulationManager::hasScript(const QString& name) const
 {
     return findScript(name).compare("") != 0;
 }
 
-QString SimulationManager::findScript(const QString& name) const    
+QString SimulationManager::findScript(const QString& name) const
 {
     return findFile(name, mScriptIncludeDirectories, mScriptIncludeFiles, "Script", mScriptSuffix);
 }
@@ -1170,7 +1170,7 @@ QString SimulationManager::findFile(const QString& name, const QStringList& incl
     for (QStringList::ConstIterator it = includeDirectories.begin(); it != includeDirectories.end(); it++)
     {
         QDir dir(*it);
-        
+
         if (!dir.exists())
         {
             LOG_WARNING() << "Directory " << dir.absolutePath() << " does not exist.";
@@ -1213,7 +1213,7 @@ QString SimulationManager::findFile(const QString& name, const QStringList& incl
     for (QStringList::ConstIterator it = includeFiles.begin(); it != includeFiles.end(); it++)
     {
         QFileInfo info(*it);
-        
+
         if (!info.exists())
         {
             LOG_WARNING() << "Path " << info.absolutePath() << " does not exist.";
@@ -1255,17 +1255,17 @@ QString SimulationManager::findFile(const QString& name, const QStringList& incl
     return foundPath;
 }
 
-void SimulationManager::findScripts(QStringList& target, bool absolute) const    
+void SimulationManager::findScripts(QStringList& target, bool absolute) const
 {
     return findFiles(target, mScriptIncludeDirectories, mScriptIncludeFiles, QStringList("*."+mScriptSuffix), absolute);
 }
 
-void SimulationManager::findScripts(QStringList& target, const QStringList& directories, bool absolute) const    
+void SimulationManager::findScripts(QStringList& target, const QStringList& directories, bool absolute) const
 {
     return findFiles(target, directories, QStringList(), QStringList("*."+mScriptSuffix), absolute);
 }
 
-void SimulationManager::findFiles(QStringList& target, const QStringList& includeDirectories, const QStringList& includeFiles, 
+void SimulationManager::findFiles(QStringList& target, const QStringList& includeDirectories, const QStringList& includeFiles,
     const QStringList& filters, bool absolute) const
 {
     mIncludePathsMutex.lock();
@@ -1276,7 +1276,7 @@ void SimulationManager::findFiles(QStringList& target, const QStringList& includ
     for (QStringList::ConstIterator it = includeDirectories.begin(); it != includeDirectories.end(); it++)
     {
         QDir dir(*it);
-        
+
         if (!dir.exists())
         {
             LOG_WARNING() << "Directory " << dir.absolutePath() << " does not exist.";
@@ -1294,7 +1294,7 @@ void SimulationManager::findFiles(QStringList& target, const QStringList& includ
     for (QStringList::ConstIterator it = includeFiles.begin(); it != includeFiles.end(); it++)
     {
         QFileInfo info(*it);
-        
+
         if (!info.exists())
         {
             LOG_WARNING() << "Path " << info.absolutePath() << " does not exist.";
@@ -1331,7 +1331,7 @@ QVariant SimulationManager::getDefaultTaskData(TaskDefinition::ETaskType type, i
     {
         LOG_ERROR() << "Field id " << field << " out of range. Task definition list has only " << list->size() << " entries.";
         return QVariant();
-    }        
+    }
 
     return list->at(field);
 }
@@ -1360,7 +1360,7 @@ void SimulationManager::setDefaultTaskData(TaskDefinition::ETaskType type, int f
     {
         LOG_ERROR() << "Field id " << field << " out of range. Task definition list has only " << list->size() << " entries.";
         return;
-    }        
+    }
 
     list->replace(field, value);
 }
@@ -1375,8 +1375,8 @@ void SimulationManager::unlockIncludePaths()
     mIncludePathsMutex.unlock();
 }
 
-void SimulationManager::createIncludeFileContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers, 
-    QObject* signalTarget, const char* slot, const QStringList& includePaths, const QStringList& includeFiles, 
+void SimulationManager::createIncludeFileContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers,
+    QObject* signalTarget, const char* slot, const QStringList& includePaths, const QStringList& includeFiles,
     const QStringList& filters, bool absolute)
 {
     QMenu* submenu;
@@ -1387,7 +1387,7 @@ void SimulationManager::createIncludeFileContextMenu(QMenu* menu, std::vector<Na
     for (auto it = includePaths.begin(); it != includePaths.end(); it++)
     {
         submenu = menu->addMenu(*it);
-    
+
         //Add gile paths to list
         QStringList files;
         findFiles(files, QStringList(*it), QStringList(), filters, absolute);
@@ -1399,12 +1399,12 @@ void SimulationManager::createIncludeFileContextMenu(QMenu* menu, std::vector<Na
             connect(receiver, SIGNAL(actionReceived(const QString&)), signalTarget, slot);
         }
     }
-    
+
     //Add single include files
     if (includeFiles.size() > 0)
     {
         submenu = menu->addMenu(tr("Single include files"));
-        
+
         for (auto it = includeFiles.begin(); it != includeFiles.end(); it++)
         {
             receiver = new NamedActionReceiver(*it);
@@ -1415,7 +1415,7 @@ void SimulationManager::createIncludeFileContextMenu(QMenu* menu, std::vector<Na
     }
 }
 
-void SimulationManager::createScriptContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers, QObject* signalTarget, 
+void SimulationManager::createScriptContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers, QObject* signalTarget,
     const char* slot, bool absolute)
 {
     lockIncludePaths();
@@ -1429,7 +1429,7 @@ void SimulationManager::createScriptContextMenu(QMenu* menu, std::vector<NamedAc
     createIncludeFileContextMenu(menu, actionReceivers, signalTarget, slot, includeDirs, includeFiles, filters, absolute);
 }
 
-void SimulationManager::createExecutableContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers, QObject* signalTarget, 
+void SimulationManager::createExecutableContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers, QObject* signalTarget,
     const char* slot, bool absolute)
 {
     lockIncludePaths();
@@ -1487,7 +1487,7 @@ void SimulationManager::loadDefaultSettings()
     #endif
 
     mDefaultServerThreadData.clear();
-    mDefaultServerThreadData.push_back("Server");                       //name 
+    mDefaultServerThreadData.push_back("Server");                       //name
     mDefaultServerThreadData.push_back((int)QThread::InheritPriority);  //priority
     mDefaultServerThreadData.push_back("");                             //executable
     mDefaultServerThreadData.push_back("sparkgui" + dotScriptSuffix);   //main script
@@ -1496,7 +1496,7 @@ void SimulationManager::loadDefaultSettings()
     mDefaultServerThreadData.push_back(QStringList());                  //parameters
 
     mDefaultPluginThreadData.clear();
-    mDefaultPluginThreadData.push_back("Plugin");                       //name 
+    mDefaultPluginThreadData.push_back("Plugin");                       //name
     mDefaultPluginThreadData.push_back((int)QThread::InheritPriority);  //priority
     mDefaultPluginThreadData.push_back("");                             //class
     mDefaultPluginThreadData.push_back("");                             //caption
@@ -1504,7 +1504,7 @@ void SimulationManager::loadDefaultSettings()
     mDefaultPluginThreadData.push_back(QStringList());                  //parameters
 
     mDefaultProcessData.clear();
-    mDefaultProcessData.push_back("Process");                           //name 
+    mDefaultProcessData.push_back("Process");                           //name
     mDefaultProcessData.push_back((int)QThread::InheritPriority);       //priority
     mDefaultProcessData.push_back("rcssagent3d" + dotExecutableSuffix); //executable
     mDefaultProcessData.push_back("");                                  //main script
@@ -1513,7 +1513,7 @@ void SimulationManager::loadDefaultSettings()
     mDefaultProcessData.push_back(QStringList());                       //parameters
 
     mDefaultSparkProcessData.clear();
-    mDefaultSparkProcessData.push_back("SparkProcess");                        //name 
+    mDefaultSparkProcessData.push_back("SparkProcess");                        //name
     mDefaultSparkProcessData.push_back((int)QThread::InheritPriority);         //priority
     mDefaultSparkProcessData.push_back("rcssmonitor3d" + dotExecutableSuffix); //executable
     mDefaultSparkProcessData.push_back("");                                    //main script
@@ -1672,7 +1672,7 @@ bool SimulationManager::removeSimulationSetup(int index, bool askDelete, bool re
         QFileInfo info(mSetupList.at(index)->getFileName());
         QDir dir = info.absoluteDir();
         QString file = info.fileName();
-        
+
         if (!info.exists())
         {
             //Setup has no file definition, skip
@@ -1694,7 +1694,7 @@ bool SimulationManager::removeSimulationSetup(int index, bool askDelete, bool re
 
     //Erase from list
     mSetupList.erase(mSetupList.begin()+index);
-   
+
     emit setupListEntryRemoved(index);
     if (!mReloadingSetups)
         emit setupListSingleEntryRemoved(index);
@@ -1711,15 +1711,15 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupByDialog(bool 
     }
 
     //currently initialized setup. Const for this field is only meant to prevent plugins from changing the setup. As long as the changes are checked access is ok.
-    shared_ptr<SimulationSetup> setup(mSimulation->getSetup()); 
+    shared_ptr<SimulationSetup> setup(mSimulation->getSetup());
 
     QString startingDirectory = setup->getFileName();
-        
+
     //Specify the file, a new name & a new caption
     DefineSetupDialog setupdialog;
     setupdialog.setFile(startingDirectory);
     setupdialog.setName(setup->getName());
-    
+
     setupdialog.setWindowTitle(tr("Save current simulation state"));
     setupdialog.setToolTip(tr("Saves the state of the current Simulation as a simulation setup save file."));
 
@@ -1749,7 +1749,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupByDialog(bool 
         }
 
         checkFirst = false;
-        
+
         int index = getSetupIndexByFilePath(targetfile);
         if (index != -1)
         {
@@ -1786,7 +1786,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupByDialog(bool 
             return savedSetup;
         }
     }
-    
+
     return shared_ptr<SimulationSetup>();
 }
 
@@ -1804,7 +1804,7 @@ bool SimulationManager::loadSimulationSetupByDialog(bool loadFromSavePath, bool 
             lastDirectory = mSetupList.at(lastIndex)->getFileName();
     }
 
-    QFileDialog dialog((QWidget*)mParent->getWindowManager()->getMainWindow(), tr("Load setup from file."), 
+    QFileDialog dialog((QWidget*)mParent->getWindowManager()->getMainWindow(), tr("Load setup from file."),
         lastDirectory, mDefaultSetupExtensionText);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setLabelText(QFileDialog::Accept, tr("Load"));
@@ -2019,7 +2019,7 @@ bool SimulationManager::loadPluginDefinitions(QDomElement& element, SimulationSe
                         attachmentCount++;
                     }
                 }
-                
+
                 if (!e.hasAttribute("parameter"))
                     parameterValue = "";
                 else
@@ -2144,8 +2144,8 @@ bool SimulationManager::loadPluginDefinitions(QDomElement& element, SimulationSe
         //Search next node
         n = n.nextSibling();
     }
-  
-    return true; 
+
+    return true;
 }
 
 bool SimulationManager::loadTaskDefinitions(QDomElement& element, SimulationSetup::TTaskDefinitions& target, const QString& msg)
@@ -2195,7 +2195,7 @@ bool SimulationManager::loadTaskDefinitions(QDomElement& element, SimulationSetu
             }
             else
                 name = nameAttr.value();
-            
+
             //Priority
             QDomAttr priorityAttr = e.attributeNode("priority");
             QThread::Priority priority;
@@ -2369,7 +2369,7 @@ bool SimulationManager::loadTaskDefinitions(QDomElement& element, SimulationSetu
                 }
                 else
                 {
-                    LOG_WARNING() << msg << "Illegal task child node " << child.nodeName() << 
+                    LOG_WARNING() << msg << "Illegal task child node " << child.nodeName() <<
                         ". Expected 'firstlist' or 'scripts' for a first list and 'secondlist' or 'parameters' as second list.";
                 }
 
@@ -2393,7 +2393,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(Simu
     return saveSimulationSetupProtected(ptr, err, directOverwrite, rememberPath);
 }
 
-shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boost::shared_ptr<SimulationSetup> setup, int& err, bool directOverwrite, bool rememberPath)                                           
+shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boost::shared_ptr<SimulationSetup> setup, int& err, bool directOverwrite, bool rememberPath)
 {
     bool overwrite = false;
     bool create = false;
@@ -2410,7 +2410,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boos
     if (setup->getFileName().compare("") == 0)
     {
         bool chose = chooseFile(*setup, false);
-        if (!chose) 
+        if (!chose)
         {
             err = 2;
             return shared_ptr<SimulationSetup>();
@@ -2432,7 +2432,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boos
             err = 1;
             shared_ptr<SimulationSetup>();
         }
-        
+
         file.close();
         info = QFileInfo(path);
 
@@ -2443,7 +2443,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boos
             return shared_ptr<SimulationSetup>();
         }
     }
-    
+
     if (!info.isReadable())
     {
        LOG_ERROR() << msg << "Path " << path << " is not readable.";
@@ -2464,7 +2464,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boos
     if (containsSetupIncludePath(setup->getFileName()))
     {
         int index = getSetupIndexByFilePath(setup->getFileName());
-        
+
         if (index != -1)
         {
             //Overwriting an existing setup in the list, if saving succeeds, update it and return it later
@@ -2488,7 +2488,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boos
     else
     {
         LOG_DEBUG() << msg << "Opened temporary Simulation Setup file for setup " << path << ".";
-    }   
+    }
 
     //Create document
     QDomDocument setupDocument;
@@ -2526,7 +2526,7 @@ shared_ptr<SimulationSetup> SimulationManager::saveSimulationSetupProtected(boos
     if (file.error())
     {
         LOG_ERROR() << msg << "Error while writing to temporary setup file: " << file.errorString();
-        
+
         saveThis = false;
     }
 
@@ -2618,13 +2618,13 @@ bool SimulationManager::saveTaskDefinitions(QDomDocument& doc, QDomElement& elem
         node.setAttribute("second", def->getSecond());
         //Secondary Script
         node.setAttribute("third", def->getThird());
-        
+
         //Additional Scripts
         if (def->getFirstList().size() > 0)
         {
             QDomElement scripts = doc.createElement("firstlist");
             node.appendChild(scripts);
-        
+
             for (auto script_it = def->getFirstList().begin(); script_it != def->getFirstList().end(); script_it++)
             {
                 //Add a script
@@ -2640,7 +2640,7 @@ bool SimulationManager::saveTaskDefinitions(QDomDocument& doc, QDomElement& elem
         {
             QDomElement parameters = doc.createElement("secondlist");
             node.appendChild(parameters);
-        
+
             for (auto param_it = def->getSecondList().begin(); param_it != def->getSecondList().end(); param_it++)
             {
                 //Add a script
@@ -2780,7 +2780,7 @@ bool SimulationManager::addIncludeDirectory(const QString& path)
         mIncludePathsMutex.unlock();
         return false;
     }
-    
+
     mSetupIncludeDirectories.push_back(path);
     mIncludePathsMutex.unlock();
 
@@ -3023,7 +3023,7 @@ void SimulationManager::cleanup()
     static QMutex cleanupMutex;
     cleanupMutex.lock();
 
-    if (mClosed) 
+    if (mClosed)
     {
         cleanupMutex.unlock();
         return;

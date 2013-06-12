@@ -62,7 +62,7 @@ public:
     typedef std::vector<boost::shared_ptr<TaskDefinition>> TTaskDefinitions;
 
     /*!
-     \brief Identification for the data fields of a simulation setup. 
+     \brief Identification for the data fields of a simulation setup.
 
      Used to emit dataChanged() whenever a data field was added directly.
     */
@@ -233,11 +233,11 @@ public:
      \param addplugin reference to definition
      \return pointer to inserted definition or null pointer
     */
-    boost::shared_ptr<PluginDefinition> insertAddPlugin(PluginDefinition& addplugin);
+    boost::shared_ptr<PluginDefinition> insertAddPlugin(const PluginDefinition& addplugin);
     /*!
      \brief Insert a plugin definition to add list.
 
-     The plugin definition is NOT copied and the given shared pointer is simply stored in the add list. 
+     The plugin definition is NOT copied and the given shared pointer is simply stored in the add list.
 
      \param addplugin definition to add
      \return false if the definition could not be added (e.g. it was illegal)
@@ -252,11 +252,11 @@ public:
      \param removeplugin reference to definition
      \return pointer to inserted definition or null pointer
     */
-    boost::shared_ptr<PluginDefinition> insertRemovePlugin(PluginDefinition& removeplugin);
+    boost::shared_ptr<PluginDefinition> insertRemovePlugin(const PluginDefinition& removeplugin);
     /*!
      \brief Insert a plugin definition to remove list.
 
-     The plugin definition is NOT copied and the given shared pointer is simply stored in the remove list. 
+     The plugin definition is NOT copied and the given shared pointer is simply stored in the remove list.
 
      \param removeplugin definition to add
      \return false if the definition could not be added (e.g. it was illegal)
@@ -271,7 +271,7 @@ public:
      \param task reference to definition
      \return pointer to inserted definition or null pointer
     */
-    boost::shared_ptr<TaskDefinition> insertTask(TaskDefinition& task);
+    boost::shared_ptr<TaskDefinition> insertTask(const TaskDefinition& task);
     /*!
      \brief Insert list of plugin definitions to add list.
 
@@ -442,7 +442,7 @@ public slots:
     //public slots
 
     /*!
-     \brief Emits dataChanged. 
+     \brief Emits dataChanged.
 
      SD_UNDEFINED is used to inform that every field has or might have changed.
     */

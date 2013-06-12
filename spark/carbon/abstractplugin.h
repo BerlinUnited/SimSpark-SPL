@@ -30,9 +30,9 @@
  */
 
 #include "plugintype.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <vector>
 #include <QString>
@@ -55,7 +55,7 @@ class Carbon;
 
   <b>Usage:</b>\n
   Define one or more plugin classes derived from Plugin, SignalPlugin or AttachableFrame.
-  Register the plugins in the plugin factory as plugins ready to be exported using REGISTER_EXPORT_PLUGIN, REGISTER_EXPORT_SIGNALPLUGIN, or 
+  Register the plugins in the plugin factory as plugins ready to be exported using REGISTER_EXPORT_PLUGIN, REGISTER_EXPORT_SIGNALPLUGIN, or
   REGISTER_EXPORT_FRAME.
   In a separate export header file, use PLUGINS_EXPORT_BEGIN and PLUGINS_EXPORT_END to export the plugins with PLUGIN_EXPORT.
   Using the export macros in a file with a Qt derived file (a file that will be parsed by the qt meta object compiler) won't work.
@@ -81,7 +81,7 @@ class Carbon;
 
   <b>Usage:</b>\n
   Define one or more plugin classes derived from Plugin, SignalPlugin or AttachableFrame.
-  Register the plugins in the plugin factory as plugins ready to be exported using REGISTER_EXPORT_PLUGIN, REGISTER_EXPORT_SIGNALPLUGIN, or 
+  Register the plugins in the plugin factory as plugins ready to be exported using REGISTER_EXPORT_PLUGIN, REGISTER_EXPORT_SIGNALPLUGIN, or
   REGISTER_EXPORT_FRAME.
   In a separate export header file, use PLUGINS_EXPORT_BEGIN and PLUGINS_EXPORT_END to export the plugins with PLUGIN_EXPORT.
   Using the export macros in a file with a Qt derived file (a file that will be parsed by the qt meta object compiler) won't work.
@@ -102,13 +102,13 @@ class Carbon;
 
   <b>Usage:</b>\n
   Define one or more plugin classes derived from Plugin, SignalPlugin or AttachableFrame.
-  Register the plugins in the plugin factory as plugins ready to be exported using REGISTER_EXPORT_PLUGIN, REGISTER_EXPORT_SIGNALPLUGIN, or 
+  Register the plugins in the plugin factory as plugins ready to be exported using REGISTER_EXPORT_PLUGIN, REGISTER_EXPORT_SIGNALPLUGIN, or
   REGISTER_EXPORT_FRAME.
   In a separate export header file, use PLUGINS_EXPORT_BEGIN and PLUGINS_EXPORT_END to export the plugins with PLUGIN_EXPORT.
   Using the export macros in a file with a Qt derived file (a file that will be parsed by the qt meta object compiler) won't work.
 
   The main application will call the export function defined by the plugins GUI_PLUGIN, GUI_SIGNALPLUGIN or GUI_FRAME macro.
-  This will export the plugin to the main applications plugin factory with the library name and (incremented) class id given by the 
+  This will export the plugin to the main applications plugin factory with the library name and (incremented) class id given by the
   main application.
 */
 #define PLUGIN_EXPORT(CLASS)\
@@ -163,7 +163,7 @@ class Carbon;
 
  Plugins that are called by other plugins are called immediately in the callers thread. Plugins that run indefinitely will cause the calling thread to freeze.
  Plugins and SignalPlugins can be started in PluginThreads of a Simulation. An endless loop in a plugin started in another thread naturally wont freeze the other threads.
- 
+
  If your derived plugin is not meant to be called by the main thread or other plugins directly, set the execution type with setExecutionType(ET_LOOP).
  If your derived plugin is only meant to be called by the main thread or other plugins directly, set the execution type with setExecutionType(ET_ONCE).
  Otherwise the PluginManager will allow any execution of the Plugin (ET_ANY).
@@ -201,7 +201,7 @@ public:
      \brief Plugin class information fields.
 
      Can be set by any plugin instance to specify class properties.
-     Every plugin info id is converted to a unique string when loading or saving class data. 
+     Every plugin info id is converted to a unique string when loading or saving class data.
      This string is used as a string to save the class info with in the global settings object.
     */
     enum EPluginInfo
@@ -374,8 +374,8 @@ public:
     */
     virtual bool run() = 0;
     /*!
-     \brief Stop function to stop a plugin executed in another thread. 
-     
+     \brief Stop function to stop a plugin executed in another thread.
+
      The function is called when the plugin is executed in another thread and is requested to stop its execution as soon as possible. The Thread will notice that the
      plugin is stopped when it returns from its run() function.
 
@@ -386,8 +386,8 @@ public:
     virtual bool stop() = 0;
     /*!
      \brief Pause function to pause a plugin executed in another thread.
-     
-     The function is called when the plugin is executed in another thread and is requested to pause or unpause its execution until the next time pause(), 
+
+     The function is called when the plugin is executed in another thread and is requested to pause or unpause its execution until the next time pause(),
      stop() or run() is call. Plugins executed in the main thread are expected to only take fractions of a second of time so pause() is not needed and wont be called.
 
      The EExecutionType of the plugin specifies if it can be executed from the main thread and plugins, from another thread or not at all.
@@ -397,9 +397,9 @@ public:
     virtual bool pause(bool state) = 0;
     /*!
      \brief Restart function to stop and start a plugin executed in another thread.
-     
+
      The function is called when the plugin is executed in another thread and is requested to stop and restart its execution.
-     Plugins executed in the main thread are expected to only take fractions of a second of time so restart() is not needed and wont be called. Instead reoccurring calls 
+     Plugins executed in the main thread are expected to only take fractions of a second of time so restart() is not needed and wont be called. Instead reoccurring calls
      all use run().
 
      The EExecutionType of the plugin specifies if it can be executed from the main thread and plugins, from another thread or not at all.
@@ -454,7 +454,7 @@ public:
     /*!
       \brief Returns the Carbon registered to the plugin class.
 
-      When plugins are exported from shared libraries the Carbon of the application is registered to the plugin so access to the static Carbon 
+      When plugins are exported from shared libraries the Carbon of the application is registered to the plugin so access to the static Carbon
       instance can be done in the plugin class.
     */
     Carbon* getCarbon();
@@ -522,7 +522,7 @@ protected:
 
     /*!
      \brief Specifies if the plugin is an extension.
-     
+
      Is called and should only be called by the PluginManager!
     */
     void setIsExtension(bool extension);
@@ -573,7 +573,7 @@ public:
      \param maxInstanceCount maximum amount of instances of this plugin allowed at a time
      \param library name of the library the plugin class was loaded from (empty for built-in plugins)
     */
-    AbstractPluginInstantiator(int classId, const QString& name, const QString& caption, EPluginType type, 
+    AbstractPluginInstantiator(int classId, const QString& name, const QString& caption, EPluginType type,
         int maxInstanceCount, const char* library);
     /*!
      \brief Basic destructor.

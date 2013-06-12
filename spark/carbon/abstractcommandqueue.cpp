@@ -20,7 +20,7 @@
 
 #include "abstractcommandqueue.h"
 #include "abstractcommand.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 //--------------------------------------------------------------
 // Constructor

@@ -19,7 +19,7 @@
 */
 
 #include "libraryloader.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 #include "pluginmanager.h"
 #include "carbon.h"
 

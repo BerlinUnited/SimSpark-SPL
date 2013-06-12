@@ -28,8 +28,8 @@
 #include <QString>
 
 #include "sparkpropertycontrol.h"
-#include <zeitgeist\class.h>
-#include <zeitgeist\leaf.h>
+#include <zeitgeist/class.h>
+#include <zeitgeist/leaf.h>
 
 namespace zeitgeist
 {

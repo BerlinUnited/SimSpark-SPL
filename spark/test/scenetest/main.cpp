@@ -11,7 +11,7 @@ using namespace std;
 using namespace zeitgeist;
 
 //! the Zeitgeist context we are using
-shared_ptr<CoreContext> gContext;
+boost::shared_ptr<CoreContext> gContext;
 
 //
 // Input constant mappings
@@ -30,7 +30,7 @@ static const int        gCmdBackward    = 0x26;
 
 //! font to display name entered
 // "Font" is ambiguously declared (also in X somewhere), so use namespace
-shared_ptr<kerosin::Font>        gFont;
+boost::shared_ptr<kerosin::Font>        gFont;
 
 /*!
         The main initialization function. It performs the following tasks:
@@ -44,7 +44,7 @@ shared_ptr<kerosin::Font>        gFont;
 static bool init()
 {
         // run initialization scripts
-        shared_ptr<ScriptServer> scriptServer = static_pointer_cast<ScriptServer>(gContext->Get("/sys/server/script"));
+        boost::shared_ptr<ScriptServer> scriptServer = static_pointer_cast<ScriptServer>(gContext->Get("/sys/server/script"));
         scriptServer->Run("script/init.rb");
         // publish our commands to the scripts
         scriptServer->CreateVariable("Command.Quit",            gCmdQuit);
@@ -64,7 +64,7 @@ static bool init()
         scriptServer->Run("script/scenetest.rb");
 
         // load font
-        shared_ptr<FontServer> fontServer = static_pointer_cast<FontServer>(gContext->Get("/sys/server/font"));
+        boost::shared_ptr<FontServer> fontServer = static_pointer_cast<FontServer>(gContext->Get("/sys/server/font"));
         gFont = fontServer->GetFont("font/andalemo.ttf");
 
         return true;
@@ -77,11 +77,11 @@ static float processInput()
         float deltaTime = 0.0f;
 
         // retrieve the input server
-        shared_ptr<InputServer> inputServer = static_pointer_cast<InputServer>(gContext->Get("/sys/server/input"));
+        boost::shared_ptr<InputServer> inputServer = static_pointer_cast<InputServer>(gContext->Get("/sys/server/input"));
         // retrieve the script server
-        shared_ptr<ScriptServer> scriptServer = static_pointer_cast<ScriptServer>(gContext->Get("/sys/server/script"));
+        boost::shared_ptr<ScriptServer> scriptServer = static_pointer_cast<ScriptServer>(gContext->Get("/sys/server/script"));
 
-        shared_ptr<FPSController> fpsController = static_pointer_cast<FPSController>(gContext->Get("/usr/scene1/camera0/_body/fps"));
+        boost::shared_ptr<FPSController> fpsController = static_pointer_cast<FPSController>(gContext->Get("/usr/scene1/camera0/_body/fps"));
     // Process incoming input
         Input input;
         while (inputServer->GetInput(input))
@@ -90,7 +90,7 @@ static float processInput()
                 {
                         case gCmdQuit:
                                 {
-                                        shared_ptr<OpenGLServer> openglServer = static_pointer_cast<OpenGLServer>(gContext->Get("/sys/server/opengl"));
+                                        boost::shared_ptr<OpenGLServer> openglServer = static_pointer_cast<OpenGLServer>(gContext->Get("/sys/server/opengl"));
                                         openglServer->Quit();
                                 }
                                 break;
@@ -154,7 +154,7 @@ static void renderFrame(float deltaTime)
                 sceneServer->Render();
         }
 #else
-    shared_ptr<RenderServer> renderServer =
+    boost::shared_ptr<RenderServer> renderServer =
         static_pointer_cast<RenderServer>(gContext->Get("/sys/server/scene"));
     if (renderServer)
     {
@@ -174,7 +174,7 @@ static void update()
         // process the input events, which have occured
         float deltaTime = processInput();
 
-        shared_ptr<SceneServer> sceneServer = static_pointer_cast<SceneServer>(gContext->Get("/sys/server/scene"));
+        boost::shared_ptr<SceneServer> sceneServer = static_pointer_cast<SceneServer>(gContext->Get("/sys/server/scene"));
         if (sceneServer.get() != NULL)
         {
                 sceneServer->Update(deltaTime);
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
         // retrieve shared ptr to the OpenGL Server ... this represents the OpenGL
         // context the application runs in, as well as the window
-        shared_ptr<OpenGLServer> openglServer = static_pointer_cast<OpenGLServer>(gContext->Get("/sys/server/opengl"));
+        boost::shared_ptr<OpenGLServer> openglServer = static_pointer_cast<OpenGLServer>(gContext->Get("/sys/server/opengl"));
         if (openglServer.get() == NULL)
         {
                 gContext->GetCore()->GetLogServer()->Error() << "ERROR: Can't locate OpenGLServer ..." << endl;
@@ -225,7 +225,7 @@ int main(int argc, char **argv)
         // we have to make sure, the inputServer is shut down before the opengl server,
         // as the opengl server shuts down SDL ... this will conflict with the input
         // server
-        shared_ptr<InputServer> inputServer = static_pointer_cast<InputServer>(gContext->Get("/sys/server/input"));
+        boost::shared_ptr<InputServer> inputServer = static_pointer_cast<InputServer>(gContext->Get("/sys/server/input"));
         inputServer->Unlink();
 
         // average FPS
