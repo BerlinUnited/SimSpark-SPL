@@ -26,13 +26,13 @@
  * \brief Contains SoccerControlFrameUtil::SoccerCommand and derived command classes.
  */
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <isimcontrol.h>
-#include <cutelogger\logger.h>
+#include <cutelogger/logger.h>
 #include <sparkcommands.h>
 
-#include <soccer\soccertypes.h>
+#include <soccer/soccertypes.h>
 
 class SparkController;
 class GameStateAspect;

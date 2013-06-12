@@ -214,7 +214,7 @@ f_inline bool gIsNan(TYPE f)
 #ifdef WIN32
     return _isnan(static_cast<double>(f)) != 0;
 #else
-    return std::isnan<TYPE>(f);
+    return std::isnan(f);
 #endif
 }
 

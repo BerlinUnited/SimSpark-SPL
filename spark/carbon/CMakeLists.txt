@@ -6,6 +6,7 @@ set(carbon_QOBJECT_HEADERS
     simulationprocess.h
     simulationmanager.h
     serverthread.h
+    signalplugin.h
     simulationsetup.h
     simulation.h
     simulationthread.h
@@ -281,7 +282,7 @@ include_directories(
 	${OPENGL_INCLUDE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR}) #intermediate directory
 
-add_library(carbon STATIC
+add_library(carbon 
 	${carbon_SOURCES} 
 	${carbon_QOBJECT_HEADERS_MOC}
 	${carbon_HEADERS}
@@ -289,7 +290,7 @@ add_library(carbon STATIC
 	${carbon_RESOURCES_RCC}
 	)
 
-target_link_libraries(carbon 
+target_link_libraries(carbon
 	${FREETYPE_LIBRARIES} 
 	${IL_LIBRARIES}
     ${OPENGL_LIBRARIES} 

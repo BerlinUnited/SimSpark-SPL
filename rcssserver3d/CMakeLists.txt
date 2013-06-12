@@ -46,7 +46,7 @@ include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
 link_directories(${Boost_LIBRARY_DIRS})
 
 if (UNIX)
-  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} CACHE
+  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} "--std=gnu++11" CACHE
         STRING "Common C++ compiler flags" FORCE)
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual" CACHE
         STRING "C++ compiler flags for Debug builds" FORCE)

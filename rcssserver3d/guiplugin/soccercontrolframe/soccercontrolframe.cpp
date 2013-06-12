@@ -36,17 +36,17 @@
 #include <settings.h>
 
 //SimSpark
-#include <oxygen\gamecontrolserver\gamecontrolserver.h>
-#include <zeitgeist\leaf.h>
+#include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <zeitgeist/leaf.h>
 
 //Soccer
-#include "soccer\gamestateaspect\gamestateaspect.h"
-#include "soccer\soccerruleaspect\soccerruleaspect.h"
-#include "soccer\ballstateaspect\ballstateaspect.h"
-//#include <agentstate\agentstate.h>
+#include "soccer/gamestateaspect/gamestateaspect.h"
+#include "soccer/soccerruleaspect/soccerruleaspect.h"
+#include "soccer/ballstateaspect/ballstateaspect.h"
+//#include <agentstate/agentstate.h>
 
 //Boost
-#include <boost\make_shared.hpp>
+#include <boost/make_shared.hpp>
 
 //Qt
 #include <QValidator>

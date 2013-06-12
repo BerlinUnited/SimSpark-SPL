@@ -31,11 +31,11 @@
 #include "isimcontrol.h"
 #include "sparkcommandqueue.h"
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <QObject>
 #include <QTimer>
 
-#include <soccer\soccertypes.h>
+#include <soccer/soccertypes.h>
 
 class ServerThread;
 class SimSpark;
