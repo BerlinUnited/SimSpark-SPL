@@ -119,6 +119,9 @@ public:
     /** sets the game running state (paused or not) */
     void SetPaused(bool paused);
 
+    /** swaps the team index (side) of current teams */
+    void SwapTeamIndexes();
+
 protected:
     /** setup the init positions for the agents */
     virtual void OnLink();
@@ -152,6 +155,13 @@ protected:
     */
     TTeamIndex GetTeamIndex(const std::string& teamName);
 
+    /**
+     * @param[in] idx the team index
+     * @return the internal index used for indexing variables storing data
+     * about teams. If idx is TI_NONE, it will return -1
+     */
+    int GetInternalIndex(TTeamIndex idx) const;
+
 protected:
     /** the current play mode */
     TPlayMode mPlayMode;
@@ -176,6 +186,10 @@ protected:
 
     /** the team that has to start the next half */
     TTeamIndex mNextHalfKickOff;
+
+    /** the internal index for a team, since its TTeamIndex might change in
+     * the second half */
+    int mInternalIndex[3];
 
     /** the names of the two teams */
     std::string mTeamName[2];

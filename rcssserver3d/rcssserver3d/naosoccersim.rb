@@ -56,7 +56,7 @@ addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
 
 addSoccerVar('AutomaticQuit', false)
-addSoccerVar('ChangeSidesInSecondHalf', true)
+addSoccerVar('ChangeSidesInSecondHalf', false)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)

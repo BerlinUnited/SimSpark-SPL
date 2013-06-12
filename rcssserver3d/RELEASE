@@ -41,6 +41,9 @@ is added and two sample types are provided.
   by Patrick)
   - A player can kick the ball in kickoff if there are only 2 players in
   the field to support current penalty mode.
+  - Fixed bugs in goal counting when changing team sides in the second half.
+  Now, this feature should work fine. However, it is disabled by default now
+  since we don't use it currently in the competitions.
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/
