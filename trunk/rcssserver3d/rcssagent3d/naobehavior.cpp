@@ -64,7 +64,7 @@ void NaoBehavior::SetupJointIDMap()
     mJointIDMap["raj4"]     = JID_RARM_4;
 }
 
-std::string gJointEff_2_Str[] = 
+std::string gJointEff_2_Str[] =
 {
 "he1",
 "he2",
@@ -106,7 +106,7 @@ string NaoBehavior::Init()
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return
-        "(scene rsg/agent/nao/nao.rsg)";
+        "(scene rsg/agent/nao/nao_hetero.rsg 0)";
 }
 
 void NaoBehavior::ParseHingeJointInfo(const oxygen::Predicate& predicate)
@@ -178,7 +178,7 @@ void NaoBehavior::ParseUniversalJointInfo(const oxygen::Predicate& predicate)
     {
         cerr << "(NaoBehavior) could not parse universal joint angle2!" << endl;
         return;
-    }   
+    }
     // try to read axis2 rate
 
     // update the map
@@ -193,7 +193,7 @@ void NaoBehavior::ParseHearInfo(const oxygen::Predicate& predicate)
     double heartime;
     string sender;
     string message;
-    
+
     Predicate::Iterator iter(predicate);
 
     if (! predicate.AdvanceValue(iter, heartime))
@@ -202,7 +202,7 @@ void NaoBehavior::ParseHearInfo(const oxygen::Predicate& predicate)
         return;
     }
 
-    
+
     if (! predicate.AdvanceValue(iter, sender))
     {
         cerr << "could not get sender \n";
@@ -226,7 +226,7 @@ void NaoBehavior::ParseHearInfo(const oxygen::Predicate& predicate)
              << " me said " << message << " at " << heartime << endl;
     }
     return;
-    
+
 }
 
 
@@ -264,7 +264,7 @@ string NaoBehavior::Think(const std::string& message)
             const Predicate& predicate = (*iter);
 
             switch(predicate.name[0])
-            { 
+            {
             case 'H': // hinge joint (HJ)
                 ParseHingeJointInfo(predicate);
                 break;
@@ -292,10 +292,10 @@ string NaoBehavior::Think(const std::string& message)
         break;
 
     case S_Sit:
-        if (mCounter > 40) 
-        { 
-            mCounter = 0; 
-            mState = S_SwingLeft; 
+        if (mCounter > 40)
+        {
+            mCounter = 0;
+            mState = S_SwingLeft;
             ss << "(lae1 0)"
                << "(rae1 0)"
                << "(lae2 0)"
@@ -326,8 +326,8 @@ string NaoBehavior::Think(const std::string& message)
            << "(rae3 0)"
            << "(lae4 -0.8)"
            << "(rae4 0.8)"
-           << "(lle3 1)" 
-           << "(rle3 1)" 
+           << "(lle3 1)"
+           << "(rle3 1)"
            << "(lle4 -2)"
            << "(rle4 -2)"
            << "(lle5 1)"
@@ -350,7 +350,7 @@ string NaoBehavior::Think(const std::string& message)
     mCounter++;
 
     if (mCounter % 10 == 0) ss << "(say ComeOn!)";
-    
+
     //std::cout << "Sent: " << ss.str() << "\n";
     return ss.str();
 }
