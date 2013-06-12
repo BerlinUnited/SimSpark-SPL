@@ -1,3 +1,10 @@
+2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	* CMakeLists.txt:
+	- final changes for 0.2.4 release
+	 
 2012-11-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/sceneeffector/sceneaction.h: 
