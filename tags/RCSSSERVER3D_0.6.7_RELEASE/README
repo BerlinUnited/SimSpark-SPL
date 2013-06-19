@@ -1,0 +1,38 @@
+rcssserver3d-0.6 README
+
+Please see doc/users/user-manual.pdf and NEWS.
+
+General Information
+
+rcssserver3d is a 3D soccer simulation server running on top of simspark
+simulation system. 
+The simspark simulation system was created with a specific simulation in mind,
+that is a 3D physical soccer simulation for RoboCup Simulation
+league. To this end, this distribution contains a set of plugins for
+RoboCup Soccer Simulation League. The soccer simulator can be found
+in the ./simspark subdirectory.
+
+If you installed rcssserver3D-0.x before, make sure to clean
+the ~/.rcssserver3d/ directory prior to using the new version. Also
+better remove the old installed libraries in /usr/local/lib/
+rcssserver3D manually. Sorry for this inconvenience.
+
+Package Overview
+
+The different parts of this package are organized in different
+directories as follows:
+
+./simspark        The soccer simulator.                              
+./rcssmonitor3d   A simple monitor that displays agents connected to 
+                  the simulator.                                     
+./rcssagent3d     A 'hello world' agent (does nothing very useful,   
+                  moves some parts of its body).                              
+./plugin          directory containing plugins to extend the         
+                  simulator with soccer related features
+./data            contains data files needed by the above applications                              
+                                                                     
+
+---------------------------------------------------------------------
+
+Oliver Obst
+Last modified: Thu Jan 29 00:51 IRDT 2009 (By Hedayat Vatankhah)
