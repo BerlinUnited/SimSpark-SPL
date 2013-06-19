@@ -12,7 +12,7 @@ check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 
 if (WIN32)
-  set(Boost_USE_STATIC_LIBS        ON)
+  set(Boost_USE_STATIC_LIBS        OFF)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME    OFF)
 

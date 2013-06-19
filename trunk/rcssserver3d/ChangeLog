@@ -1,3 +1,13 @@
+2013-06-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccermonitor/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	- link boost libraries
+	
+	* CMakeLists.txt: 
+	* cmake/AdditionalSearchPaths.cmake: 
+	- support cross-compiling from multiple root dirs
+
 2013-06-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 
