@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>How to implement a Perceptor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="highlight.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<p><font size="6"><i><b>How to implement a Perceptor</b></i></font></p>
+<p><font size="4">In this HowTo we will focus on creating a perceptor. A perceptor 
+  allows an agent aspect to perceive the virtual world it lives in. Given the 
+  technology presented in the previous HowTos about class objects and scripting, 
+  implementing a Perceptor is very simple. All Perceptors are derived from the 
+  Kerosin::Perceptor class (source files located under lib/kerosin/agentaspect). 
+  They have to implement a single function: Percept(). We will now take a short 
+  look at a Perceptor which has been implemented as part of the framework. It 
+  is called VisionPerceptor. Let's take a look at the signature of the Percept() 
+  function: </font></p>
+<pre><span class="key">typedef </span>std::hash_map&lt;std::string, boost::any&gt; TDictionary;
+
+<span class="key">virtual </span><span class="typ">bool </span>Percept(TDictionary &amp;dictionary) = <span class="num">0</span>;
+</pre>
+<p><font size="4">We need a generic interface for this function, which would allow 
+  every possible Perceptor to be implemented. For generality, we chose the following 
+  interface. Every Percept() function accepts a TDictionary, which maps a string 
+  to an 'any' type. If the Percept() function returns some valid data in the dictionary, 
+  it returns true, else false. The agent code using the Perceptor can then query 
+  the TDictionary for certain results. Every Perceptor should clearly describe 
+  which properties it returns, and which type is associated with the property. 
+  For example, the VisionPerceptor says, that it returns a property named 'visibleObjects' 
+  with the type of TLeafList (see visionperceptor.h). A TLeafList is just a bunch 
+  of nodes in the object hierarchy. The agent using the VisionPerceptor knows 
+  how to deal with this. If Percept() returns true, it knows that the 'visibleObjects' 
+  property in TDictionary contains a TLeafList of visible objects. It then accesses 
+  the dictionary and casts the property to the correct type. So, implementing 
+  a custom Perceptor is easy. One just has to derive from the Perceptor class 
+  and implement the Percept() function. First, the necessary outputs should be 
+  identified. These conditions should then be checked internally in the Percept() 
+  function and returned to the caller where appropriate.</font></p>
+</body>
+</html>
+

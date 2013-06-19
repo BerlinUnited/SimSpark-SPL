@@ -1,0 +1,13 @@
+RELEASE News of simspark-0.2.4
+
+Simspark 0.2.4 is ready. This release is mostly a bug fix and compile fix
+release for RoboCup 2013. New exciting changes are pending, but will be
+released in Simspark 0.3.0 very soon. The most considerable change in this
+release is the possibility of sending parameters to the SceneEffector, which 
+is required for Heterogeneous robots functionality.
+
+Additionally, a paper about recent changes to Simspark/Rcssserver3d which is
+mostly written by Yuan Xu is available in SimSpark SVN repository. 
+
+You can get the package on the Simspark page on SourceForge
+at http://sourceforge.net/projects/simspark/

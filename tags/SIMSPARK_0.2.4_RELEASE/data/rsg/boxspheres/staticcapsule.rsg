@@ -1,0 +1,17 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+ (templ $radius $length $density $material)
+
+ (nd Capsule
+       (setParams $radius $length)
+       (setMaterial $material)
+       )
+       
+ (nd CapsuleCollider
+       (setParams $radius $length)
+       )
+ )
+
+
