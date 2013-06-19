@@ -1,3 +1,15 @@
+2013-06-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/zeitgeist/scriptserver/rubywrapper.h: 
+	- disalbed unsupported pragmas for MinGW
+	
+	* lib/zeitgeist/scriptserver/scriptserver.cpp: 
+	- fixed a bug in changing current directory in Windows
+	
+	* CMakeLists.txt:
+	* cmake/AdditionalSearchPaths.cmake: 
+	- fixed some problems in building Windows installer (with MinGW)
+
 2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 

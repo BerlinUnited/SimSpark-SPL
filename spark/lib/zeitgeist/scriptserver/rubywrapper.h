@@ -41,8 +41,10 @@
 #ifdef WIN32
 #include <winsock2.h>
 
+#ifndef __MINGW32__
 // disable compiler warning about type cast from VALUE to RBasic*
 #pragma warning (disable : 4312)
+#endif
 #endif
 
 #include <ruby.h>
@@ -59,8 +61,10 @@
 #undef read
 #undef write
 
+#ifndef __MINGW32__
 // reenable compiler warning
 #pragma warning (default : 4312)
+#endif
 #endif
 
 #undef EXTERN
