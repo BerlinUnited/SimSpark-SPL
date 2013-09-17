@@ -122,6 +122,7 @@ void SPLRule::Update(float /*deltaTime*/)
       UpdatePlaying();
       break;
     case Finished:
+      UpdateFinish();
       break;
     }
 
@@ -134,6 +135,18 @@ void SPLRule::UpdateInitialKickOff()
   HideBall();
   //all robots must be in the initial state and must be placed on the
   //sidelines in their own half of the field
+
+  // auto kick off
+  float kickOffWaitTime = 0;
+  if (mAutoKickOffTimeOrigin > mGameState->GetModeTime())
+      mAutoKickOffTimeOrigin = mGameState->GetModeTime();
+  else
+      kickOffWaitTime = mGameState->GetModeTime() - mAutoKickOffTimeOrigin;
+
+  if (mAutomaticKickOff && kickOffWaitTime > mWaitBeforeKickOff)
+  {
+      mGameState->KickOff();
+  }
 
 }
 
@@ -572,6 +585,17 @@ void SPLRule::CheckTime()
         mState->SetState(Finished);
     }
 }
+
+void SPLRule::UpdateFinish()
+{
+    if (mAutomaticQuit)
+    {
+        boost::shared_ptr<GameControlServer> gameControlServer =
+            dynamic_pointer_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
+        gameControlServer->Quit();
+    }
+}
+
 
 //TOOLS
 
