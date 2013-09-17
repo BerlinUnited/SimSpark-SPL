@@ -60,7 +60,8 @@ void SPLState::SetState(TSPLState state)
     return;
   }
   mSPLState = state;
-  mLastModeChange = mTime;
+    
+  mLastModeChange = GetStateTime();
 }
 
 string SPLState::GetPlayModeStr() const

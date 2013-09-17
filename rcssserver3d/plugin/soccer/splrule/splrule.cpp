@@ -137,13 +137,7 @@ void SPLRule::UpdateInitialKickOff()
   //sidelines in their own half of the field
 
   // auto kick off
-  float kickOffWaitTime = 0;
-  if (mAutoKickOffTimeOrigin > mGameState->GetModeTime())
-      mAutoKickOffTimeOrigin = mGameState->GetModeTime();
-  else
-      kickOffWaitTime = mGameState->GetModeTime() - mAutoKickOffTimeOrigin;
-
-  if (mAutomaticKickOff && kickOffWaitTime > mWaitBeforeKickOff)
+  if (mAutomaticKickOff && mState->GetStateTime() > mWaitBeforeKickOff)
   {
       mGameState->KickOff();
   }
