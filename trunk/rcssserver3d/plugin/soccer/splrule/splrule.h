@@ -63,6 +63,8 @@ public:
     void UpdateSet();
 
     void UpdatePlaying();
+    
+    void UpdateFinish();
 
     salt::Vector3f getBallPositionAfterOutsideField(salt::Vector3f ballPos);
 
