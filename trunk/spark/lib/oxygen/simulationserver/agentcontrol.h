@@ -85,6 +85,9 @@ protected:
      * a new task */
     void WaitSlave(boost::barrier* &currentBarrier);
 
+
+    void KillUnSyncAgent();
+
 protected:
     /** cached reference to the GameControlServer */
     CachedPath<GameControlServer> mGameControlServer;
@@ -98,6 +101,9 @@ protected:
      * proceed to the next cycle
      */
     bool mSyncMode;
+
+    /** max number of trials to sync with agent */
+    int mSyncTimeOutCount;
 
     /** indicates if the AgentControl runs in multi-threads */
     bool mMultiThreads;
