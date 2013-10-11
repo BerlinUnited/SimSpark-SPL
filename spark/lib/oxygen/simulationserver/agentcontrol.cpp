@@ -29,7 +29,7 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-AgentControl::AgentControl() : NetControl(), mSyncMode(false),
+AgentControl::AgentControl() : NetControl(), mSyncMode(false), mSyncTimeOutCount(60),
             mMultiThreads(true), mThreadBarrierNew(NULL), nThreads(0)
 {
     mThreadBarrier = new boost::barrier(1);
@@ -97,6 +97,7 @@ void AgentControl::ClientDisconnect(boost::shared_ptr<Client> client)
 
 void AgentControl::StartCycle()
 {
+    int n = 0;
     do
     {
         NetControl::StartCycle();
@@ -146,7 +147,44 @@ void AgentControl::StartCycle()
           WaitMaster(); //let threads start
           WaitMaster(); //wait for threads to finish
         }*/
+
+          if (n > mSyncTimeOutCount) {
+              KillUnSyncAgent();
+              n = 0;
+          }
+        n++;
+
     } while (!AgentsAreSynced());
+}
+
+
+void AgentControl::KillUnSyncAgent() {
+    if (!mSyncMode) return;
+
+    set<rcss::net::Addr> closedClients(mCloseClients.begin(),
+                                       mCloseClients.end());
+
+    set<rcss::net::Addr> closingClients;
+    for (
+         TAddrMap::const_iterator iter = mClients.begin();
+         iter != mClients.end();
+         ++iter
+         )
+    {
+        if (closedClients.find(iter->first) != closedClients.end())
+            continue;
+
+        boost::shared_ptr<AgentAspect> agent =
+                mGameControlServer->GetAgentAspect(iter->second->id);
+        if (agent && !agent->IsSynced())
+        {
+            closingClients.insert(iter->first);
+        }
+    }
+
+    for(set<rcss::net::Addr>::iterator iter=closingClients.begin(); iter!=closingClients.end(); ++iter) {
+        RemoveClient(*iter);
+    }
 }
 
 void AgentControl::StartCycle(const boost::shared_ptr<Client> &client,
