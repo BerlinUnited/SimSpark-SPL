@@ -38,8 +38,8 @@ using namespace salt;
 using namespace spl;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
-  mReadyDuration(45), //old 45
-  mSetDuration(10) //old 10
+  mReadyDuration(45),
+  mSetDuration(10)
 {
 }
 
@@ -66,6 +66,22 @@ void SPLRule::OnUnlink()
   mState.reset();
 }
 
+void SPLRule::UpdateCachedInternal()
+{
+    SoccerRuleAspect::UpdateCachedInternal();
+
+    mFieldRightHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0),
+                         Vector2f(mFieldLength/2.0, mFieldWidth/2.0));
+    mFieldLeftHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0),
+                        Vector2f(-mFieldLength/2.0, mFieldWidth/2.0));
+    mFieldRightHalfDefense = salt::AABB2(Vector2f(1.2, -mFieldWidth/2.0),
+                             Vector2f(mFieldLength/2.0, mFieldWidth/2.0));
+    mFieldLeftHalfDefense = salt::AABB2(Vector2f(-1.2, -mFieldWidth/2.0),
+                                        Vector2f(-mFieldLength/2.0, mFieldWidth/2.0));
+    mWholeField = salt::AABB2(Vector2f(mFieldLength/2.0+0.7, -mFieldWidth/2.0-0.7),
+                              Vector2f(-mFieldLength/2.0-0.7, mFieldWidth/2.0+0.7));
+}
+
 void SPLRule::Update(float /*deltaTime*/)
 {
     if (
@@ -82,7 +98,7 @@ void SPLRule::Update(float /*deltaTime*/)
     {
     case Unknown:
     {
-      SoccerRuleAspect::UpdateCachedInternal();
+      UpdateCachedInternal();
       mState->SetState(Initial);
 
       mSPLRightHalf = salt::AABB2(Vector2f(0                , -mFieldWidth/2.0f),
@@ -115,6 +131,7 @@ void SPLRule::Update(float /*deltaTime*/)
       UpdatePlaying();
       break;
     case Finished:
+      UpdateFinish();
       break;
     }
 
@@ -127,6 +144,12 @@ void SPLRule::UpdateInitialKickOff()
   HideBall();
   //all robots must be in the initial state and must be placed on the
   //sidelines in their own half of the field
+
+  // auto kick off
+  if (mAutomaticKickOff && mState->GetStateTime() > mWaitBeforeKickOff)
+  {
+      mGameState->KickOff();
+  }
 
 }
 
@@ -158,6 +181,8 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
+  float height = agent_aspect->GetWorldTransform().Pos().z();
+
   SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 
   robot->Penalize(mGameState->GetTime());
@@ -174,8 +199,114 @@ void SPLRule::UpdateReady()
   }
 }
 
+float findFreePosition(float minPos, float maxPos, const vector<float>& others)
+{
+    set<float> sorted;
+    sorted.insert(minPos);
+    sorted.insert(maxPos);
+    for(vector<float>::const_iterator iter=others.begin(); iter!=others.end(); ++iter)
+    {
+        sorted.insert(*iter);
+    }
+
+    float maxDist = 0;
+    float freePos = (minPos + maxPos) * 0.5;
+    set<float>::const_iterator iterA = sorted.begin();
+    set<float>::const_iterator iterB = sorted.begin();
+    ++iterB;
+    for(; iterB!=sorted.end(); ++iterA, ++iterB)
+    {
+        float d = *iterB - *iterA;
+        if (d > maxDist)
+        {
+            freePos = (*iterB + *iterA) * 0.5;
+            maxDist = d;
+        }
+    }
+    return freePos;
+}
+
+Vector3f SPLRule::GetRobotBodyPos(boost::shared_ptr<AgentState> robot)
+{
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    SoccerBase::GetTransformParent(*robot, agent_aspect);
+    boost::shared_ptr<RigidBody> body;
+    SoccerBase::GetAgentBody(agent_aspect, body);
+    return body->GetPosition();
+}
+
+void SPLRule::ManualPlaceRobot(boost::shared_ptr<AgentState> robot)
+{
+    TTeamIndex idx = robot->GetTeamIndex();
+    float angle = -90 * (idx==TI_RIGHT?-1:1);
+    float z = GetRobotBodyPos(robot).z();
+
+    boost::shared_ptr<oxygen::Transform> agent_aspect;
+    SoccerBase::GetTransformParent(*robot, agent_aspect);
+
+    if (robot->GetUniformNumber() == 1) // goalie
+    {
+        float xLine = (-mFieldLength/2) * (idx==TI_RIGHT?-1:1);
+        Vector3f pos(xLine, 0, z);
+        SoccerBase::MoveAndRotateAgent(agent_aspect, pos, angle);
+        return;
+    }
+
+    float xMin = -mFieldLength/2;
+    float xLine = mLeftPenaltyArea.maxVec.x() + 0.3;
+    float xMax = xLine + (xLine - xMin);
+    if (TI_RIGHT==idx)
+    {
+        xMin = -xMax;
+        xLine *= -1;
+        xMax = mFieldLength/2;
+    }
+
+    // find y position of other robots inside placement area
+    Vector2f mn(xMin, -mFieldWidth/2);
+    Vector2f mx(xMax, mFieldWidth/2);
+    salt::AABB2 placementArea(mn, mx);
+    SoccerBase::TAgentStateList robots = FindRobotsIn(placementArea);
+    vector<float> yRobots;
+    for(SoccerBase::TAgentStateList::const_iterator iter=robots.begin(); iter!=robots.end(); ++iter)
+    {
+        if (robot.get() != iter->get())
+        {
+            float y = GetRobotBodyPos(*iter).y();
+            yRobots.push_back(y);
+        }
+    }
+
+    float y = findFreePosition(-mFieldWidth/2, mFieldWidth/2, yRobots);
+
+    Vector3f pos(xLine, y, z);
+    SoccerBase::MoveAndRotateAgent(agent_aspect, pos, angle);
+}
+
+SoccerBase::TAgentStateList SPLRule::FindRobotsIn(const salt::AABB2& box, TTeamIndex idx)
+{
+    SoccerBase::TAgentStateList robots; // TODO: cache it?
+    SoccerBase::TAgentStateList robotsIn;
+    if ( mBallState.get() == 0 )
+        return robotsIn;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), robots, idx))
+        return robotsIn;
+
+    for (SoccerBase::TAgentStateList::const_iterator i = robots.begin(); i != robots.end(); ++i)
+    {
+        Vector3f pos = GetRobotBodyPos(*i); // using bounding box?
+        if (box.Contains(Vector2f(pos.x(),pos.y())))
+        {
+            robotsIn.push_back(*i);
+        }
+    }
+    return robotsIn;
+}
+
 void SPLRule::UpdateSet()
 {
+    // TODO: it may not correct for the second half kickoff
+
     //static TTime lastTimeBeforePlacement = mGameState->GetTime();
     //static float range = (float)salt::NormalRNG<>(4.0, 1.5)();
 
@@ -187,137 +318,112 @@ void SPLRule::UpdateSet()
 
     //if (timeNow - lastTimeBeforePlacement > crange) {
 
-        //check position - otherwise manual
-        if(wasManual = CheckIllegalPosition(TI_LEFT)) {
-            ManualPlacement(TI_LEFT);
-        //    wasManual = true;
-        }
-        if(wasManual = CheckIllegalPosition(TI_RIGHT)) {
-            ManualPlacement(TI_RIGHT);
-        //    wasManual = true;
-        }
-    //}
-
-  MoveBall(Vector3f(0.0,0.0,0.0));
-
-  if (mState->GetStateTime() > mSetDuration)
-  {
-    mState->SetState(Playing);
-  }
-}
-
-
-
-bool SPLRule::CheckIllegalPosition(TTeamIndex idx) {
-
-    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
     SoccerBase::TAgentStateList agentStates;
+    if (mBallState.get() == 0)
+        return;
 
-    if (idx == TI_NONE || mBallState.get() == 0) {
-        return false;
-    }
-
-    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx)) {
-        return false;
-    }
-
-    bool result = false;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, TI_NONE))
+        return;
 
     for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
     {
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        Vector3f agentPos = agentAspectTrans->GetWorldTransform().Pos();
-        Vector2f agentPos2D(agentPos.x(), agentPos.y());
-
-        //boost::shared_ptr<AgentState> agentState;
-
-        if (idx == TI_LEFT) 
+        if ( IsIllegalPosition(*i) )
         {
-          //check goalie in box
-          result = result || ((*i)->GetUniformNumber() == 1 && !mLeftPenaltyArea.Contains(agentPos2D));
-          // own penalty area is forbidden
-          result = result || ((*i)->GetUniformNumber() != 1 &&  mLeftPenaltyArea.Contains(agentPos2D));
-          // check wrong field side
-          result = result || !mSPLLeftHalf.Contains(agentPos2D);
-          // center circle + kick off
-          result = result || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Left);
-        }  
-
-        if (idx == TI_RIGHT) {
-          //check goalie in box
-          result = result || ((*i)->GetUniformNumber() == 1 && !mRightPenaltyArea.Contains(agentPos2D));
-          // own penalty area is forbidden
-          result = result || ((*i)->GetUniformNumber() != 1 &&  mRightPenaltyArea.Contains(agentPos2D));
-          // check wrong field side
-          result = result || !mSPLRightHalf.Contains(agentPos2D);
-          // center circle + kick off
-          result = result || (agentPos2D.Length() <= mFreeKickDist && mGameState->GetPlayMode() != PM_KickOff_Right);
+            ManualPlaceRobot(*i);
         }
+    }
 
-        // break up if one player violates the rules
-        if(result) {
-          return true;
+    MoveBall(Vector3f(0.0,0.0,0.0));
+
+    if (mState->GetStateTime() > mSetDuration)
+    {
+        mState->SetState(Playing);
+    }
+}
+
+bool SPLRule::IsIllegalDefender(boost::shared_ptr<AgentState> robot)
+{
+    if ( robot->GetUniformNumber()==1 )
+    {
+        return false;
+    }
+
+    Vector3f pos = GetRobotBodyPos(robot);
+    Vector2f pos2D = Vector2f(pos.x(), pos.y());
+    TTeamIndex idx = robot->GetTeamIndex();
+
+    if (idx == TI_LEFT) {
+        //check if agent inside penalty area and move
+        if (mLeftPenaltyArea.Contains(pos2D)) {
+            return true;
         }
-    }//end for
+    }
+    else if (idx == TI_RIGHT) {
+        //check if agent inside penalty area and move
+        if (mRightPenaltyArea.Contains(pos2D)) {
+            return true;
+        }
+    }
 
     return false;
 }
 
-void SPLRule::ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff) {
+bool SPLRule::IsIllegalPosition(boost::shared_ptr<AgentState> robot)
+{
+    Vector3f pos = GetRobotBodyPos(robot);
+    Vector2f pos2D = Vector2f(pos.x(), pos.y());
+    TTeamIndex idx = robot->GetTeamIndex();
 
-    number--; // map the player number to index, e.g., 1->0
-    static const int MAX_NUM_OF_PLAYERS = 5;
-    assert(number >= 0 && number < MAX_NUM_OF_PLAYERS);
-
-    Vector2f pos_defensive[MAX_NUM_OF_PLAYERS] = 
+    if (robot->GetUniformNumber() == 1)
     {
-      Vector2f(4.4f, 0.0f),
-      Vector2f(3.7f, 0.7f),
-      Vector2f(3.7f,-0.7f),
-      Vector2f(3.7f, 2.3f),
-      Vector2f(3.7f,-2.3f)
-    };
-
-    Vector2f pos_offensive[MAX_NUM_OF_PLAYERS] = 
+        if (idx == TI_LEFT ) {
+            //check if agent inside penalty area and move
+            if (!mLeftPenaltyArea.Contains(pos2D)) {
+                return true;
+            }
+        }
+        else if (idx == TI_RIGHT ) {
+            //check if agent inside penalty area and move
+            if (!mRightPenaltyArea.Contains(pos2D)) {
+                return true;
+            }
+        }
+    }
+    else
     {
-      Vector2f(4.4f, 0.0f),
-      Vector2f(0.9f, 0.0f),
-      Vector2f(2.0f,-0.7f),
-      Vector2f(3.7f, 2.0f),
-      Vector2f(3.7f,-2.0f)
-    };
+        if (mGameState->GetPlayMode() == PM_KickOff_Left)
+        {
+            if (idx == TI_LEFT) {
+                if (!mFieldLeftHalf.Contains(pos2D)) {
+                    return true;
+                }
+            }
+            else if (idx == TI_RIGHT) {
+                if (!mFieldRightHalfDefense.Contains(pos2D)) {
+                    return true;
+                }
+            }
+        }
+        else if (mGameState->GetPlayMode() == PM_KickOff_Right)
+        {
+            if (idx == TI_LEFT) {
+                if (!mFieldLeftHalfDefense.Contains(pos2D)) {
+                    return true;
+                }
+            }
+            else if (idx == TI_RIGHT) {
+                if (!mFieldRightHalf.Contains(pos2D)) {
+                    return true;
+                }
+            }
+        }
+    }
 
-    float site = left?-1.f:1.f;
-    const Vector2f& pos = haveKickOff?pos_offensive[number]:pos_defensive[number];
-    SoccerBase::MoveAndRotateAgent(agentAspectTrans, Vector3f(pos.x()*site,  pos.y(), 0.3f), 90.f*site);
+    return IsIllegalDefender(robot);
 }
 
 void SPLRule::ManualPlacement(TTeamIndex idx) {
 
-    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
-    SoccerBase::TAgentStateList agentStates;
-
-    Vector3f agentPos;
-
-    if (idx == TI_NONE || mBallState.get() == 0)
-        return;
-
-    if (! SoccerBase::GetAgentStates(*mBallState.get(), agentStates, idx))
-        return;
-
-    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
-    {
-        //Player infos
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        agentPos = agentAspectTrans->GetWorldTransform().Pos();
-
-        if (idx == TI_LEFT) {
-            ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), true, mGameState->GetPlayMode() == PM_KickOff_Left);
-        } else {
-            ManualPlaceRobot(agentAspectTrans, (*i)->GetUniformNumber(), false, mGameState->GetPlayMode() == PM_KickOff_Right);
-        }
-
-     }
 }
 
 //void SPLRule:.checkRobotsIfUnpenalized(boost::shared_ptr<AgentState>, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx) {
@@ -327,207 +433,69 @@ void SPLRule::ManualPlacement(TTeamIndex idx) {
 
 void SPLRule::UpdatePlaying()
 {
-  //
-  //check the robots
-  //
-    //boost::shared_ptr<AgentAspect> agentAspect;
-    boost::shared_ptr<oxygen::Transform> agentAspectTrans;
-    SoccerBase::TAgentStateList agentStatesLeft;
-    SoccerBase::TAgentStateList agentStatesRight;
 
-    if (mBallState.get() == 0)
-        return;
-
-    if (! (SoccerBase::GetAgentStates(*mBallState.get(), agentStatesLeft, TI_LEFT) ||
-          SoccerBase::GetAgentStates(*mBallState.get(), agentStatesRight, TI_RIGHT)))
-        return;
-
-    for (SoccerBase::TAgentStateList::const_iterator i = agentStatesLeft.begin(); i != agentStatesLeft.end(); ++i)
-    {
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-
-        if((*i)->IsPenalized()) {
-          CheckPenalized(agentAspectTrans, (*i), TI_LEFT);
-        } else {
-          CheckIllegalDefender(agentAspectTrans, (*i), TI_LEFT);
-          CheckOutsideField(agentAspectTrans, (*i), TI_LEFT);
-        }
-    }
-
-    for (SoccerBase::TAgentStateList::const_iterator i = agentStatesRight.begin(); i != agentStatesRight.end(); ++i)
-    {
-        SoccerBase::GetTransformParent(**i, agentAspectTrans);
-        if((*i)->IsPenalized()) {
-          CheckPenalized(agentAspectTrans, (*i), TI_RIGHT);
-        } else {
-          CheckIllegalDefender(agentAspectTrans,(*i), TI_RIGHT);
-          CheckOutsideField(agentAspectTrans, (*i), TI_RIGHT);
-        }
-    }
-
-
-  //
-  //ball outside the field
-  //
-
-  static TTime lastTimeBallOnField = mGameState->GetTime();
-  static float range = (float)salt::NormalRNG<>(2.0, 1.8)();
-
-  if (!mBallState->GetBallOnField()) {
-
-    //ball infos
-    Vector3f ballPos = mBallState->GetLastValidBallPosition();
-    std::cout << "ball: " << ballPos << std::endl;
-    if(checkIfGoal(ballPos)) {
-        std::cout << "ValidPose:" << mBallState->GetLastValidBallPosition() << std::endl;
+    if(CheckGoal()) {
         mState->SetState(Ready);
         return;
     }
 
-    TTime timeNow = mGameState->GetTime();
-    float crange = clamp(range, 0.5, 5.0);
+    //
+    //ball outside the field
+    //
+    static TTime lastTimeBallOnField = mGameState->GetTime();
+    static salt::NormalRNG<> rangeRNG = salt::NormalRNG<>(2.0, 1.8);
 
-    if (timeNow - lastTimeBallOnField > crange) {
+    if (!mBallState->GetBallOnField()) {
+      TTime timeNow = mGameState->GetTime();
+      float crange = (float)rangeRNG();
+      crange = salt::gClamp(crange, 0.5f, 5.0f);
 
-        Vector3f ballPos = getBallPositionAfterOutsideField(ballPos);
-        std::cout << "(SPLRule) Put back after " << crange << " seconds" << std::endl;
-        MoveBall(ballPos);
-
-    } else {
-        HideBall();
+      if (timeNow - lastTimeBallOnField > crange) {
+          Vector3f ballPos = getBallPositionAfterOutsideField(ballPos);
+          std::cout << "(SPLRule) Put back after " << crange << " seconds" << std::endl;
+          MoveBall(ballPos);
+      }
     }
-
-
-  } else {
-    lastTimeBallOnField = mGameState->GetTime();
-        //N(mean, sigma) - randomly put the ball back
-    range = (float)salt::NormalRNG<>(2.0f, 1.8f)();
-  }
-
-}
-
-
-void SPLRule::CheckPenalized(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) 
-{
-  TTime now = mGameState->GetTime();
-
-  if(agentState->IsPenalized() && now - agentState->getWhenPenalized() > 30) {
-    Vector3f ballPos = mBallState->GetLastValidBallPosition();
-    float side = ballPos.y() > 0?-1.f:1.f;
-    salt::Vector3f pos(0, side*(mFieldWidth / 2.f), 0.4f);
-
-    boost::shared_ptr<oxygen::Transform> agent_aspect;
-    SoccerBase::GetTransformParent(*agentState, agent_aspect);
-    SoccerBase::MoveAndRotateAgent(agent_aspect, pos, 180);
-
-    agentState->UnPenalize();
-  }
-}//end CheckPenalized
-
-
-void SPLRule::CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) {
-        Vector3f agentPos;
-
-        agentPos = agentAspectTrans->GetWorldTransform().Pos();
-
-        //boost::shared_ptr<AgentState> agentState;
-
-        if (idx == TI_LEFT && agentState->GetUniformNumber() != 1) { //not goali
-                    //check if agent inside penalty area and move
-                    if (mLeftPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                        RemoveRobot(agentState);
-                        std::cout << "(SPLRule) Blue player No.  " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-                    }
-                }
-        if (idx == TI_RIGHT && agentState->GetUniformNumber() != 1) {
-                    //check if agent inside penalty area and move
-                    if (mRightPenaltyArea.Contains(Vector2f(agentPos.x(), agentPos.y()))) {
-                        RemoveRobot(agentState);
-                        std::cout << "(SPLRule) Red player No.  " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-                    }
-        }
-
-
-}
-
-void SPLRule::CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx) {
-
-    Vector3f agentPos;
-
-    agentPos = agentAspectTrans->GetWorldTransform().Pos();
-
-    if (agentPos.x() < 0) agentPos.x() = -1 * agentPos.x();
-    if (agentPos.y() < 0) agentPos.y() = -1 * agentPos.y();
-
-    if (agentPos.y() > mFieldWidth/2+0.5 || agentPos.x() > mFieldLength/2+0.3) {
-        RemoveRobot(agentState);
-        if(idx == TI_LEFT) {
-            std::cout << "(SPLRule) Blue player No. " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-        } else {
-            std::cout << "(SPLRule) Red player No.  " << agentState->GetUniformNumber() << " leaving the Field" << std::endl;
-        }
-    }
-
-}
-
-bool SPLRule::checkIfGoal(Vector3f ballPos) 
-{
-/*
-    if (fabs(ballPos.y()) < mGoalWidth / 2.0 ) {
-        if (ballPos.x() > mFieldLength/2) {
-            mGameState->ScoreTeam(TI_LEFT);
-            std::cout << "(SPLRule) Goal by blue" << std::endl;
-            return true;
-        } else if (ballPos.x() < -mFieldLength/2) {
-            mGameState->ScoreTeam(TI_RIGHT);
-            std::cout << "(SPLRule) Goal by red " << std::endl;
-            return true;
-        }
-    }
-
-    return false;
-    */
-
-    // check if the ball is in one of the goals
-    TTeamIndex idx = mBallState->GetGoalState();
-
-    if (idx == TI_NONE)
+    else
     {
-        const salt::Vector3f ballPos = mBallBody->GetPosition();
-        const float xDist2Goal = fabs(ballPos.x()) - mGoalBallLineX;
-
-        // check if ball is completely out of the field
-        if (xDist2Goal < 0)
-            return false;
-
-        salt::Vector3f normBVel = mBallBody->GetVelocity();
-        // ball should be inside the field recently (assumes that the simulation
-        // step size is smaller than 1 second)
-        if (fabs(ballPos.x() - normBVel.x()) > mGoalBallLineX)
-            return false;
-
-        normBVel.Normalize();
-        float velCos = normBVel.x();
-        float dist = xDist2Goal / velCos;
-        salt::Vector3f crossPoint = ballPos - normBVel * dist;
-
-        if (fabs(crossPoint.y()) < mGoalWidth / 2.0 &&
-                crossPoint.z() < mGoalHeight)
-        {
-            if (ballPos.x() < 0)
-                idx = TI_LEFT;
-            else
-                idx = TI_RIGHT;
-        }
-        else
-            return false;
+        lastTimeBallOnField = mGameState->GetTime();
     }
 
-    // score the lucky team
-    mGameState->ScoreTeam((idx == TI_LEFT) ? TI_RIGHT : TI_LEFT);
-    mGameState->SetPlayMode((idx == TI_LEFT) ? PM_Goal_Right : PM_Goal_Left);
+  //
+  //check the robots
+  //
+    SoccerBase::TAgentStateList agentStates;
 
-    return true;
+    if (mBallState.get() == 0)
+        return;
+
+    if (! (SoccerBase::GetAgentStates(*mBallState.get(), agentStates, TI_NONE)))
+        return;
+
+    // check illegal defender
+    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
+    {
+        if (IsIllegalDefender(*i))
+        {
+            RemoveRobot(*i);
+            std::cout << "(SPLRule) team "<<(*i)->GetTeamIndex()<<" player No.  " << (*i)->GetUniformNumber() << " illegal defender" << std::endl;
+        }
+    }
+
+    // check player leave the field
+    for (SoccerBase::TAgentStateList::const_iterator i = agentStates.begin(); i != agentStates.end(); ++i)
+    {
+        if ( !(*i)->IsPenalized() )
+        {
+            Vector3f pos = GetRobotBodyPos(*i);
+            if (!mWholeField.Contains(Vector2f(pos.x(), pos.y())))
+            {
+                RemoveRobot(*i);
+                std::cout << "(SPLRule) team "<<(*i)->GetTeamIndex()<<" player No.  " << (*i)->GetUniformNumber() << " leaving the field" << std::endl;
+            }
+        }
+    }
+
 }
 
 Vector3f SPLRule::getBallPositionAfterOutsideField(Vector3f ballPos) {
@@ -621,38 +589,23 @@ void SPLRule::CheckTime()
     }
 }
 
-//TOOLS
-
-void SPLRule::MoveBall(Vector3f toPosition) {
-
-    mBallBody->SetPosition(toPosition);
-    mBallBody->SetVelocity(Vector3f(0,0,0));
-    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
-    mBallBody->Enable();
-
+void SPLRule::UpdateFinish()
+{
+    if (mAutomaticQuit)
+    {
+        boost::shared_ptr<GameControlServer> gameControlServer =
+            dynamic_pointer_cast<GameControlServer>(GetCore()->Get("/sys/server/gamecontrol"));
+        gameControlServer->Quit();
+    }
 }
+
+
+//TOOLS
 
 void SPLRule::HideBall() {
 
     //HACK: making the Ball invisible
     //must outside the field, "check if outside and wait till put back" using it
-    mBallBody->SetPosition(Vector3f(0,-500,500));
-    mBallBody->SetVelocity(Vector3f(0,0,0));
-    mBallBody->SetAngularVelocity(Vector3f(0,0,0));
-    mBallBody->Disable();
+    MoveBall(Vector3f(0,-500,500));
 }
 
-
-float SPLRule::clamp(float val, const float min, const float max) {
-
-    if (min <= max)
-    {
-        if (val<min) val=min;
-        if (val>max) val=max;
-    } else {
-        if (val>=min || val<=max) return val;
-        if (val>=(min+max)/2.0) val = min; else val = max;
-    }
-    return val;
-
-}

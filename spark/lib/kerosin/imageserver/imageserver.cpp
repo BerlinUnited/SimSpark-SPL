@@ -69,7 +69,7 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
 {
     // lookup the file server
     boost::shared_ptr<FileServer> fileServer
-        = shared_static_cast<FileServer>(GetCore()->Get("/sys/server/file"));
+        = static_pointer_cast<FileServer>(GetCore()->Get("/sys/server/file"));
 
     if (fileServer.get() == 0)
     {

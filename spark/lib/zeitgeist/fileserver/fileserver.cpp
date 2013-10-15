@@ -88,7 +88,7 @@ boost::shared_ptr<salt::RFile> FileServer::Open(const string& inName)
 {
     for (TLeafList::iterator i = mChildren.begin(); i != mChildren.end(); ++i)
         {
-            boost::shared_ptr<FileSystem> fileSys = shared_static_cast<FileSystem>(*i);
+            boost::shared_ptr<FileSystem> fileSys = static_pointer_cast<FileSystem>(*i);
 
             boost::shared_ptr<salt::RFile> file(fileSys->Open(inName));
 
@@ -180,7 +180,7 @@ bool FileServer::Exist(const string& inName)
 bool FileServer::Mount(const string& inFileSysName, const string& inPath)
 {
     boost::shared_ptr<FileSystem> fileSys =
-        shared_static_cast<FileSystem>(GetChild(inPath));
+        static_pointer_cast<FileSystem>(GetChild(inPath));
 
     if (fileSys)
         {
@@ -201,7 +201,7 @@ bool FileServer::Mount(const string& inFileSysName, const string& inPath)
         }
 
     // try to instantiate the file system
-    fileSys = shared_static_cast<FileSystem>(GetCore()->New(inFileSysName));
+    fileSys = static_pointer_cast<FileSystem>(GetCore()->New(inFileSysName));
 
     if (
         (fileSys.get() == 0) ||
@@ -242,7 +242,7 @@ bool FileServer::Unmount(const string& inPath)
 
 bool FileServer::Unmount(const string& inFileSysName, const string& inPath)
 {
-  boost::shared_ptr<FileSystem> fileSystem = shared_static_cast<FileSystem>(GetChild(inPath));
+  boost::shared_ptr<FileSystem> fileSystem = static_pointer_cast<FileSystem>(GetChild(inPath));
 
   if(fileSystem)
     {

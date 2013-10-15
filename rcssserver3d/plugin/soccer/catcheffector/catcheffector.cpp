@@ -83,7 +83,7 @@ CatchEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
     }
 
     boost::shared_ptr<CatchAction> catchAction =
-        shared_dynamic_cast<CatchAction>(mAction);
+        dynamic_pointer_cast<CatchAction>(mAction);
     mAction.reset();
     if (catchAction.get() == 0)
     {
@@ -177,7 +177,7 @@ CatchEffector::OnLink()
 
     SoccerBase::GetSoccerRuleAspect(*this,mSoccerRule);
 
-    mAgent = shared_dynamic_cast<AgentAspect>(GetParent().lock());
+    mAgent = dynamic_pointer_cast<AgentAspect>(GetParent().lock());
 
     if (mAgent.get() == 0)
     {
@@ -188,7 +188,7 @@ CatchEffector::OnLink()
     }
 
     boost::shared_ptr<SphereCollider> geom =
-        shared_dynamic_cast<SphereCollider>(mAgent->GetChild("geometry"));
+        dynamic_pointer_cast<SphereCollider>(mAgent->GetChild("geometry"));
     if (geom.get() == 0)
     {
         GetLog()->Error()

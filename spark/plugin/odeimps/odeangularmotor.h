@@ -50,6 +50,7 @@ public:
     void SetAxisAngle(int idx, float degAngle, long jointID);
     float GetAxisAngle(int idx, long jointID);
     float GetAxisAngleRate(int idx, long jointID);
+    virtual float GetTorque(long jointID) const;
 };
 
 DECLARE_CLASS(AngularMotorImp);

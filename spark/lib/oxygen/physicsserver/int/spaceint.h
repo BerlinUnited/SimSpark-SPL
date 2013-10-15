@@ -38,53 +38,55 @@ class OXYGEN_API SpaceInt
 {
 
 public:
+    virtual ~SpaceInt() {}
+
     virtual long CreateSpace(long spaceID) = 0;
-    
-    /** Destroys the space specified by \param spaceID and the 
+
+    /** Destroys the space specified by \param spaceID and the
         contact group specified by \param contactGroup
     */
     virtual void DestroySpace(long contactGroup, long spaceID) = 0;
-    
+
     /** returns the ID of the containing parent space */
     virtual long GetParentSpaceID(long spaceID) = 0;
-    
+
     /** calls collision detection for this space if internal collision
         detection is enabled for this space.
      */
     virtual void Collide(long space, Space* callee) = 0;
-    
+
     /** collide all geoms internal to the space \param callee */
-    virtual void Collide2(long obj1, long obj2, Space* callee) = 0; 
-    
+    virtual void Collide2(long obj1, long obj2, Space* callee) = 0;
+
     /** Creates a Contact Group and returns its ID */
     virtual long CreateContactGroup() = 0;
-    
+
     /** updates internal state after physics calculation */
     virtual void PostPhysicsUpdateInternal(long contactGroup) = 0;
-    
-    /** Returns true if the physics object specified 
-        by \param objectID is a space 
-    */ 
+
+    /** Returns true if the physics object specified
+        by \param objectID is a space
+    */
     virtual bool ObjectIsSpace(long objectID) = 0;
-    
+
     /** Retrieves the ID of the body that the geom specified
-        by \param geomID is linked with 
+        by \param geomID is linked with
     */
     virtual long FetchBody(long geomID) = 0;
-    
+
     /** Retrieves the ID of the space that the geom specified
         by \param geomID is inside of
     */
     virtual long FetchSpace(long geomID) = 0;
-    
+
     /** Returns true if the two bodies specified by \param bodyID1
         and \param bodyID2 are connected with a joint
     */
     virtual bool AreConnectedWithJoint(long bodyID1, long bodyID2) = 0;
 
-    /** Collides the two geoms managed by \param collider 
+    /** Collides the two geoms managed by \param collider
         and \param collidee */
-    virtual void CollideInternal(boost::shared_ptr<Collider> collider, 
+    virtual void CollideInternal(boost::shared_ptr<Collider> collider,
                                 boost::shared_ptr<Collider> collidee,
                                 long geomID1, long geomID2) = 0;
 };

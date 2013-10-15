@@ -74,7 +74,7 @@ void BallStateAspect::UpdateLastCollidingAgent()
 
     if (agents.size() > 0)
         {
-            mLastCollidingAgent = shared_static_cast<AgentAspect>
+            mLastCollidingAgent = static_pointer_cast<AgentAspect>
                 (agents.front().lock());
 
             mLastAgentCollisionTime = mGameState->GetTime();

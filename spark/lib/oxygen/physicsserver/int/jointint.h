@@ -37,6 +37,8 @@ class Joint;
 class OXYGEN_API JointInt
 {
 public:
+    virtual ~JointInt() {}
+
     /** Returns a pointer to the Joint object that manages the joint
         specified by \param jointID.
     */
@@ -209,8 +211,11 @@ public:
     /** sets the angular motor velocity in degrees */
     virtual void SetAngularMotorVelocity(int idx, float deg, long jointID) = 0;
 
-    /** returns the angular motor velocity in degrees */
+    /** returns the angular motor velocity in degrees / s */
     virtual float GetAngularMotorVelocity(int idx, long jointID) const = 0;
+
+    /** returns the angular motor angle in degrees */
+    virtual float GetAngularMotorAngle(int idx, long jointID) const = 0;
 
     /** sets the maximum force or torque that the motor will use to
         achieve the desired velocity. This must always be greater than

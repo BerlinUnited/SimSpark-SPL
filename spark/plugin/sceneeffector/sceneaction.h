@@ -24,20 +24,29 @@
 
 #include <oxygen/gamecontrolserver/actionobject.h>
 #include <salt/vector.h>
+#include <zeitgeist/parameterlist.h>
 
 class SceneAction : public oxygen::ActionObject
 {
 public:
-    SceneAction(const std::string& predicate, const std::string& scene)
-        : ActionObject(predicate), mScene(scene) {}
+    SceneAction(const std::string& predicate, const std::string& scene,
+        boost::shared_ptr<zeitgeist::ParameterList> parameters)
+        : ActionObject(predicate), mScene(scene), mParameters(parameters) {}
     virtual ~SceneAction() {}
 
     /** returns the stored scene name */
     const std::string& GetScene() { return mScene; }
 
+    /** returns the stored scene parameters */
+    const boost::shared_ptr<zeitgeist::ParameterList> &GetSceneParameters()
+            { return mParameters; }
+
 protected:
     /** the name of the scene to be created by the SceneEffector */
     std::string mScene;
+
+    /** the parameters of the scene to be created by the SceneEffector */
+    boost::shared_ptr<zeitgeist::ParameterList> mParameters;
 };
 
 #endif // SCENEACTION_H

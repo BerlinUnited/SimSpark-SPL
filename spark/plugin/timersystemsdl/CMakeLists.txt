@@ -10,7 +10,7 @@ set(timersystemsdl_LIB_SRCS
 include_directories(${SDL_INCLUDE_DIR})
 add_library(timersystemsdl MODULE ${timersystemsdl_LIB_SRCS})
 
-target_link_libraries(timersystemsdl ${spark_libs})
+target_link_libraries(timersystemsdl ${spark_libs} ${SDL_LIBRARY})
 
 if (NOT APPLE)
    set_target_properties(timersystemsdl PROPERTIES VERSION 0.0.0 SOVERSION 0)

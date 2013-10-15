@@ -8,8 +8,7 @@ set(scenetest_SRCS
    md5mesh_c.cpp
 )
 
-include_directories(${SDL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS}
-    ${IL_INCLUDE_DIR})
+include_directories(${FREETYPE_INCLUDE_DIRS} ${IL_INCLUDE_DIR})
 
 if (NOT WIN32)
   add_executable(scenetest ${scenetest_SRCS})

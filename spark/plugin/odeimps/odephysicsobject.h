@@ -40,4 +40,9 @@ public:
 
 DECLARE_CLASS(PhysicsObjectImp);
 
+class ODEMass : public dMass, public oxygen::GenericMass
+{
+  
+};
+
 #endif //ODEPHYSICSOBJECT_H

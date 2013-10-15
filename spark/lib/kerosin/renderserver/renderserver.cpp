@@ -67,7 +67,7 @@ RenderServer::Render(bool clean)
 
     // if no camera is selected yet, select the first one
     if (mCamera.get() == 0)
-      mCamera = shared_static_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
+      mCamera = static_pointer_cast<Camera>(mActiveScene->GetChildOfClass("Camera", true));
     
     if (mCamera.get() == 0)
     {
@@ -128,7 +128,7 @@ RenderServer::Render(bool clean)
              ++iter
              )
         {
-            (shared_static_cast<Light>(*iter))->Prepare();
+            (static_pointer_cast<Light>(*iter))->Prepare();
         }
     }
 
@@ -257,7 +257,7 @@ RenderServer::ProcessPicks()
 void
 RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
 {
-    boost::shared_ptr<RenderNode> renderNode = shared_dynamic_cast<RenderNode>(node);
+    boost::shared_ptr<RenderNode> renderNode = dynamic_pointer_cast<RenderNode>(node);
     if (renderNode.get() != 0 &&
         !renderNode->IsVisible())
       return;
@@ -298,7 +298,7 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
     // traverse the the hierarchy
     for (TLeafList::iterator i = node->begin(); i!= node->end(); ++i)
     {
-        boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*i);
+        boost::shared_ptr<BaseNode> node = dynamic_pointer_cast<BaseNode>(*i);
         if (node.get() == 0)
         {
             continue;
@@ -392,7 +392,7 @@ void RenderServer::NextCamera()
         if (*iter == mCamera)
         {
             ++iter;
-            mCamera = iter != cameras.end() ? shared_static_cast<Camera>(*iter) : shared_static_cast<Camera>(cameras.front());
+            mCamera = iter != cameras.end() ? static_pointer_cast<Camera>(*iter) : static_pointer_cast<Camera>(cameras.front());
             break;
         }
 }
@@ -404,7 +404,7 @@ void RenderServer::PreviousCamera()
     for (TLeafList::iterator iter = cameras.begin(); iter != cameras.end(); ++iter)
         if (*iter == mCamera)
         {
-            mCamera = iter != cameras.begin() ? shared_static_cast<Camera>(*(--iter)) : shared_static_cast<Camera>(cameras.back());
+            mCamera = iter != cameras.begin() ? static_pointer_cast<Camera>(*(--iter)) : static_pointer_cast<Camera>(cameras.back());
             break;
         }
 }

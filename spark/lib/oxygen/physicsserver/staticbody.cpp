@@ -38,6 +38,6 @@ StaticBody::~StaticBody(){
 void StaticBody::OnLink()
 {
     if (mStaticBodyImp.get() == 0)
-        mStaticBodyImp = shared_dynamic_cast<StaticBodyInt>
+        mStaticBodyImp = dynamic_pointer_cast<StaticBodyInt>
             (GetCore()->New("StaticBodyImp"));
 }

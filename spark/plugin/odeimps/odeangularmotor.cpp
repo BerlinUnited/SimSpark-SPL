@@ -98,3 +98,13 @@ float AngularMotorImp::GetAxisAngleRate(int idx, long jointID)
     dJointID ODEJoint = (dJointID) jointID;
     return gRadToDeg(dJointGetAMotorAngleRate(ODEJoint,idx));
 }
+
+float AngularMotorImp::GetTorque(long jointID) const
+{
+    dJointID ODEJoint = (dJointID) jointID;
+    dJointFeedback* fb = dJointGetFeedback(ODEJoint);
+    if(fb)
+      return dLENGTH(fb->t1);
+    else
+      return 0;
+}

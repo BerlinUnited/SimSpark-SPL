@@ -57,7 +57,7 @@ const salt::Matrix& BaseNode::GetWorldTransform() const
             return mIdentityMatrix;
         } else
         {
-            return shared_static_cast<BaseNode>
+            return static_pointer_cast<BaseNode>
                 (mParent.lock())->GetWorldTransform();
         }
 }
@@ -73,7 +73,7 @@ void BaseNode::SetWorldTransform(const salt::Matrix& transform)
             return;
         }
 
-    shared_static_cast<BaseNode>
+    static_pointer_cast<BaseNode>
         (mParent.lock())->SetWorldTransform(transform);
 }
 
@@ -99,7 +99,7 @@ void BaseNode::UpdateCache(bool recursive)
         // perform update on hierarchy
         for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
             {
-                shared_static_cast<BaseNode>(*i)->UpdateCache();
+                static_pointer_cast<BaseNode>(*i)->UpdateCache();
             }
     }
 }
@@ -109,7 +109,7 @@ void BaseNode::PrePhysicsUpdate(float deltaTime)
     // perform update on hierarchy
     for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
         {
-            shared_static_cast<BaseNode>(*i)->PrePhysicsUpdate(deltaTime);
+            static_pointer_cast<BaseNode>(*i)->PrePhysicsUpdate(deltaTime);
         }
 
     // do the internal update. This can be overridden by derived classes
@@ -124,7 +124,7 @@ void BaseNode::PostPhysicsUpdate()
     // perform update on hierarchy
     for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
         {
-            shared_static_cast<BaseNode>(*i)->PostPhysicsUpdate();
+            static_pointer_cast<BaseNode>(*i)->PostPhysicsUpdate();
         }
 
     // do the internal update this can be overridden by derived classes
@@ -146,7 +146,7 @@ void BaseNode::UpdateHierarchy()
     // perform update on hierarchy
     for (TLeafList::iterator i = mBaseNodeChildren.begin(); i!= mBaseNodeChildren.end(); ++i)
         {
-            boost::shared_ptr<BaseNode> node = shared_static_cast<BaseNode>(*i);
+            boost::shared_ptr<BaseNode> node = static_pointer_cast<BaseNode>(*i);
             node->UpdateHierarchy();
 
             // here we merge our world bounding volume with the child
@@ -159,7 +159,7 @@ boost::shared_ptr<Scene> BaseNode::GetScene() const
 {
     // is this node the scene node ?
     boost::shared_ptr<Scene> self =
-        shared_dynamic_cast<Scene>(GetSelf().lock());
+        dynamic_pointer_cast<Scene>(GetSelf().lock());
 
     if (self.get() != 0)
         {
@@ -205,7 +205,7 @@ const salt::AABB3& BaseNode::GetWorldBoundingBox() const
 
 bool BaseNode::ImportScene(const string& fileName, boost::shared_ptr<ParameterList> parameter)
 {
-    boost::shared_ptr<SceneServer> sceneServer = shared_dynamic_cast<SceneServer>
+    boost::shared_ptr<SceneServer> sceneServer = dynamic_pointer_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
@@ -215,7 +215,7 @@ bool BaseNode::ImportScene(const string& fileName, boost::shared_ptr<ParameterLi
         }
 
     boost::shared_ptr<BaseNode> node =
-        shared_dynamic_cast<BaseNode>(GetSelf().lock());
+        dynamic_pointer_cast<BaseNode>(GetSelf().lock());
 
     return sceneServer->ImportScene(fileName,node,parameter);
 }

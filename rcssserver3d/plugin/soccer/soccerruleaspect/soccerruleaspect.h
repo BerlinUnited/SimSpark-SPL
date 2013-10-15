@@ -46,6 +46,29 @@ class SoccerRuleAspect : public SoccerControlAspect
 public:
     typedef std::list<boost::shared_ptr<AgentState> > TAgentStateList;
 
+    enum EFoulType
+    {
+        FT_Crowding,
+        FT_Touching,
+        FT_IllegalDefence,
+        FT_IllegalAttack,
+        FT_Incapable,
+        FT_KickOff
+    };
+
+    struct Foul
+    {
+        Foul(unsigned _index, EFoulType _type, boost::shared_ptr<AgentState> _agent)
+            : index(_index),
+              type(_type),
+              agent(_agent)
+        {}
+        int index;
+        EFoulType type;
+        boost::shared_ptr<AgentState> agent;
+        bool operator<(Foul const& other) const { return index < other.index; }
+    };
+
 public:
     SoccerRuleAspect();
     virtual ~SoccerRuleAspect();
@@ -76,7 +99,7 @@ public:
     */
     //salt::Vector3f RepositionInsidePos(salt::Vector3f initPos, int unum, TTeamIndex idx, float distance);
 
-    /** New rules for repositioning players that commit faults
+    /** New rules for repositioning players that commit fouls
     */
     void ClearPlayersAutomatic(TTeamIndex idx);
 
@@ -91,17 +114,17 @@ public:
     */
     void ProcessAgentState(salt::Vector3f pos, int unum, TTeamIndex idx);
 
-    /** Reset the fault time counter for all players and also other counters
+    /** Reset the foul time counter for all players and also other counters
     */
-    void ResetFaultCounter(TTeamIndex idx);
+    void ResetFoulCounter(TTeamIndex idx);
 
-    /** Reset the fault time counter for a given player
+    /** Reset the foul time counter for a given player
     */
-    void ResetFaultCounterPlayer(int unum, TTeamIndex idx);
+    void ResetFoulCounterPlayer(int unum, TTeamIndex idx);
 
-    /**Analyse Faults from players and increase fault counter of offending players
+    /**Analyse Fouls from players and increase foul counter of offending players
     */
-    void AnalyseFaults(TTeamIndex idx);
+    void AnalyseFouls(TTeamIndex idx);
 
     /** Check whether too many agents are touching
      */
@@ -146,6 +169,13 @@ public:
      */
     salt::Vector2f GetFieldSize() const;
 
+    /** Get the foul history
+    */
+    std::vector<Foul> GetFouls() const;
+
+    /** Get the foul history, starting from given foul index
+    */
+    std::vector<Foul> GetFoulsSince(unsigned index) const;
 
     void ResetAgentSelection();
 
@@ -211,6 +241,9 @@ protected:
     /** checks if the assistant referee should raise the flag for offside */
     bool CheckOffside();
 
+    /** checks if kickoff taker has kicked the ball again before other players */
+    bool CheckKickOffTakerFoul();
+
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
 
@@ -248,6 +281,20 @@ protected:
      */
     void ClearPlayersBeforeKickOff(TTeamIndex idx);
 
+    /**
+     * swaps the side of the teams
+     */
+    void SwapTeamSides();
+
+    /**
+     * Punish agent's foul committed during kickoff
+     */
+    void PunishKickOffFoul(boost::shared_ptr<oxygen::AgentAspect> agent);
+
+    /** returns true if last kick was happenned in kick off */
+    bool WasLastKickFromKickOff(
+        boost::shared_ptr<oxygen::AgentAspect> &lastKicker);
+
 protected:
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::RigidBody> mBallBody;
@@ -260,6 +307,7 @@ protected:
 
     /** the radius of the Ball */
     float mBallRadius;
+
     /** the length of the pause after a goal */
     float mGoalPauseTime;
     /** the length of the pause after the ball left the field */
@@ -269,8 +317,7 @@ protected:
     /** the time we wait before dropping the ball in play modes where only
         one team can touch the ball */
     float mDropBallTime;
-    /** the point above the ground, where the ball left the field */
-    salt::Vector3f mLastValidBallPos;
+
     /** the field length (in meters) */
     float mFieldLength;
     /** the field width (in meters) */
@@ -281,8 +328,10 @@ protected:
     float mGoalHeight;
     /** the absolute x coordinate of the goal which ball should pass (in meters) */
     float mGoalBallLineX;
+
     /** the point on the field where we do the kick in, free kick etc. */
     salt::Vector3f mFreeKickPos;
+
     /** the distance opponents have to keep during free kicks, kick ins etc. */
     float mFreeKickDist;
     /** the (least) distance opponents will be moved away if they are to close
@@ -290,12 +339,19 @@ protected:
     float mFreeKickMoveDist;
     /** the distance from the back line the ball should be placed at for a goal kick */
     float mGoalKickDist;
+
     /** flag if the simulator should do the kick off automatically after the agent */
     bool mAutomaticKickOff;
     /** time to wait until we kick off automatically */
     float mWaitBeforeKickOff;
     /** flag if we want to play only one half of the match */
     bool mSingleHalfTime;
+    /** flag if the simulator should quit automatically when the game is over */
+    bool mAutomaticQuit;
+    /** flag if the side of the teams should be changed in the second half*/
+    bool mChangeSidesInSecondHalf;
+    /** the time origin from which mWaitBeforeKickOff is calculated */
+    float mAutoKickOffTimeOrigin;
 
     //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
     /** max time player may be sitted or laying down before being repositioned */
@@ -316,9 +372,10 @@ protected:
     int mMaxPlayersInsideOwnArea;
     /** maximum number of players that may be in a single touch group */
     int mMaxTouchGroupSize;
-    /** maximum time allowed for a player to commit a positional fault before being repositioned */
-    int mMaxFaultTime;
-    /* Useful arrays for dealing with agent state an faults */
+    /** maximum time allowed for a player to commit a positional foul before being repositioned */
+    int mMaxFoulTime;
+
+    /* Useful arrays for dealing with agent state an fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
     int playerGround[12][3];  		//Time Players are on the ground
     int playerNotStanding[12][3];  	//Time Players are not standing (head up for more than 0.5s)
@@ -329,7 +386,8 @@ protected:
     int ordArr[12][3];	  		//Distance order of players (left/right team)
     float distGArr[12][3];		//Distance array to own goal (left/right team)
     int ordGArr[12][3];			//Distance order of players to own goal (left/right team)
-    int playerFaultTime[12][3];		//Time player is commiting a positional fault
+    int playerFoulTime[12][3];		//Time player is commiting a positional foul
+    EFoulType playerLastFoul[12][3];	//Type of last foul committed by player
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
     int closestPlayer[3]; 		//Closest Player from each team
     float closestPlayerDist[3]; 	//Closest Player distance to ball from each team
@@ -366,6 +424,16 @@ protected:
 
     /** use offside law */
     bool mUseOffside;
+
+    /** the time of the kick in the last kick off mode */
+    TTime mLastKickOffKickTime;
+    /** the player which kicked in the last kick off mode */
+    boost::shared_ptr<oxygen::AgentAspect> mLastKickOffTaker;
+    /** if kickoff taker should be checked for single kick rule */
+    bool mCheckKickOffKickerFoul;
+
+    /** complete foul history */
+    std::vector<Foul> mFouls;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);

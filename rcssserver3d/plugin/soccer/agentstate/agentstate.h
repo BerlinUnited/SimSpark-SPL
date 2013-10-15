@@ -59,6 +59,12 @@ public:
     /** returns the uniform number as integer */
     int GetUniformNumber() const;
 
+    /** Set the robot type. */
+    void SetRobotType(int type);
+
+    /** returns the robot type */
+    int GetRobotType() const;
+
     /** Set the object id for perceptors.
      *
      * This method is the same as SetUniformNumber for AgentState.
@@ -130,6 +136,9 @@ protected:
 
     /** uniform number */
     int mUniformNumber;
+
+    /** robot type */
+    int mRobotType;
 
     /** motor temperature */
     float mTemperature;

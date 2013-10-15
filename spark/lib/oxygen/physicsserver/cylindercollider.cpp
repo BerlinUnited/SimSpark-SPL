@@ -39,7 +39,7 @@ CylinderCollider::~CylinderCollider(){
 bool CylinderCollider::ConstructInternal()
 {
     if (mCylinderColliderImp.get() == 0)
-        mCylinderColliderImp = shared_dynamic_cast<CylinderColliderInt>
+        mCylinderColliderImp = dynamic_pointer_cast<CylinderColliderInt>
             (GetCore()->New("CylinderColliderImp"));
             
     if (mCylinderColliderImp.get() == 0)

@@ -25,6 +25,7 @@
 #include <soccertypes.h>
 #include <ballstateaspect/ballstateaspect.h>
 #include <splstate/splstate.h>
+#include <soccerbase/soccerbase.h>
 
 class AgentState;
 
@@ -46,11 +47,6 @@ public:
     SPLRule();
     virtual ~SPLRule();
 
-    /** bounding box for the right half of the field */
-    salt::AABB2 mSPLRightHalf;
-    /** bounding box for the left half of the field */
-    salt::AABB2 mSPLLeftHalf;
-
     /** called during the update of the GameControlServer to allow the
         ControlAspect to perform any necessary checks.
     */
@@ -67,22 +63,16 @@ public:
     void UpdateSet();
 
     void UpdatePlaying();
+    
+    void UpdateFinish();
 
     salt::Vector3f getBallPositionAfterOutsideField(salt::Vector3f ballPos);
 
-    bool checkIfGoal(salt::Vector3f ballPos);
+    bool IsIllegalPosition(boost::shared_ptr<AgentState> robot);
 
-    bool CheckIllegalPosition(TTeamIndex idx);
+    bool IsIllegalDefender(boost::shared_ptr<AgentState> robot);
 
     //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
-
-    void ManualPlaceRobot(boost::shared_ptr<oxygen::Transform> agentAspectTrans, int number, bool left, bool haveKickOff);
-
-    void CheckPenalized(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
-
-    void CheckIllegalDefender(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
-
-    void CheckOutsideField(boost::shared_ptr<oxygen::Transform> agentAspectTrans, boost::shared_ptr<AgentState> agentState, TTeamIndex idx);
 
     void ManualPlacement(TTeamIndex idx);
 
@@ -92,22 +82,31 @@ public:
 
     void Test(TTeamIndex idx);
 
-    void MoveBall(salt::Vector3f toPosition);
-
     void HideBall();
 
-    //TOOLS
+    void ManualPlaceRobot(boost::shared_ptr<AgentState> robot);
 
-    float clamp(float val, const float min, const float max);
+    SoccerBase::TAgentStateList FindRobotsIn(const salt::AABB2& box, TTeamIndex idx=TI_NONE);
+
+    // this function return position in ODE ( not the RSG tree )
+    salt::Vector3f GetRobotBodyPos(boost::shared_ptr<AgentState> robot);
 
 protected:
-
+    virtual void UpdateCachedInternal();
 
     /** reference to the GameStateAspect */
     CachedPath<SPLState> mState;
 
     float mReadyDuration;
     float mSetDuration;
+
+    /** bounding box for the right half of the field */
+    salt::AABB2 mFieldRightHalf;
+    /** bounding box for the left half of the field */
+    salt::AABB2 mFieldLeftHalf;
+    salt::AABB2 mFieldRightHalfDefense;
+    salt::AABB2 mFieldLeftHalfDefense;
+    salt::AABB2 mWholeField;
 };
 
 DECLARE_CLASS(SPLRule);
