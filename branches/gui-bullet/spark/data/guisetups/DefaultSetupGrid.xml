@@ -1,0 +1,9 @@
+<root>
+  <name>DefaultSetupGrid</name>
+  <addplugins reloadall="true">
+    <frame caption="Setup" name="setupframe" attachment="left_attachment"/>
+    <frame caption="Log" reload="false" name="logframe" attachment="bottom_attachment"/>
+  </addplugins>
+  <removeplugins removeall="true"/>
+  <tasks/>
+</root>

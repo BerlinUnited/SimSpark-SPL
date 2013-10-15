@@ -46,6 +46,7 @@ void SPLState::Update(float deltaTime)
 
 void SPLState::KickOff(TTeamIndex ti)
 {
+  GameStateAspect::KickOff(ti);
   if (mSPLState == Initial)
   {
     SetState(Ready);
@@ -59,7 +60,8 @@ void SPLState::SetState(TSPLState state)
     return;
   }
   mSPLState = state;
-  mLastModeChange = mTime;
+    
+  mLastModeChange = GetStateTime();
 }
 
 string SPLState::GetPlayModeStr() const

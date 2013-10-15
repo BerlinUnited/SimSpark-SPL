@@ -44,7 +44,7 @@ bool UniversalJointEffector::Realize(boost::shared_ptr<ActionObject> action)
         }
 
     boost::shared_ptr<UniversalJointAction> universalAction =
-        shared_dynamic_cast<UniversalJointAction>(action);
+        dynamic_pointer_cast<UniversalJointAction>(action);
 
     if (universalAction.get() == 0)
     {

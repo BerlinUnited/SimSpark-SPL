@@ -42,7 +42,7 @@ void UniversalJoint::OnLink()
     Joint::OnLink();
 
     if (mUniversalJointImp.get() == 0)
-        mUniversalJointImp = shared_dynamic_cast<UniversalJointInt>
+        mUniversalJointImp = dynamic_pointer_cast<UniversalJointInt>
             (GetCore()->New("UniversalJointImp"));
             
     long world = GetWorldID();

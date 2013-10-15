@@ -1,0 +1,65 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+ (templ  $PerName     $EffName   
+	 $Path_Body1  $Path_Body2
+	 $Anchor_X    $Anchor_Y   $Anchor_Z
+	 $Axis_X      $Axis_Y     $Axis_Z
+	 $MinDeg      $MaxDeg
+	 $Ke          $Kt         $R
+	 $Te          $Ct         $Ch
+	 $FMax        $MaxAbsSpeed
+    )
+
+    ;
+    ;Hinge Joint Parameters
+    ;
+    (def $CFM           1e-8)
+    (def $Stop_CFM      1e-8)
+    (def $Stop_ERP      0.8)
+    (def $FudgeFactor   1e-5)
+    (def $Bounce        1)
+    
+    (def $PathBody1  (join ../ $Path_Body1))
+    (def $PathBody2  (join ../ $Path_Body2))
+
+    (nd HingeJoint
+	(attach             $Path_Body1  $Path_Body2)
+	(setAnchor          $Anchor_X    $Anchor_Y  $Anchor_Z)
+	(setAxis            $Axis_X      $Axis_Y    $Axis_Z)
+	(setCFM             0  $CFM)
+	(setStopCFM         0  $Stop_CFM)
+	(setStopERP         0  $Stop_ERP)
+	(setFudgeFactor     0  $FudgeFactor)
+	(setBounce          0  $Bounce)
+	(setLowStopDeg      0  $MinDeg)
+	(setHighStopDeg     0  $MaxDeg)
+	(setMaxMotorForce   0  0.1) ;; as friction
+	(nd AngularMotor
+	    (setNumAxes         1)
+	    (attach             $PathBody1  $PathBody2)
+	    (setMotorAxis       0  1  $Axis_X      $Axis_Y    $Axis_Z)
+	    (setMaxTorque       $FMax)
+	    (setJointMaxSpeed1  $MaxAbsSpeed)
+	    ;; constant of motor
+	    (setSpeedConstant         $Ke)
+	    (setTorqueConstant        $Kt)
+	    (setResistance            $R)
+	    (setEnvironmentTempeature $Te)
+	    (setThermalConductivity   $Ct)
+	    (setHeatCapacity          $Ch)
+	    (setProtectionTempeature  80)
+
+	    (enableFeedback true)
+	    (setBattery ../../../torso/Battery)
+	    
+	    (nd AngularMotorPerceptor (setName $PerName)
+		(setSenseAngle true)
+		(setSenseTemperature true))
+	    (nd AngularMotorEffector  (setName $EffName))
+	    (nd StiffnessEffector (setName (join $EffName s)))
+	    )
+	)
+    )
+)

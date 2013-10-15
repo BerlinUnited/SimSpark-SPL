@@ -51,7 +51,7 @@ void SoccerInputLogPlayer::OnLink()
     mScriptServer->CreateVariable("Command.CameraRightCorner", CmdCameraRightCorner);
     mScriptServer->CreateVariable("Command.CameraRightGoal", CmdCameraRightGoal);
 
-    mMonitorClient = shared_dynamic_cast<SimControlNode>
+    mMonitorClient = dynamic_pointer_cast<SimControlNode>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorLogFileServer"));
 
     if (mMonitorClient.get() == 0)
@@ -61,7 +61,7 @@ void SoccerInputLogPlayer::OnLink()
         }
 
     // get fps controller
-    mFPS = shared_dynamic_cast<FPSController>
+    mFPS = dynamic_pointer_cast<FPSController>
         (GetCore()->Get("/usr/scene/camera/physics/controller"));
 
     if (mFPS.get() == 0)
@@ -71,7 +71,7 @@ void SoccerInputLogPlayer::OnLink()
     }
 
     // get camera body
-    mCameraBody = shared_dynamic_cast<RigidBody>
+    mCameraBody = dynamic_pointer_cast<RigidBody>
         (GetCore()->Get("/usr/scene/camera/physics"));
 
     if (mCameraBody.get() == 0)

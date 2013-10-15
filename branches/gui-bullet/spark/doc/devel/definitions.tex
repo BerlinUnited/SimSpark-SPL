@@ -1,0 +1,99 @@
+\documentclass[10pt,a4paper]{book}
+\usepackage{a4} % 297x210 paper
+\usepackage{amsmath}
+\usepackage{amssymb} % Some extra symbols
+\usepackage{makeidx} % If you want to generate an index, automatically
+\usepackage{graphicx} % If you want to include postscript graphics
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{pifont}
+\usepackage{url}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{cite}
+\usepackage{scalefnt}
+\usepackage{fancyhdr}
+\usepackage{wrapfig}
+\usepackage{charter}
+\usepackage[british]{babel}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks,%
+  citecolor=blue,%
+  filecolor=black,%
+  linkcolor=black,%
+  urlcolor=black,%
+  pdftex=true,%
+  breaklinks=true}
+\usepackage{listings}
+\lstset{language=bash,basicstyle=\small,breaklines=false}
+\usepackage{subfigure}
+\usepackage[font=small,labelfont=bf,textfont=it]{caption}
+\titlespacing*{\section}{0pt}{1.5cm plus 0.2cm minus 0.2cm}{0.5cm}
+\titlespacing*{\subsection}{0pt}{1.2cm plus 0.2cm minus 0.2cm}{0.5cm}
+\titlespacing*{\subsubsection}{0pt}{1.0cm plus 0.2cm minus 0.2cm}{0.5cm}
+\titleformat*{\section}{\usefont{T1}{pag}{db}{n}\selectfont\large}
+\titleformat*{\subsection}{\usefont{T1}{pag}{db}{n}\selectfont\large}
+\titleformat*{\subsubsection}{\sf\selectfont\large}
+
+\definecolor{Grey}{rgb}{0.40,0.60,0.80}
+
+\titleformat{\chapter}[display]
+{\normalfont\huge\sf}
+{\flushright\vspace{1cm}{\Huge\color{Grey}\thechapter\vspace{0.2cm}\hrule}}
+{10pt}
+{\vspace{-2.2cm}\scalefont{1.15}}
+
+\setlength{\footskip}{1.5cm}
+% Define footer for chapter start pages
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \cfoot{}
+  \fancyfoot[r]{\sf\bfseries\thepage}
+}
+
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Change TOC style
+\titlecontents{chapter}[0pt]
+  {\addvspace{1.5pc}}
+  {\contentsmargin{0pt} \sf \makebox[0pt][r]
+  {\color{Grey}\Huge\thecontentslabel\enspace} \large}
+  {\contentsmargin{0pt} \large}
+  {\bfseries\hfill\contentspage}
+  [\color{Grey}\hrule\addvspace{0.6pc}]
+
+\contentsmargin{2.0em}
+
+\titlecontents{section}[5em]   {\contentslabel{2.3em}}{}{}{\hfill\contentspage}
+\titlecontents{subsection}[9em]{\contentslabel{3em}}{}{}{\hfill\contentspage}
+
+\newenvironment{fancyfig}
+{
+	\begin{figure}[float]
+	\begin{center}
+}
+{
+	{\color{Grey}\vspace{0.2cm}\hrule}
+	\end{center}
+	\end{figure}
+}
+
+\topmargin=-0.3in
+\textheight=8.93in
+\oddsidemargin=0.57in
+\evensidemargin=0.57in
+\textwidth=5.71in
+\renewcommand{\headwidth}{\textwidth}
+
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\llap{\csname the#1\endcsname\hskip1em}}
+\makeatother
+\pagestyle{fancy}
+\lhead{}
+\rhead{}
+\cfoot{}
+\rfoot{\sf\bfseries\thepage}
+

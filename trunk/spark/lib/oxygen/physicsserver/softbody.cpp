@@ -38,6 +38,6 @@ SoftBody::~SoftBody(){
 void SoftBody::OnLink()
 {
     if (mSoftBodyImp.get() == 0)
-        mSoftBodyImp = shared_dynamic_cast<SoftBodyInt>
+        mSoftBodyImp = dynamic_pointer_cast<SoftBodyInt>
             (GetCore()->New("SoftBodyImp"));
 }

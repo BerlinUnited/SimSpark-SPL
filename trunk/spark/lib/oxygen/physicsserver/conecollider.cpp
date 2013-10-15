@@ -41,7 +41,7 @@ ConeCollider::~ConeCollider()
 bool ConeCollider::ConstructInternal()
 {
     if (mConeColliderImp.get() == 0)
-        mConeColliderImp = shared_dynamic_cast<ConeColliderInt>
+        mConeColliderImp = dynamic_pointer_cast<ConeColliderInt>
             (GetCore()->New("ConeColliderImp"));
             
     if (mConeColliderImp.get() == 0)

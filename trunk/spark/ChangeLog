@@ -1,3 +1,92 @@
+2012-11-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/sceneeffector/sceneaction.h: 
+	* plugin/sceneeffector/sceneeffector.cpp:
+	- added the ability to receive and apply scene parameters
+	 
+2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+	
+	* lib/kerosin/CMakeLists.txt: 
+	- latest cleanups for 0.2.3: don't link SDL to kerosin
+
+	* test/fonttest/CMakeLists.txt: 
+	* test/inputtest/CMakeLists.txt: 
+	* plugin/inputsdl/CMakeLists.txt: 
+	* plugin/openglsyssdl/CMakeLists.txt: 
+	* plugin/timersystemsdl/CMakeLists.txt: 
+	- link against SDL
+	
+	* test/scenetest/main.cpp: 
+	* test/scenetest/CMakeLists.txt: 
+	- scenetest doesn't need SDL
+
+2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/oxygen/physicsserver/int/angularmotorint.h: 
+	* lib/oxygen/physicsserver/int/balljointint.h: 
+	* lib/oxygen/physicsserver/int/boxcolliderint.h: 
+	* lib/oxygen/physicsserver/int/capsulecolliderint.h: 
+	* lib/oxygen/physicsserver/int/colliderint.h: 
+	* lib/oxygen/physicsserver/int/contactjointhandlerint.h: 
+	* lib/oxygen/physicsserver/int/fixedjointint.h: 
+	* lib/oxygen/physicsserver/int/hinge2jointint.h: 
+	* lib/oxygen/physicsserver/int/hingejointint.h: 
+	* lib/oxygen/physicsserver/int/jointint.h: 
+	* lib/oxygen/physicsserver/int/physicsobjectint.h: 
+	* lib/oxygen/physicsserver/int/physicsserverint.h: 
+	* lib/oxygen/physicsserver/int/planecolliderint.h: 
+	* lib/oxygen/physicsserver/int/raycolliderint.h: 
+	* lib/oxygen/physicsserver/int/rigidbodyint.h: 
+	* lib/oxygen/physicsserver/int/sliderjointint.h: 
+	* lib/oxygen/physicsserver/int/spaceint.h: 
+	* lib/oxygen/physicsserver/int/spherecolliderint.h: 
+	* lib/oxygen/physicsserver/int/transformcolliderint.h: 
+	* lib/oxygen/physicsserver/int/universaljointint.h: 
+	* lib/oxygen/physicsserver/int/worldint.h: 
+	- added virtual distructor
+	
+	* NEWS: 
+	* CMakeLists.txt:
+	- updated for 0.2.3 release
+
+	* plugin/sparkmonitor/sparkmonitor.cpp: 
+	* plugin/sparkmonitor/sparkmonitor.h: 
+	* lib/oxygen/monitorserver/monitorsystem.h: 
+	* lib/oxygen/monitorserver/monitorserver.cpp:
+	- fixed a small spelling error
+
+2012-05-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- initial version for 0.2.3 release
+
+2012-04-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* spark/spark.cpp (Spark::Init): 
+	- set default relpath to empty string, since "../../" is not a usable 
+	  default value (doesn't work in the current project's directory structure)
+	  and also to prevent "script not found" error messages
+	
+	* lib/zeitgeist/scriptserver/scriptserver.cpp (ScriptServer::RunInitScript): 
+	- only check mRelPathPrefix if not empty
+
+2012-04-10  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/oxygen/simulationserver/agentcontrol.h: 
+	* lib/oxygen/simulationserver/agentcontrol.cpp: 
+	* lib/oxygen/simulationserver/agentcontrol_c.cpp:
+	- AgentControl multi-threaded implementation added with some cleanups. 
+	  Thanks to Andreas Seekircher for providing the patch. 
+	 
+	* spark/spark.rb: 
+	- sets AgentControls multi-threaded mode according to $threadedAgentControl
+	  variable
+
+2012-04-07  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* lib/oxygen/simulationserver/simulationserver.cpp (SimulationServer::Step): 
+	- quit if GameControlServer is finished (e.g. the end of a game)
+
 2012-02-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* lib/salt/gmath.h: 

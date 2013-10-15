@@ -1,0 +1,175 @@
+; -*- mode: lisp; -*-
+
+;
+; nao robot description file.
+;
+
+(RSG 0 1)
+(
+
+;
+; The torso parameters
+;
+
+(def $TorsoLength  0.1)
+(def $TorsoWidth   0.1)
+(def $TorsoHeight  0.195)
+(def $TorsoMass    1.02628)
+
+(def $TorsoCGX     -0.00006)
+(def $TorsoCGY     -0.00480)
+(def $TorsoCGZ     -0.04227)
+(def $TorsoI11     0.00487953284)
+(def $TorsoI22     0.00470360698)
+(def $TorsoI33     0.00156713520)
+(def $TorsoI12     -0.00001428591)
+(def $TorsoI13     -0.00019545651)
+(def $TorsoI23     0.00002224589)
+
+(def $RobotInitX  0)
+(def $RobotInitY  -1)
+(def $RobotInitZ  1.5)
+(def $TorsoX (eval $RobotInitX + $TorsoCGX))
+(def $TorsoY (eval $RobotInitY + $TorsoCGY))
+(def $TorsoZ (eval $RobotInitZ + $TorsoCGZ))
+(def $GeoX (eval -1 * $TorsoCGX))
+(def $GeoY (eval -1 * $TorsoCGY))
+(def $GeoZ (eval -1 * $TorsoCGZ + 0.0125))
+
+(def $loadObj (eval Nao.UseTexture))
+;
+;Begin Construct of Nao
+;
+(nd Space
+    (setName spacenao)
+    (disableInnerCollision true)
+    
+    ;
+    ;The torso part
+    ;
+    (nd AgentAspect
+        (setName torso)
+        (setLocalPos $TorsoX $TorsoY $TorsoZ)
+
+	(nd Transform
+	    (setLocalPos $GeoX $GeoY $GeoZ)
+        (switch $loadObj
+          (true
+            (nd Transform
+                (setLocalRotation -90 0 180)
+                (nd StaticMesh
+                    (load 'models/naobody.obj')
+                    (setScale $TorsoLength $TorsoLength $TorsoLength)
+                )
+          )
+          )
+        
+          (false
+            (importScene rsg/agent/naov4/box_appearance.rsg $TorsoLength $TorsoWidth $TorsoHeight matGrey)
+          )
+        )
+	)
+
+        (importScene rsg/agent/naov4/body_physics.rsg $TorsoMass 0 0 0 $TorsoI11 $TorsoI22 $TorsoI33 $TorsoI12 $TorsoI13 $TorsoI23)
+	(nd TransformCollider
+	    (nd BoxCollider
+		(setName TorsoCollider)
+		(setBoxLengths $TorsoLength $TorsoWidth $TorsoHeight)
+		(setLocalPosition $GeoX $GeoY $GeoZ)
+		(importScene rsg/agent/naov4/contactjointhandler.rsg)
+		)
+	    )
+	(nd Transform
+	   (setLocalRotation 0 0 90)
+	   (nd GPS
+		(setName torso)
+		)
+	    )
+
+	(nd Battery
+	    (setName Battery)
+	    (setCapacity 167184)
+	    (setPower 167184)
+	    (nd BatteryPerceptor
+		(setName BAT)
+		(setInterval 50)
+		)
+	    )
+
+        ;Install effectors and perceptors
+        (nd StaticMeshInitEffector)
+
+        (nd TimePerceptor)
+        
+        (nd AgentState
+            (setName AgentState)
+            (nd GameStatePerceptor)
+            (nd HearPerceptor)
+            (nd Transform
+              (nd Cylinder
+                (setName SelectionMarker)
+                (setParams 1.0 1.0)
+                (setScale 0.2 0.2 0.02)
+                (setMaterial matSelect)
+                (setTransparent)
+              )
+            )
+        )
+
+        (nd GyroRatePerceptor (setName torso))
+	(nd Accelerometer (setName torso))
+
+        ;(nd HMDPPerceptor)
+        ;(nd HMDPEffector)
+
+        (nd BeamEffector)
+
+        (nd SayEffector)
+
+        ;(nd VisionPerceptor
+    ;        (setSenseMyPos false)
+    ;        (setStaticSenseAxis false)
+    ;        (addNoise false))
+
+        (nd AgentSyncEffector)
+
+    );end of AgentAspect
+    
+    
+    ;
+    ;The neck and head part
+    ;
+    (importScene rsg/agent/naov4/naoneckhead.rsg $RobotInitX $RobotInitY $RobotInitZ $loadObj)
+    
+
+    ;
+    ;The Right Arm
+    ;
+    (importScene rsg/agent/naov4/naoarm.rsg
+              1 r
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
+
+    ;
+    ;The Left Arm
+    ;
+    (importScene rsg/agent/naov4/naoarm.rsg
+              -1 l
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
+    
+    ;
+    ;The Right Leg
+    ;
+    (importScene rsg/agent/naov4/naoleg.rsg
+              1 r
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
+    
+    ;
+    ;The Left Leg
+    ;
+    (importScene rsg/agent/naov4/naoleg.rsg
+              -1 l
+              $RobotInitX $RobotInitY $RobotInitZ $loadObj)
+
+);end of nd Space
+
+);end of RSG 0 1

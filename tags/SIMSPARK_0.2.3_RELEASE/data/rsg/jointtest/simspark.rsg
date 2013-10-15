@@ -1,0 +1,92 @@
+; -*- mode: lisp; -*-
+(RSG 0 1)
+
+(
+ ; add lights
+ (nd Transform
+       (setLocalPos -10 10 20)
+       (nd Light
+	     (setDiffuse 1.0 1.0 1.0 1.0)
+	     (setSpecular 0.1 0.1 0.1 1.0)
+	     (setAmbient 0.5 0.5 0.5 1.0)
+	     )
+       )
+
+; create the arena
+ (nd Transform
+       (setLocalPos 0 0 -1)
+       (importScene rsg/boxspheres/arena.rsg)
+       )
+
+ ; add a platform
+ (nd Transform
+       (setLocalPos 0 25 20)
+       (setLocalRotation 30 0 0)
+       (importScene rsg/boxspheres/staticbox.rsg 15 80 0.2 matGreen)
+       )
+
+
+ ; add some rotors
+ (importScene rsg/jointtest/rotorlayer.rsg 200 300)
+ (nd Transform
+      (setLocalPos 0 -20 15)
+      (importScene rsg/boxspheres/layer.rsg 1 0.01)
+      )
+    
+  ; add some bodies connected with joints
+ (nd Transform
+       (setLocalPos -2 40 32)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
+ (nd Transform
+       (setLocalPos -4 40 31)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
+ (nd Transform
+       (setLocalPos 0 39 30)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
+ (nd Transform
+       (setLocalPos -2 33 32)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
+ (nd Transform
+       (setLocalPos -4 36 29)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
+ (nd Transform
+       (setLocalPos 0 34 30)
+       (importScene rsg/jointtest/hinge2thing.rsg)
+       )
+
+ (nd Transform 
+       (setLocalRotation 45 0 0)
+       (setLocalPos 0 0 20)
+       (importScene rsg/jointtest/hingething.rsg)
+       )
+
+
+ (nd Transform 
+       (setLocalRotation 45 0 0)
+       (setLocalPos 0 0 30)
+       (importScene rsg/jointtest/hingething.rsg)
+       )
+
+
+ (nd Transform 
+       (setLocalRotation 45 0 0)
+       (setLocalPos 10 10 10)
+       (importScene rsg/jointtest/sliderthing.rsg)
+       )
+
+ (nd Transform 
+       (setLocalPos -10 -10 10)
+       (setLocalRotation 45 0 0)
+       (importScene rsg/jointtest/universalthing.rsg)
+       )
+ )

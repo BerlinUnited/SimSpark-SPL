@@ -65,7 +65,7 @@ GameTimePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
 void
 GameTimePerceptor::OnLink()
 {
-    mGameState = shared_dynamic_cast<GameStateAspect>
+    mGameState = dynamic_pointer_cast<GameStateAspect>
         (GetCore()->Get("/sys/server/gamecontrol/GameStateAspect"));
     
     if (mGameState.get() == 0)

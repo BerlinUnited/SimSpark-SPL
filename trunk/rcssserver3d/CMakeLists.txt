@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.6.5")
+set(PACKAGE_VERSION "0.6.6")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -26,7 +26,7 @@ include(AdditionalSearchPaths)
 
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED system)
 find_package(SDL REQUIRED)
 find_package(DevIL REQUIRED)
 find_package(ODE REQUIRED)

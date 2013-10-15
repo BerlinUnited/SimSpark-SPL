@@ -56,7 +56,7 @@ void SparkMonitorLogFileServer::OnLink()
     mScriptServer = GetCore()->GetScriptServer();
 
     // setup SceneServer reference
-    mSceneServer = shared_dynamic_cast<SceneServer>
+    mSceneServer = dynamic_pointer_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
@@ -80,7 +80,7 @@ void SparkMonitorLogFileServer::OnUnlink()
 void SparkMonitorLogFileServer::InitSimulation()
 {
     // get the SceneImporter
-    mSceneImporter = shared_dynamic_cast<SceneImporter>
+    mSceneImporter = dynamic_pointer_cast<SceneImporter>
         (GetCore()->Get("/sys/server/scene/RubySceneImporter"));
 
     if (mSceneImporter.get() == 0)
@@ -205,7 +205,7 @@ void SparkMonitorLogFileServer::ParseCustomPredicates(sexp_t* sexp)
          ++iter
          )
         {
-            shared_static_cast<CustomMonitor>((*iter))
+            static_pointer_cast<CustomMonitor>((*iter))
                 ->ParseCustomPredicates(pList);
         }
 }
@@ -230,7 +230,7 @@ void SparkMonitorLogFileServer::ParseMessage(const string& msg)
 
     if (mManagedScene.get() == 0)
         {
-            mManagedScene = shared_dynamic_cast<BaseNode>
+            mManagedScene = dynamic_pointer_cast<BaseNode>
                 (GetCore()->New("oxygen/BaseNode"));
             mActiveScene->AddChildReference(mManagedScene);
         }

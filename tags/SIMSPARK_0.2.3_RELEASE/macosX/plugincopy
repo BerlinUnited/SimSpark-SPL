@@ -1,0 +1,14 @@
+#! /bin/sh
+# get the entire plugin path
+plugin=$1
+# get the application name
+appname=$2
+
+appdir=$appname.app
+pluginname=`basename $plugin`
+
+if test -f "$plugin"; then
+    cp $plugin $appdir/Contents/plugins/
+else
+    echo "warning: plugin $pluginname not found"
+fi
