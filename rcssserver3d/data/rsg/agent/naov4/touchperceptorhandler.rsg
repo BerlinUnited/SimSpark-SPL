@@ -17,7 +17,5 @@
 
         (setContactSlipMode true)
         (setContactSlip 5e-3)
-
-	(setContactMu 1e4)
     )
 )
