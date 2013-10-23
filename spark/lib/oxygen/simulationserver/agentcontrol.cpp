@@ -164,7 +164,6 @@ void AgentControl::KillUnSyncAgent() {
     set<rcss::net::Addr> closedClients(mCloseClients.begin(),
                                        mCloseClients.end());
 
-    set<rcss::net::Addr> closingClients;
     for (
          TAddrMap::const_iterator iter = mClients.begin();
          iter != mClients.end();
@@ -178,12 +177,9 @@ void AgentControl::KillUnSyncAgent() {
                 mGameControlServer->GetAgentAspect(iter->second->id);
         if (agent && !agent->IsSynced())
         {
-            closingClients.insert(iter->first);
+            mCloseClients.push_back(iter->first);
+            GetLog()->Normal() <<"AgentControl::KillUnSyncAgent "<<agent->GetFullPath()<<"\n";
         }
-    }
-
-    for(set<rcss::net::Addr>::iterator iter=closingClients.begin(); iter!=closingClients.end(); ++iter) {
-        RemoveClient(*iter);
     }
 }
 
