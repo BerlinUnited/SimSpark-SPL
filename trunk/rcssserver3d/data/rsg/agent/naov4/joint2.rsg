@@ -15,11 +15,11 @@
  (def $MaxAbsSpeed (eval 79.2 * $RMP2RPS))
  (def $Ke (eval 3.8 * $RMP2RPS))
  (def $Kt 2.5)
- (def $R  23.1)
+ (def $R  6) ; WORKAROUND: 23.1
  (def $Ct 0.0158)
  (def $Ch 27.2)
  (def $Te 38)
- (def $FMax 3.3) ; WORKAROUND: the joint was too weak to stand up (the real robot use collision between hand and body for standing up from back!)
+ (def $FMax 10) ; WORKAROUND: the joint was too weak (2.3) to stand up (the real robot use collision between hand and body for standing up from back!)
 
  (importScene rsg/agent/naov4/hingejoint.rsg
 	      $PerName     $EffName   
