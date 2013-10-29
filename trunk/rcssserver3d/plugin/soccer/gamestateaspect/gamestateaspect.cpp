@@ -287,7 +287,13 @@ GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
         }
     }
 
-    ++mRobotTypeCount[i][type];
+    if (type>=0 && type < mRobotTypeCount[i].size()) {
+        ++mRobotTypeCount[i][type];
+    }
+    else {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::InsertRobotType) unknow robot type " << type << " \n";
+    }
 
     return true;
 }
