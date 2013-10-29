@@ -1,3 +1,7 @@
+# useful for cross-compilation from multiple root directories
+set(CMAKE_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH}
+    "$ENV{CMAKE_ALTERNATIVE_ROOT}")
+
 if (WIN32)
   set(ENV{SDLDIR} $ENV{SDLDIR} C:/library/SDL/ 
          "C:/Program Files/SDL/"

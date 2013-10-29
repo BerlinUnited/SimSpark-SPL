@@ -252,7 +252,8 @@ AgentState::OnUnlink()
       return;
     }
 
-    game_state->ReturnUniform(GetTeamIndex(), GetUniformNumber());
+    game_state->ReturnUniform(GetTeamIndex(), GetUniformNumber(),
+        GetRobotType());
 }
 
 bool

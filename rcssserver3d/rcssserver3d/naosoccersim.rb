@@ -56,10 +56,12 @@ addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
 
 addSoccerVar('AutomaticQuit', false)
-addSoccerVar('ChangeSidesInSecondHalf', true)
+addSoccerVar('ChangeSidesInSecondHalf', false)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
+addSoccerVar('MaxHeteroTypeCount', 3)
+addSoccerVar('MaxTotalHeteroCount', 9)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.042)
@@ -73,6 +75,12 @@ addSoccerVar('RuleDropBallTime', 15)
 addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
+
+# charging foul parameters
+addSoccerVar('UseCharging', true)
+addSoccerVar('ChargingMinSpeed', 0.2)
+addSoccerVar('ChargingMinBallDist', 0.2)
+addSoccerVar('IllegalInterceptMinAngle', 70)
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       
