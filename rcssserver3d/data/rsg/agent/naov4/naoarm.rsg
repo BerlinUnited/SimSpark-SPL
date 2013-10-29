@@ -49,7 +49,7 @@
     (def $ShoulderI23    -0.00000004410)
     
     (def $UpperArmSizeX  0.06)
-    (def $UpperArmSizeY  0.09)
+    (def $UpperArmSizeY  0.105)
     (def $UpperArmSizeZ  0.06)
     (def $UpperArmMass   0.12166)
     (def $UpperArmCGX    -0.00388)
