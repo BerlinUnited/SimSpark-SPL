@@ -19,7 +19,7 @@
  (def $Ct 0.0158)
  (def $Ch 27.2)
  (def $Te 38)
- (def $FMax 2.3)
+ (def $FMax 3.3) ; WORKAROUND: the joint was too weak to stand up (the real robot use collision between hand and body for standing up from back!)
 
  (importScene rsg/agent/naov4/hingejoint.rsg
 	      $PerName     $EffName   
