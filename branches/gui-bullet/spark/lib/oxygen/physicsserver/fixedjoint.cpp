@@ -40,7 +40,7 @@ void FixedJoint::OnLink()
     Joint::OnLink();
     
     if (mFixedJointImp.get() == 0)
-        mFixedJointImp = shared_dynamic_cast<FixedJointInt>
+        mFixedJointImp = dynamic_pointer_cast<FixedJointInt>
             (GetCore()->New("FixedJointImp"));
 
     long world = GetWorldID();

@@ -20,9 +20,9 @@
 
 #include "sparktreemodel.h"
 #include "treeitem.h"
-#include "zeitgeist\core.h"
-#include "zeitgeist\leaf.h"
-#include "zeitgeist\class.h"
+#include "zeitgeist/core.h"
+#include "zeitgeist/leaf.h"
+#include "zeitgeist/class.h"
 #include "carbon.h"
 
 #include <QStringList>

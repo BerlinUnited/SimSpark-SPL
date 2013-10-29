@@ -28,6 +28,7 @@
 #include "sparkproperty.h"
 
 #include <QTableWidget>
+#include "sparkpropertymanager.h"
 
 class QTableWidget;
 class SparkController;
@@ -73,7 +74,7 @@ public:
      \brief Clears list of Property objects.
     */
     void clearProperties();
-    
+
     /*!
      \brief Initialize the PropertyList
 

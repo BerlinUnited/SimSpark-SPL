@@ -42,7 +42,7 @@ void BallJoint::OnLink()
     Joint::OnLink();
     
     if (mBallJointImp.get() == 0)
-        mBallJointImp = shared_dynamic_cast<BallJointInt>
+        mBallJointImp = dynamic_pointer_cast<BallJointInt>
             (GetCore()->New("BallJointImp"));
 
     long world = GetWorldID();

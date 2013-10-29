@@ -54,7 +54,7 @@ MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
 {
     // check if a monitor system of the requested type was already created
     boost::shared_ptr<MonitorSystem> monitorSys =
-        shared_dynamic_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
+        dynamic_pointer_cast<MonitorSystem>(GetChildOfClass(monitorSysName));
 
     if (monitorSys.get() != 0)
     {
@@ -62,7 +62,7 @@ MonitorServer::RegisterMonitorSystem(const std::string& monitorSysName)
     }
 
     // create the monitor system
-    monitorSys = shared_dynamic_cast<MonitorSystem>(GetCore()->New(monitorSysName));
+    monitorSys = dynamic_pointer_cast<MonitorSystem>(GetCore()->New(monitorSysName));
 
     if (monitorSys.get() == 0)
     {
@@ -92,7 +92,7 @@ MonitorServer::RegisterMonitorItem(const std::string& monitorItemName)
 {
     // check if a monitor item of the requested type was already created
     boost::shared_ptr<MonitorItem> monitorItem =
-        shared_dynamic_cast<MonitorItem>(GetChildOfClass(monitorItemName));
+        dynamic_pointer_cast<MonitorItem>(GetChildOfClass(monitorItemName));
 
     if (monitorItem.get() != 0)
     {
@@ -100,7 +100,7 @@ MonitorServer::RegisterMonitorItem(const std::string& monitorItemName)
     }
 
     // create the monitor item
-    monitorItem = shared_dynamic_cast<MonitorItem>(GetCore()->New(monitorItemName));
+    monitorItem = dynamic_pointer_cast<MonitorItem>(GetCore()->New(monitorItemName));
 
     if (monitorItem.get() == 0)
     {
@@ -127,7 +127,7 @@ MonitorServer::RegisterMonitorItem(const std::string& monitorItemName)
 
 boost::shared_ptr<MonitorSystem> MonitorServer::GetMonitorSystem()
 {
-    return shared_static_cast<MonitorSystem>
+    return static_pointer_cast<MonitorSystem>
         (
          FindChildSupportingClass<MonitorSystem>()
          );
@@ -146,7 +146,7 @@ MonitorServer::CollectItemPredicates(bool initial, PredicateList& pList)
         )
     {
         boost::shared_ptr<MonitorItem> item =
-            shared_static_cast<MonitorItem>(*iter);
+            static_pointer_cast<MonitorItem>(*iter);
 
         if (initial)
         {

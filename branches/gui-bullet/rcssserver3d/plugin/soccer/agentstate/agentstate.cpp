@@ -76,6 +76,18 @@ AgentState::GetUniformNumber() const
 }
 
 void
+AgentState::SetRobotType(int type)
+{
+    mRobotType = type;
+}
+
+int
+AgentState::GetRobotType() const
+{
+    return mRobotType;
+}
+
+void
 AgentState::SetID(const std::string& id, TPerceptType pt)
 {
     std::istringstream iss(id);
@@ -217,7 +229,7 @@ AgentState::GetSelfMessage(string& msg)
 void
 AgentState::UpdateHierarchyInternal()
 {
-    boost::shared_ptr<RenderNode> node = boost::shared_dynamic_cast<RenderNode>(GetChild("SelectionMarker", true));
+    boost::shared_ptr<RenderNode> node = boost::dynamic_pointer_cast<RenderNode>(GetChild("SelectionMarker", true));
     if (!node)
     {
       GetLog()->Error() << "ERROR: (AgentState::UpdateHierarchyInternal) could not find selection marker\n";
@@ -238,8 +250,9 @@ AgentState::OnUnlink()
       GetLog()->Error() << "ERROR: (AgentState::OnUnlink) could not get game state\n";
       return;
     }
-    
-    game_state->ReturnUniform(GetTeamIndex(), GetUniformNumber());
+
+    game_state->ReturnUniform(GetTeamIndex(), GetUniformNumber(),
+        GetRobotType());
 }
 
 bool

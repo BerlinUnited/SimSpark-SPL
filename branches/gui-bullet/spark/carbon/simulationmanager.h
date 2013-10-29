@@ -114,7 +114,7 @@ namespace GuiSettings
 */
 class SimulationManager : public QObject
 {
-    Q_OBJECT 
+    Q_OBJECT
 
     friend SimulationTask;
 
@@ -184,7 +184,7 @@ public:
     int getSetupIndexByFilePath(const QString& path) const;
     /*!
      \brief Returns the index of the currently initialized simulation setup in the list of default simulation setups.
-     
+
      If the currently initialized setup was not loaded from the include directories, returns -1.
     */
     int getInitializedSetupIndex() const;
@@ -293,7 +293,7 @@ public:
     QStringList getFileExtensions() const;
 
     /*!
-     \brief Returns a pointer to the permanent spark server thread. Is a null pointer if no server has been started yet. 
+     \brief Returns a pointer to the permanent spark server thread. Is a null pointer if no server has been started yet.
     */
     boost::shared_ptr<ServerThread> getSparkServerThread() const;
     /*!
@@ -388,7 +388,7 @@ public:
      Setups with conflicting names cant be loaded.
 
      The savestate specifies the type of the SimulationSetup. Preset setups do not contain data to load and are located in one of the include directories.
-     Saved SimulationSetups contain plugin data and are located in any save directory. Overwriting a save state is possible anytime and there may be many 
+     Saved SimulationSetups contain plugin data and are located in any save directory. Overwriting a save state is possible anytime and there may be many
      saves of the same basic preset SimulationSetup with the same setup name. The names of included preset simulation setups has to be unique.
 
      If the loadData flag is true, a save .ini file for plugin data will be searched in the same directory and with the same file name than the simulation
@@ -405,7 +405,7 @@ public:
      Setups with conflicting names cant be saved in the include directories.
 
      The savestate specifies the type of the SimulationSetup. Preset setups do not contain data to load and are located in one of the include directories.
-     Saved SimulationSetups contain plugin data and are located in any save directory. Overwriting a save state is possible anytime and there may be many 
+     Saved SimulationSetups contain plugin data and are located in any save directory. Overwriting a save state is possible anytime and there may be many
      saves of the same basic preset SimulationSetup with the same setup name. The names of included default simulation setups has to be unique.
 
      If the saveData flag is true, the saveData() function of all plugins will be called and their data will be saved to an .ini file in the same directory and with
@@ -502,8 +502,8 @@ public:
     bool updateSimulationSetup(const QString& path, const SimulationSetup& setup, bool askReloadCurrent = true);
 
     /*!
-     \brief Initializes a simulation by a SimulationSetup name from the list of SimulationSetups. 
-     
+     \brief Initializes a simulation by a SimulationSetup name from the list of SimulationSetups.
+
      The current simulation will be stopped and the new simulations plugins and tasks (threads and processes) will be initialized. Before closing the Simulation object will
      ask to save the data of the current simulation.
 
@@ -515,8 +515,8 @@ public:
     */
     bool initializeSimulation(const QString& name, bool reinitialize = false);
     /*!
-     \brief Initializes a simulation by a SimulationSetup file at the given path. 
-     
+     \brief Initializes a simulation by a SimulationSetup file at the given path.
+
      The current simulation will be stopped and the new simulations plugins and tasks (threads and processes) will be initialized. Before closing the Simulation object will
      ask to save the data of the current simulation. The file will not be added to the current list of preset simulation setups.
      Used to load save states.
@@ -533,14 +533,14 @@ public:
     /*!
      \brief Returns a pointer to the current Simulation or 0.
 
-     The Simulation object is created in the constructor of the SimulationManager. This does not mean a setup has been loaded and the Simulation is not neccessarily 
+     The Simulation object is created in the constructor of the SimulationManager. This does not mean a setup has been loaded and the Simulation is not neccessarily
      initialized yet. Use simulationInitialized() to check.
     */
     const boost::shared_ptr<Simulation> getSimulation() const;
     /*!
      \brief Returns a pointer to the current Simulation or 0.
 
-     The Simulation object is created in the constructor of the SimulationManager. This does not mean a setup has been loaded and the Simulation is not neccessarily 
+     The Simulation object is created in the constructor of the SimulationManager. This does not mean a setup has been loaded and the Simulation is not neccessarily
      initialized yet. Use simulationInitialized() to check.
     */
     boost::shared_ptr<Simulation> getSimulation();
@@ -698,7 +698,7 @@ public:
      \param filters file filters (format: "*.rb;*.rsg"...)
      \param absolute if true, absolute filepaths will be displayed in the context menu, otherwise relative paths will be used
     */
-    void createIncludeFileContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers = std::vector<NamedActionReceiver*>(),
+    void createIncludeFileContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers,
         QObject* signalTarget = 0, const char* slot = "", const QStringList& includePaths = QStringList(), const QStringList& includeFiles = QStringList(),
         const QStringList& filters = QStringList("*.rb"), bool absolute = true);
     /*!
@@ -710,7 +710,7 @@ public:
      \param slot target function of the optional target object to call with signature (QString) when a generated entry is clicked
      \param absolute if true, absolute filepaths will be displayed in the context menu, otherwise relative paths will be used
     */
-    void createScriptContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers = std::vector<NamedActionReceiver*>(),
+    void createScriptContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers,
         QObject* signalTarget = 0, const char* slot = "", bool absolute = true);
     /*!
      \brief Create context menu entries for executable files in include file and include directory list
@@ -721,7 +721,7 @@ public:
      \param slot target function of the optional target object to call with signature (QString) when a generated entry is clicked
      \param absolute if true, absolute filepaths will be displayed in the context menu, otherwise relative paths will be used
     */
-    void createExecutableContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers = std::vector<NamedActionReceiver*>(),
+    void createExecutableContextMenu(QMenu* menu, std::vector<NamedActionReceiver*>& actionReceivers,
         QObject* signalTarget = 0, const char* slot = "", bool absolute = true);
 
 protected:
@@ -946,12 +946,12 @@ public: signals:
     void aboutToReloadSetupList();
 
     /*!
-     \brief Emitted before a new Simulation is initialized. 
+     \brief Emitted before a new Simulation is initialized.
 
      Use this signal to fetch or store data before the setup begins to be closed. When reaching the destructor of a plugin or task the other plugins and tasks
      are not guaranteed to be still running.
 
-     Name and path specify wich setup is going to be initialized. If the setup is a save state, the SimulationManager might not contain a preset setup with this name 
+     Name and path specify wich setup is going to be initialized. If the setup is a save state, the SimulationManager might not contain a preset setup with this name
      or a setup with this name is not identical to the save sate. Use access via filename to identify the setup.
 
      You might want to receive the signal of the current Simulation aboutToBeStopped() instead.
@@ -986,7 +986,7 @@ public: signals:
     */
     void setupPaused(QString name);
     /*!
-     \brief Emitted when a setup has been saved. 
+     \brief Emitted when a setup has been saved.
 
      Includes preset setups and save states.
 
@@ -1004,9 +1004,9 @@ public: signals:
     */
     void settingChanged(QString name);
 
-public slots:	
+public slots:
     //public slots
-    
+
     /*!
      \brief Makes the SimulationManager ready to be deleted. Stops current Simulation.
 
@@ -1032,9 +1032,9 @@ private:
     bool mReloadingSetups; /*!< True if currently reloading the setup list. */
     bool mClosed; /*!< True after cleanup has been called. */
 
-    /*! Unique server. Must never be deleted, but may only be resetted. 
+    /*! Unique server. Must never be deleted, but may only be resetted.
         Instead of initializing a new server, this one is used and reinitialized.*/
-    boost::shared_ptr<ServerThread> mServerThread; 
+    boost::shared_ptr<ServerThread> mServerThread;
 
     boost::shared_ptr<Settings> mSettings; /*!< Pointer to global settings object. */
 

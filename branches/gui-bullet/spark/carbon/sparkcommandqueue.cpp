@@ -22,7 +22,7 @@
 #include "sparkcommands.h"
 #include "sparkcontroller.h"
 #include "guisimcontrol.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 namespace SparkCommand
 {

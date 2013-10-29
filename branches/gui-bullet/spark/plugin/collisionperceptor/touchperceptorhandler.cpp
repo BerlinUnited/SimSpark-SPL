@@ -36,7 +36,7 @@ void TouchPerceptorHandler::OnLink()
 	ContactJointHandler::OnLink();
 
     // find the first CollisionPerceptor below our closest Transform node
-    boost::shared_ptr<Transform> transformParent = shared_static_cast<Transform>
+    boost::shared_ptr<Transform> transformParent = static_pointer_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());
 
     if (transformParent.get() == 0)
@@ -44,7 +44,7 @@ void TouchPerceptorHandler::OnLink()
         return;
     }
 
-    mForceResistancePercept = shared_dynamic_cast<ForceResistancePerceptor>(
+    mForceResistancePercept = dynamic_pointer_cast<ForceResistancePerceptor>(
             transformParent->GetChildSupportingClass("ForceResistancePerceptor",
                     true));
 

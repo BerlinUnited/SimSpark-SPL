@@ -44,7 +44,7 @@ Joint::~Joint()
 void Joint::OnLink()
 {
     if (mJointImp.get() == 0)
-        mJointImp = shared_dynamic_cast<JointInt>
+        mJointImp = dynamic_pointer_cast<JointInt>
             (GetCore()->New("JointImp"));
 
     if (mJointID == 0)
@@ -72,7 +72,7 @@ boost::shared_ptr<Joint> Joint::GetJoint(long jointID)
             return boost::shared_ptr<Joint>();
         }
 
-    boost::shared_ptr<Joint> joint = shared_static_cast<Joint>
+    boost::shared_ptr<Joint> joint = static_pointer_cast<Joint>
         (jointPtr->GetSelf().lock());
 
     if (joint.get() == 0)
@@ -132,7 +132,7 @@ boost::shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
             return boost::shared_ptr<RigidBody>();
         }
 
-    boost::shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
+    boost::shared_ptr<Leaf> mySelf = static_pointer_cast<Leaf>
         (GetSelf().lock());
 
     boost::shared_ptr<Leaf> leaf = GetCore()->Get(path,mySelf);
@@ -145,7 +145,7 @@ boost::shared_ptr<RigidBody> Joint::GetBody(const std::string& path)
             return boost::shared_ptr<RigidBody>();
         }
 
-    boost::shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(leaf);
+    boost::shared_ptr<RigidBody> body = dynamic_pointer_cast<RigidBody>(leaf);
 
     if (body.get() == 0)
         {

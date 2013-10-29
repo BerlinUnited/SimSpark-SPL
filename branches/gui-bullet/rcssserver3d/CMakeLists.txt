@@ -26,7 +26,7 @@ include(AdditionalSearchPaths)
 
 find_package(Spark REQUIRED) 
 find_package(Freetype REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED system)
 find_package(SDL REQUIRED)
 find_package(DevIL REQUIRED)
 find_package(ODE REQUIRED)
@@ -46,7 +46,7 @@ include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
 link_directories(${Boost_LIBRARY_DIRS})
 
 if (UNIX)
-  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} CACHE
+  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} "--std=gnu++11" CACHE
         STRING "Common C++ compiler flags" FORCE)
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual" CACHE
         STRING "C++ compiler flags for Debug builds" FORCE)

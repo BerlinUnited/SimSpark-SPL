@@ -46,7 +46,7 @@ void ThreadMessageQueue::queueMessage(const QString& message, Logger::LogLevel l
     emit queuedMessage(message, level);
 }
 
-void ThreadMessageQueue::queueMessageObject(boost::shared_ptr<LogMessage>& object)
+void ThreadMessageQueue::queueMessageObject(const boost::shared_ptr<LogMessage>& object)
 {
     emit queuedMessageObject(object);
 }
@@ -109,7 +109,7 @@ void IMessageReceiver::receiveMessageQueued(const QString& message, Logger::LogL
         mThreadMessageQueue->queueMessage(message, level);
 }
 
-void IMessageReceiver::receiveMessageObjectQueued(boost::shared_ptr<LogMessage>& object)
+void IMessageReceiver::receiveMessageObjectQueued(const boost::shared_ptr<LogMessage>& object)
 {
     if (!mQueueInterThreadMessages)
         receiveMessageObject(object);
@@ -141,7 +141,7 @@ bool IMessageReceiver::isReceivingMessageObjects()
 
 QString IMessageReceiver::getMessageFormat()
 {
-    return mMessageReceiverAppender.format(); 
+    return mMessageReceiverAppender.format();
 }
 
 QString IMessageReceiver::getMessageObjectFormat()

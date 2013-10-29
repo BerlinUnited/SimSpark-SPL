@@ -59,7 +59,7 @@ namespace GuiSettings
  For example, the SimulationManager loads SimulationSetup files and uses the PluginManager to create plugins based on PluginDefinitions in the SimulationSetup.
  The user can manually explore the list of registered plugin classes and instantiate them or remove plugin instances with a PluginDialog.
  When loading a list of plugins, the manager can control which plugins are kept, which ones are reloaded, which ones have to be removed, and which ones habe to be added.
- 
+
  Plugins are stored with different kinds of identification values. These different values can be used to search and access plugins.
  They are also used to identify them during one program execution or over several program executions (e.g. to save [[Gui Settings Concept|Settings]] for the plugins).
 
@@ -83,11 +83,11 @@ namespace GuiSettings
  The caption of a plugin is freely choosable. It is advised to not to change it too often, because settings for plugin instances are saved with its caption as identification.\n
  It is stored in the plugin instance.\n
  It CAN be different for every plugin instance and can be changed at runtime. Unless changed manually, plugin instances will have the same name in every program execution.\n
- 
+
  Plugins can be searched an utilized at runtime by searching for their name, ids, or definition directly using findPlugins() in the PluginManager.
  A better and order-independant way is to use the CommunicationManager (see [[Graphical User Interface Development]]) to create communication channels between plugins.
 
- The manager handles deleting plugins. 
+ The manager handles deleting plugins.
  Some plugins (derived from AttachableFrame and attached to a QWidget) are deleted by Qt and notify the manager of the plugins destruction.
 */
 class PluginManager : public QObject
@@ -117,7 +117,7 @@ public:
 
 public:
     // public constructor functions
-    
+
     /*!
      \brief Basic constructor.
 
@@ -272,7 +272,7 @@ public:
     /*!
      \brief Searches plugins in the plugin instance list that matches different criteria.
 
-     name, caption and type can be general (empty string or -1) to match with all plugins. 
+     name, caption and type can be general (empty string or -1) to match with all plugins.
      All matching plugins are added to a list and returned.
      When using findPlugin() to search for a single plugin in the manager you should make sure, that the SimulationSetup
      uses unique captions, so they can be identified by caption.
@@ -305,7 +305,7 @@ public:
      A Plugin declared as a extension will not be unloaded when loading a new SimulationSetup in the SimulationManager.
      They will be loaded first before loading any plugin list with the PluginManager.
 
-     If the SimulationSetup declares the plugin too, the declaration will stay in the setup definition. 
+     If the SimulationSetup declares the plugin too, the declaration will stay in the setup definition.
      This will result in double instantiation of the plugin if it can be instantiated more than once.
      The extension flag will never be stored within a SimulationSetup, but the plugins flagged as extension are stored
      in an additional SimulationSetup which contains the extensions.
@@ -336,11 +336,11 @@ public:
 
      \warning Do not access plugins from any other than the main thread because they might be deleted in between getting the pointer and dereferencing it.
      Since the plugin might be deleted by the Gui-Core itself, the only safe way to access the plugin from another thread is using the plugin managers call interface.
-     
-     It should not be neccessary to store a plugin pointer. Store its pluginId (instance id) instead. Either way, the signal pluginAboutToBeRemoved() informs about 
+
+     It should not be neccessary to store a plugin pointer. Store its pluginId (instance id) instead. Either way, the signal pluginAboutToBeRemoved() informs about
      removal of the plugin. If the plugin was removed by the gui itself however this signal is emitted in the destructor of the plugin and it must not be dereferenced
      anymore in the mean time. So, dont store plugin pointers in any other than the main thread.
-     
+
      \param pluginId id of the plugin
     */
     AbstractPlugin* getPlugin(int pluginId) const;
@@ -375,7 +375,7 @@ public:
      \param slot Slot of the optional object to invoke when a plugin entry was clicked. signature is (int) and contains the plugin id
      \param matchDefinition optional plugin definition to restrict the set of plugins that generate entries. Only matching plugins will have an entry in the list
     */
-    void createPluginContextMenu(QMenu* menu, std::vector<NumberedActionReceiver*>& actionReceivers = std::vector<NumberedActionReceiver*>(),
+    void createPluginContextMenu(QMenu* menu, std::vector<NumberedActionReceiver*>& actionReceivers,
         QObject* signalTarget = 0, const char* slot = "", const PluginDefinition& matchDefinition = PluginDefinition());
 
     /*!
@@ -645,9 +645,9 @@ private:
     //Settings
     QString mExtensionFile;                 /*!< File to load the SimulationSetup with the extension plugins from. */
     QString mDefaultPluginPath;             /*!< Default path to search plugin libraries in. */
-    QStringList mPluginIncludeDirectories;  /*!< List of include directories for plugin libraries. */         
-    QStringList mPluginIncludeFiles;        /*!< List of single plugin libraries to include. */      
-    
+    QStringList mPluginIncludeDirectories;  /*!< List of include directories for plugin libraries. */
+    QStringList mPluginIncludeFiles;        /*!< List of single plugin libraries to include. */
+
     static int mNextClassId;  /*!< Next class id. */
     int mNextPluginId;        /*!< Next plugin instance id. */
 

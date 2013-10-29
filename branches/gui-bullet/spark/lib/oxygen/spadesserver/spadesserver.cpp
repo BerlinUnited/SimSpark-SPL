@@ -66,7 +66,7 @@ SpadesServer::ConstructInternal()
 void
 SpadesServer::OnLink()
 {
-    mMonitorServer = shared_dynamic_cast<MonitorServer>
+    mMonitorServer = dynamic_pointer_cast<MonitorServer>
         (GetCore()->Get("/sys/server/monitor"));
 
     if (mMonitorServer.get() == 0)
@@ -74,7 +74,7 @@ SpadesServer::OnLink()
         GetLog()->Error() << "ERROR: (SpadesServer) MonitorServer not found.\n";
     }
 
-    mGameControlServer = shared_dynamic_cast<GameControlServer>
+    mGameControlServer = dynamic_pointer_cast<GameControlServer>
         (GetCore()->Get("/sys/server/gamecontrol"));
 
     if (mGameControlServer.get() == 0)
@@ -82,7 +82,7 @@ SpadesServer::OnLink()
         GetLog()->Error() << "ERROR: (SpadesServer) GameControlServer not found.\n";
     }
 
-    mSceneServer = shared_dynamic_cast<SceneServer>
+    mSceneServer = dynamic_pointer_cast<SceneServer>
         (GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
@@ -216,7 +216,7 @@ EngineParam*
 SpadesServer::parseParameters(int argc, const char *const *argv)
 {
     mParamReader =
-        shared_static_cast<ParamReader>(GetCore()->New("oxygen/ParamReader"));
+        static_pointer_cast<ParamReader>(GetCore()->New("oxygen/ParamReader"));
 
     // SimulationEngineMain uses the ParamReader we have to get the
     // command line options. It doesn't delete the ParamReader, so we

@@ -24,6 +24,7 @@
 
 #include <soccercontrolaspect/soccercontrolaspect.h>
 #include <set>
+#include <vector>
 
 class AgentState;
 
@@ -87,7 +88,7 @@ public:
                         std::string teamName, unsigned int unum);
 
     /** notifies that a uniform number is free again */
-    bool ReturnUniform(TTeamIndex ti, unsigned int unum);
+    bool ReturnUniform(TTeamIndex ti, unsigned int unum, int type);
 
     /** returns the next uniform number not taken for the given team */
     int RequestUniformNumber(TTeamIndex ti) const;
@@ -133,6 +134,18 @@ protected:
         contain a uniform number unum and erases it. */
     bool EraseUnum(TTeamIndex idx, int unum);
 
+    /**
+     * Adds a robot of the given type to the given team if permitted.
+     * @return true if permitted
+     */
+    bool InsertRobotType(TTeamIndex idx, int type);
+
+    /**
+     * Removes a robot of the given type from the given team if exists.
+     * @return true on success
+     */
+    bool EraseRobotType(TTeamIndex idx, int type);
+
     /** returns the team index corresponding to the given teamName. If
         the teamname does not exist and less than two teams are
         registered, the given team name is registered.
@@ -170,6 +183,12 @@ protected:
     /** the set of uniform number for each team */
     TUnumSet mUnumSet[2];
 
+    /** the array of robot type counts for each team */
+    std::vector<int> mRobotTypeCount[2];
+
+    /** the number of heterogeneous players for each team */
+    int mHeteroCount[2];
+
     /** the scores of two teams */
     int mScore[2];
 
@@ -187,6 +206,12 @@ protected:
 
     /** flag if the game is running or paused (e.g. in goal_left/right state) */
     bool mGamePaused;
+
+    /** the maximum number of heterogeneous players of a single type per team */
+    int mMaxHeteroTypeCount;
+
+    /** the maximum number of total heterogeneous players for a team */
+    int mMaxTotalHeteroCount;
 };
 
 DECLARE_CLASS(GameStateAspect);

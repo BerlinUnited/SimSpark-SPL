@@ -83,6 +83,49 @@ directories as follows:
                   for creating simulations using simspark                              
 ./test            applications for testing different subsystems of the        
                   simulator.                   
+./carbon          The carbon library contains a gui-framework and a
+                  simulation-framework which wraps simspark using qt.
+                  Its main features are:
+                  - Offering a graphical user interface which can be extended
+                    by visual and functional plugins. The plugins can be used
+                    to write easy-to-use interfaces to simspark simulations.
+                  - Creating, managing and executing simspark-simulations
+                    alongside with any additional threads and processes.
+                  - The gui can be altered flexibly. Its main window with
+                    "attachment points" is loaded from a shared library, and
+                    its used plugins are loaded from shared libraries too.
+                    Plugins with visual representation can be attached to the
+                    Gui.
+./guilayout       Layout projects for the Gui. They export main windows for
+                  the carbon gui from a shared library. You can easily and
+                  quickly create a new layout for the gui by creating a new
+                  layout project. A gui-layout (main window) may define
+                  attachment points for gui-plugins.
+                  
+                  Initial layout projects:
+                  - guigridlayout: Contains 4 attachment points (left, center,
+                    right, bottom)
+                  - guisimplelayout: Contains 2 attachment points (left, right)
+./guiplugin       Generic (not soccer related) plugins for the carbon gui.
+                  Plugins can be anything to extend the gui with. There are
+                  three types: Simple Plugins (can be executed), Signal
+                  Plugins (can communicate), and AttachableFrame Plugins (can
+                  be embedded into the Gui). Examples which can be created
+                  really easily and quickly, are: executable plugins running in
+                  a new thread, function libraries, toolboxes or menu entries,
+                  or visual plugins made for user interaction.
+                  
+                  Initial plugins (all of them are plugins that can be attached
+                  to attachment points):
+                  - logframe: logs and displays messages
+                  - setupframe: creates simulation setups for the gui
+                  - simulationframe: displays and controls simulation tasks and
+                    processes in the gui
+                  - scenegraphframe: displays and controls the whole scene graph
+                    of a spark simulation. The user can freely change the values
+                    of several types of nodes.
+                    This interaction can be extended with additional plugins.
+                  - monitorframe: renders a spark simulation
                   
 Literature:
 

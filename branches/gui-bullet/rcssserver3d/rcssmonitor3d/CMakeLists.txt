@@ -13,7 +13,7 @@ include_directories(${SDL_INCLUDE_DIR})
 add_executable(rcssmonitor3d ${rcssmonitor3d_SRCS})
 
 target_link_libraries(rcssmonitor3d 
-  ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY}
+  ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY} ${Boost_LIBRARIES}
   debug ${SPARK_LIBRARY_DEBUG} 
   debug ${SALT_LIBRARY_DEBUG}
   debug ${ZEITGEIST_LIBRARY_DEBUG} 

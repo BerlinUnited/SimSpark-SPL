@@ -21,7 +21,7 @@
 */
 #include "inputsystem.h"
 
-#include <boost\thread\locks.hpp>
+#include <boost/thread/locks.hpp>
 
 using namespace kerosin;
 using namespace zeitgeist;

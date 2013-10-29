@@ -119,15 +119,15 @@ SexpMonitor::AddAgents(boost::shared_ptr<Scene> activeScene, std::ostringstream&
 
     for (TLeafList::iterator i = nodes.begin(); i != nodes.end(); ++i)
     {
-        boost::shared_ptr<AgentAspect> aspect = shared_static_cast<AgentAspect>(*i);
+        boost::shared_ptr<AgentAspect> aspect = static_pointer_cast<AgentAspect>(*i);
         const salt::Vector3f& pos = aspect->GetWorldTransform().Pos();
 
         ss << "(P ";
 
-        boost::shared_ptr<AgentState> state = shared_static_cast<AgentState>
+        boost::shared_ptr<AgentState> state = static_pointer_cast<AgentState>
             (aspect->GetChildOfClass("AgentState"));
 
-        boost::shared_ptr<SayEffector> sayEff = shared_static_cast<SayEffector>
+        boost::shared_ptr<SayEffector> sayEff = static_pointer_cast<SayEffector>
             (aspect->GetChildOfClass("SayEffector"));
 
         if (state.get() != 0)
@@ -184,9 +184,9 @@ SexpMonitor::AddFlags(boost::shared_ptr<Scene> activeScene, std::ostringstream& 
 
     for (TLeafList::iterator i = nodes.begin(); i != nodes.end(); ++i)
     {
-        boost::shared_ptr<FieldFlag> flag = shared_static_cast<FieldFlag>(*i);
+        boost::shared_ptr<FieldFlag> flag = static_pointer_cast<FieldFlag>(*i);
         const salt::Vector3f& pos = flag->GetWorldTransform().Pos();
-        boost::shared_ptr<ObjectState> state = shared_dynamic_cast<ObjectState>
+        boost::shared_ptr<ObjectState> state = dynamic_pointer_cast<ObjectState>
             (flag->GetChildOfClass("ObjectState"));
 
         if (state.get() == 0) continue;
@@ -204,7 +204,7 @@ SexpMonitor::AddFlags(boost::shared_ptr<Scene> activeScene, std::ostringstream& 
 void
 SexpMonitor::AddBall(boost::shared_ptr<Scene> activeScene, std::ostringstream& ss) const
 {
-    boost::shared_ptr<Ball> ball = shared_static_cast<Ball>(activeScene->GetChild("Ball"));
+    boost::shared_ptr<Ball> ball = static_pointer_cast<Ball>(activeScene->GetChild("Ball"));
     const salt::Vector3f& pos = ball->GetWorldTransform().Pos();
     ss << "(B ";
     // pos
@@ -221,7 +221,7 @@ SexpMonitor::GetMonitorInformation(const oxygen::PredicateList& pList)
     }
 
     boost::shared_ptr<SceneServer> sceneServer =
-        shared_dynamic_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
+        dynamic_pointer_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (sceneServer.get() == 0)
     {
@@ -270,7 +270,7 @@ SexpMonitor::OnLink()
 
     // we need the TrainerCommandParser to parse the predicates
     // and interpret the commands
-    mCommandParser = shared_dynamic_cast<TrainerCommandParser>
+    mCommandParser = dynamic_pointer_cast<TrainerCommandParser>
       (GetCore()->New("TrainerCommandParser"));
 
     if (mCommandParser.get() == 0)
@@ -288,7 +288,7 @@ SexpMonitor::OnLink()
 void
 SexpMonitor::UpdateCached()
 {
-    mBallState = shared_dynamic_cast<BallStateAspect>
+    mBallState = dynamic_pointer_cast<BallStateAspect>
         (GetCore()->Get("/sys/server/gamecontrol/BallStateAspect"));
 
     if (mBallState.get() == 0)

@@ -20,6 +20,7 @@
 
 #include "simspark.h"
 
+#include "carbon.h"
 #include <zeitgeist/fileserver/fileserver.h>
 #include <zeitgeist/zeitgeist.h>
 #include <oxygen/simulationserver/simulationserver.h>
@@ -30,7 +31,6 @@
 #include <kerosin/inputserver/inputcontrol.h>
 #include <kerosin/kerosin.h>
 
-#include "carbon.h"
 #include "openglmanager.h"
 #include "guisimcontrol.h"
 
@@ -195,7 +195,7 @@ bool SimSpark::Reinit(const std::string& sparkScriptsPath, const std::string& sp
         LOG_ERROR() << "Cant reinitialize spark. It has to be Reset() after execution.";
         return false;
     }
-        
+
     LOG_INFO() << "Reinitializing SimSpark...";
 
     //Change script paths
@@ -216,11 +216,11 @@ bool SimSpark::Reinit(const std::string& sparkScriptsPath, const std::string& sp
 
     //Reinitialize zeitgeist
 
-    /* 
+    /*
     // {#Spark-Reset#}
-    // When resetting the core, do initialization again: add resource locations, update the cache, run initialization scripts 
+    // When resetting the core, do initialization again: add resource locations, update the cache, run initialization scripts
     // (or even better: do not use this function but create a new SimSpark object)
-    
+
     //Add resources for current simulation
     for (int i = 0; i < mResourceLocations.size(); i++)
     {
@@ -269,7 +269,7 @@ bool SimSpark::Reset()
     //{#Spark-Reset#}: If it should ever be possible to completely reset SimSpark, resetting to PreInitialized and re-running the init-script in Reinit() would be a better choice here
     mState = SSS_INITIALIZED;
     mReset = true;
-    
+
     LOG_INFO() << "Resetting SimSpark...";
 
     /* {#Spark-Reset#}
@@ -370,7 +370,7 @@ void SimSpark::AddResourceLocation(const std::string& location)
 {
     if (mState != SSS_PREINIT)
         GetCore()->GetFileServer()->AddResourceLocation(location);
-    
+
     mResourceLocations.push_back(location);
 }
 
@@ -424,8 +424,8 @@ int SimSpark::ExecuteRunScripts()
     if (mRunExecuted == false)
     {
         //{#Spark-Reset#}
-        //Can only execute main script once. When complete reset is possible, reset simspark in the "Reset()" function, and call the main script here every time. 
-        
+        //Can only execute main script once. When complete reset is possible, reset simspark in the "Reset()" function, and call the main script here every time.
+
         //Run main simulation initialization script
         GetCore()->GetScriptServer()->Run(mScriptPath);
     }
@@ -528,7 +528,7 @@ bool SimSpark::Continue()
     {
         LOG_INFO() << "SimSpark is not paused.";
         return false;
-    }    
+    }
 
     //unpause simulation server
     GetSimulationServer()->PauseCycle(false);
@@ -566,8 +566,8 @@ bool SimSpark::RunScript(const std::string& path)
     LOG_INFO() << "Running script '" << path.c_str() << "'...";
     bool ok = GetScriptServer()->Run(path);
 
-    // Error logging using ruby was not possible at this point. Including ruby.h or zeitgeist/scriptserver/rubywrapper.h 
-    // caused some unresolvable compile-errors in combination with Qt. The project probably has to be upgraded to ruby 1.9 to 
+    // Error logging using ruby was not possible at this point. Including ruby.h or zeitgeist/scriptserver/rubywrapper.h
+    // caused some unresolvable compile-errors in combination with Qt. The project probably has to be upgraded to ruby 1.9 to
     // make it possible. Therefore, the log info about error scripts cant be read out. The user has to check on the console instead.
 
     if (!ok)

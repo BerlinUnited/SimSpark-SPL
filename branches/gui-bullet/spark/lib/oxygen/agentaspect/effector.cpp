@@ -29,7 +29,7 @@ using namespace boost;
 boost::shared_ptr<AgentAspect>
 Effector::GetAgentAspect()
 {
-  return shared_static_cast<AgentAspect>
+  return static_pointer_cast<AgentAspect>
     (GetParentSupportingClass("AgentAspect").lock());
 }
 

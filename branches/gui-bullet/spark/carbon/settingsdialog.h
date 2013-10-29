@@ -268,14 +268,14 @@ public:
 
      \param topicname name to search for
     */
-    bool hasTopic(QString& topicname);
+    bool hasTopic(const QString& topicname);
     /*!
      \brief Returns if a page with the given name exists in the given topic.
 
      \param topicname name of topic to search for
      \param pagename name of page to search for
     */
-    bool hasPage(QString& topicname, QString& pagename);
+    bool hasPage(const QString& topicname, const QString& pagename);
 
     /*!
      \brief Returns current PageDefinition or null pointer if there is none.
@@ -326,7 +326,7 @@ protected:
      \param topicname name of the topic
      \return null pointer if topic is not found
     */
-    boost::shared_ptr<TopicDefinition> getTopicDefinition(QString& topicname);
+    boost::shared_ptr<TopicDefinition> getTopicDefinition(const QString& topicname);
     /*!
      \brief Return page definition pointer by name.
 
@@ -335,7 +335,7 @@ protected:
      \param pagename name of the page
      \return null pointer if topic or page is not found
     */
-    boost::shared_ptr<PageDefinition> getPageDefinition(QString& topicname, QString& pagename);
+    boost::shared_ptr<PageDefinition> getPageDefinition(const QString& topicname, const QString& pagename);
     /*!
      \brief Return page definition pointer by name.
 
@@ -344,7 +344,7 @@ protected:
      \param pagename name of the page
      \return null pointer if page is not found
     */
-    boost::shared_ptr<PageDefinition> getPageDefinition(TopicDefinition& topic, QString& pagename);
+    boost::shared_ptr<PageDefinition> getPageDefinition(const TopicDefinition& topic, const QString& pagename);
 
     /*!
      \brief Creates a new topic with the name topicname.
@@ -354,7 +354,7 @@ protected:
      \param iconpath path to an icon for the topic button
      \return pointer to the added topic with name topicname
     */
-    boost::shared_ptr<TopicDefinition> createTopic(QString& topicname, QString& iconpath = QString(""));
+    boost::shared_ptr<TopicDefinition> createTopic(const QString& topicname, const QString& iconpath = QString(""));
     /*!
      \brief Creates a new page with the name pagename in topic topicname.
 
@@ -364,7 +364,7 @@ protected:
      \param pagename name of the page
      \return pointer to the added topic with name topicname
     */
-    boost::shared_ptr<PageDefinition> createPage(QString& topicname, QString& pagename);
+    boost::shared_ptr<PageDefinition> createPage(const QString& topicname, const QString& pagename);
 
     /*!
      \brief Adds a new page to the stacked widget, that represents one topic.
@@ -372,19 +372,19 @@ protected:
      \param topicname name of the topic
      \param topic pointer to TopicDefinition to fill data in
     */
-    void addStackedWidgetPage(QString& topicname, TopicDefinition* topic);
+    void addStackedWidgetPage(const QString& topicname, TopicDefinition* topic);
     /*!
      \brief Returns the StackedWidget page for a topic name.
 
      \param topicname name of topic page
     */
-    QWidget* getStackedWidgetPage(QString& topicname);
+    QWidget* getStackedWidgetPage(const QString& topicname);
     /*!
      \brief Returns the index of the StackedWidget page for a topic name.
 
      \param topicname name of topic page
     */
-    int getStackedWidgetPageIndex(QString& topicname);
+    int getStackedWidgetPageIndex(const QString& topicname);
 
     /*!
      \brief Clears all topics and the StackedWidget.
@@ -473,7 +473,7 @@ public slots:
      Activated by the pluginmanager whenever a plugin is removed.
      \param creator creator to delete widgets from
     */
-    void removeSettingWidgets(AbstractPlugin* creator);    
+    void removeSettingWidgets(AbstractPlugin* creator);
 
 private:
     // private members

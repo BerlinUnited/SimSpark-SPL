@@ -8,6 +8,7 @@
     ;    
     (templ  $LRFactor $LeftOrRight
             $Torso_X $Torso_Y $Torso_Z $loadObj
+            $type
     )
     
     ;
@@ -45,7 +46,8 @@
     (def $UpperarmRelShoulderZ 0)
     
     (def $ElbowRelUpperArm_X (eval $LRFactor * -0.01))
-    (def $ElbowRelUpperArm_Y 0.07)
+    ;(def $ElbowRelUpperArm_Y 0.07)
+    (def $ElbowRelUpperArm_Y (eval "NaoType["$type"]['ElbowRelUpperArm_Y']"))
     (def $ElbowRelUpperArm_Z 0.009)
     
     (def $LowerarmRelElbow_X 0)
@@ -91,8 +93,12 @@
     ;
     ;Joint Parameters
     ;
+    (def $PI 3.14159265)
+    (def $MaxAbsJointSpeed (eval $PI * (eval 351.77 / 180.0)))
+    
     (def $aj1_min -120)
     (def $aj1_max 120)
+    (def $aj1_max_abs_speed $MaxAbsJointSpeed)
     
     (def $right_aj2_min     -95)
     (def $left_aj2_min      -1)
@@ -105,9 +111,11 @@
     (def $aj2_max_c1        (eval (eval $right_aj2_max + $left_aj2_max) * 0.5))
     (def $aj2_max_c2        (eval (eval $right_aj2_max - $left_aj2_max) * 0.5))
     (def $aj2_max           (eval $aj2_max_c1 + (eval $LRFactor * $aj2_max_c2)))
+    (def $aj2_max_abs_speed $MaxAbsJointSpeed)
     
     (def $aj3_min           -120)
     (def $aj3_max           120)
+    (def $aj3_max_abs_speed $MaxAbsJointSpeed)
     
     (def $right_aj4_min     -1)
     (def $left_aj4_min      -90)
@@ -120,6 +128,7 @@
     (def $aj4_max_c1        (eval (eval $right_aj4_max + $left_aj4_max) * 0.5))
     (def $aj4_max_c2        (eval (eval $right_aj4_max - $left_aj4_max) * 0.5))
     (def $aj4_max           (eval $aj4_max_c1 + (eval $LRFactor * $aj4_max_c2)))
+    (def $aj4_max_abs_speed $MaxAbsJointSpeed)
     
 
     (def $aj2_Anchor_X      (eval -1 * $UpperarmRelShoulderX))
@@ -152,7 +161,8 @@
                               ../sphereBody ../../body/boxBody 
                               0 0 0
                               1 0 0 ;1 -1 -1
-                              $aj1_min $aj1_max)
+                              $aj1_min $aj1_max
+                              $aj1_max_abs_speed)
     )                  
            
     ;               
@@ -175,11 +185,12 @@
         (importScene rsg/agent/nao/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint2PerName $Joint2EffName
-                                ../boxBody $ShoulderBodyPath
-                                $aj2_Anchor_X $aj2_Anchor_Y $aj2_Anchor_Z
-                                0 0 1 ;2 -1 -1
-                                $aj2_min $aj2_max)
+                              $Joint2PerName $Joint2EffName
+                              ../boxBody $ShoulderBodyPath
+                              $aj2_Anchor_X $aj2_Anchor_Y $aj2_Anchor_Z
+                              0 0 1 ;2 -1 -1
+                              $aj2_min $aj2_max
+                              $aj2_max_abs_speed)
      )
      
     ;
@@ -195,11 +206,12 @@
         (importScene rsg/agent/nao/sphere_physics_nocollider.rsg $ElbowRadius $ElbowMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint3PerName $Joint3EffName
-                                ../sphereBody $UpperarmBodyPath
-                                0 0 0
-                                0 1 0 ;1 -1 -1
-                                $aj3_min $aj3_max)
+                              $Joint3PerName $Joint3EffName
+                              ../sphereBody $UpperarmBodyPath
+                              0 0 0
+                              0 1 0 ;1 -1 -1
+                              $aj3_min $aj3_max
+                              $aj3_max_abs_speed)
     )
     
     ;
@@ -221,11 +233,12 @@
         (importScene rsg/agent/nao/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
         
         (importScene rsg/agent/nao/hingejoint.rsg
-                                $Joint4PerName $Joint4EffName
-                                ../boxBody $ElbowBodyPath
-                                $aj4_Anchor_X $aj4_Anchor_Y $aj4_Anchor_Z
-                                0 0 1 ;2 -1 -1
-                                $aj4_min $aj4_max)
+                              $Joint4PerName $Joint4EffName
+                              ../boxBody $ElbowBodyPath
+                              $aj4_Anchor_X $aj4_Anchor_Y $aj4_Anchor_Z
+                              0 0 1 ;2 -1 -1
+                              $aj4_min $aj4_max
+                              $aj4_max_abs_speed)
 
         (nd ObjectState
              (setID $LowerarmName)

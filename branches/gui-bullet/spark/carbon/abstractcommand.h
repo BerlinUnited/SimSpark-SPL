@@ -26,9 +26,9 @@
  */
 
 #include <QObject>
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 class AbstractCommandQueue;
 

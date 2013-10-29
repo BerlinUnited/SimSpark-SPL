@@ -25,7 +25,7 @@
  * \brief Contains SceneGraphFrameUtil::PropertyFrame class.
  */
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <QFrame>
 #include <vector>
 

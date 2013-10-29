@@ -20,7 +20,7 @@
 
 #include "guisimcontrol.h"
 #include "isimcontrol.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 //--------------------------------------------------------------
 // Public

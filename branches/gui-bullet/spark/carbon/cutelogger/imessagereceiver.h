@@ -67,7 +67,7 @@ public:
 
      \param object message to queue
     */
-    void queueMessageObject(boost::shared_ptr<LogMessage>& object);
+    void queueMessageObject(const boost::shared_ptr<LogMessage>& object);
 
 private: signals:
     /*!
@@ -83,7 +83,7 @@ private: signals:
      \param object message to emit
     */
     void queuedMessageObject(boost::shared_ptr<LogMessage> object);
-    
+
 private slots:
     /*!
      \brief Receives an emitted queued message in the main thread and sends it to the receive target.
@@ -140,7 +140,7 @@ private:
  a ThreadMessageQueue and the qt-connect-queue. For the queue to work the IMessageReceivers thread needs to be in an event loop (QThread::exec()).
 
  \warning Especially when interacting with QtGui-elements like QTextEdit, QWidget etc., the IMessageReceiver HAS to be used in queued mode, since only the owning thread
- may change Gui parameters. Otherwise the application might crash in release mode. 
+ may change Gui parameters. Otherwise the application might crash in release mode.
 
  If you dont want the messages to be queued you can set the constructors queue flag to false. In this case the thread that sent the log message will call receiveMessage()
  and receiveMessageObject() directly.
@@ -172,7 +172,7 @@ public:
     /*!
      \brief Receive function called by MessageReceiverAppender when a new message arrives.
 
-     Calls the virtual receive function directly if mQueueInterThreadMessages is false. 
+     Calls the virtual receive function directly if mQueueInterThreadMessages is false.
      Queues them by sending them to the owning thread if mQueueInterThreadMessages is true.
 
      \param message formatted message
@@ -182,12 +182,12 @@ public:
     /*!
      \brief Receive function called by MessageObjectAppender when a new message arrives.
 
-     Calls the virtual receive function directly if mQueueInterThreadMessages is false. 
+     Calls the virtual receive function directly if mQueueInterThreadMessages is false.
      Queues them by sending them to the owning thread if mQueueInterThreadMessages is true.
 
      \param object message content and meta information as LogMessage
     */
-    void receiveMessageObjectQueued(boost::shared_ptr<LogMessage>& object);
+    void receiveMessageObjectQueued(const boost::shared_ptr<LogMessage>& object);
 
 protected:
 
@@ -199,7 +199,7 @@ protected:
      a ThreadMessageQueue and the qt-connect-queue. For the queue to work the IMessageReceivers thread needs to be in an event loop (QThread::exec()).
 
      \warning Especially when interacting with QtGui-elements like QTextEdit, QWidget etc, the receiveMessagesQueued flag HAS to be set, since only the owning thread
-     may change Gui parameters. 
+     may change Gui parameters.
 
      If you dont want the messages to be queued you can set receiveMessagesQueued to false. In this case the thread that sent the log message will call receiveMessage()
      and receiveMessageObject() directly.

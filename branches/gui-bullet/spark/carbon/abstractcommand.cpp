@@ -20,7 +20,7 @@
 
 #include "abstractcommand.h"
 #include "abstractcommandqueue.h"
-#include "cutelogger\logger.h"
+#include "cutelogger/logger.h"
 
 using namespace boost;
 

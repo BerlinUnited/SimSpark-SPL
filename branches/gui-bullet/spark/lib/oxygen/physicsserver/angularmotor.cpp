@@ -43,7 +43,7 @@ void AngularMotor::OnLink()
     Joint::OnLink();
 
     if (mAngularMotorImp.get() == 0)
-        mAngularMotorImp = shared_dynamic_cast<AngularMotorInt>
+        mAngularMotorImp = dynamic_pointer_cast<AngularMotorInt>
             (GetCore()->New("AngularMotorImp"));
 
     long world = GetWorldID();

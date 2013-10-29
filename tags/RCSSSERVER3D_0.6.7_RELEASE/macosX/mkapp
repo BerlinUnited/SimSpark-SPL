@@ -1,0 +1,8 @@
+#! /bin/sh
+appname=$1
+appdir=$appname.app
+mkdir -p $appdir/Contents/Frameworks
+mkdir -p $appdir/Contents/MacOS
+mkdir -p $appdir/Contents/Resources
+mkdir -p $appdir/Contents/plugins
+cd $appdir/Contents/MacOS && ln -f ../../../.libs/$appname $appname

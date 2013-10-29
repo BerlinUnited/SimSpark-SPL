@@ -42,6 +42,7 @@ QT4_WRAP_UI(scenegraphframe_FORMS_HEADERS ${scenegraphframe_FORMS})
 
 include_directories(
   ${CMAKE_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/carbon
   ${FREETYPE_INCLUDE_DIRS}
   ${IL_INCLUDE_DIR}

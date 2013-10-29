@@ -63,7 +63,7 @@ void SignalPlugin::saveData(QSettings& data) const
 // Public
 //--------------------------------------------------------------
 
-SignalPluginInstantiator::SignalPluginInstantiator(int id, const QString& name, const QString& caption, SignalPlugin* (*instantiateFunc)(void), 
+SignalPluginInstantiator::SignalPluginInstantiator(int id, const QString& name, const QString& caption, SignalPlugin* (*instantiateFunc)(void),
     int maxInstanceCount, const char* library) :
     AbstractPluginInstantiator(id, name, caption, PT_SIGNAL, maxInstanceCount, library),
     mInstantiateFunc(instantiateFunc)

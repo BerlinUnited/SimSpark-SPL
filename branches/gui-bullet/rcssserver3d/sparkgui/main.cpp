@@ -31,7 +31,7 @@
 #include <QLibrary>
 #include <QMainWindow>
 
-#include "sparkgui\sparkgui_config.h"
+#include "sparkgui/sparkgui_config.h"
 
 void PrintGreeting()
 {

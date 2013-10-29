@@ -28,7 +28,7 @@
 #include <QFrame>
 #include <simulationtask.h>
 
-#include <boost\weak_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <QPalette>
 
 #include "ui_simulationframe_taskwidget.h"

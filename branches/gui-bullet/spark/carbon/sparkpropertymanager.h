@@ -27,7 +27,7 @@
 
 #include "sparkproperty.h"
 
-#include <boost\shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <QObject>
 
 class SparkController;

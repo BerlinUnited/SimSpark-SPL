@@ -39,7 +39,7 @@ bool SingleMatNode::SetMaterial(const std::string& name)
 {
     mMaterials.clear();
 
-    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = dynamic_pointer_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)

@@ -39,7 +39,7 @@ SimControlNode::~SimControlNode()
 
 boost::shared_ptr<SimulationServer> SimControlNode::GetSimulationServer()
 {
-    return shared_static_cast<SimulationServer>
+    return static_pointer_cast<SimulationServer>
         (GetParent().lock());
 }
 

@@ -27,7 +27,7 @@ using namespace oxygen;
 using namespace boost;
 
 IndexBuffer::IndexBuffer()
-    : mMaxIndex(0), mNumIndex(0), mIndex(0)   {}
+    : mMaxIndex(0), mNumIndex(0), mIndex()   {}
 
 IndexBuffer::~IndexBuffer()
 {

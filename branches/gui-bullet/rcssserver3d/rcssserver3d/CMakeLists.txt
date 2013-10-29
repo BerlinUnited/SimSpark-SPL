@@ -13,7 +13,7 @@ endif (APPLE)
 include_directories(${SDL_INCLUDE_DIR})
 
 target_link_libraries(rcssserver3d 
-    ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY}
+    ${SDL_LINK_LIBS} ${RCSSNET3D_LIBRARY} ${Boost_LIBRARIES}
 	debug ${SPARK_LIBRARY_DEBUG} 
 	debug ${SALT_LIBRARY_DEBUG}
    	debug ${ZEITGEIST_LIBRARY_DEBUG} 
@@ -37,7 +37,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
 
 ########### install files ###############
 
-install(FILES  rcssserver3d.rb soccersim.rb naosoccersim.rb 
+install(FILES  rcssserver3d.rb soccersim.rb naosoccersim.rb naorobottypes.rb 
         internalsoccermonitor.rb internalsoccerbindings.rb
         DESTINATION ${DATADIR}/${CMAKE_PROJECT_NAME})
 

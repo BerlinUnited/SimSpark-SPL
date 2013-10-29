@@ -222,7 +222,7 @@ void InputControl::StartCycle()
                           ++iter
                           )
                         {
-                            shared_static_cast<InputItem>(*iter)
+                            static_pointer_cast<InputItem>(*iter)
                                 ->ProcessInput(input);
                         }
                     break;
@@ -260,7 +260,7 @@ InputControl::RegisterInputItem(const string& inputItemName, const string& name)
 {
     // check if a input item of the requested type was already created
     boost::shared_ptr<InputItem> inputItem =
-        shared_dynamic_cast<InputItem>(GetChildOfClass(inputItemName));
+        dynamic_pointer_cast<InputItem>(GetChildOfClass(inputItemName));
 
     if (inputItem.get() != 0)
     {
@@ -268,7 +268,7 @@ InputControl::RegisterInputItem(const string& inputItemName, const string& name)
     }
 
     // create the input item
-    inputItem = shared_dynamic_cast<InputItem>(GetCore()->New(inputItemName));
+    inputItem = dynamic_pointer_cast<InputItem>(GetCore()->New(inputItemName));
 
     if (inputItem.get() == 0)
     {

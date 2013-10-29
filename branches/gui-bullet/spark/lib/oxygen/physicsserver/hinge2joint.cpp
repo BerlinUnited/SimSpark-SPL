@@ -41,7 +41,7 @@ void Hinge2Joint::OnLink()
     Joint::OnLink();
     
     if (mHinge2JointImp.get() == 0)
-        mHinge2JointImp = shared_dynamic_cast<Hinge2JointInt>
+        mHinge2JointImp = dynamic_pointer_cast<Hinge2JointInt>
             (GetCore()->New("Hinge2JointImp"));
             
     long world = GetWorldID();

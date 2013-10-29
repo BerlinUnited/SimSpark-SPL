@@ -2,7 +2,9 @@
 
 (RSG 0 1)
 (
-    (templ $Torso_X $Torso_Y $Torso_Z $loadObj)
+    (templ $Torso_X $Torso_Y $Torso_Z $loadObj
+           $type
+    )
     
     ;
     ;neck parameter
@@ -27,14 +29,19 @@
     ;
     ;Head effector 1 parameter
     ;
+    (def $PI 3.14159265)
+    (def $MaxAbsJointSpeed (eval $PI * (eval 351.77 / 180.0)))
+    
     (def $he1_min -120)
     (def $he1_max 120)
+    (def $he1_max_abs_speed $MaxAbsJointSpeed)
     
     ;
     ;Head effector 2 parameter
     ;
     (def $he2_min -45)
     (def $he2_max 45)
+    (def $he2_max_abs_speed $MaxAbsJointSpeed)
     
     ;
     ;Begin construct neck
@@ -51,7 +58,8 @@
                             ../capsuleBody ../../body/boxBody
                             0 0 0
                             0 0 1
-                            $he1_min $he1_max)
+                            $he1_min $he1_max
+                            $he1_max_abs_speed)
     )
 
     ;
@@ -84,11 +92,13 @@
                               ;../boxBody ../../body/boxBody
                               0 0 -0.005
                               1 0 0
-                              $he2_min $he2_max)
+                              $he2_min $he2_max
+                              $he2_max_abs_speed)
 
         (nd RestrictedVisionPerceptor
             (setViewCones 120 120)
             (setSenseMyPos false)
+            (setSenseMyOrien false)
             (setSenseBallPos false)
             (setStaticSenseAxis false)
             (addNoise true)

@@ -37,7 +37,7 @@ TimePerceptor::~TimePerceptor()
 
 void TimePerceptor::OnLink()
 {
-    mSimulationServer = shared_dynamic_cast<SimulationServer>
+    mSimulationServer = dynamic_pointer_cast<SimulationServer>
         (GetCore()->Get("/sys/server/simulation"));
 
     if (mSimulationServer.get() == 0)

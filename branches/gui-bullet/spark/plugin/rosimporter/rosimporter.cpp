@@ -240,7 +240,7 @@ void RosImporter::RosContext::AdjustPos()
         }
 
     // adjust for the mass center
-    boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> transform = dynamic_pointer_cast<Transform>
         (body->GetParent().lock());
 
     if (transform.get() == 0)
@@ -277,7 +277,7 @@ void RosImporter::ApplyTransform(boost::shared_ptr<Transform> transform, const T
 
 boost::shared_ptr<Transform> RosImporter::CreateTransform(boost::shared_ptr<BaseNode> parent, const Trans& trans)
 {
-    boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>
+    boost::shared_ptr<Transform> transform = dynamic_pointer_cast<Transform>
         (GetCore()->New("/oxygen/Transform"));
 
     ApplyTransform(transform, trans);
@@ -306,7 +306,7 @@ boost::shared_ptr<Transform> RosImporter::GetContextTransform(boost::shared_ptr<
                 {
                     break;
                 }
-            boost::shared_ptr<Transform> transform = shared_dynamic_cast<Transform>(current);
+            boost::shared_ptr<Transform> transform = dynamic_pointer_cast<Transform>(current);
             if (transform.get() != 0)
                 {
                     parentList.push_back(transform);
@@ -324,7 +324,7 @@ boost::shared_ptr<Transform> RosImporter::GetContextTransform(boost::shared_ptr<
          )
         {
             boost::shared_ptr<Transform> transform
-                = shared_static_cast<Transform>(*iter);
+                = static_pointer_cast<Transform>(*iter);
 
             globalTrans.matrix = globalTrans.matrix * transform->GetLocalTransform();
         }
@@ -371,7 +371,7 @@ boost::shared_ptr<RigidBody> RosImporter::GetContextBody(boost::shared_ptr<BaseN
             return boost::shared_ptr<RigidBody>();
         }
 
-    context.body = shared_dynamic_cast<RigidBody>
+    context.body = dynamic_pointer_cast<RigidBody>
         (GetCore()->New("/oxygen/RigidBody"));
 
 
@@ -562,7 +562,7 @@ bool RosImporter::ReadVector(TiXmlElement* element, Vector3f& vec, bool succeedI
 
 bool RosImporter::ReadAppearenceDef(TiXmlElement* element)
 {
-    boost::shared_ptr<MaterialServer> materialServer = shared_dynamic_cast<MaterialServer>
+    boost::shared_ptr<MaterialServer> materialServer = dynamic_pointer_cast<MaterialServer>
         (GetCore()->Get("/sys/server/material"));
 
     if (materialServer.get() == 0)
@@ -593,7 +593,7 @@ bool RosImporter::ReadAppearenceDef(TiXmlElement* element)
             return false;
         }
 
-    boost::shared_ptr<MaterialSolid> material = shared_dynamic_cast<MaterialSolid>
+    boost::shared_ptr<MaterialSolid> material = dynamic_pointer_cast<MaterialSolid>
         (GetCore()->New("/kerosin/MaterialSolid"));
 
     if (material.get() == 0)
@@ -622,7 +622,7 @@ bool RosImporter::ReadAmbientLight(TiXmlElement* element)
             return false;
         }
 
-    boost::shared_ptr<RenderServer> renderServer = shared_dynamic_cast<RenderServer>
+    boost::shared_ptr<RenderServer> renderServer = dynamic_pointer_cast<RenderServer>
         (GetCore()->Get("/sys/server/render"));
 
     if (renderServer.get() == 0)
@@ -871,7 +871,7 @@ bool RosImporter::ReadTrans(TiXmlElement* element, Trans& trans)
 
 boost::shared_ptr<TransformCollider> RosImporter::CreateTransformCollider(boost::shared_ptr<BaseNode> parent, const Trans& trans)
 {
-    boost::shared_ptr<TransformCollider> transCollider = shared_dynamic_cast<TransformCollider>
+    boost::shared_ptr<TransformCollider> transCollider = dynamic_pointer_cast<TransformCollider>
         (GetCore()->New("/oxygen/TransformCollider"));
 
     parent->AddChildReference(transCollider);
@@ -884,7 +884,7 @@ boost::shared_ptr<TransformCollider> RosImporter::CreateTransformCollider(boost:
 
 boost::shared_ptr<ContactJointHandler> RosImporter::CreateContactJointHandler()
 {
-    boost::shared_ptr<ContactJointHandler> handler = shared_dynamic_cast<ContactJointHandler>
+    boost::shared_ptr<ContactJointHandler> handler = dynamic_pointer_cast<ContactJointHandler>
         (GetCore()->New("/oxygen/ContactJointHandler"));
 
     handler->SetContactSoftERPMode(true);
@@ -1023,7 +1023,7 @@ bool RosImporter::ReadCapsule(boost::shared_ptr<BaseNode> parent, TiXmlElement* 
     transform->SetName(name);
 
     // visual
-    boost::shared_ptr<Capsule> capsule = shared_dynamic_cast<Capsule>
+    boost::shared_ptr<Capsule> capsule = dynamic_pointer_cast<Capsule>
         (GetCore()->New("/kerosin/Capsule"));
     transform->AddChildReference(capsule);
 
@@ -1043,7 +1043,7 @@ bool RosImporter::ReadCapsule(boost::shared_ptr<BaseNode> parent, TiXmlElement* 
     if (physical.canCollide)
         {
             // geometry
-            boost::shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
+            boost::shared_ptr<CapsuleCollider> collider = dynamic_pointer_cast<CapsuleCollider>
                 (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transform->AddChildReference(collider);
@@ -1084,7 +1084,7 @@ bool RosImporter::ReadSphere(boost::shared_ptr<BaseNode> parent, TiXmlElement* e
     transform->SetName(name);
 
     // visual
-    boost::shared_ptr<Sphere> sphere = shared_dynamic_cast<Sphere>
+    boost::shared_ptr<Sphere> sphere = dynamic_pointer_cast<Sphere>
         (GetCore()->New("/kerosin/Sphere"));
     transform->AddChildReference(sphere);
 
@@ -1101,7 +1101,7 @@ bool RosImporter::ReadSphere(boost::shared_ptr<BaseNode> parent, TiXmlElement* e
         }
 
     // geometry
-    boost::shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>
+    boost::shared_ptr<SphereCollider> collider = dynamic_pointer_cast<SphereCollider>
         (GetCore()->New("/oxygen/SphereCollider"));
 
     transform->AddChildReference(collider);
@@ -1147,7 +1147,7 @@ bool RosImporter::ReadBox(boost::shared_ptr<BaseNode> parent, TiXmlElement* elem
     transform->SetName(name);
 
     // visual
-    boost::shared_ptr<Box> box = shared_dynamic_cast<Box>
+    boost::shared_ptr<Box> box = dynamic_pointer_cast<Box>
         (GetCore()->New("/kerosin/Box"));
     transform->AddChildReference(box);
 
@@ -1167,7 +1167,7 @@ bool RosImporter::ReadBox(boost::shared_ptr<BaseNode> parent, TiXmlElement* elem
     if (physical.canCollide)
         {
             // geometry
-            boost::shared_ptr<BoxCollider> collider = shared_dynamic_cast<BoxCollider>
+            boost::shared_ptr<BoxCollider> collider = dynamic_pointer_cast<BoxCollider>
                 (GetCore()->New("/oxygen/BoxCollider"));
 
             transform->AddChildReference(collider);
@@ -1276,7 +1276,7 @@ boost::shared_ptr<RigidBody> RosImporter::GetJointChildBody(boost::shared_ptr<Ba
 
     for (Leaf::TLeafList::iterator iter = parent->begin();iter != parent->end();++iter)
         {
-            boost::shared_ptr<RigidBody> body = shared_dynamic_cast<RigidBody>(*iter);
+            boost::shared_ptr<RigidBody> body = dynamic_pointer_cast<RigidBody>(*iter);
             if (body.get() == 0)
                 {
                     continue;
@@ -1288,7 +1288,7 @@ boost::shared_ptr<RigidBody> RosImporter::GetJointChildBody(boost::shared_ptr<Ba
 
     for (Leaf::TLeafList::iterator iter = parent->begin();iter != parent->end();++iter)
         {
-            boost::shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>(*iter);
+            boost::shared_ptr<BaseNode> node = dynamic_pointer_cast<BaseNode>(*iter);
             if (node.get() == 0)
                 {
                     continue;
@@ -1331,7 +1331,7 @@ bool RosImporter::ReadUniversal(boost::shared_ptr<BaseNode> parent, TiXmlElement
     boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, anchorTrans);
 
     // joint
-    boost::shared_ptr<UniversalJoint> universal = shared_dynamic_cast<UniversalJoint>
+    boost::shared_ptr<UniversalJoint> universal = dynamic_pointer_cast<UniversalJoint>
         (GetCore()->New("/oxygen/UniversalJoint"));
     contextTransform->AddChildReference(universal);
 
@@ -1383,7 +1383,7 @@ bool RosImporter::ReadHinge(boost::shared_ptr<BaseNode> parent, TiXmlElement* el
     boost::shared_ptr<Transform> contextTransform = GetContextTransform(parent, anchorTrans);
 
     // joint
-    boost::shared_ptr<HingeJoint> hinge = shared_dynamic_cast<HingeJoint>
+    boost::shared_ptr<HingeJoint> hinge = dynamic_pointer_cast<HingeJoint>
         (GetCore()->New("/oxygen/HingeJoint"));
     contextTransform->AddChildReference(hinge);
 
@@ -1430,7 +1430,7 @@ bool RosImporter::ReadSlider(boost::shared_ptr<BaseNode> parent, TiXmlElement* e
         }
 
     // joint
-    boost::shared_ptr<SliderJoint> slider = shared_dynamic_cast<SliderJoint>
+    boost::shared_ptr<SliderJoint> slider = dynamic_pointer_cast<SliderJoint>
         (GetCore()->New("/oxygen/SliderJoint"));
     parent->AddChildReference(slider);
 
@@ -1575,7 +1575,7 @@ bool RosImporter::ReadVertexList(TiXmlElement* element)
 
 bool RosImporter::ReadComplexShape(boost::shared_ptr<BaseNode> parent, TiXmlElement* element)
 {
-    boost::shared_ptr<GeometryServer> geometryServer = shared_dynamic_cast<GeometryServer>
+    boost::shared_ptr<GeometryServer> geometryServer = dynamic_pointer_cast<GeometryServer>
         (GetCore()->Get("/sys/server/geometry"));
 
     if (geometryServer.get() == 0)
@@ -1629,7 +1629,7 @@ bool RosImporter::ReadComplexShape(boost::shared_ptr<BaseNode> parent, TiXmlElem
         }
 
     geometryServer->RegisterMesh(mesh);
-    boost::shared_ptr<StaticMesh> staticMesh = shared_dynamic_cast<StaticMesh>
+    boost::shared_ptr<StaticMesh> staticMesh = dynamic_pointer_cast<StaticMesh>
         (GetCore()->New("/kerosin/StaticMesh"));
 
     transform->AddChildReference(staticMesh);
@@ -1924,7 +1924,7 @@ bool RosImporter::ReadSimpleBox(boost::shared_ptr<oxygen::BaseNode> parent, TiXm
                 = CreateTransformCollider(contextTransform,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            boost::shared_ptr<BoxCollider> collider = shared_dynamic_cast<BoxCollider>
+            boost::shared_ptr<BoxCollider> collider = dynamic_pointer_cast<BoxCollider>
                 (GetCore()->New("/oxygen/BoxCollider"));
 
             transCollider->AddChildReference(collider);
@@ -1974,7 +1974,7 @@ bool RosImporter::ReadSimpleSphere(boost::shared_ptr<oxygen::BaseNode> parent, T
                 = CreateTransformCollider(body,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            boost::shared_ptr<SphereCollider> collider = shared_dynamic_cast<SphereCollider>
+            boost::shared_ptr<SphereCollider> collider = dynamic_pointer_cast<SphereCollider>
                 (GetCore()->New("/oxygen/SphereCollider"));
 
             transCollider->AddChildReference(collider);
@@ -2025,7 +2025,7 @@ bool RosImporter::ReadSimpleCapsule(boost::shared_ptr<oxygen::BaseNode> parent, 
                 = CreateTransformCollider(body,trans);
             transCollider->SetName(S_GEOMTRANS+name);
 
-            boost::shared_ptr<CapsuleCollider> collider = shared_dynamic_cast<CapsuleCollider>
+            boost::shared_ptr<CapsuleCollider> collider = dynamic_pointer_cast<CapsuleCollider>
                 (GetCore()->New("/oxygen/CapsuleCollider"));
 
             transCollider->AddChildReference(collider);
@@ -2064,7 +2064,7 @@ void RosImporter::AttachJoint(const JointAttach& ja)
 {
     ja.joint->Attach(ja.body1, ja.body2);
 
-    boost::shared_ptr<HingeJoint> hinge = shared_dynamic_cast<HingeJoint>(ja.joint);
+    boost::shared_ptr<HingeJoint> hinge = dynamic_pointer_cast<HingeJoint>(ja.joint);
     if (hinge.get() != 0)
         {
             hinge->SetAxis(ja.axis1.dir);
@@ -2081,7 +2081,7 @@ void RosImporter::AttachJoint(const JointAttach& ja)
             return;
         }
 
-    boost::shared_ptr<UniversalJoint> universal = shared_dynamic_cast<UniversalJoint>(ja.joint);
+    boost::shared_ptr<UniversalJoint> universal = dynamic_pointer_cast<UniversalJoint>(ja.joint);
     if (universal.get() != 0)
         {
             universal->SetAxis1(ja.axis1.dir);
@@ -2107,7 +2107,7 @@ void RosImporter::AttachJoint(const JointAttach& ja)
             return;
         }
 
-    boost::shared_ptr<SliderJoint> slider = shared_dynamic_cast<SliderJoint>(ja.joint);
+    boost::shared_ptr<SliderJoint> slider = dynamic_pointer_cast<SliderJoint>(ja.joint);
     if (slider.get() != 0)
         {
             // slider axis is set via parent transform node

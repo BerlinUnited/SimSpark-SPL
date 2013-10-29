@@ -23,7 +23,7 @@
 #include "abstractplugin.h"
 #include "topic.h"
 
-#include <boost\make_shared.hpp>
+#include <boost/make_shared.hpp>
 
 using namespace boost;
 
