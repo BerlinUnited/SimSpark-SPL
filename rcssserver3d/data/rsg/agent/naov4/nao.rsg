@@ -103,6 +103,7 @@
         
         (nd AgentState
             (setName AgentState)
+            (setRobotType 0)
             (nd GameStatePerceptor)
             (nd HearPerceptor)
             (nd Transform
