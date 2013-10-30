@@ -56,7 +56,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
       return false;
     }
 
-    shared_ptr<HingeAction> motorAction = shared_dynamic_cast<HingeAction>(action);
+    boost::shared_ptr<HingeAction> motorAction = shared_dynamic_cast<HingeAction>(action);
 
     if (motorAction.get() == 0)
     {
@@ -90,7 +90,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
     return true;
 }
 
-shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Predicate& predicate)
+boost::shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Predicate& predicate)
 {
     for(;;)
         {
@@ -126,8 +126,8 @@ shared_ptr<ActionObject> AngularMotorEffector::GetActionObject(const Predicate& 
                     break;
                 }*/
 
-            return shared_ptr<HingeAction>(new HingeAction(GetPredicate(),velocity));
+            return boost::shared_ptr<HingeAction>(new HingeAction(GetPredicate(),velocity));
         }
 
-    return shared_ptr<ActionObject>();
+    return boost::shared_ptr<ActionObject>();
 }

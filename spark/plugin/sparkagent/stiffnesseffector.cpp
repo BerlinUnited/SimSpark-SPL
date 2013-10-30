@@ -41,7 +41,7 @@ bool StiffnessEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
     if (mJoint.get() == 0) return false;
 
-    shared_ptr<StiffnessAction> stiffnessAction = shared_dynamic_cast<StiffnessAction>(action);
+    boost::shared_ptr<StiffnessAction> stiffnessAction = shared_dynamic_cast<StiffnessAction>(action);
 
     if (stiffnessAction.get() == 0)
     {
@@ -57,7 +57,7 @@ bool StiffnessEffector::Realize(boost::shared_ptr<ActionObject> action)
     return true;
 }
 
-shared_ptr<ActionObject> StiffnessEffector::GetActionObject(const Predicate& predicate)
+boost::shared_ptr<ActionObject> StiffnessEffector::GetActionObject(const Predicate& predicate)
 {
     for(;;)
     {
@@ -85,8 +85,8 @@ shared_ptr<ActionObject> StiffnessEffector::GetActionObject(const Predicate& pre
             break;
         }
 
-        return shared_ptr<StiffnessAction>(new StiffnessAction(GetPredicate(),stiffness));
+        return boost::shared_ptr<StiffnessAction>(new StiffnessAction(GetPredicate(),stiffness));
     }
 
-    return shared_ptr<ActionObject>();
+    return boost::shared_ptr<ActionObject>();
 }
