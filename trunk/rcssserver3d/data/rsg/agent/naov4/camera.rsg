@@ -1,0 +1,18 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+    (templ $name)
+
+    (nd RestrictedVisionPerceptor
+        (setPredicateName $name)
+        (setViewCones 60.9 47.6)
+        (setSenseMyPos false)
+        (setSenseBallPos false)
+        (setStaticSenseAxis false)
+        (addNoise true)
+        (setInterval 3)
+        (setSenseLine true)
+        (setSenseLineName true)
+        )
+)

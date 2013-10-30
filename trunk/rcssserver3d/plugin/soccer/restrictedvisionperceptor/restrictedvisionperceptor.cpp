@@ -42,7 +42,8 @@ RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mSenseBallPos(false),
                                      mAddNoise(true),
                                      mStaticSenseAxis(true),
-                                     mSenseLine(false)
+                                     mSenseLine(false),
+                                     mSenseLineName(false)
 {
     // set predicate name
     SetPredicateName("See");
@@ -922,10 +923,24 @@ void RestrictedVisionPerceptor::AddSense(Predicate& predicate, const TLineList& 
     endPos.AddValue(ld.mEndPoint.mDist);
     endPos.AddValue(ld.mEndPoint.mTheta);
     endPos.AddValue(ld.mEndPoint.mPhi);
+
+    if (mSenseLineName) {
+        const std::string& n = ld.mLine->GetName();
+        if (n!="<Unnamed>") {
+            ParameterList& name = element.AddList();
+            name.AddValue(std::string("n"));
+            name.AddValue(n);
+        }
+    }
   }
 }
 
 void RestrictedVisionPerceptor::SetSenseLine(bool sense)
 {
   mSenseLine = sense;
+}
+
+void RestrictedVisionPerceptor::SetSenseLineName(bool sense)
+{
+  mSenseLineName = sense;
 }
