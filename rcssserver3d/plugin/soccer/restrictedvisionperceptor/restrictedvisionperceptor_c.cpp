@@ -198,6 +198,22 @@ FUNCTION(RestrictedVisionPerceptor,setSenseLine)
     return true;
 }
 
+FUNCTION(RestrictedVisionPerceptor,setSenseLineName)
+{
+    bool inSenseLineName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inSenseLineName))
+        )
+        {
+            return false;
+        }
+
+    obj->SetSenseLineName(inSenseLineName);
+    return true;
+}
+
 void CLASS(RestrictedVisionPerceptor)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/Perceptor);
@@ -211,4 +227,5 @@ void CLASS(RestrictedVisionPerceptor)::DefineClass()
     DEFINE_FUNCTION(setPanRange);
     DEFINE_FUNCTION(setTiltRange);
     DEFINE_FUNCTION(setSenseLine);
+    DEFINE_FUNCTION(setSenseLineName);
 }
