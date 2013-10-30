@@ -41,6 +41,7 @@ SPLRule::SPLRule() : SoccerRuleAspect(),
   mReadyDuration(45),
   mSetDuration(10)
 {
+	mSayMsgSize = 20;
 }
 
 SPLRule::~SPLRule()
@@ -101,15 +102,11 @@ void SPLRule::Update(float /*deltaTime*/)
       UpdateCachedInternal();
       mState->SetState(Initial);
 
-      mSPLRightHalf = salt::AABB2(Vector2f(0                , -mFieldWidth/2.0f),
-                                  Vector2f(mFieldLength/2.0f,  mFieldWidth/2.0f));
-
-      mSPLLeftHalf = salt::AABB2(Vector2f(-mFieldLength/2.0f, -mFieldWidth/2.0f),
-                                 Vector2f(0                 ,  mFieldWidth/2.0f));
-
       SoccerBase::GetSoccerVar(*this,"ReadyDuration",mReadyDuration);
       SoccerBase::GetSoccerVar(*this,"SetDuration",mSetDuration);
-
+	  
+	  SoccerBase::GetSoccerVar(*this,"SayMsgSize",mSayMsgSize);
+	  
       // debug ----
       /*float factor = 0.1;
       mReadyDuration *= factor;
