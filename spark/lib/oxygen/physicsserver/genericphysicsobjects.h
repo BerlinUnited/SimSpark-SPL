@@ -36,7 +36,7 @@ namespace oxygen
 
 class OXYGEN_API GenericPhysicsMatrix{};
 class OXYGEN_API GenericContact{};
-class OXYGEN_API GenericMass{};
+class OXYGEN_API GenericMass{ public: virtual ~GenericMass() {} };
 class OXYGEN_API GenericJointFeedback{};
 class OXYGEN_API GenericSurfaceParameter{};
 
