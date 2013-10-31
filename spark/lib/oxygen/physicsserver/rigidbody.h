@@ -247,6 +247,8 @@ public:
 
     GenericMass* CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const;
 
+	void DeleteMass(GenericMass* mass) const;
+
     /** Sets the value of the inertia tensor of this body. \param i is the
         index of the \param value 's position in the inertia tensor.
         (It's a 3x3 matrix)

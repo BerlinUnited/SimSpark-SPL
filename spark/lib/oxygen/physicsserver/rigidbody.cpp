@@ -400,6 +400,11 @@ GenericMass* RigidBody::CreateMass(float mass, const salt::Vector3f& cg, const s
   return mRigidBodyImp->CreateMass(mass, cg, Ixx, Ixy);
 }
 
+void RigidBody::DeleteMass(GenericMass* mass) const
+{
+	mRigidBodyImp->DeleteMass(mass);
+}
+
 void RigidBody::SetInertiaTensorAt(int i, float value, GenericMass& mass)
 {
     mRigidBodyImp->SetInertiaTensorAt(i, value, mass);

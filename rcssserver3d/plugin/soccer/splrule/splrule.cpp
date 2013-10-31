@@ -41,6 +41,7 @@ SPLRule::SPLRule() : SoccerRuleAspect(),
   mReadyDuration(45),
   mSetDuration(10)
 {
+	mSayMsgSize = 20;
 }
 
 SPLRule::~SPLRule()
@@ -101,6 +102,11 @@ void SPLRule::Update(float /*deltaTime*/)
       UpdateCachedInternal();
       mState->SetState(Initial);
 
+      SoccerBase::GetSoccerVar(*this,"ReadyDuration",mReadyDuration);
+      SoccerBase::GetSoccerVar(*this,"SetDuration",mSetDuration);
+	  
+	  SoccerBase::GetSoccerVar(*this,"SayMsgSize",mSayMsgSize);
+	  
       // debug ----
       /*float factor = 0.1;
       mReadyDuration *= factor;
