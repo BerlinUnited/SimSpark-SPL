@@ -467,12 +467,6 @@ GenericMass* RigidBodyImp::CreateMass(float mass, salt::Vector3f cVector)
     return odeMass;
 }
 
-void RigidBodyImp::DeleteMass(GenericMass* mass) const
-{
-	ODEMass* odeMass = (ODEMass*)(mass);
-	delete odeMass;
-}
-
 oxygen::GenericMass* RigidBodyImp::CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const
 {
   ODEMass* odeMass = new ODEMass;
