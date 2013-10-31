@@ -111,8 +111,11 @@ public:
     //! Turn sensing of ball position on/off
     void SetSenseBallPos(bool sense);
 
-    // turn sensing of lines on/off
+    //! Turn sensing of lines on/off
     void SetSenseLine(bool sense);
+
+    //! Turn sensing of lines' name on/off
+    void SetSenseLineName(bool sense);
 
     /** Turn noise off/on.
         \param add_noise flag if noise should be used at all.
@@ -239,6 +242,7 @@ protected:
 
     /** flag if the lines can be sensed */
     bool mSenseLine;
+    bool mSenseLineName;
 
     //! horizontal opening of the vision cone
     unsigned int mHViewCone;

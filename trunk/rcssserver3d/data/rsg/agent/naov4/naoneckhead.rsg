@@ -130,31 +130,13 @@
 	(nd Transform
 	    (setLocalPos 0 0.05871 0.016364)
 	    (setLocalRotation -1.2 0 0)
-	    (nd RestrictedVisionPerceptor
-		(setPredicateName TopCamera)
-		(setViewCones 60.9 47.6)
-		(setSenseMyPos true)
-		(setSenseBallPos false)
-		(setStaticSenseAxis false)
-		(addNoise true)
-		(setInterval 3)
-		(setSenseLine true)
-		)
+            (importScene rsg/agent/naov4/camera.rsg TopCamera)
 	    )
 
 	(nd Transform
 	    (setLocalPos 0 0.05071 -0.03226)
 	    (setLocalRotation -39.7 0 0)
-	    (nd RestrictedVisionPerceptor
-		(setPredicateName BottomCamera)
-		(setViewCones 60.9 47.6)
-		(setSenseMyPos false)
-		(setSenseBallPos false)
-		(setStaticSenseAxis false)
-		(addNoise true)
-		(setInterval 3)
-		(setSenseLine true)
-		)
+            (importScene rsg/agent/naov4/camera.rsg BottomCamera)
 	    )
 
 

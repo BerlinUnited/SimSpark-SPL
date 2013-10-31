@@ -106,7 +106,7 @@ createVariable('Nao', 'UseTexture', 'true')
 
 scene = get($scenePath)
 if (scene != nil)
-  scene.importScene('rsg/agent/nao/soccer-spl.rsg')
+  scene.importScene('rsg/agent/naov4/soccer.rsg')
 end
 
 # setup the GameControlServer
