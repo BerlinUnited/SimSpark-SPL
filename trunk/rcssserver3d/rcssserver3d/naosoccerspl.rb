@@ -50,6 +50,12 @@ addSoccerVar('FreeKickMoveDist', 1.0)
 addSoccerVar('GoalKickDist', 0.6)
 addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
+
+# game flow parameters
+addSoccerVar('ReadyDuration', 2)
+addSoccerVar('SetDuration', 2)
+
+
 # soccer game settings
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 30.0)
@@ -57,6 +63,7 @@ addSoccerVar('CoinTossForKickOff', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', true)
+
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
