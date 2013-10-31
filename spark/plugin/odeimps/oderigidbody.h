@@ -92,7 +92,6 @@ public:
     long CreateBody(long worldID);
     oxygen::GenericMass* CreateMass(float mass, salt::Vector3f cVector);
     oxygen::GenericMass* CreateMass(float mass, const salt::Vector3f& cg, const salt::Vector3f& Ixx, const salt::Vector3f& Ixy ) const;
-	void RigidBodyImp::DeleteMass(oxygen::GenericMass* mass) const;
     void SetInertiaTensorAt(int i, float value, oxygen::GenericMass& mass);
     
 protected:
