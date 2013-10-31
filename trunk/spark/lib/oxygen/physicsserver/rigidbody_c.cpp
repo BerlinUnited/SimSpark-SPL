@@ -91,7 +91,8 @@ FUNCTION(RigidBody,setMassParameters)
 
     GenericMass* mass = obj->CreateMass(inMass, inCenter, Ixx, Ixy);
     obj->SetMassParameters(mass);
-    delete mass;
+    //delete mass;
+	obj->DeleteMass(mass);
     return true;
 }
 
