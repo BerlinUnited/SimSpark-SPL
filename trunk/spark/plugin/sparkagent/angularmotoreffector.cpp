@@ -56,7 +56,7 @@ bool AngularMotorEffector::Realize(boost::shared_ptr<ActionObject> action)
       return false;
     }
 
-    boost::shared_ptr<HingeAction> motorAction = shared_dynamic_cast<HingeAction>(action);
+    boost::shared_ptr<HingeAction> motorAction = boost::dynamic_pointer_cast<HingeAction>(action);
 
     if (motorAction.get() == 0)
     {

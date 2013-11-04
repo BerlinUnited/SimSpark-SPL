@@ -39,7 +39,7 @@ GPS::~GPS()
 void 
 GPS::OnLink()
 {
-    mTransformParent = shared_static_cast<Transform>
+    mTransformParent = boost::static_pointer_cast<Transform>
         (FindParentSupportingClass<Transform>().lock());   
 }
 
