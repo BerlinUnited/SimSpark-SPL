@@ -187,7 +187,7 @@ void AngularMotor::SetBattery(const std::string& batteryPath)
     return;
   }
 
-  boost::shared_ptr<Leaf> mySelf = shared_static_cast<Leaf>
+  boost::shared_ptr<Leaf> mySelf = boost::static_pointer_cast<Leaf>
       (GetSelf().lock());
 
   boost::shared_ptr<Leaf> leaf = GetCore()->Get(batteryPath,mySelf);
@@ -200,7 +200,7 @@ void AngularMotor::SetBattery(const std::string& batteryPath)
     return;
   }
 
-  boost::shared_ptr<Battery> battery = shared_dynamic_cast<Battery>(leaf);
+  boost::shared_ptr<Battery> battery = boost::dynamic_pointer_cast<Battery>(leaf);
 
   if (battery.get() == 0)
   {

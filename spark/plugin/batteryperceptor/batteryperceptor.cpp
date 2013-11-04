@@ -37,7 +37,7 @@ BatteryPerceptor::~BatteryPerceptor()
 
 void BatteryPerceptor::OnLink()
 { 
-  mBattery = shared_static_cast<Battery>(FindParentSupportingClass<Battery>().lock());
+  mBattery = boost::static_pointer_cast<Battery>(FindParentSupportingClass<Battery>().lock());
   if (0 == mBattery.get())
   {
     GetLog()->Error()<< "(BatteryPerceptor) ERROR: can not link to battery\n";

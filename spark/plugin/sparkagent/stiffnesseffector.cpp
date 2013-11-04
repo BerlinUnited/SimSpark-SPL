@@ -41,7 +41,7 @@ bool StiffnessEffector::Realize(boost::shared_ptr<ActionObject> action)
 {
     if (mJoint.get() == 0) return false;
 
-    boost::shared_ptr<StiffnessAction> stiffnessAction = shared_dynamic_cast<StiffnessAction>(action);
+    boost::shared_ptr<StiffnessAction> stiffnessAction = boost::dynamic_pointer_cast<StiffnessAction>(action);
 
     if (stiffnessAction.get() == 0)
     {

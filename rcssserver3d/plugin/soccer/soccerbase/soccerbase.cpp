@@ -329,7 +329,7 @@ SoccerBase::GetGameControlServer(const Leaf& base,
 
     if (gameControlServer.get() == 0)
     {
-        gameControlServer = shared_dynamic_cast<GameControlServer>
+        gameControlServer = boost::dynamic_pointer_cast<GameControlServer>
             (base.GetCore()->Get("/sys/server/gamecontrol"));
 
         if (gameControlServer.get() == 0)
