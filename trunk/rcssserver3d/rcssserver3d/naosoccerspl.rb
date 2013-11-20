@@ -52,9 +52,9 @@ addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
 
 # game flow parameters
-addSoccerVar('ReadyDuration', 2)
-addSoccerVar('SetDuration', 2)
-
+addSoccerVar('ReadyDuration', 45)
+addSoccerVar('SetDuration', 5)
+addSoccerVar('SayMsgSize', 128)
 
 # soccer game settings
 addSoccerVar('AutomaticKickOff', false)
@@ -74,6 +74,12 @@ addSoccerVar('BallMass',0.055)
 
 # SPL rule parameters
 addSoccerVar('RuleHalfTime', 10.0 * 60)
+
+# charging foul parameters (S3D)
+addSoccerVar('UseCharging', true)
+addSoccerVar('ChargingMinSpeed', 0.2)
+addSoccerVar('ChargingMinBallDist', 0.2)
+addSoccerVar('IllegalInterceptMinAngle', 70)
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
@@ -144,3 +150,5 @@ end
 # monitor client
 sparkRegisterMonitorCmdParser 'TrainerCommandParser'
 
+# Load parameters for heterogeneous Nao robots
+run "naorobottypes.rb"
