@@ -515,7 +515,7 @@ ScriptServer::RunInitScriptInternal(const string &sourceDir, const string &name,
 #else
     s << "cp \"" << sourcePath << "\" \"" << destPath << '"';
 #endif
-    system(s.str().c_str());
+    std::system(s.str().c_str());
 
     return eOK;
 }
