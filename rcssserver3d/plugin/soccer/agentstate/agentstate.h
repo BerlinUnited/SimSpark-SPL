@@ -128,6 +128,8 @@ public:
 
     bool IsPenalized();
 
+	TTime GetWhenPenalized() const;
+
     TTime getWhenPenalized() const {return whenPenalized;}
 
 protected:

@@ -315,5 +315,9 @@ bool AgentState:: IsPenalized() {
     } else {
         return false;
     }
+}
 
+TTime AgentState::GetWhenPenalized() const
+{
+    return whenPenalized;
 }
