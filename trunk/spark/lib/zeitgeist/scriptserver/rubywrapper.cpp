@@ -49,8 +49,17 @@ VALUE zeitgeist::RbEvalStringWrap(const std::string& str)
 
 std::string zeitgeist::RbGetError()
 {
-  VALUE mes = rb_inspect(rb_gv_get("$!"));
-  return RSTRING_PTR(mes);
+  // BUG: rb_gv_get("$!") returns invalide characters 
+  //      probably due to multithreaded access to ruby environment.
+  //      This makes rb_inspect crash.
+  //VALUE msg = rb_inspect(rb_gv_get("$!"));
+
+  // Note: this is a better way of getting the error message
+  //VALUE msg = rb_errinfo();
+  
+  //return RSTRING_PTR(rb_obj_as_string(msg));
+
+  return std::string("(zeitgeist::RbGetError) [BUG] dont use this function until the multithreaded access to ruby environment is solved properly!!!");
 }
 
 void zeitgeist::RbPrintError()

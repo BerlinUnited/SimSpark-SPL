@@ -66,10 +66,10 @@ public:
     
     void UpdateFinish();
 
-    salt::Vector3f getBallPositionAfterOutsideField(salt::Vector3f ballPos);
+    salt::Vector3f GetBallDropInPosition();
 
+	bool IsLeavingTheField(boost::shared_ptr<AgentState> robot);
     bool IsIllegalPosition(boost::shared_ptr<AgentState> robot);
-
     bool IsIllegalDefender(boost::shared_ptr<AgentState> robot);
 
     //void CheckRobotsIfUnpenalized(boost::shared_ptr<AgentState> agentState, boost::shared_ptr<oxygen::Transform> agentAspectTrans, TTeamIndex idx);
@@ -79,6 +79,7 @@ public:
     void CheckTime();
 
     void RemoveRobot(boost::shared_ptr<AgentState> robot);
+	void UnpenalizeRobot(boost::shared_ptr<AgentState> robot);
 
     void Test(TTeamIndex idx);
 
