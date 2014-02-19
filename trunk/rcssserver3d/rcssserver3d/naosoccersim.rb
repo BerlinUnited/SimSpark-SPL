@@ -60,8 +60,9 @@ addSoccerVar('ChangeSidesInSecondHalf', false)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
-addSoccerVar('MaxHeteroTypeCount', 3)
-addSoccerVar('MaxTotalHeteroCount', 9)
+addSoccerVar('MaxRobotTypeCount', 7)
+addSoccerVar('MinRobotTypesCount', 3)
+addSoccerVar('MaxSumTwoRobotTypes', 9)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.042)
@@ -90,7 +91,11 @@ addSoccerVar('GoalieGroundMaxTime', 30)
 addSoccerVar('MaxPlayersInsideOwnArea',3)
 addSoccerVar('MinOppDistance',0.8)       
 addSoccerVar('Min2PlDistance',0.4)       
-addSoccerVar('Min3PlDistance',1.0)      
+addSoccerVar('Min3PlDistance',1.0)  
+
+# 2014 server changes     
+addSoccerVar('ReportScore', true)
+addSoccerVar('LabelMessages', true)
 
 # auto ref parameters for testing (not for use in competition...)
 #addSoccerVar('NotStandingMaxTime',10)       
