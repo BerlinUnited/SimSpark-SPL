@@ -41,8 +41,6 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mGameHalf = GH_FIRST;
     mRobotTypeCount[0].push_back(0); // add count for type 0 (default type)
     mRobotTypeCount[1].push_back(0);
-    mHeteroCount[0] = 0;
-    mHeteroCount[1] = 0;
     mScore[0] = 0;
     mScore[1] = 0;
     mLastKickOffGameHalf = GH_NONE;
@@ -52,8 +50,9 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mAgentRadius = 3.5;
     mFinished = false;
     mGamePaused = true;
-    mMaxHeteroTypeCount = 3;
-    mMaxTotalHeteroCount = 9;
+    mMaxRobotTypeCount = 7;
+    mMinRobotTypesCount = 3;
+    mMaxSumTwoRobotTypes = 9;
     mInternalIndex[TI_NONE] = -1;
     mInternalIndex[TI_LEFT] = 0;
     mInternalIndex[TI_RIGHT] = 1;
@@ -258,26 +257,53 @@ GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
     if (i < 0)
         return false;
 
-    if (type) // heterogeneous player
+    int numRobots = 0;
+    int numRobotTypes = 0;
+    int maxSumTwoRobotTypes = 0;
+
+    if (mRobotTypeCount[i].size() <= type)
+        mRobotTypeCount[i].resize(type+1);
+
+    for (int j = 0; j < mRobotTypeCount[i].size(); j++) 
     {
-        if (mHeteroCount[i] == mMaxTotalHeteroCount)
+        if (mRobotTypeCount[i][j] > 0)
         {
-            GetLog()->Error()
-                << "ERROR: (GameStateAspect::InsertRobotType) Hetero player"
-                        " count limit reached.\n";
-            return false;
+            numRobots += mRobotTypeCount[i][j];
+            numRobotTypes++;
         }
+        int sumTwoRobotTypes = mRobotTypeCount[i][type]+1;
+        if (j != type)
+            sumTwoRobotTypes += mRobotTypeCount[i][j];
+       
+        if (sumTwoRobotTypes > maxSumTwoRobotTypes)
+            maxSumTwoRobotTypes = sumTwoRobotTypes;
+    }
 
-        ++mHeteroCount[i];
+    if (mRobotTypeCount[i][type] == mMaxRobotTypeCount)
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::InsertRobotType) No more robots "
+            "of type " << type << " are allowed.\n";
+        return false;
+    }
 
-        if (mRobotTypeCount[i].size() <= type)
-            mRobotTypeCount[i].resize(type+1);
-
-        if (mRobotTypeCount[i][type] == mMaxHeteroTypeCount)
+    if (maxSumTwoRobotTypes > mMaxSumTwoRobotTypes) 
+    {
+        GetLog()->Error()
+            << "ERROR: (GameStateAspect::InsertRobotType) Maximum sum of "
+            "robots of two robot types limit reached. No more robots of "
+            "type " << type << " are allowed.\n";
+        return false;
+    }
+    
+    if ((11-numRobots) <= (mMinRobotTypesCount-numRobotTypes)) 
+    {
+        if (mRobotTypeCount[i][type] != 0) 
         {
             GetLog()->Error()
-                << "ERROR: (GameStateAspect::InsertRobotType) No more robots "
-                        "of type " << type << " are allowed.\n";
+                << "ERROR: (GameStateAspect::InsertRobotType) Minimum number"
+                " of different robot types not reached. Only robots of a type"
+                " not yet used can be added.\n";
             return false;
         }
     }
@@ -298,9 +324,6 @@ GameStateAspect::EraseRobotType(TTeamIndex idx, int type)
     {
         return false;
     }
-
-    if (type) // heterogeneous player
-        --mHeteroCount[i];
 
     --mRobotTypeCount[i][type];
 
@@ -496,8 +519,9 @@ GameStateAspect::OnLink()
     if (!coinTossKickOff)
         mNextHalfKickOff = TI_LEFT;
 
-    SoccerBase::GetSoccerVar(*this, "MaxHeteroTypeCount", mMaxHeteroTypeCount);
-    SoccerBase::GetSoccerVar(*this, "MaxTotalHeteroCount", mMaxTotalHeteroCount);
+    SoccerBase::GetSoccerVar(*this, "MaxRobotTypeCount", mMaxRobotTypeCount);
+    SoccerBase::GetSoccerVar(*this, "MinRobotTypesCount", mMinRobotTypesCount);
+    SoccerBase::GetSoccerVar(*this, "MaxSumTwoRobotTypes", mMaxSumTwoRobotTypes);
 }
 
 int

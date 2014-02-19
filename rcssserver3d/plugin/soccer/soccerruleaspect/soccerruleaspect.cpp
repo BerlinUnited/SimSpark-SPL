@@ -1806,7 +1806,8 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             Vector3f relPos = pos - new_pos;
             relPos = SoccerBase::FlipView(relPos, idx);
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
-            (*it)->AddMessage(message, direction, true);
+            std::string team = (*it)->GetPerceptName(ObjectState::PT_Player);
+            (*it)->AddMessage(message, team, direction, true);
         }
     }
 
@@ -1828,7 +1829,8 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             Vector3f relPos = pos - new_pos;
             relPos = SoccerBase::FlipView(relPos, SoccerBase::OpponentTeam(idx));
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
-            (*it)->AddMessage(message, direction, false);
+            std::string team = (*it)->GetPerceptName(ObjectState::PT_Player);
+            (*it)->AddMessage(message, team, direction, false);
         }
     }
 }

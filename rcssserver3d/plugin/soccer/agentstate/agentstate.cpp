@@ -136,7 +136,7 @@ AgentState::ReduceBattery(float consumption)
 }
 
 void
-AgentState::AddMessage(const string& msg, float direction, bool teamMate)
+AgentState::AddMessage(const string& msg, const string& team, float direction, bool teamMate)
 {
     if (teamMate)
     {
@@ -148,6 +148,7 @@ AgentState::AddMessage(const string& msg, float direction, bool teamMate)
         mHearMateCap -= mHearDecay;
 
         mMateMsg = msg;
+        mMateTeam = team;
         mMateMsgDir = direction;
         mIfMateMsg = true;
     }
@@ -161,6 +162,7 @@ AgentState::AddMessage(const string& msg, float direction, bool teamMate)
         mHearOppCap -= mHearDecay;
 
         mOppMsg = msg;
+        mOppTeam = team;
         mOppMsgDir = direction;
         mIfOppMsg = true;
     }
@@ -174,7 +176,7 @@ AgentState::AddSelfMessage(const string& msg)
 }
 
 bool
-AgentState::GetMessage(string& msg, float& direction, bool teamMate)
+AgentState::GetMessage(string& msg, string& team, float& direction, bool teamMate)
 {
     if (teamMate)
     {
@@ -189,6 +191,7 @@ AgentState::GetMessage(string& msg, float& direction, bool teamMate)
         }
 
         msg = mMateMsg;
+        team = mMateTeam;
         direction = mMateMsgDir;
         mIfMateMsg = false;
         return true;
@@ -206,6 +209,7 @@ AgentState::GetMessage(string& msg, float& direction, bool teamMate)
         }
 
         msg = mOppMsg;
+        team = mOppTeam;
         direction = mOppMsgDir;
         mIfOppMsg = false;
         return true;

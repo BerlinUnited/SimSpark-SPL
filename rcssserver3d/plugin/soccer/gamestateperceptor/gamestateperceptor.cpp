@@ -33,6 +33,7 @@ using namespace std;
 GameStatePerceptor::GameStatePerceptor() : oxygen::Perceptor()
 {
     mFirstPercept = true;
+    mReportScore = true;
 }
 
 GameStatePerceptor::~GameStatePerceptor()
@@ -127,6 +128,18 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         InsertInitialPercept(predicate);
     }
 
+    if (mReportScore) {
+        // score left
+        ParameterList& slElement = predicate.parameter.AddList();
+        slElement.AddValue(string("sl"));
+        slElement.AddValue(mGameState->GetScore(TI_LEFT));
+        
+        // score right
+        ParameterList& srElement = predicate.parameter.AddList();
+        srElement.AddValue(string("sr"));
+        srElement.AddValue(mGameState->GetScore(TI_RIGHT));
+    }
+
     // time
     ParameterList& timeElement = predicate.parameter.AddList();
     timeElement.AddValue(string("t"));
@@ -145,6 +158,7 @@ GameStatePerceptor::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
     SoccerBase::GetAgentState(*this,mAgentState);
+    SoccerBase::GetSoccerVar(*this,"ReportScore",mReportScore);
 }
 
 void

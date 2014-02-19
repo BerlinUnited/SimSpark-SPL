@@ -200,9 +200,6 @@ protected:
     /** the array of robot type counts for each team */
     std::vector<int> mRobotTypeCount[2];
 
-    /** the number of heterogeneous players for each team */
-    int mHeteroCount[2];
-
     /** the scores of two teams */
     int mScore[2];
 
@@ -221,11 +218,14 @@ protected:
     /** flag if the game is running or paused (e.g. in goal_left/right state) */
     bool mGamePaused;
 
-    /** the maximum number of heterogeneous players of a single type per team */
-    int mMaxHeteroTypeCount;
+    /** the maximum number of players of a single type per team */
+    int mMaxRobotTypeCount;
 
-    /** the maximum number of total heterogeneous players for a team */
-    int mMaxTotalHeteroCount;
+    /** the minimum number of different robot types per team */
+    int mMinRobotTypesCount;
+
+    /** the maximum sum of robots for any two robot types */
+    int mMaxSumTwoRobotTypes;
 };
 
 DECLARE_CLASS(GameStateAspect);
