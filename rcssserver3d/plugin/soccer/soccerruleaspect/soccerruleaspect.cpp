@@ -547,19 +547,27 @@ void SoccerRuleAspect::AnalyseFouls(TTeamIndex idx)
 
     for(int unum=1; unum<=11; unum++)
     {
-        // I am the third closest player but i am too near the ball (and not the goalie)
-        if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance &&
-            (distArr[unum][idx] <= mMin3PlDistance + 0.01 && ordArr[unum][idx] == 3))
+        TPlayMode playMode = mGameState->GetPlayMode();
+        if ((playMode == PM_KickOff_Left && idx != TI_LEFT)
+                || (playMode == PM_KickOff_Right && idx != TI_RIGHT)
+                || (playMode != PM_KickOff_Left && playMode != PM_KickOff_Right))
         {
-            playerFoulTime[unum][idx]++;
-            playerLastFoul[unum][idx] = FT_Crowding;
-        }
-        // I am the second closest player but i am too near the ball (and not the goalie)
-        else if(unum != 1 && closestPlayerDist[idx2] < mMinOppDistance &&
-                distArr[unum][idx] <= mMin2PlDistance + 0.01 && ordArr[unum][idx] == 2 )
-        {
-            playerFoulTime[unum][idx]++;
-            playerLastFoul[unum][idx] = FT_Crowding;
+            // I am the third closest player but i am too near the ball (and not the goalie)
+            if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
+                    && (distArr[unum][idx] <= mMin3PlDistance + 0.01
+                            && ordArr[unum][idx] == 3))
+            {
+                playerFoulTime[unum][idx]++;
+                playerLastFoul[unum][idx] = FT_Crowding;
+            }
+            // I am the second closest player but i am too near the ball (and not the goalie)
+            else if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
+                    && distArr[unum][idx] <= mMin2PlDistance + 0.01
+                    && ordArr[unum][idx] == 2)
+            {
+                playerFoulTime[unum][idx]++;
+                playerLastFoul[unum][idx] = FT_Crowding;
+            }
         }
         // Too many players inside my own penalty area and Im am the last one to enter or
         // the last one to enter was the goalie and I am the one further away from own goal
@@ -1631,7 +1639,11 @@ SoccerRuleAspect::Update(float deltaTime)
         break;
 
     case PM_Goal_Left:
+        ClearPlayersBeforeKickOff(TI_RIGHT);
+        UpdateGoal();
+        break;
     case PM_Goal_Right:
+        ClearPlayersBeforeKickOff(TI_LEFT);
         UpdateGoal();
         break;
 
