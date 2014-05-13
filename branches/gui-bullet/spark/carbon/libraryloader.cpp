@@ -451,7 +451,7 @@ QMainWindow* LibraryLoader::exportLayout(LibraryDefinition& lib)
     else
     {
         LOG_INFO() << "Failed to access export plugin function in library " << lib.mLibrary->fileName() << ": " << lib.mLibrary->errorString().toStdString().c_str();
-        return false;
+        return 0;
     }
 
     //Set exported flag

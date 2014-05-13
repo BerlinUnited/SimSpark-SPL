@@ -1522,7 +1522,7 @@ void SetupFrame::saveSetup()
 {
     mSaving = true;
 
-    bool saved = mSimulationManager->saveSimulationSetup(mCurrentSetup);
+    bool saved = static_cast<bool>(mSimulationManager->saveSimulationSetup(mCurrentSetup));
     mSaving = false;
     if (!saved)
     {

@@ -281,7 +281,7 @@ bool SimSpark::Reset()
     std::string pathStr;
     path.GetString(pathStr);
     boost::shared_ptr<zeitgeist::Leaf> leaf(GetCore()->Get(pathStr));
-    boost::shared_ptr<oxygen::Scene> scene = boost::shared_ptr<oxygen::Scene>(boost::shared_static_cast<oxygen::Scene>(leaf));
+    boost::shared_ptr<oxygen::Scene> scene = boost::shared_ptr<oxygen::Scene>(boost::static_pointer_cast<oxygen::Scene>(leaf));
     boost::shared_ptr<oxygen::World> world;
     boost::shared_ptr<oxygen::Space> space;
 
@@ -289,7 +289,7 @@ bool SimSpark::Reset()
     {
         if (it->get()->GetName().compare("world") == 0)
         {
-            world = boost::shared_static_cast<oxygen::World>(*it);
+            world = boost::static_pointer_cast<oxygen::World>(*it);
             scene->RemoveChildReference(*it);
             break;
         }
@@ -298,13 +298,13 @@ bool SimSpark::Reset()
     {
         if (it->get()->GetName().compare("space") == 0)
         {
-             space = boost::shared_static_cast<oxygen::Space>(*it);
+             space = boost::static_pointer_cast<oxygen::Space>(*it);
              scene->RemoveChildReference(*it);
              break;
         }
     }
 
-    //boost::shared_ptr<oxygen::GameControlServer> gc = boost::shared_static_cast<oxygen::GameControlServer>(GetCore()->Get("/sys/server/gamecontrol/"));
+    //boost::shared_ptr<oxygen::GameControlServer> gc = boost::static_pointer_cast<oxygen::GameControlServer>(GetCore()->Get("/sys/server/gamecontrol/"));
     //boost::shared_ptr<zeitgeist::Leaf> gc_state = gc->GetChild("GameStateAspect");
     //boost::shared_ptr<zeitgeist::Leaf> gc_ball = gc->GetChild("BallStateAspect");
     //boost::shared_ptr<zeitgeist::Leaf> gc_rule = gc->GetChild("SoccerRuleAspect");
@@ -316,7 +316,7 @@ bool SimSpark::Reset()
     //gc_rule.reset();
     //gc.reset();
 
-    boost::shared_ptr<zeitgeist::Node> root = boost::shared_static_cast<zeitgeist::Node>(GetCore()->GetRoot());
+    boost::shared_ptr<zeitgeist::Node> root = boost::static_pointer_cast<zeitgeist::Node>(GetCore()->GetRoot());
     boost::shared_ptr<zeitgeist::Leaf> root_leaf(GetCore()->GetRoot());
 
     scene->UnlinkChildren();
