@@ -270,10 +270,10 @@ bool SoccerControlFrame::tryInitSpark()
         }
 
         SimSpark* spark = &*mSparkController->getSpark();
-        boost::shared_ptr<GameControlServer> gameControl(shared_dynamic_cast<GameControlServer>(spark->GetCore()->Get(gameControlServer.toStdString())));
-        boost::shared_ptr<GameStateAspect>   gameState  (shared_dynamic_cast<GameStateAspect>  (spark->GetCore()->Get(gameStateAspect.toStdString())));
-        boost::shared_ptr<SoccerRuleAspect>  soccerRule (shared_dynamic_cast<SoccerRuleAspect> (spark->GetCore()->Get(soccerRuleAspect.toStdString())));
-        boost::shared_ptr<BallStateAspect>   ballState  (shared_dynamic_cast<BallStateAspect>  (spark->GetCore()->Get(ballStateAspect.toStdString())));
+        boost::shared_ptr<GameControlServer> gameControl(dynamic_pointer_cast<GameControlServer>(spark->GetCore()->Get(gameControlServer.toStdString())));
+        boost::shared_ptr<GameStateAspect>   gameState  (dynamic_pointer_cast<GameStateAspect>  (spark->GetCore()->Get(gameStateAspect.toStdString())));
+        boost::shared_ptr<SoccerRuleAspect>  soccerRule (dynamic_pointer_cast<SoccerRuleAspect> (spark->GetCore()->Get(soccerRuleAspect.toStdString())));
+        boost::shared_ptr<BallStateAspect>   ballState  (dynamic_pointer_cast<BallStateAspect>  (spark->GetCore()->Get(ballStateAspect.toStdString())));
 
         bool success = true;
         if (!gameControl.get())

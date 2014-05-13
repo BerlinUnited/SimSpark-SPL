@@ -90,7 +90,7 @@ bool SparkGLRender::init(shared_ptr<SimSpark> spark)
     }
 
     //Search camera
-    mCamera = shared_dynamic_cast<Camera>
+    mCamera = dynamic_pointer_cast<Camera>
         (mSpark->GetCore()->Get(mCameraPath));
 
     if (mCamera.get() == 0)
@@ -100,7 +100,7 @@ bool SparkGLRender::init(shared_ptr<SimSpark> spark)
     }
 
     //Search RenderServer
-    mRenderServer = shared_dynamic_cast<RenderServer>
+    mRenderServer = dynamic_pointer_cast<RenderServer>
         (mSpark->GetCore()->Get(mRenderServerPath));
 
     if (mRenderServer.get() == 0)
@@ -110,7 +110,7 @@ bool SparkGLRender::init(shared_ptr<SimSpark> spark)
     }
 
     //Search RenderControl node
-    mRenderControl = shared_dynamic_cast<RenderControl>
+    mRenderControl = dynamic_pointer_cast<RenderControl>
         (mSpark->GetCore()->Get(mRenderControlPath));
 
     if (mRenderControl.get() == 0)
@@ -120,7 +120,7 @@ bool SparkGLRender::init(shared_ptr<SimSpark> spark)
     }
 
     //Search SceneServer
-    mSceneServer = shared_dynamic_cast<SceneServer>
+    mSceneServer = dynamic_pointer_cast<SceneServer>
         (mSpark->GetCore()->Get(mSceneServerPath));
 
     if (mSceneServer.get() == 0)

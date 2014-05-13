@@ -301,7 +301,7 @@ int SparkController::initSpark(const QString& scriptPath, const QString& seconda
         //Initialize SimControl node and store weak ptr
         boost::shared_ptr<zeitgeist::Leaf> leaf(
             mSpark->GetCore()->CreateContext()->New("gui/GuiSimControl", "sys/server/simulation/GuiControl"));
-        mSimControl = boost::weak_ptr<GuiSimControl>(boost::shared_dynamic_cast<GuiSimControl>(leaf));
+        mSimControl = boost::weak_ptr<GuiSimControl>(boost::dynamic_pointer_cast<GuiSimControl>(leaf));
             
         //Init Command queue
         initCommandQueue();

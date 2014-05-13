@@ -279,7 +279,7 @@ bool Simulation::stop(bool stopserver)
         {
             //Do not stop the main spark server if not explicitly ordered to, reset it instead
             skipServer = true;
-            shared_dynamic_cast<SparkSimulationThread>(*it)->reset();
+            dynamic_pointer_cast<SparkSimulationThread>(*it)->reset();
         }
         else*/
         {
@@ -706,7 +706,7 @@ bool Simulation::addTask(boost::shared_ptr<TaskDefinition> taskDefinition)
 
         }
 
-        task = shared_ptr<SimulationTask>(shared_dynamic_cast<SimulationTask>(server));
+        task = shared_ptr<SimulationTask>(dynamic_pointer_cast<SimulationTask>(server));
     }
     else
     {
@@ -742,7 +742,7 @@ bool Simulation::addTask(boost::shared_ptr<TaskDefinition> taskDefinition)
 
     if (taskDefinition->getType() == TaskDefinition::TT_SERVERTHREAD)
     {
-        emit serverCreated(shared_static_cast<ServerThread>(task));
+        emit serverCreated(static_pointer_cast<ServerThread>(task));
     }
 
     //If a existing spark server reinitialized, leave it paused. Otherwise initialize the task.

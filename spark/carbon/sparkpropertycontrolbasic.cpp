@@ -57,7 +57,7 @@ using namespace boost;
     list.push_back(boost::shared_ptr<Property>(new Property(leaf, descriptor, NAME, QObject::tr(CAPTION), DATA, true, VALIDATOR, ##__VA_ARGS__)))
 
 #define SET_VALUE(DATAPTR) setPropertyValueProtected(prop, DATAPTR)
-#define GET_VALUE(TYPE) boost::shared_static_cast<const TYPE>(prop.getTempValue())->mValue
+#define GET_VALUE(TYPE) boost::static_pointer_cast<const TYPE>(prop.getTempValue())->mValue
 
 #define FORMAT_FLAG(VALUE, FLAG)\
     QString((VALUE & FLAG) ? QString(#FLAG" ") : QString(""))
@@ -351,7 +351,7 @@ bool BasicControl::genClass(TLeafPtr leaf, const ClassDescriptor& descriptor, TP
 
 bool BasicControl::updateClass(TLeafPtr leaf, Property& prop) const
 {
-    const Class& cl = *shared_static_cast<Class>(leaf);
+    const Class& cl = *static_pointer_cast<Class>(leaf);
 
     if (prop.getName().compare("GetBundle") == 0)
     {
@@ -401,14 +401,14 @@ bool BasicControl::applyChangeClass(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::genBaseNode(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    boost::shared_ptr<BaseNode> baseNode = boost::shared_static_cast<BaseNode>(leaf);
+    boost::shared_ptr<BaseNode> baseNode = boost::static_pointer_cast<BaseNode>(leaf);
     ADD_READ_PROPERTY("GetWorldBoundingBox", "WorldBoundingBox", new DAABB3());
     return true;
 }
 
 bool BasicControl::updateBaseNode(TLeafPtr leaf, Property& prop) const
 {
-    boost::shared_ptr<BaseNode> baseNode = boost::shared_static_cast<BaseNode>(leaf);
+    boost::shared_ptr<BaseNode> baseNode = boost::static_pointer_cast<BaseNode>(leaf);
     if (prop.getName().compare("GetWorldBoundingBox") == 0) {SET_VALUE(new DAABB3(baseNode->GetWorldBoundingBox()));}
     else return false; //Getter not supported
     return true;
@@ -425,7 +425,7 @@ bool BasicControl::applyChangeBaseNode(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::genTransform(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const Transform& trans = *shared_static_cast<Transform>(leaf);
+    const Transform& trans = *static_pointer_cast<Transform>(leaf);
     ADD_READ_PROPERTY("GetChangedMark"   , "ChangedMark",    new DInt());
     ADD_READWRITE_PROPERTY("GetLocalTransform", "LocalTransform", new DMat4x4(), Data::doubleMatrixValidator(), QObject::tr("Local transformation matrix"));
     ADD_READWRITE_PROPERTY("GetWorldTransform", "WorldTransform", new DMat4x4(), Data::doubleMatrixValidator(), QObject::tr("World transformation matrix"));
@@ -434,7 +434,7 @@ bool BasicControl::genTransform(TLeafPtr leaf, const ClassDescriptor& descriptor
 
 bool BasicControl::updateTransform(TLeafPtr leaf, Property& prop) const
 {
-    const Transform& trans = *shared_static_cast<Transform>(leaf);
+    const Transform& trans = *static_pointer_cast<Transform>(leaf);
     if      (prop.getName().compare("GetChangedMark") == 0)    {SET_VALUE(new DInt(trans.GetChangedMark()));}
     else if (prop.getName().compare("GetLocalTransform") == 0) {SET_VALUE(new DMat4x4(trans.GetLocalTransform()));}
     else if (prop.getName().compare("GetWorldTransform") == 0) {SET_VALUE(new DMat4x4(trans.GetWorldTransform()));}
@@ -444,7 +444,7 @@ bool BasicControl::updateTransform(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::applyChangeTransform(TLeafPtr leaf, Property& prop) const
 {
-    Transform& trans = *shared_static_cast<Transform>(leaf);
+    Transform& trans = *static_pointer_cast<Transform>(leaf);
     //Supported setters
     if      (prop.getName().compare("GetLocalTransform") == 0) {trans.SetLocalTransform(GET_VALUE(DMat4x4));}
     else if (prop.getName().compare("GetWorldTransform") == 0) {trans.SetWorldTransform(GET_VALUE(DMat4x4));}
@@ -457,7 +457,7 @@ bool BasicControl::applyChangeTransform(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::genRigidBody(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const RigidBody& body = *shared_static_cast<RigidBody>(leaf);
+    const RigidBody& body = *static_pointer_cast<RigidBody>(leaf);
     ADD_READWRITE_PROPERTY("GetMass",            "Mass",            new DFloat   (), Data::doubleValidator(0));
     ADD_READWRITE_PROPERTY("GetVelocity",        "Velocity",        new DVector3f(), Data::vector3fValidator());
     ADD_READWRITE_PROPERTY("GetAngularVelocity", "AngularVelocity", new DVector3f(), Data::vector3fValidator());
@@ -467,7 +467,7 @@ bool BasicControl::genRigidBody(TLeafPtr leaf, const ClassDescriptor& descriptor
 
 bool BasicControl::updateRigidBody(TLeafPtr leaf, Property& prop) const
 {
-    const RigidBody& body = *shared_static_cast<RigidBody>(leaf);
+    const RigidBody& body = *static_pointer_cast<RigidBody>(leaf);
     if      (prop.getName().compare("GetMass") == 0)            {SET_VALUE(new DFloat   (body.GetMass())           );}
     else if (prop.getName().compare("GetVelocity") == 0)        {SET_VALUE(new DVector3f(body.GetVelocity())       );}
     else if (prop.getName().compare("GetAngularVelocity") == 0) {SET_VALUE(new DVector3f(body.GetAngularVelocity()));}
@@ -478,7 +478,7 @@ bool BasicControl::updateRigidBody(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::applyChangeRigidBody(TLeafPtr leaf, Property& prop) const
 {
-    RigidBody& body = *shared_static_cast<RigidBody>(leaf);
+    RigidBody& body = *static_pointer_cast<RigidBody>(leaf);
     if      (prop.getName().compare("GetMass") == 0)            {body.SetMass           (GET_VALUE(DFloat));}
     else if (prop.getName().compare("GetVelocity") == 0)        {body.SetVelocity       (GET_VALUE(DVector3f));}
     else if (prop.getName().compare("GetAngularVelocity") == 0) {body.SetAngularVelocity(GET_VALUE(DVector3f));}
@@ -527,7 +527,7 @@ bool BasicControl::genJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TP
 
 bool BasicControl::updateJoint(TLeafPtr leaf, Property& prop) const
 {
-    const Joint& joint = *shared_static_cast<Joint>(leaf);
+    const Joint& joint = *static_pointer_cast<Joint>(leaf);
     if (prop.getName().compare("FeedBackEnabled") == 0)     {SET_VALUE(new DFloat(joint.FeedBackEnabled()));}
     else
     {
@@ -570,7 +570,7 @@ bool BasicControl::applyChangeJoint(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::genHingeJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const HingeJoint& hinge = *shared_static_cast<HingeJoint>(leaf);
+    const HingeJoint& hinge = *static_pointer_cast<HingeJoint>(leaf);
     ADD_READ_PROPERTY("GetAngle",     "Angle",     new DFloat()); //todo
     ADD_READ_PROPERTY("GetAngleRate", "AngleRate", new DFloat()); //todo
     return true;
@@ -578,7 +578,7 @@ bool BasicControl::genHingeJoint(TLeafPtr leaf, const ClassDescriptor& descripto
 
 bool BasicControl::updateHingeJoint(TLeafPtr leaf, Property& prop) const
 {
-    const HingeJoint& hinge = *shared_static_cast<HingeJoint>(leaf);
+    const HingeJoint& hinge = *static_pointer_cast<HingeJoint>(leaf);
     if      (prop.getName().compare("GetAngle") == 0)     {SET_VALUE(new DFloat(hinge.GetAngle()));}
     else if (prop.getName().compare("GetAngleRate") == 0) {SET_VALUE(new DFloat(hinge.GetAngleRate()));}
     else return false; //Getter not supported
@@ -596,7 +596,7 @@ bool BasicControl::applyChangeHingeJoint(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::genUniversalJoint(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const UniversalJoint& univ = *shared_static_cast<UniversalJoint>(leaf);
+    const UniversalJoint& univ = *static_pointer_cast<UniversalJoint>(leaf);
     ADD_READ_PROPERTY("GetAngle(0)",     "Angle(0)",     new DFloat()); //todo
     ADD_READ_PROPERTY("GetAngle(1)",     "Angle(1)",     new DFloat()); //todo
     ADD_READ_PROPERTY("GetAngleRate(0)", "AngleRate(0)", new DFloat()); //todo
@@ -606,7 +606,7 @@ bool BasicControl::genUniversalJoint(TLeafPtr leaf, const ClassDescriptor& descr
 
 bool BasicControl::updateUniversalJoint(TLeafPtr leaf, Property& prop) const
 {
-    const UniversalJoint& univ = *shared_static_cast<UniversalJoint>(leaf);
+    const UniversalJoint& univ = *static_pointer_cast<UniversalJoint>(leaf);
     if      (prop.getName().compare("GetAngle(0)") == 0)     {SET_VALUE(new DFloat(univ.GetAngle(Joint::AI_FIRST)));}
     else if (prop.getName().compare("GetAngle(1)") == 0)     {SET_VALUE(new DFloat(univ.GetAngle(Joint::AI_SECOND)));}
     else if (prop.getName().compare("GetAngleRate(0)") == 0) {SET_VALUE(new DFloat(univ.GetAngleRate(Joint::AI_FIRST)));}
@@ -626,7 +626,7 @@ bool BasicControl::applyChangeUniversalJoint(TLeafPtr leaf, Property& prop) cons
 
 bool BasicControl::genContactJointHandler(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
+    const ContactJointHandler& cjh = *static_pointer_cast<ContactJointHandler>(leaf);
     ADD_READ_PROPERTY     ("GetContactMode",    "ContactMode",    new DString());
     ADD_READWRITE_PROPERTY("GetBounceValue",    "BounceValue",    new DFloat(), Data::doubleValidator());
     ADD_READWRITE_PROPERTY("GetMinBounceVel",   "MinBounceVel",   new DFloat(), Data::doubleValidator());
@@ -640,7 +640,7 @@ bool BasicControl::genContactJointHandler(TLeafPtr leaf, const ClassDescriptor& 
 
 bool BasicControl::updateContactJointHandler(TLeafPtr leaf, Property& prop) const
 {
-    const ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
+    const ContactJointHandler& cjh = *static_pointer_cast<ContactJointHandler>(leaf);
 
     if      (prop.getName().compare("GetContactMode"   ) == 0)
     {
@@ -675,7 +675,7 @@ bool BasicControl::updateContactJointHandler(TLeafPtr leaf, Property& prop) cons
 
 bool BasicControl::applyChangeContactJointHandler(TLeafPtr leaf, Property& prop) const
 {
-    ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
+    ContactJointHandler& cjh = *static_pointer_cast<ContactJointHandler>(leaf);
 
     //Supported setters
     if      (prop.getName().compare("GetBounceValue") == 0)    {cjh.SetBounceValue   (GET_VALUE(DFloat));}
@@ -692,7 +692,7 @@ bool BasicControl::applyChangeContactJointHandler(TLeafPtr leaf, Property& prop)
 
 bool BasicControl::genWorld(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const World& world = *shared_static_cast<World>(leaf);
+    const World& world = *static_pointer_cast<World>(leaf);
     ADD_READWRITE_PROPERTY("GetGravity",  "Gravity", new DVector3f(), Data::vector3fValidator(),
         "Gravity Vector");
     ADD_READWRITE_PROPERTY("GetERP",      "ERP",     new DFloat(),    Data::doubleValidator(0.0, 1.0),
@@ -708,7 +708,7 @@ bool BasicControl::genWorld(TLeafPtr leaf, const ClassDescriptor& descriptor, TP
 
 bool BasicControl::updateWorld(TLeafPtr leaf, Property& prop) const
 {
-    const World& world = *shared_static_cast<World>(leaf);
+    const World& world = *static_pointer_cast<World>(leaf);
     if      (prop.getName().compare("GetGravity") == 0) {SET_VALUE(new DVector3f(world.GetGravity()));}
     else if (prop.getName().compare("GetERP") == 0)     {SET_VALUE(new DFloat   (world.GetERP()));}
     else if (prop.getName().compare("GetCFM") == 0)     {SET_VALUE(new DFloat   (world.GetCFM()));}
@@ -718,7 +718,7 @@ bool BasicControl::updateWorld(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::applyChangeWorld(TLeafPtr leaf, Property& prop) const
 {
-    World& world = *shared_static_cast<World>(leaf);
+    World& world = *static_pointer_cast<World>(leaf);
     if      (prop.getName().compare("GetGravity") == 0)  {world.SetGravity(GET_VALUE(DVector3f));}
     else if (prop.getName().compare("GetERP") == 0)      {world.SetERP    (GET_VALUE(DFloat));}
     else if (prop.getName().compare("GetCFM") == 0)      {world.SetCFM    (GET_VALUE(DFloat));}
@@ -731,14 +731,14 @@ bool BasicControl::applyChangeWorld(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::genCollisionHandler(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    boost::shared_ptr<CollisionHandler> ch = shared_static_cast<CollisionHandler>(leaf);
+    boost::shared_ptr<CollisionHandler> ch = static_pointer_cast<CollisionHandler>(leaf);
     ADD_READ_PROPERTY("IsSymmetricHandler", "SymmetricHandler", new DBool());
     return true;
 }
 
 bool BasicControl::updateCollisionHandler(TLeafPtr leaf, Property& prop) const
 {
-    boost::shared_ptr<CollisionHandler> ch = shared_static_cast<CollisionHandler>(leaf);
+    boost::shared_ptr<CollisionHandler> ch = static_pointer_cast<CollisionHandler>(leaf);
     if (prop.getName().compare("IsSymmetricHandler") == 0) {SET_VALUE(new DBool(ch->IsSymmetricHandler()));}
     else return false; //Getter not supported
     return true;
@@ -755,7 +755,7 @@ bool BasicControl::applyChangeCollisionHandler(TLeafPtr leaf, Property& prop) co
 
 bool BasicControl::genDragController(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const DragController& dc = *shared_static_cast<DragController>(leaf);
+    const DragController& dc = *static_pointer_cast<DragController>(leaf);
     ADD_READWRITE_PROPERTY("GetLinearDrag",  "LinearDrag",  new DFloat(dc.GetLinearDrag()),  Data::doubleValidator());
     ADD_READWRITE_PROPERTY("GetAngularDrag", "AngularDrag", new DFloat(dc.GetAngularDrag()), Data::doubleValidator());
     return true;
@@ -763,7 +763,7 @@ bool BasicControl::genDragController(TLeafPtr leaf, const ClassDescriptor& descr
 
 bool BasicControl::updateDragController(TLeafPtr leaf, Property& prop) const
 {
-    const DragController& dc = *shared_static_cast<DragController>(leaf);
+    const DragController& dc = *static_pointer_cast<DragController>(leaf);
     if      (prop.getName().compare("GetLinearDrag") == 0)  {SET_VALUE(new DFloat(dc.GetLinearDrag()));}
     else if (prop.getName().compare("GetAngularDrag") == 0) {SET_VALUE(new DFloat(dc.GetAngularDrag()));}
     else return false; //Getter not supported
@@ -772,7 +772,7 @@ bool BasicControl::updateDragController(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::applyChangeDragController(TLeafPtr leaf, Property& prop) const
 {
-    DragController& dc = *shared_static_cast<DragController>(leaf);
+    DragController& dc = *static_pointer_cast<DragController>(leaf);
     if      (prop.getName().compare("GetLinearDrag") == 0)  {dc.SetLinearDrag (GET_VALUE(DFloat));}
     else if (prop.getName().compare("GetAngularDrag") == 0) {dc.SetAngularDrag(GET_VALUE(DFloat));}
     else return false; //Setter not supported
@@ -784,7 +784,7 @@ bool BasicControl::applyChangeDragController(TLeafPtr leaf, Property& prop) cons
 
 bool BasicControl::genMaterialSolid(TLeafPtr leaf, const ClassDescriptor& descriptor, TProperties& list) const
 {
-    const MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
+    const MaterialSolid& mat = *static_pointer_cast<MaterialSolid>(leaf);
     ADD_READWRITE_PROPERTY("GetAmbient",  "Ambient",  new DRGBA(), Data::rgbaValidator());
     ADD_READWRITE_PROPERTY("GetDiffuse",  "Diffuse",  new DRGBA(), Data::rgbaValidator());
     ADD_READWRITE_PROPERTY("GetSpecular", "Specular", new DRGBA(), Data::rgbaValidator());
@@ -793,7 +793,7 @@ bool BasicControl::genMaterialSolid(TLeafPtr leaf, const ClassDescriptor& descri
 
 bool BasicControl::updateMaterialSolid(TLeafPtr leaf, Property& prop) const
 {
-    const MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
+    const MaterialSolid& mat = *static_pointer_cast<MaterialSolid>(leaf);
     if      (prop.getName().compare("GetAmbient") == 0)  {SET_VALUE(new DRGBA(mat.GetAmbient()));}
     else if (prop.getName().compare("GetDiffuse") == 0)  {SET_VALUE(new DRGBA(mat.GetDiffuse()));}
     else if (prop.getName().compare("GetSpecular") == 0) {SET_VALUE(new DRGBA(mat.GetSpecular()));}
@@ -803,7 +803,7 @@ bool BasicControl::updateMaterialSolid(TLeafPtr leaf, Property& prop) const
 
 bool BasicControl::applyChangeMaterialSolid(TLeafPtr leaf, Property& prop) const
 {
-    MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
+    MaterialSolid& mat = *static_pointer_cast<MaterialSolid>(leaf);
     //Supported setters
     if      (prop.getName().compare("GetAmbient") == 0)  {mat.SetAmbient (GET_VALUE(DRGBA));}
     else if (prop.getName().compare("GetDiffuse") == 0)  {mat.SetDiffuse (GET_VALUE(DRGBA));}
