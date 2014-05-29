@@ -56,12 +56,13 @@ addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
 
 addSoccerVar('AutomaticQuit', false)
-addSoccerVar('ChangeSidesInSecondHalf', true)
+addSoccerVar('ChangeSidesInSecondHalf', false)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
-addSoccerVar('MaxHeteroTypeCount', 3)
-addSoccerVar('MaxTotalHeteroCount', 9)
+addSoccerVar('MaxRobotTypeCount', 7)
+addSoccerVar('MinRobotTypesCount', 3)
+addSoccerVar('MaxSumTwoRobotTypes', 9)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.042)
@@ -76,6 +77,12 @@ addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
 
+# charging foul parameters
+addSoccerVar('UseCharging', true)
+addSoccerVar('ChargingMinSpeed', 0.2)
+addSoccerVar('ChargingMinBallDist', 0.2)
+addSoccerVar('IllegalInterceptMinAngle', 70)
+
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       
 addSoccerVar('GoalieNotStandingMaxTime',60)
@@ -84,7 +91,11 @@ addSoccerVar('GoalieGroundMaxTime', 30)
 addSoccerVar('MaxPlayersInsideOwnArea',3)
 addSoccerVar('MinOppDistance',0.8)       
 addSoccerVar('Min2PlDistance',0.4)       
-addSoccerVar('Min3PlDistance',1.0)      
+addSoccerVar('Min3PlDistance',1.0)  
+
+# 2014 server changes     
+addSoccerVar('ReportScore', true)
+addSoccerVar('LabelMessages', true)
 
 # auto ref parameters for testing (not for use in competition...)
 #addSoccerVar('NotStandingMaxTime',10)       

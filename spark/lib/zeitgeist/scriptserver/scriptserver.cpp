@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: scriptserver.cpp 306 2012-04-16 09:46:12Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -563,7 +563,7 @@ ScriptServer::CreateDotDir(const string& dotDir)
     }
 
 #if WIN32
-    if (! SetCurrentDirectory(dotDir.c_str()))
+    if (SetCurrentDirectory(dotDir.c_str()))
 #else
     if (chdir(dotDir.c_str()) == 0)
 #endif

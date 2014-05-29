@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: agentstate.h 253 2011-03-21 22:27:45Z sgvandijk $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,11 +94,11 @@ public:
     bool ReduceBattery(float consumption);
 
     /** Add a new message to the list */
-    void AddMessage(const std::string& msg, float direction, bool teamMate);
+    void AddMessage(const std::string& msg, const std::string& team, float direction, bool teamMate);
     void AddSelfMessage(const std::string& msg);
 
     /** Get the first message from the list */
-    bool GetMessage(std::string& msg, float& direction, bool teamMate);
+    bool GetMessage(std::string& msg, std::string& team, float& direction, bool teamMate);
     bool GetSelfMessage(std::string& msg);
 
     /** Whether agent is selected */
@@ -143,10 +143,12 @@ protected:
 
     /** team-mate's message */
     std::string mMateMsg;
+    std::string mMateTeam;
     float mMateMsgDir;
 
     /** opponent's message */
     std::string mOppMsg;
+    std::string mOppTeam;
     float mOppMsgDir;
 
     /** max hear capacity units */

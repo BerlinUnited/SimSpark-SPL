@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: rubywrapper.h 3 2008-11-21 02:38:08Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -41,8 +41,10 @@
 #ifdef WIN32
 #include <winsock2.h>
 
+#ifndef __MINGW32__
 // disable compiler warning about type cast from VALUE to RBasic*
 #pragma warning (disable : 4312)
+#endif
 #endif
 
 #include <ruby.h>
@@ -59,8 +61,10 @@
 #undef read
 #undef write
 
+#ifndef __MINGW32__
 // reenable compiler warning
 #pragma warning (default : 4312)
+#endif
 #endif
 
 #undef EXTERN

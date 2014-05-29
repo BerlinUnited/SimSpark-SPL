@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: soccerruleaspect.h 316 2012-05-22 22:33:15Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +53,8 @@ public:
         FT_IllegalDefence,
         FT_IllegalAttack,
         FT_Incapable,
-        FT_KickOff
+        FT_KickOff,
+        FT_Charging
     };
 
     struct Foul
@@ -67,6 +68,8 @@ public:
         EFoulType type;
         boost::shared_ptr<AgentState> agent;
         bool operator<(Foul const& other) const { return index < other.index; }
+
+        int time;
     };
 
 public:
@@ -424,6 +427,20 @@ protected:
 
     /** use offside law */
     bool mUseOffside;
+
+    /** use charging law */
+    bool mUseCharging;
+
+    /** minimum player speed to apply charging rules */
+    float mChargingMinSpeed;
+    /** minimum player distance to ball to apply charging rules */
+    float mChargingMinBallDist;
+    /** maximum angle between move direction and opponent to apply
+     * charging rules */
+    float mChargingMaxOppSpeedAngle;
+    /** minimum angle between move directions to apply illegal
+     * intercept part of charging rules */
+    float mChargingIllInterceptMinMutualSpeedAngel;
 
     /** the time of the kick in the last kick off mode */
     TTime mLastKickOffKickTime;

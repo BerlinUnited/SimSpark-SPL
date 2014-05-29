@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id$
+   $Id: gamestateperceptor.cpp 21 2009-01-14 14:38:57Z yxu $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ using namespace std;
 GameStatePerceptor::GameStatePerceptor() : oxygen::Perceptor()
 {
     mFirstPercept = true;
+    mReportScore = true;
 }
 
 GameStatePerceptor::~GameStatePerceptor()
@@ -127,6 +128,18 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         InsertInitialPercept(predicate);
     }
 
+    if (mReportScore) {
+        // score left
+        ParameterList& slElement = predicate.parameter.AddList();
+        slElement.AddValue(string("sl"));
+        slElement.AddValue(mGameState->GetScore(TI_LEFT));
+        
+        // score right
+        ParameterList& srElement = predicate.parameter.AddList();
+        srElement.AddValue(string("sr"));
+        srElement.AddValue(mGameState->GetScore(TI_RIGHT));
+    }
+
     // time
     ParameterList& timeElement = predicate.parameter.AddList();
     timeElement.AddValue(string("t"));
@@ -145,6 +158,7 @@ GameStatePerceptor::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
     SoccerBase::GetAgentState(*this,mAgentState);
+    SoccerBase::GetSoccerVar(*this,"ReportScore",mReportScore);
 }
 
 void
