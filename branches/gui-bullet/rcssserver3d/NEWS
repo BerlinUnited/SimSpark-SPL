@@ -1,3 +1,49 @@
+[0.6.7]
+This is the RoboCup 2013 release. It comes with some bug fixes, and also
+compatibility with latest Boost libraries. New foulds and new debugging
+facility are provided. Now, fouls are sent to the monitor so that it can
+provide visual feedback about them. Finally, support for heterogeneous robots
+is added and two sample types are provided. 
+
+* Heterogeneous Players:
+  This release supports heterogeneous players. Currently, two extra Nao robots
+  are provided beside the standard Nao (thanks Stefan and Klaus).
+  
+  - Usage: to use the new heterogeneous players, a new scene command should be
+  used. While the old style scene commands work, for using hetero players you
+  should send "(scene rsg/agent/nao/nao_hetero.rsg TYPE_NO)", in which TYPE_NO
+  is the type number of the player type. Type 0 is the standard type, and
+  hetero types start from 1. Therefore, to load Nao type 1 the following
+  command should be sent: (scene rsg/agent/nao/nao_hetero.rsg 1). Notice that
+  you can use the new style command for loading standard Nao, using 0 as
+  TYPE_NO.
+  
+  - Heterogeneous Robot Parameters: The robot parameters for different types
+  are defined in a new file: "naorobottypes.rb". New types can be added to the
+  array. But to define new parameters, corresponding .rsg files should be
+  modified.
+  
+  - Rules: Each team can use a limited number of hetero players. The limits
+  can be configured in naosoccersim.rb using "MaxTotalHeteroCount" and 
+  "MaxHeteroTypeCount" variables. The former limits the total number of hetero
+  players for each team, and the latter specifies the maximum number of players
+  of a single hetero player type.
+
+* Other Features/Changes:
+  - Charging fouls rules are added (thanks Patrick). These fouls are not
+  penalized, but recorded and sent to the monitor. New rules can be configured
+  in naosoccersim.rb.
+  - Fouls are added to the monitor protocol to provide visual feedback about
+  them to viewers.
+  - For debugging purposes, sensing the orientation of the agent can be 
+  enabled using "setSenseMyOrien" option in the .rsg file of an agent (added 
+  by Patrick)
+  - A player can kick the ball in kickoff if there are only 2 players in
+  the field to support current penalty mode.
+  - Fixed bugs in goal counting when changing team sides in the second half.
+  Now, this feature should work fine. However, it is disabled by default now
+  since we don't use it currently in the competitions.
+
 [0.6.6]
 It's time for a new release! This release comes with a number of bug fixes and
 several minor enhancements here and there. Now, you can run the server for 
