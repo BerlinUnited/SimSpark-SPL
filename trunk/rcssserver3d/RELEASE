@@ -1,49 +1,34 @@
-RELEASE News of rcssserver3d-0.6.7
+RELEASE News of rcssserver3d-0.6.8
 
-This is the RoboCup 2013 release. It comes with some bug fixes, and also
-compatibility with latest Boost libraries. New foulds and new debugging
-facility are provided. Now, fouls are sent to the monitor so that it can
-provide visual feedback about them. Finally, support for heterogeneous robots
-is added and two sample types are provided. 
+This release mainly comes with 2 new features: 1. labeling hear messages with
+team names so that it is clear which team the message comes from. 2. Score
+reporting. A few bug fixes are also included. 
 
-* Heterogeneous Players:
-  This release supports heterogeneous players. Currently, two extra Nao robots
-  are provided beside the standard Nao (thanks Stefan and Klaus).
+* Hear message labeling: 
+  - Now hear messages include team names - Ex: (hear teamName 9 10 text)
   
-  - Usage: to use the new heterogeneous players, a new scene command should be
-  used. While the old style scene commands work, for using hetero players you
-  should send "(scene rsg/agent/nao/nao_hetero.rsg TYPE_NO)", in which TYPE_NO
-  is the type number of the player type. Type 0 is the standard type, and
-  hetero types start from 1. Therefore, to load Nao type 1 the following
-  command should be sent: (scene rsg/agent/nao/nao_hetero.rsg 1). Notice that
-  you can use the new style command for loading standard Nao, using 0 as
-  TYPE_NO.
-  
-  - Heterogeneous Robot Parameters: The robot parameters for different types
-  are defined in a new file: "naorobottypes.rb". New types can be added to the
-  array. But to define new parameters, corresponding .rsg files should be
-  modified.
-  
-  - Rules: Each team can use a limited number of hetero players. The limits
-  can be configured in naosoccersim.rb using "MaxTotalHeteroCount" and 
-  "MaxHeteroTypeCount" variables. The former limits the total number of hetero
-  players for each team, and the latter specifies the maximum number of players
-  of a single hetero player type.
+* Score Reporting:
+  - Example: (GS (unum 8) (team left) (sl 1) (sr 2) (t 0.00) (pm BeforeKickOff))
 
-* Other Features/Changes:
-  - Charging fouls rules are added (thanks Patrick). These fouls are not
-  penalized, but recorded and sent to the monitor. New rules can be configured
-  in naosoccersim.rb.
-  - Fouls are added to the monitor protocol to provide visual feedback about
-  them to viewers.
-  - For debugging purposes, sensing the orientation of the agent can be 
-  enabled using "setSenseMyOrien" option in the .rsg file of an agent (added 
-  by Patrick)
-  - A player can kick the ball in kickoff if there are only 2 players in
-  the field to support current penalty mode.
-  - Fixed bugs in goal counting when changing team sides in the second half.
-  Now, this feature should work fine. However, it is disabled by default now
-  since we don't use it currently in the competitions.
+* New Options in naosoccersim.rb:
+  - LabelMessages - Toggles on/off labeling of messages (default on)
+  - ReportScores - Toggles on/off score reporting (default on)
+  - MaxRobotTypeCount - Maximum number of any one robot type that may be 
+    used (default 7 and can be set to 11 to preserve 2013 competition behavior)
+  - MinRobotTypesCount - Minimum number of robot types that must be used for a
+    full team (default 3 and can be set to 1 to preserve 2013 competition
+    behavior)
+  - MaxSumTwoRobotTypes - The maximum sum of robots for any two robot types
+    (default 9 but can be set to 11 to preserve 2013 competition behavior)
+   
+* Other changes:
+  - Robot type checking to ensure that enough robot types (3) are used and that
+    not too many of any one (7) or two (9) types is used.
+  - Updating naorobottypes.rb with robot types used in 2013 competitions
+  - Clear Players in GoalLeft/Right before kickoff to make sure that opponent
+    doesn't touch ball at the middle of the field.
+  - Don't enforce crowding rules on kickoff, since opponent should not come
+    near the ball
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/

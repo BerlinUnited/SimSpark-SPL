@@ -1,3 +1,12 @@
+2014-05-30  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS:
+	* RELEASE:
+	* CMakeLists.txt:
+	- prepared for 0.6.8 release; including changes in this release like hear
+	  message labeling, score reporting and bug fixes not documented in 
+	  ChangeLog
+
 2013-06-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccermonitor/CMakeLists.txt: 
