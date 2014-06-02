@@ -1795,12 +1795,16 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     boost::shared_ptr<Transform> transform_parent;
     boost::shared_ptr<RigidBody> agent_body;
 
+    std::string team = "";
+
     for (
         SoccerBase::TAgentStateList::const_iterator it = agent_states.begin();
         it != agent_states.end();
         it++
         )
     {
+        // Get name of team to label all messages with
+        team = (*it)->GetPerceptName(ObjectState::PT_Player);
         if ( (*it)->GetUniformNumber() == number)
         {
             (*it)->AddSelfMessage(message);
@@ -1818,7 +1822,6 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             Vector3f relPos = pos - new_pos;
             relPos = SoccerBase::FlipView(relPos, idx);
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
-            std::string team = (*it)->GetPerceptName(ObjectState::PT_Player);
             (*it)->AddMessage(message, team, direction, true);
         }
     }
@@ -1841,7 +1844,6 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             Vector3f relPos = pos - new_pos;
             relPos = SoccerBase::FlipView(relPos, SoccerBase::OpponentTeam(idx));
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
-            std::string team = (*it)->GetPerceptName(ObjectState::PT_Player);
             (*it)->AddMessage(message, team, direction, false);
         }
     }
