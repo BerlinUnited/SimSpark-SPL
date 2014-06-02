@@ -58,7 +58,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mNotOffside(false),
     mLastModeWasPlayOn(false),
     mUseOffside(true),
-    mUseCharging(true),
+    mUseCharging(false),
     mChargingMinSpeed(0.2),
     mChargingMinBallDist(0.2),
     mChargingMaxOppSpeedAngle(90),
@@ -647,14 +647,11 @@ SoccerRuleAspect::ClearPlayersAutomatic(TTeamIndex idx)
         int unum = (*i)->GetUniformNumber();
         if (playerFoulTime[unum][idx] > mMaxFoulTime / 0.02)
         {
-            if (playerLastFoul[unum][idx] != FT_Charging)
-            {
-                // I am not a very good soccer player... I am violating the rules...
-                salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
-                //Calculate my Reposition pos outside of the field
-                SoccerBase::MoveAgent(agent_aspect, new_pos);
-                //Oh my God!! I am flying!! I am going outside of the field
-            }
+            // I am not a very good soccer player... I am violating the rules...
+            salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
+            //Calculate my Reposition pos outside of the field
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
+            //Oh my God!! I am flying!! I am going outside of the field
             ResetFoulCounterPlayer(unum, idx);
             // Record faul
             mFouls.push_back(Foul(mFouls.size() + 1, playerLastFoul[unum][idx], *i));
