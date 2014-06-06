@@ -1,3 +1,58 @@
+2013-06-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccermonitor/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	- link boost libraries
+	
+	* CMakeLists.txt: 
+	* cmake/AdditionalSearchPaths.cmake: 
+	- support cross-compiling from multiple root dirs
+
+2013-06-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- added a note about fixing side changing bug in 0.6.7 release
+	 
+	* rcssserver3d/naosoccersim.rb: 
+	- disabled ChangeSidesInSecondHalf by default for 0.6.7 release, since this
+	  is what we use currently in competitions. But it should work fine if
+	  enabled.
+
+2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	* CMakeLists.txt:
+	- Updated for 0.6.7 release
+
+	* rcssagent3d/naobehavior.cpp:
+	- use the new style scene command to load standard Nao 
+
+	* rcssserver3d/naorobottypes.rb: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- re-formatted for better readability & consistency
+	(SoccerRuleAspect::SwapTeamSides): 
+	- swap gamestateaspect internal team data too (should fix bugs related to
+	  changing team's sides in the second half)
+
+	* rcssserver3d/naosoccersim.rb: 
+	- added charging foul parameters to silent 'variable not found' errors
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- added new functions to swap teams internal data structures when they
+	  change sides
+
+2013-06-12  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	* rcssserver3d/naosoccersim.rb: 
+	- added Patrick's charging foul rules, plus soccervar parameters
+	to enable and configure them. these fouls are not penalized, only
+	recorded and sent to the monitor
+
 2013-06-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/gamestateaspect/gamestateaspect.h:
@@ -8,7 +63,7 @@
 	  both the total number of heterogeneous players of each team
 	  (MaxTotalHeteroCount variable in naosoccersim.rb), and the number of 
 	  heterogeneous players of each type (MaxHeteroTypeCount variable)
- 
+
 2013-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h: 

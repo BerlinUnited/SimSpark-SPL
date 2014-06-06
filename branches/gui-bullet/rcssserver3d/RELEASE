@@ -1,64 +1,49 @@
-RELEASE News of rcssserver3d-0.6.6
+RELEASE News of rcssserver3d-0.6.7
 
-It's time for a new release! This release comes with a number of bug fixes and
-several minor enhancements here and there. Now, you can run the server for 
-two complete halves. Teams now change their sides in the second half. Also, 
-automatic kick off and automatic quit modes are added. Field dimensions are
-also increased to 20x30 meters, and free kick distance is 2.0 meters now.
-More detailed information about this release follows:
+This is the RoboCup 2013 release. It comes with some bug fixes, and also
+compatibility with latest Boost libraries. New foulds and new debugging
+facility are provided. Now, fouls are sent to the monitor so that it can
+provide visual feedback about them. Finally, support for heterogeneous robots
+is added and two sample types are provided. 
 
-* Rule Changes:
- - automatic referee now enforces rules whenever players are permitted to 
-   play, rather than only in playon play mode.
- - it is no longer possible to score directly from kick off, the ball should 
-   at least touch another player before going into the goal
- - in kickoff playmode, the kicker cannot touch the ball again until another
-   player touches it.
+* Heterogeneous Players:
+  This release supports heterogeneous players. Currently, two extra Nao robots
+  are provided beside the standard Nao (thanks Stefan and Klaus).
+  
+  - Usage: to use the new heterogeneous players, a new scene command should be
+  used. While the old style scene commands work, for using hetero players you
+  should send "(scene rsg/agent/nao/nao_hetero.rsg TYPE_NO)", in which TYPE_NO
+  is the type number of the player type. Type 0 is the standard type, and
+  hetero types start from 1. Therefore, to load Nao type 1 the following
+  command should be sent: (scene rsg/agent/nao/nao_hetero.rsg 1). Notice that
+  you can use the new style command for loading standard Nao, using 0 as
+  TYPE_NO.
+  
+  - Heterogeneous Robot Parameters: The robot parameters for different types
+  are defined in a new file: "naorobottypes.rb". New types can be added to the
+  array. But to define new parameters, corresponding .rsg files should be
+  modified.
+  
+  - Rules: Each team can use a limited number of hetero players. The limits
+  can be configured in naosoccersim.rb using "MaxTotalHeteroCount" and 
+  "MaxHeteroTypeCount" variables. The former limits the total number of hetero
+  players for each team, and the latter specifies the maximum number of players
+  of a single hetero player type.
 
-* Field/Dimension Changes:
- - New dimensions: 20x30
- - Free kick distance: 2.0
- - Corner kick position: in the middle point between goal and corner of the 
-   field, to facilitate faster corner kicks.
- - Nao's foot height is now 0.02 rather than 0.03. Ankle's position changed 
-   accordingly
-
-* Several Bug fixes. Some notable ones are:
- - Penalty lines and middle circle are now visible at their actual position
-   (Thanks to Marcus for his bug report, and Sander).
- - Fixed a small bug in parsing move paramter (Thanks to Andreas Seekircher)  
- - Fixed a mistake which prevented from touch group rules to be applied at all 
- - Fixed a small bug in goal counting which cause this function to always
-   count a goal when ball moved out of the field 
-
-* Enhance Automatic Kickoff Support:    
- - Changed default value of 'WaitBeforeKickOff' to 30, since 5 seconds
-   is too small for any team to start.
- - WaitBeforeKickOff is now calculated from when the first agent connects
-   rather than from the beginning of the before kickoff playmode (when the
-   simulator is started)
- - A game can be started with kick off for the left team, or using 'coin toss'
-   to determine which team should start the game. CoinTossForKickOff variable
-   in naosoccersim.rb can be used to change the behavior. It is disabled
-   by default. 
-
-* Enhance Support for 'Second Half':
- - Automatic Kick Off mode assigns Kick off to the correct team in the second
-    half
- - Change teams' sides in the second half if enabled (enabled by default). It
-    can be disabled using ChangeSidesInSecondHalf variable in naosoccersim.rb.
-
-* Automatic Quit:
- - In Automatic Quit mode rcsssever3d shuts down automatically when the game
-   is over. It is disabled by default but can be enabled using 'AutomaticQuit'
-   variable in naosoccersim.rb
-
-* Other Enhancements:
- - The location of init scripts (e.g. zeitgeist.rb) can now be specified using
-  --init-script-prefix (you still can put most of the scripts and data files
-  like rsg/ directory inside your ~/.simspark/ instead).
- - Better Windows support
- - Support creating Windows binaries under Linux using MinGW
+* Other Features/Changes:
+  - Charging fouls rules are added (thanks Patrick). These fouls are not
+  penalized, but recorded and sent to the monitor. New rules can be configured
+  in naosoccersim.rb.
+  - Fouls are added to the monitor protocol to provide visual feedback about
+  them to viewers.
+  - For debugging purposes, sensing the orientation of the agent can be 
+  enabled using "setSenseMyOrien" option in the .rsg file of an agent (added 
+  by Patrick)
+  - A player can kick the ball in kickoff if there are only 2 players in
+  the field to support current penalty mode.
+  - Fixed bugs in goal counting when changing team sides in the second half.
+  Now, this feature should work fine. However, it is disabled by default now
+  since we don't use it currently in the competitions.
 
 You can get the package on the Simspark page on SourceForge
 at http://sourceforge.net/projects/simspark/

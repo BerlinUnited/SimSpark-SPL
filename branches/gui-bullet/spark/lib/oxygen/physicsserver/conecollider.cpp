@@ -4,7 +4,7 @@
    Fri May 9 2003
    Copyright (C) 2002,2003 Koblenz University
    Copyright (C) 2003 RoboCup Soccer Server 3D Maintenance Group
-   $Id: conecollider.cpp
+   $Id$
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -43,18 +43,18 @@ bool ConeCollider::ConstructInternal()
     if (mConeColliderImp.get() == 0)
         mConeColliderImp = dynamic_pointer_cast<ConeColliderInt>
             (GetCore()->New("ConeColliderImp"));
-            
+
     if (mConeColliderImp.get() == 0)
         {
             //we can't use the logserver here
             std::cerr << "(ConeCollider) ERROR: No implementation found at '/classes/ConeColliderImp'";
             return false;
         }
-    
+
     if (!Collider::ConstructInternal()) return false;
-    
+
     //we can't use the logserver here
     std::cerr << "(ConeCollider) ERROR: ConeCollider is not implemented yet. Did nothing";
-    
+
     return true;
 }
