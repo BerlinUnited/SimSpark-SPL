@@ -58,7 +58,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mNotOffside(false),
     mLastModeWasPlayOn(false),
     mUseOffside(true),
-    mUseCharging(true),
+    mUseCharging(false),
     mChargingMinSpeed(0.2),
     mChargingMinBallDist(0.2),
     mChargingMaxOppSpeedAngle(90),
@@ -547,19 +547,27 @@ void SoccerRuleAspect::AnalyseFouls(TTeamIndex idx)
 
     for(int unum=1; unum<=11; unum++)
     {
-        // I am the third closest player but i am too near the ball (and not the goalie)
-        if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance &&
-            (distArr[unum][idx] <= mMin3PlDistance + 0.01 && ordArr[unum][idx] == 3))
+        TPlayMode playMode = mGameState->GetPlayMode();
+        if ((playMode == PM_KickOff_Left && idx != TI_LEFT)
+                || (playMode == PM_KickOff_Right && idx != TI_RIGHT)
+                || (playMode != PM_KickOff_Left && playMode != PM_KickOff_Right))
         {
-            playerFoulTime[unum][idx]++;
-            playerLastFoul[unum][idx] = FT_Crowding;
-        }
-        // I am the second closest player but i am too near the ball (and not the goalie)
-        else if(unum != 1 && closestPlayerDist[idx2] < mMinOppDistance &&
-                distArr[unum][idx] <= mMin2PlDistance + 0.01 && ordArr[unum][idx] == 2 )
-        {
-            playerFoulTime[unum][idx]++;
-            playerLastFoul[unum][idx] = FT_Crowding;
+            // I am the third closest player but i am too near the ball (and not the goalie)
+            if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
+                    && (distArr[unum][idx] <= mMin3PlDistance + 0.01
+                            && ordArr[unum][idx] == 3))
+            {
+                playerFoulTime[unum][idx]++;
+                playerLastFoul[unum][idx] = FT_Crowding;
+            }
+            // I am the second closest player but i am too near the ball (and not the goalie)
+            else if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
+                    && distArr[unum][idx] <= mMin2PlDistance + 0.01
+                    && ordArr[unum][idx] == 2)
+            {
+                playerFoulTime[unum][idx]++;
+                playerLastFoul[unum][idx] = FT_Crowding;
+            }
         }
         // Too many players inside my own penalty area and Im am the last one to enter or
         // the last one to enter was the goalie and I am the one further away from own goal
@@ -639,14 +647,11 @@ SoccerRuleAspect::ClearPlayersAutomatic(TTeamIndex idx)
         int unum = (*i)->GetUniformNumber();
         if (playerFoulTime[unum][idx] > mMaxFoulTime / 0.02)
         {
-            if (playerLastFoul[unum][idx] != FT_Charging)
-            {
-                // I am not a very good soccer player... I am violating the rules...
-                salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
-                //Calculate my Reposition pos outside of the field
-                SoccerBase::MoveAgent(agent_aspect, new_pos);
-                //Oh my God!! I am flying!! I am going outside of the field
-            }
+            // I am not a very good soccer player... I am violating the rules...
+            salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
+            //Calculate my Reposition pos outside of the field
+            SoccerBase::MoveAgent(agent_aspect, new_pos);
+            //Oh my God!! I am flying!! I am going outside of the field
             ResetFoulCounterPlayer(unum, idx);
             // Record faul
             mFouls.push_back(Foul(mFouls.size() + 1, playerLastFoul[unum][idx], *i));
@@ -1631,7 +1636,11 @@ SoccerRuleAspect::Update(float deltaTime)
         break;
 
     case PM_Goal_Left:
+        ClearPlayersBeforeKickOff(TI_RIGHT);
+        UpdateGoal();
+        break;
     case PM_Goal_Right:
+        ClearPlayersBeforeKickOff(TI_LEFT);
         UpdateGoal();
         break;
 
@@ -1783,12 +1792,16 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
     boost::shared_ptr<Transform> transform_parent;
     boost::shared_ptr<RigidBody> agent_body;
 
+    std::string team = "";
+
     for (
         SoccerBase::TAgentStateList::const_iterator it = agent_states.begin();
         it != agent_states.end();
         it++
         )
     {
+        // Get name of team to label all messages with
+        team = (*it)->GetPerceptName(ObjectState::PT_Player);
         if ( (*it)->GetUniformNumber() == number)
         {
             (*it)->AddSelfMessage(message);
@@ -1806,7 +1819,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             Vector3f relPos = pos - new_pos;
             relPos = SoccerBase::FlipView(relPos, idx);
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
-            (*it)->AddMessage(message, direction, true);
+            (*it)->AddMessage(message, team, direction, true);
         }
     }
 
@@ -1828,7 +1841,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
             Vector3f relPos = pos - new_pos;
             relPos = SoccerBase::FlipView(relPos, SoccerBase::OpponentTeam(idx));
             float direction = salt::gRadToDeg(salt::gArcTan2(relPos[1], relPos[0]));
-            (*it)->AddMessage(message, direction, false);
+            (*it)->AddMessage(message, team, direction, false);
         }
     }
 }

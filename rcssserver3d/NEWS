@@ -1,6 +1,37 @@
+[0.6.8]
+This release mainly comes with 2 new features: 1. labeling hear messages with
+team names so that it is clear which team the message comes from. 2. Score
+reporting. A few bug fixes are also included. 
+
+* Hear message labeling: 
+  - Now hear messages include team names - Ex: (hear teamName 9 10 text)
+  
+* Score Reporting:
+  - Example: (GS (unum 8) (team left) (sl 1) (sr 2) (t 0.00) (pm BeforeKickOff))
+
+* New Options in naosoccersim.rb:
+  - LabelMessages - Toggles on/off labeling of messages (default on)
+  - ReportScores - Toggles on/off score reporting (default on)
+  - MaxRobotTypeCount - Maximum number of any one robot type that may be 
+    used (default 7 and can be set to 11 to preserve 2013 competition behavior)
+  - MinRobotTypesCount - Minimum number of robot types that must be used for a
+    full team (default 3 and can be set to 1 to preserve 2013 competition
+    behavior)
+  - MaxSumTwoRobotTypes - The maximum sum of robots for any two robot types
+    (default 9 but can be set to 11 to preserve 2013 competition behavior)
+   
+* Other changes:
+  - Robot type checking to ensure that enough robot types (3) are used and that
+    not too many of any one (7) or two (9) types is used.
+  - Updating naorobottypes.rb with robot types used in 2013 competitions
+  - Clear Players in GoalLeft/Right before kickoff to make sure that opponent
+    doesn't touch ball at the middle of the field.
+  - Don't enforce crowding rules on kickoff, since opponent should not come
+    near the ball
+
 [0.6.7]
 This is the RoboCup 2013 release. It comes with some bug fixes, and also
-compatibility with latest Boost libraries. New foulds and new debugging
+compatibility with latest Boost libraries. New fouls and new debugging
 facility are provided. Now, fouls are sent to the monitor so that it can
 provide visual feedback about them. Finally, support for heterogeneous robots
 is added and two sample types are provided. 
