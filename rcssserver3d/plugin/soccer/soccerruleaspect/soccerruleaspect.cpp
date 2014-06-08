@@ -1271,6 +1271,7 @@ SoccerRuleAspect::CheckBallLeftField()
     {
         // update freekickpos
         mFreeKickPos = mBallState->GetLastValidBallPosition();
+        mFreeKickPos[2] = mBallRadius;
 
         return false;
     }
