@@ -142,7 +142,7 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 bool SimSpark::InitApp(int argc, char** argv)
 {
     GetCore()->GetFileServer()->AddResourceLocation(RCSS_BUNDLE_PATH);
-    GetSimulationServer()->SetSimStep(0.02f);
+    GetSimulationServer()->SetSimStep(0.01f);
     PrintGreeting();
 
     // process command line
