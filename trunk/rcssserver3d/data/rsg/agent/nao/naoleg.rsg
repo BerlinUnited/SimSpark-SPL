@@ -47,9 +47,11 @@
     ;
     ;Position Parameters
     ;
-    (def $Hip1RelTorso_X (eval $LRFactor * 0.055))
+    ;(def $Hip1RelTorso_X (eval $LRFactor * 0.055))
+    (def $Hip1RelTorso_X (eval $LRFactor * (eval "NaoType["$type"]['Hip1RelTorso_X']")))
     (def $Hip1RelTorso_Y -0.01)
-    (def $Hip1RelTorso_Z -0.115)
+    ;(def $Hip1RelTorso_Z -0.115)
+    (def $Hip1RelTorso_Z (eval "NaoType["$type"]['Hip1RelTorso_Z']"))
 
     (def $Hip2RelHip1_X 0)
     (def $Hip2RelHip1_Y 0)

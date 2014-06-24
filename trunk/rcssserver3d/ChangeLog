@@ -1,3 +1,17 @@
+2014-06-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	* CMakeLists.txt: 
+	- prepared for 0.6.8.1 release
+	
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	* data/rsg/agent/nao/naoleg.rsg: 
+	* data/rsg/agent/nao/naolegtoe.rsg: 
+	* rcssserver3d/naorobottypes.rb:
+	- Update robot types for RoboCup 2014 including two new types, one of which
+	  has toes! Thanks to Patrick, Stefan and Klaus.
+
 2014-05-30  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS:

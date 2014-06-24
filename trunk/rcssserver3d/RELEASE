@@ -1,5 +1,10 @@
-RELEASE News of rcssserver3d-0.6.8
+RELEASE News of rcssserver3d-0.6.8.1
 
+This is a bug-fix release for 0.6.8, which had a bug in labeling hear messages.
+It also includes few other changes: a small bug fix, and new hetero robot types
+for RoboCup 2014. Now, our Nao robots can have toe! :)
+
+And this is the release news for 0.6.8:
 This release mainly comes with 2 new features: 1. labeling hear messages with
 team names so that it is clear which team the message comes from. 2. Score
 reporting. A few bug fixes are also included. 
