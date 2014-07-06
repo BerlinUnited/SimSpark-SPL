@@ -548,27 +548,26 @@ void SoccerRuleAspect::AnalyseFouls(TTeamIndex idx)
     for(int unum=1; unum<=11; unum++)
     {
         TPlayMode playMode = mGameState->GetPlayMode();
-        if ((playMode == PM_KickOff_Left && idx != TI_LEFT)
-                || (playMode == PM_KickOff_Right && idx != TI_RIGHT)
-                || (playMode != PM_KickOff_Left && playMode != PM_KickOff_Right))
+        bool checkCrowding = (playMode == PM_KickOff_Left && idx != TI_LEFT)
+            || (playMode == PM_KickOff_Right && idx != TI_RIGHT)
+            || (playMode != PM_KickOff_Left && playMode != PM_KickOff_Right);
+ 
+        // I am the third closest player but i am too near the ball (and not the goalie)
+        if (checkCrowding && unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
+            && (distArr[unum][idx] <= mMin3PlDistance + 0.01
+                && ordArr[unum][idx] == 3))
         {
-            // I am the third closest player but i am too near the ball (and not the goalie)
-            if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
-                    && (distArr[unum][idx] <= mMin3PlDistance + 0.01
-                            && ordArr[unum][idx] == 3))
-            {
                 playerFoulTime[unum][idx]++;
                 playerLastFoul[unum][idx] = FT_Crowding;
-            }
-            // I am the second closest player but i am too near the ball (and not the goalie)
-            else if (unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
-                    && distArr[unum][idx] <= mMin2PlDistance + 0.01
-                    && ordArr[unum][idx] == 2)
-            {
-                playerFoulTime[unum][idx]++;
-                playerLastFoul[unum][idx] = FT_Crowding;
-            }
         }
+        // I am the second closest player but i am too near the ball (and not the goalie)
+        else if (checkCrowding && unum != 1 && closestPlayerDist[idx2] < mMinOppDistance
+                 && distArr[unum][idx] <= mMin2PlDistance + 0.01
+                 && ordArr[unum][idx] == 2)
+        {
+                playerFoulTime[unum][idx]++;
+                playerLastFoul[unum][idx] = FT_Crowding;
+        } 
         // Too many players inside my own penalty area and Im am the last one to enter or
         // the last one to enter was the goalie and I am the one further away from own goal
         else if((numPlInsideOwnArea[idx] > mMaxPlayersInsideOwnArea && unum != 1 && playerInsideOwnArea[unum][idx] == 1 &&
