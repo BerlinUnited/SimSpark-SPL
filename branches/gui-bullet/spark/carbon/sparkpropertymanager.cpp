@@ -265,7 +265,7 @@ void PropertyManager::getClassListPrivate(TClassPtr classPtr, TClassList& classL
         std::string basePath = "/classes/" + (*base_it);
 
         //Convert base class string to class object
-        boost::shared_ptr<zeitgeist::Class> base = shared_dynamic_cast<Class>
+        boost::shared_ptr<zeitgeist::Class> base = dynamic_pointer_cast<Class>
             (spark->GetCore()->Get(basePath));
 
         if (base.get() == 0)

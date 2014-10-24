@@ -376,7 +376,7 @@ bool SceneGraphWidget::canLoadInItem(const QModelIndex& index, boost::shared_ptr
     if (leaf.get() == 0)
         return false;
 
-    boost::shared_ptr<oxygen::BaseNode> bn(boost::shared_dynamic_cast<oxygen::BaseNode>(leaf));
+    boost::shared_ptr<oxygen::BaseNode> bn(boost::dynamic_pointer_cast<oxygen::BaseNode>(leaf));
     if (bn.get() == 0)
     {
         // Can only load in base nodes
@@ -493,7 +493,7 @@ void SceneGraphWidget::loadInItem(const QModelIndex& index, boost::shared_ptr<ze
         return;
     }
 
-    boost::shared_ptr<oxygen::BaseNode> bn(boost::shared_dynamic_cast<oxygen::BaseNode>(leaf));
+    boost::shared_ptr<oxygen::BaseNode> bn(boost::dynamic_pointer_cast<oxygen::BaseNode>(leaf));
     if (bn.get() == 0)
     {
         // Can only load in base nodes

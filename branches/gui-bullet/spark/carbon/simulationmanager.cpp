@@ -658,7 +658,7 @@ shared_ptr<SimulationSetup> SimulationManager::loadSimulationSetup(const QString
             QString abs = entries.at(i).absoluteFilePath();
 
             LOG_DEBUG() << "Loading contained Setup Definition file " << abs;
-            bool success = loadSimulationSetup(abs, false);
+            bool success = static_cast<bool>(loadSimulationSetup(abs, false));
             if (!success)
                 LOG_WARNING() << "Loading contained Setup Definition " << abs << " failed.";
         }

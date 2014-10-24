@@ -67,16 +67,25 @@ addSoccerVar('ChangeSidesInSecondHalf', true)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
+addSoccerVar('MaxRobotTypeCount', 7)
+addSoccerVar('MinRobotTypesCount', 3)
+addSoccerVar('MaxSumTwoRobotTypes', 9)
 
 # ball parameters
 addSoccerVar('BallRadius', 0.0325)
 addSoccerVar('BallMass',0.055)
 
 # SPL rule parameters
+addSoccerVar('RuleGoalPauseTime', 3.0)
+addSoccerVar('RuleKickInPauseTime', 1.0)
 addSoccerVar('RuleHalfTime', 10.0 * 60)
+addSoccerVar('RuleDropBallTime', 15)   
+addSoccerVar('SingleHalfTime', false)
+addSoccerVar('UseOffside', false)
+addSoccerVar('MaxTouchGroupSize', 2)
 
 # charging foul parameters (S3D)
-addSoccerVar('UseCharging', true)
+addSoccerVar('UseCharging', false)
 addSoccerVar('ChargingMinSpeed', 0.2)
 addSoccerVar('ChargingMinBallDist', 0.2)
 addSoccerVar('IllegalInterceptMinAngle', 70)
@@ -97,7 +106,11 @@ addSoccerVar('GoalieGroundMaxTime', 30)
 addSoccerVar('MaxPlayersInsideOwnArea',3)
 addSoccerVar('MinOppDistance',0.8)       
 addSoccerVar('Min2PlDistance',0.4)       
-addSoccerVar('Min3PlDistance',1.0)      
+addSoccerVar('Min3PlDistance',1.0)  
+
+# 2014 server changes     
+addSoccerVar('ReportScore', true)
+addSoccerVar('LabelMessages', true)
 
 # auto ref parameters for testing (not for use in competition...)
 #addSoccerVar('NotStandingMaxTime',10)       
@@ -144,6 +157,7 @@ end
 monitorServer = get($serverPath+'monitor')
 if (monitorServer != nil)
   monitorServer.registerMonitorItem('GameStateItem')
+  monitorServer.registerMonitorItem('SoccerRuleItem')
 end
 
 # install the TrainerCommandParser to parse commands received from a

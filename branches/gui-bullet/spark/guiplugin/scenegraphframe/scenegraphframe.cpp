@@ -211,8 +211,8 @@ void SceneGraphFrame::observeSparkSimulationThread(boost::shared_ptr<SparkSimula
 {
     if (thread->getTaskDefinition().isSpark())
     {
-        connect(boost::shared_static_cast<SparkSimulationThread>(thread).get(), SIGNAL(sparkRunning(SparkController*)), this, SLOT(updateSparkRunning(SparkController*)));
-        connect(boost::shared_static_cast<SparkSimulationThread>(thread).get(), SIGNAL(sparkFinished(SparkController*)), this, SLOT(updateSparkFinished(SparkController*)));
+        connect(boost::static_pointer_cast<SparkSimulationThread>(thread).get(), SIGNAL(sparkRunning(SparkController*)), this, SLOT(updateSparkRunning(SparkController*)));
+        connect(boost::static_pointer_cast<SparkSimulationThread>(thread).get(), SIGNAL(sparkFinished(SparkController*)), this, SLOT(updateSparkFinished(SparkController*)));
     }
 }
 
@@ -222,7 +222,7 @@ boost::shared_ptr<SparkController> SceneGraphFrame::getSparkController(boost::sh
     if (task->getTaskDefinition().isSpark() && task->getTaskDefinition().isThread())
     {
         //Has scene graph
-        return boost::shared_static_cast<SparkSimulationThread>(task)->getSparkController();
+        return boost::static_pointer_cast<SparkSimulationThread>(task)->getSparkController();
     }
     else
     {
@@ -260,7 +260,7 @@ void SceneGraphFrame::addSceneGraphWidget(int localindex)
     //We can only create scene graph widgets for tasks with scene graph
     if (task->getTaskDefinition().getType() == TaskDefinition::TT_SERVERTHREAD)
     {
-        boost::shared_ptr<SparkSimulationThread> thread(boost::shared_static_cast<SparkSimulationThread>(task));
+        boost::shared_ptr<SparkSimulationThread> thread(boost::static_pointer_cast<SparkSimulationThread>(task));
 
         //Create widget
         SceneGraphFrameUtil::SceneGraphWidget* newWidget = new SceneGraphFrameUtil::SceneGraphWidget(thread, this);
@@ -475,7 +475,7 @@ void SceneGraphFrame::updateSparkRunning(SparkController* controller)
     if (getSparkController(currentTask).get() == controller)
     {
         //Update current view
-        mSceneGraphWidgets.at(mCurrentTask)->updateDisplay(boost::shared_static_cast<SparkSimulationThread>(currentTask));
+        mSceneGraphWidgets.at(mCurrentTask)->updateDisplay(boost::static_pointer_cast<SparkSimulationThread>(currentTask));
     }
     
     //Init/update property frame
@@ -500,7 +500,7 @@ void SceneGraphFrame::updateCurrent()
     }
 
     //Update scene graph
-    mSceneGraphWidgets.at(mCurrentTask)->updateDisplay(boost::shared_static_cast<SparkSimulationThread>(updateTask));
+    mSceneGraphWidgets.at(mCurrentTask)->updateDisplay(boost::static_pointer_cast<SparkSimulationThread>(updateTask));
 }
 
 void SceneGraphFrame::updatePropertyFrame()

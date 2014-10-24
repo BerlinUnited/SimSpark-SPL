@@ -339,20 +339,20 @@ void PropertyWidget::refreshEditFrame()
             case SparkProperty::DT_BOOL  : //no edit window for bool
                 break;
             case SparkProperty::DT_VEC3F : 
-                vec3 = &boost::shared_static_cast<const DVector3f>(prop->getCurrentValue())->mValue;
+                vec3 = &boost::static_pointer_cast<const DVector3f>(prop->getCurrentValue())->mValue;
                 ((Vector3Widget*)mPropertyEditWidget)->setVector(vec3->x(), vec3->y(), vec3->z());
                 break;
             case SparkProperty::DT_RGBA  : 
-                rgba = &boost::shared_static_cast<const DRGBA>(prop->getCurrentValue())->mValue;
+                rgba = &boost::static_pointer_cast<const DRGBA>(prop->getCurrentValue())->mValue;
                 ((Vector4Widget*)mPropertyEditWidget)->setVector(rgba->r(), rgba->g(), rgba->b(), rgba->a());
                 break;
             case SparkProperty::DT_AABB3 : 
-                aabb3 = &boost::shared_static_cast<const DAABB3>(prop->getCurrentValue())->mValue;
+                aabb3 = &boost::static_pointer_cast<const DAABB3>(prop->getCurrentValue())->mValue;
                 ((Vector2x3Widget*)mPropertyEditWidget)->getWidget1().setVector(aabb3->minVec.x(), aabb3->minVec.y(), aabb3->minVec.z());
                 ((Vector2x3Widget*)mPropertyEditWidget)->getWidget2().setVector(aabb3->maxVec.x(), aabb3->maxVec.y(), aabb3->maxVec.z());
                 break;
             case SparkProperty::DT_MAT4X4:
-                mat = &boost::shared_static_cast<const DMat4x4>(prop->getCurrentValue())->mValue;
+                mat = &boost::static_pointer_cast<const DMat4x4>(prop->getCurrentValue())->mValue;
                 ((MatrixWidget*)mPropertyEditWidget)->setMatrix(
                     mat->m[0], mat->m[4], mat->m[ 8], mat->m[12],
                     mat->m[1], mat->m[5], mat->m[ 9], mat->m[13],

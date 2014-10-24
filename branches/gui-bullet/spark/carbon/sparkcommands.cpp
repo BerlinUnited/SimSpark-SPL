@@ -121,7 +121,7 @@ bool ImportScene::execute()
     }
 
     boost::shared_ptr<oxygen::SceneImporter> sceneImporter = 
-        boost::shared_static_cast<oxygen::SceneImporter>(getController()->getSpark()->GetCore()->Get("sys/server/scene/RubySceneImporter"));
+        boost::static_pointer_cast<oxygen::SceneImporter>(getController()->getSpark()->GetCore()->Get("sys/server/scene/RubySceneImporter"));
     sceneImporter->SetSceneDict(&oxygen::SceneDict::GetInstance());
     if (sceneImporter.get() == 0)
     {

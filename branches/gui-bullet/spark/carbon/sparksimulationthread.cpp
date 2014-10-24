@@ -77,7 +77,7 @@ boost::shared_ptr<SparkSimulationThread> SparkSimulationThread::getHostSparkThre
         if (index == -1)
             LOG_ERROR() << "Current thread not found in SimulationManagers thread list.";
         else
-            return boost::shared_static_cast<SparkSimulationThread>(manager->getThreadList().at(index));
+            return boost::static_pointer_cast<SparkSimulationThread>(manager->getThreadList().at(index));
     }
     else
     {

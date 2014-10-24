@@ -178,7 +178,7 @@ void SimulationFrame::addTask()
     {
         boost::shared_ptr<TaskDefinition> newDefinition(mSimulationManager->newTaskDefinition(TaskDefinition::mTypes[mChosenTask]));
         
-        bool success = mSimulationManager->getSimulation()->addNewTask(*newDefinition);
+        bool success = static_cast<bool>(mSimulationManager->getSimulation()->addNewTask(*newDefinition));
         if (!success)
             LOG_INFO() << "Could not initialize task " << newDefinition->getName() << " (" << TaskDefinition::getTypeString(newDefinition->getType()) << ")";
         else
