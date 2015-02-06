@@ -75,7 +75,8 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMaxTouchGroupSize(1000),
     mMaxFoulTime(0.0),              // maximum time allowed for a player to commit a positional foul before being repositioned
     mLastKickOffKickTime(0),
-    mCheckKickOffKickerFoul(false)
+    mCheckKickOffKickerFoul(false),
+    mPenaltyShootout(false)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
 }
@@ -120,6 +121,28 @@ SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
         // Reset touch groups
         ResetTouchGroups(TI_LEFT);
         ResetTouchGroups(TI_RIGHT);
+
+        // If in penalty shootout mode check that the goalie remains in the penalty area
+        if (mPenaltyShootout) 
+        {
+            SoccerBase::TAgentStateList agent_states;
+            if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_RIGHT))
+                return;
+            boost::shared_ptr<oxygen::Transform> agent_aspect;
+            SoccerBase::TAgentStateList::const_iterator i;
+            for (i = agent_states.begin(); i != agent_states.end(); ++i)
+            {
+                SoccerBase::GetTransformParent(**i, agent_aspect);
+                Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
+                if (agentPos.x() < mRightPenaltyArea.minVec[0] || agentPos.y() < mRightPenaltyArea.minVec[1] || agentPos.y() > mRightPenaltyArea.maxVec[1]) 
+                {
+                    // Penalty shootout goalie has left penalty area so award goal
+                    mPenaltyShootout = false;
+                    mGameState->ScoreTeam(TI_LEFT);
+                    mGameState->SetPlayMode(PM_Goal_Left);
+                }
+            }
+        }
     }
 }
 
@@ -1717,6 +1740,7 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"GoalKickDist",mGoalKickDist);
     SoccerBase::GetSoccerVar(*this,"AutomaticKickOff",mAutomaticKickOff);
     SoccerBase::GetSoccerVar(*this,"WaitBeforeKickOff",mWaitBeforeKickOff);
+    SoccerBase::GetSoccerVar(*this,"PenaltyShootout",mPenaltyShootout);
     SoccerBase::GetSoccerVar(*this,"SingleHalfTime",mSingleHalfTime);
     SoccerBase::GetSoccerVar(*this,"AutomaticQuit",mAutomaticQuit);
     SoccerBase::GetSoccerVar(*this,"ChangeSidesInSecondHalf",mChangeSidesInSecondHalf);

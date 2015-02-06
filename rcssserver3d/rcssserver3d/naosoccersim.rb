@@ -54,6 +54,7 @@ addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
+addSoccerVar('PenaltyShootout', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', false)
