@@ -52,6 +52,8 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mCommandMap["repos"] = CT_REPOS;
     mCommandMap["killsim"] = CT_KILLSIM;
     mCommandMap["reqfullstate"] = CT_REQFULLSTATE;
+    mCommandMap["time"] = CT_TIME;
+    mCommandMap["score"] = CT_SCORE;
 
     // setup team index map
     // Originally  team sides were "L","R" and "N"
@@ -234,6 +236,12 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
         break;
     case CT_REQFULLSTATE:
         mMonitorControl->RequestFullState();
+        break;
+    case CT_TIME:
+        ParseTimeCommand(predicate);
+        break;
+    case CT_SCORE:
+        ParseScoreCommand(predicate);
         break;
 
     default:
@@ -661,7 +669,7 @@ void TrainerCommandParser::ParseKillCommand(const oxygen::Predicate & predicate)
 
 void TrainerCommandParser::ParseReposCommand(const oxygen::Predicate & predicate)
 {
-        cerr << "repos 2" << endl;
+    //cerr << "repos 2" << endl;
 
     Predicate::Iterator unumParam(predicate);
     int                 unum;
@@ -714,7 +722,7 @@ void TrainerCommandParser::ParseReposCommand(const oxygen::Predicate & predicate
                 ballPos = ballBody->GetPosition();
 
             SoccerBase::GetTransformParent(**iter, agent_aspect);
-        cerr << "repos 3" << endl;
+            //cerr << "repos 3" << endl;
             Vector3f new_pos = mSoccerRule->RepositionOutsidePos(ballPos, (*iter)->GetUniformNumber(), (*iter)->GetTeamIndex());
             SoccerBase::MoveAgent(agent_aspect, new_pos);
 
@@ -726,4 +734,92 @@ void TrainerCommandParser::ParseReposCommand(const oxygen::Predicate & predicate
 void TrainerCommandParser::ParseKillSimCommand(const oxygen::Predicate & predicate)
 {
     mSimServer->Quit();
+}
+
+void TrainerCommandParser::ParseTimeCommand(const oxygen::Predicate & predicate)
+{
+    Predicate::Iterator timeParam(predicate);
+    float time;
+
+    if (predicate.GetValue(timeParam,time))
+    {
+        if (time >= 0)
+        {
+            mGameState->SetTime(time);
+        }
+        else
+        {
+            GetLog()->Debug()
+                << "(TrainerCommandParser) ERROR: value of time "
+                << time << " cannot be a negative value\n";
+            return;
+        }
+    }
+    else
+    {
+        GetLog()->Debug()
+            << "(TrainerCommandParser) ERROR: could not parse time "
+            << time << "\n";
+        return;
+    }
+}
+
+void TrainerCommandParser::ParseScoreCommand(const oxygen::Predicate & predicate)
+{
+    Predicate::Iterator leftScoreParam(predicate);
+    int scoreLeft;
+    if (predicate.FindParameter(leftScoreParam, "left"))
+    {
+        if (!predicate.GetValue(leftScoreParam, scoreLeft))
+        {
+            GetLog()->Debug()
+                << "(TrainerCommandParser) ERROR: could not parse score left "
+                << scoreLeft << "\n";
+            return;
+        }
+    }
+    else
+    {
+        GetLog()->Debug()
+            << "(TrainerCommandParser) ERROR: could not find score left\n";
+        return;
+    }
+      
+
+    Predicate::Iterator rightScoreParam(predicate);
+    int scoreRight;
+    if (predicate.FindParameter(rightScoreParam, "right"))
+    {
+        if (!predicate.GetValue(rightScoreParam, scoreRight))
+        {
+            GetLog()->Debug()
+                << "(TrainerCommandParser) ERROR: could not parse score right "
+                << scoreRight << "\n";
+            return;
+        }
+    }
+    else
+    {
+        GetLog()->Debug()
+            << "(TrainerCommandParser) ERROR: could not find score right\n";
+        return;
+    }
+
+    if (scoreLeft < 0) 
+    {
+        GetLog()->Debug()
+            << "(TrainerCommandParser) ERROR: score left "
+            << scoreLeft << " cannot be negative\n";
+        return;
+    }
+
+    if (scoreRight < 0) 
+    {
+        GetLog()->Debug()
+            << "(TrainerCommandParser) ERROR: score right "
+            << scoreRight << " cannot be negative\n";
+        return;
+    }
+
+    mGameState->SetScores(scoreLeft, scoreRight);
 }
