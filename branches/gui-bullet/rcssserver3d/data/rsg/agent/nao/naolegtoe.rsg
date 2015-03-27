@@ -20,13 +20,15 @@
     (def $ShankName (join $LeftOrRight shank))
     (def $AnkleName (join $LeftOrRight ankle))    
     (def $FootName  (join $LeftOrRight foot))
+    (def $ToeName   (join $LeftOrRight toe))
     
     (def $Hip1BodyPath    (join ../../ $Hip1Name  /sphereBody))
     (def $Hip2BodyPath    (join ../../ $Hip2Name  /sphereBody))
     (def $ThighBodyPath   (join ../../ $ThighName /boxBody))
     (def $ShankBodyPath   (join ../../ $ShankName /boxBody))
     (def $AnkleBodyPath   (join ../../ $AnkleName /sphereBody))
-    (def $FootBodyPath    (join ../../ $FootName  /boxBody))                
+    (def $FootBodyPath    (join ../../ $FootName  /boxBody)) 
+    (def $ToeBodyPath     (join ../../ $ToeName   /boxBody))               
     
     (def $Joint1PerName   (join $LeftOrRight lj1))
     (def $Joint2PerName   (join $LeftOrRight lj2))
@@ -34,6 +36,7 @@
     (def $Joint4PerName   (join $LeftOrRight lj4))
     (def $Joint5PerName   (join $LeftOrRight lj5))
     (def $Joint6PerName   (join $LeftOrRight lj6))
+    (def $Joint7PerName   (join $LeftOrRight lj7))
 
     (def $Joint1EffName   (join $LeftOrRight le1))
     (def $Joint2EffName   (join $LeftOrRight le2))
@@ -41,9 +44,49 @@
     (def $Joint4EffName   (join $LeftOrRight le4))
     (def $Joint5EffName   (join $LeftOrRight le5))
     (def $Joint6EffName   (join $LeftOrRight le6))
+    (def $Joint7EffName   (join $LeftOrRight le7))
 
     (def $FRPName (join $LeftOrRight f))
+    (def $FRPToeName (join $LeftOrRight f1))
 
+    ;
+    ;Size and Mass Parameters
+    ;
+    (def $Hip1Radius 0.01)
+    (def $Hip1Mass   0.09)
+    
+    (def $Hip2Radius 0.01)
+    (def $Hip2Mass   0.125)
+    
+    (def $ThighSizeX 0.07)
+    (def $ThighSizeY 0.07)
+    (def $ThighSizeZ 0.14)
+    (def $ThighMass  0.275)
+    
+    (def $ShankSizeX 0.08)
+    (def $ShankSizeY 0.07)
+    (def $ShankSizeZ 0.11)
+    (def $ShankMass  0.225)
+    
+    (def $AnkleRadius 0.01)
+    (def $AnkleMass   0.125)
+    
+    (def $ToeLength        (eval "NaoType["$type"]['ToeLength']"))
+    (def $TotalFootLength       0.16)
+    (def $FootToeMassRatio (eval (eval $ToeLength / $TotalFootLength) * 0.5))
+    (def $FootTotalMass    0.2)
+    
+    (def $FootSizeX  0.08)
+    (def $FootSizeY  (eval $TotalFootLength - $ToeLength))
+    (def $FootSizeZ  0.02)
+    (def $FootMass   (eval (eval 1 - $FootToeMassRatio) * $FootTotalMass))
+      
+    (def $ToeSizeX   0.08)
+    (def $ToeSizeY   $ToeLength)
+    (def $ToeSizeZ   0.01)
+    (def $ToeMass    (eval $FootToeMassRatio * $FootTotalMass))
+    
+    
     ;
     ;Position Parameters
     ;
@@ -72,8 +115,12 @@
     (def $AnkleRelShank_Z (eval "NaoType["$type"]['AnkleRelShank_Z']"))
     
     (def $FootRelAnkle_X 0)
-    (def $FootRelAnkle_Y 0.03)
+    (def $FootRelAnkle_Y (eval (eval $FootSizeY * 0.5) - 0.05))
     (def $FootRelAnkle_Z -0.04)
+      
+    (def $ToeRelFoot_X 0)
+    (def $ToeRelFoot_Y (eval $TotalFootLength * 0.5))
+    (def $ToeRelFoot_Z -0.005)
     
     (def $Hip1_X (eval $Torso_X + $Hip1RelTorso_X))
     (def $Hip1_Y (eval $Torso_Y + $Hip1RelTorso_Y))
@@ -98,34 +145,10 @@
     (def $Foot_X (eval $Ankle_X + $FootRelAnkle_X))
     (def $Foot_Y (eval $Ankle_Y + $FootRelAnkle_Y))
     (def $Foot_Z (eval $Ankle_Z + $FootRelAnkle_Z))
-    
-    ;
-    ;Size and Mass Parameters
-    ;
-    (def $Hip1Radius 0.01)
-    (def $Hip1Mass   0.09)
-    
-    (def $Hip2Radius 0.01)
-    (def $Hip2Mass   0.125)
-    
-    (def $ThighSizeX 0.07)
-    (def $ThighSizeY 0.07)
-    (def $ThighSizeZ 0.14)
-    (def $ThighMass  0.275)
-    
-    (def $ShankSizeX 0.08)
-    (def $ShankSizeY 0.07)
-    (def $ShankSizeZ 0.11)
-    (def $ShankMass  0.225)
-    
-    (def $AnkleRadius 0.01)
-    (def $AnkleMass   0.125)
-    
-    (def $FootSizeX   0.08)
-    (def $FootSizeY   0.16)
-    (def $FootSizeZ   0.02)
-    (def $FootMass    0.2)
-    
+      
+    (def $Toe_X (eval $Foot_X + $ToeRelFoot_X))
+    (def $Toe_Y (eval $Foot_Y + $ToeRelFoot_Y))
+    (def $Toe_Z (eval $Foot_Z + $ToeRelFoot_Z))
     
     ;
     ;Joint Parameters
@@ -174,6 +197,10 @@
     (def $lj6_max_c2    (eval (eval $right_lj6_max - $left_lj6_max) * 0.5))
     (def $lj6_max       (eval $lj6_max_c1 + (eval $LRFactor * $lj6_max_c2)))
     (def $lj6_max_abs_speed (eval "NaoType["$type"]['lj6_max_abs_speed']"))
+      
+    (def $lj7_min    -1)
+    (def $lj7_max    70)
+    (def $lj7_max_abs_speed $MaxAbsJointSpeed)
     
     (def $lj1_axis_x   -0.7071)
     (def $lj1_axis_y   0)
@@ -182,6 +209,14 @@
     (def $lj3_Anchor_X  (eval -1 * $ThighRelHip2_X))
     (def $lj3_Anchor_Y  (eval -1 * $ThighRelHip2_Y))
     (def $lj3_Anchor_Z  (eval -1 * $ThighRelHip2_Z))
+  
+    (def $lj6_Anchor_X  0)
+    (def $lj6_Anchor_Y  -0.03)
+    (def $lj6_Anchor_Z  0.035)
+    
+    (def $lj7_Anchor_X  0)
+    (def $lj7_Anchor_Y  (eval -0.5 * $ToeLength))
+    (def $lj7_Anchor_Z  -0.005)
     
     ;
     ;Models obj
@@ -337,7 +372,7 @@
   
         (switch $loadObj
           (true
-            (nd StaticMesh (load $FootObj) (setScale $FootSizeX $FootSizeX $FootSizeX))
+            (nd StaticMesh (load $FootObj) (setScale $FootSizeX (eval $FootSizeX * (eval $FootSizeY / $TotalFootLength)) $FootSizeX))
           )
           (false
             (importScene rsg/agent/nao/box_appearance.rsg $FootSizeX $FootSizeY $FootSizeZ matBlue)
@@ -357,7 +392,7 @@
         (importScene rsg/agent/nao/hingejoint.rsg
                               $Joint6PerName $Joint6EffName
                               ../boxBody $AnkleBodyPath
-                              0 -0.03 0.035
+                              $lj6_Anchor_X $lj6_Anchor_Y $lj6_Anchor_Z
                               0 1 0 ;1 -1 -1
                               $lj6_min $lj6_max
                               $lj6_max_abs_speed)
@@ -367,5 +402,46 @@
             )
         
          
+    )
+    
+      
+       
+    ;
+    ;Construct Toe
+    ;
+    (nd Transform
+        (setName $ToeName)
+        (setLocalPos $Toe_X $Toe_Y $Toe_Z)
+         
+        (nd ForceResistancePerceptor
+            (setName $FRPToeName)
+        )
+
+	(switch $loadObj
+          (true
+            (nd StaticMesh (load $FootObj) (setScale $FootSizeX (eval $FootSizeX * (eval $ToeSizeY / $FootSizeY)) (eval $FootSizeX * (eval $ToeSizeZ / $FootSizeZ))))
+          )
+          (false
+            (importScene rsg/agent/nao/box_appearance.rsg $ToeSizeX $ToeSizeY $ToeSizeZ matGrey)
+          )
+        )
+
+        ;(importScene rsg/agent/nao/box_physics_with_handler.rsg    $ToeSizeX $ToeSizeY $ToeSizeZ $ToeMass)
+        (importScene rsg/agent/nao/box_physics_nocollider.rsg    $ToeSizeX $ToeSizeY $ToeSizeZ $ToeMass)
+        
+        (nd BoxCollider
+            (setName (join $LeftOrRight ToeCollider))
+            (addNotCollideWithColliderName (join $LeftOrRight FootCollider) true)
+            (setBoxLengths $ToeSizeX $ToeSizeY $ToeSizeZ)
+            (importScene rsg/agent/nao/touchperceptorhandler.rsg)
+        )
+        
+        (importScene rsg/agent/nao/hingejoint.rsg
+                              $Joint7PerName $Joint7EffName
+                              ../boxBody $FootBodyPath
+                              $lj7_Anchor_X $lj7_Anchor_Y $lj7_Anchor_Z
+                              1 0 0 ;1 -1 -1
+                              $lj7_min $lj7_max
+                              $lj7_max_abs_speed)
     )
 )

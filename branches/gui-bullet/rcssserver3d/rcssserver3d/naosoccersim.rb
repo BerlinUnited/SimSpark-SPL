@@ -54,6 +54,7 @@ addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
+addSoccerVar('PenaltyShootout', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', false)
@@ -78,7 +79,7 @@ addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
 
 # charging foul parameters
-addSoccerVar('UseCharging', true)
+addSoccerVar('UseCharging', false)
 addSoccerVar('ChargingMinSpeed', 0.2)
 addSoccerVar('ChargingMinBallDist', 0.2)
 addSoccerVar('IllegalInterceptMinAngle', 70)
