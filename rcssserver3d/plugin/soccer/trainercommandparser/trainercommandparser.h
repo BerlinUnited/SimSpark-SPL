@@ -56,7 +56,9 @@ public:
         CT_KILL,
         CT_REPOS,
         CT_KILLSIM,
-        CT_REQFULLSTATE
+        CT_REQFULLSTATE,
+        CT_TIME,
+        CT_SCORE
     };
 
     typedef std::map<std::string, ECommandType>  TCommandMap;
@@ -132,6 +134,17 @@ protected:
         predicate
     */
     void ParseKillSimCommand(const oxygen::Predicate & predicate);
+
+    /** parses and executes the time command contained in the given
+        predicate
+    */
+    void ParseTimeCommand(const oxygen::Predicate & predicate);
+
+    /** parses and executes the score command contained in the given
+        predicate
+    */
+    void ParseScoreCommand(const oxygen::Predicate & predicate);
+    
     
 protected:
     TCommandMap    mCommandMap;

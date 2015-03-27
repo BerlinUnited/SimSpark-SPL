@@ -448,6 +448,8 @@ protected:
     boost::shared_ptr<oxygen::AgentAspect> mLastKickOffTaker;
     /** if kickoff taker should be checked for single kick rule */
     bool mCheckKickOffKickerFoul;
+    /** if in penalty shootout mode */
+    bool mPenaltyShootout;
 
     /** complete foul history */
     std::vector<Foul> mFouls;

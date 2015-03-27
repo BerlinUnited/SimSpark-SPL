@@ -25,6 +25,9 @@
 (def $TorsoInitZ  1.5)
 
 (def $loadObj (eval Nao.UseTexture))
+
+(def $useToe (eval "NaoType["$type"]['UseToe']"))
+
 ;
 ;Begin Construct of Nao
 ;
@@ -131,18 +134,38 @@
     ;
     ;The Right Leg
     ;
-    (importScene rsg/agent/nao/naoleg.rsg
-              1 r
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
-              $type)
-    
+    (switch $useToe
+	    (true
+	     (importScene rsg/agent/nao/naolegtoe.rsg
+			  1 r
+			  $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+			  $type)
+	     )
+	    (false
+	     (importScene rsg/agent/nao/naoleg.rsg
+			  1 r
+			  $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+			  $type)
+	     )
+	    )
+
     ;
     ;The Left Leg
     ;
-    (importScene rsg/agent/nao/naoleg.rsg
-              -1 l
-              $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
-              $type)
+    (switch $useToe
+	    (true
+	     (importScene rsg/agent/nao/naolegtoe.rsg
+			  -1 l
+			  $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+			  $type)  
+	     )
+	    (false
+	     (importScene rsg/agent/nao/naoleg.rsg
+			  -1 l
+			  $TorsoInitX $TorsoInitY $TorsoInitZ $loadObj
+			  $type)
+	     )
+	    )
 
 );end of nd Space
 
