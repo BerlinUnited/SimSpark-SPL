@@ -26,6 +26,7 @@
 #include <oxygen/agentaspect/agentaspect.h>
 #include <oxygen/physicsserver/recorderhandler.h>
 #include <gamestateaspect/gamestateaspect.h>
+#include <agentstate/agentstate.h>
 #include <soccerbase/soccerbase.h>
 #include <ball/ball.h>
 
@@ -40,6 +41,8 @@ BallStateAspect::BallStateAspect() : SoccerControlAspect()
     mLastValidBallPos = Vector3f(0,0,0);
     mGoalState = TI_NONE;
     mLastAgentCollisionTime = 0;
+    mCollidingWithLeftTeamAgent = false;
+    mCollidingWithRightTeamAgent = false;
 }
 
 BallStateAspect::~BallStateAspect()
@@ -66,6 +69,9 @@ bool BallStateAspect::GetLastKickingAgent(boost::shared_ptr<AgentAspect>& agent,
 
 void BallStateAspect::UpdateLastCollidingAgent()
 {
+    mCollidingWithLeftTeamAgent = false;
+    mCollidingWithRightTeamAgent = false;
+
     // get a list of agents that collided with the ball since the last
     // update of the recorder and remember the first returned node as
     // the last agent that collided with the ball.
@@ -78,6 +84,26 @@ void BallStateAspect::UpdateLastCollidingAgent()
                 (agents.front().lock());
 
             mLastAgentCollisionTime = mGameState->GetTime();
+
+            for (RecorderHandler::TParentList::iterator it = agents.begin(); 
+                 it != agents.end(); ++it) {
+                boost::shared_ptr<oxygen::AgentAspect> agent = 
+                    static_pointer_cast<AgentAspect>(it->lock());   
+                boost::shared_ptr<AgentState> agentState;
+                if (!SoccerBase::GetAgentState(agent, agentState))
+                    {
+                        GetLog()->Error() << "ERROR: (SoccerRuleAspect) Cannot"
+                            " get AgentState from an AgentAspect\n";
+                    }
+                else {
+                    TTeamIndex team = agentState->GetTeamIndex(); 
+                    if (team == TI_LEFT) {
+                        mCollidingWithLeftTeamAgent = true;
+                    } else if (team == TI_RIGHT) {
+                        mCollidingWithRightTeamAgent = true;
+                    }
+                }
+            }
         }
 
     // empty the recorder buffer
@@ -205,4 +231,17 @@ bool BallStateAspect::GetBallOnField()
 salt::Vector3f BallStateAspect::GetLastValidBallPosition()
 {
     return mLastValidBallPos;
+}
+
+bool BallStateAspect::GetBallCollidingWithAgentTeam(TTeamIndex team)
+{
+    if (team == TI_LEFT) {
+        return mCollidingWithLeftTeamAgent;
+    } else if (team == TI_RIGHT) {
+        return mCollidingWithRightTeamAgent;
+    } else if (team == TI_NONE) {
+        return !mCollidingWithLeftTeamAgent && !mCollidingWithRightTeamAgent;
+    }
+
+    return false;
 }

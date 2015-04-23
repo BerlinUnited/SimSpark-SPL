@@ -76,6 +76,11 @@ public:
     /** updates the reference to the last agent that kicked the ball */
     void UpdateLastKickingAgent(boost::shared_ptr<oxygen::AgentAspect> agent);
 
+    /** returns if ball is currently colliding with an agent from the given
+        team 
+    */
+    bool GetBallCollidingWithAgentTeam(TTeamIndex team);
+
 protected:
     /** set up the reference to the ball and field collider */
     virtual void OnLink();
@@ -127,6 +132,12 @@ protected:
 
     /** then time when the last agent collided with the ball */
     TTime mLastAgentCollisionTime;
+
+    /** if ball is currently colliding with left team agent */
+    bool mCollidingWithLeftTeamAgent;
+
+    /** if ball is currently colliding with right team agent */
+    bool mCollidingWithRightTeamAgent;
 
     /** then time when the last agent kicked the ball */
     TTime mLastAgentKickTime;
