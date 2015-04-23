@@ -76,6 +76,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMaxFoulTime(0.0),              // maximum time allowed for a player to commit a positional foul before being repositioned
     mLastKickOffKickTime(0),
     mCheckKickOffKickerFoul(false),
+    mAllowKickOffTeamToScore(true),
     mPenaltyShootout(false)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
@@ -1022,6 +1023,9 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
 {
     mGameState->SetPaused(false);
 
+    mCheckKickOffKickerFoul = false;
+    mAllowKickOffTeamToScore = true;
+
     ClearPlayersBeforeKickOff(idx);
 
     // if no player touched the ball for mDropBallTime, we move away
@@ -1045,10 +1049,12 @@ SoccerRuleAspect::UpdateKickOff(TTeamIndex idx)
     if (time > mGameState->GetLastModeChange())
     {
         boost::shared_ptr<GameControlServer> game_control;
-        if (SoccerBase::GetGameControlServer(*this, game_control)
-                && game_control->GetAgentCount() > 2) // todo: remove this when there is a "penalty" playmode
+        if ((SoccerBase::GetGameControlServer(*this, game_control)
+             && game_control->GetAgentCount() > 2) // todo: remove this when there is a "penalty" playmode
+            && !mPenaltyShootout)
         {
             mCheckKickOffKickerFoul = true;
+            mAllowKickOffTeamToScore = false;
         }
         mLastKickOffKickTime = time;
         mLastKickOffTaker = agent;
@@ -1444,7 +1450,32 @@ SoccerRuleAspect::CheckGoal()
     if (WasLastKickFromKickOff(agent))
     {
         PunishKickOffFoul(agent);
-        return false;
+        // Return true so that we know the ball is in the goal and don't check
+        // for other conditions such as the ball being out of bounds
+        return true;
+    }
+
+    /* Don't allow goals kicked from inside center circle directly after 
+       kickoff
+     */
+    if (!mAllowKickOffTeamToScore) {
+         boost::shared_ptr<AgentState> agentState;
+         if (!SoccerBase::GetAgentState(mLastKickOffTaker, agentState))
+             {
+                 GetLog()->Error() << "ERROR: (SoccerRuleAspect) Cannot"
+                     " get AgentState from an AgentAspect\n";
+             }
+         else {
+             TTeamIndex team = agentState->GetTeamIndex();
+             if (idx != team) {
+                 // Team that scored is same team that took kickoff
+                 PunishKickOffFoul(mLastKickOffTaker);
+                 // Return true so that we know the ball is in the goal and 
+                 // don't check for other conditions such as the ball being out
+                 // of bounds
+                 return true;
+             }
+         }
     }
 
     // score the lucky team
@@ -1478,6 +1509,13 @@ SoccerRuleAspect::UpdatePlayOn()
 {
     mGameState->SetPaused(false);
 
+    // check that player who took kickoff doesn't touch the ball a second
+    // time before another agent touches the ball
+    if (CheckKickOffTakerFoul())
+    {
+        return;
+    }
+
     // check if the ball is in one of the goals
     if (CheckGoal())
     {
@@ -1497,11 +1535,6 @@ SoccerRuleAspect::UpdatePlayOn()
         return;
     }
 #endif
-
-    if (CheckKickOffTakerFoul())
-    {
-        return;
-    }
 
     // other checks go here...
 }
@@ -1601,6 +1634,28 @@ SoccerRuleAspect::Update(float deltaTime)
     static bool updated = false;
 
     mLastModeWasPlayOn = false;
+
+    if (!mAllowKickOffTeamToScore) {
+        // Check if requirements/rules have been met for team taking kickoff 
+        // to score
+        boost::shared_ptr<AgentState> agentState;
+        if (!SoccerBase::GetAgentState(mLastKickOffTaker, agentState))
+            {
+                GetLog()->Error() << "ERROR: (SoccerRuleAspect) Cannot"
+                    " get AgentState from an AgentAspect\n";
+            }
+        else {
+            TTeamIndex team = agentState->GetTeamIndex();
+            bool ballTouchedByKickOffTeam = 
+                mBallState->GetBallCollidingWithAgentTeam(team);
+            bool ballTouchedByNonKickOffTeam = 
+                mBallState->GetBallCollidingWithAgentTeam(SoccerBase::OpponentTeam(team));
+            salt::Vector2f ball_pos(mBallBody->GetPosition().x(), mBallBody->GetPosition().y());
+            bool ballOutsideCenterCircle = ball_pos.Length() > mFreeKickDist;
+            mAllowKickOffTeamToScore = ballTouchedByNonKickOffTeam ||
+                (ballTouchedByKickOffTeam && ballOutsideCenterCircle);
+        }
+    }
 
     switch (playMode)
     {

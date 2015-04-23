@@ -37,6 +37,8 @@ BeamEffector::BeamEffector() : oxygen::Effector()
 
 BeamEffector::~BeamEffector()
 {
+    mXYRng.reset();
+    mThetaRng.reset();
 }
 
 #ifdef __APPLE_CC__
@@ -54,7 +56,9 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         (mAction.get() == 0) ||
         (mBody.get() == 0) ||
         (mGameState.get() == 0) ||
-        (mAgentState.get() == 0)
+        (mAgentState.get() == 0) ||
+        (mXYRng.get() == 0) ||
+        (mThetaRng.get() == 0)
         )
     {
         return;
@@ -78,10 +82,10 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
         || mGameState->GetPlayMode() == PM_Goal_Right)
     {
         Vector3f pos;
-        pos[0] = beamAction->GetPosX();
-        pos[1] = beamAction->GetPosY();
+        pos[0] = beamAction->GetPosX() + (*(mXYRng.get()))();
+        pos[1] = beamAction->GetPosY() + (*(mXYRng.get()))();
 
-        float angle = beamAction->GetXYAngle();
+        float angle = beamAction->GetXYAngle() + (*(mThetaRng.get()))();
 
         // reject nan or infinite numbers in the beam position
         if (
@@ -181,6 +185,17 @@ BeamEffector::OnLink()
 
     mAgentRadius = 0.22f;
     SoccerBase::GetSoccerVar(*this,"AgentRadius",mAgentRadius);
+
+    mBeamNoiseXY = 0.05f;
+    SoccerBase::GetSoccerVar(*this, "BeamNoiseXY",mBeamNoiseXY);
+
+    mBeamNoiseAngle = 10.0f;
+    SoccerBase::GetSoccerVar(*this, "BeamNoiseAngle",mBeamNoiseAngle);
+
+    UniformRngPtr rng1(new salt::UniformRNG<>(-mBeamNoiseXY,mBeamNoiseXY));
+    mXYRng = rng1;
+    UniformRngPtr rng2(new salt::UniformRNG<>(-mBeamNoiseAngle,mBeamNoiseAngle));
+    mThetaRng = rng2;
 }
 
 void
@@ -189,5 +204,7 @@ BeamEffector::OnUnlink()
     mBody.reset();
     mGameState.reset();
     mAgentState.reset();
+    mXYRng.reset();
+    mThetaRng.reset();
 }
 
