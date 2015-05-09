@@ -1440,14 +1440,19 @@ SoccerRuleAspect::CheckGoal()
             return false;
     }
 
-    /* don't allow goals directly from kickoff
+    /* don't allow goals directly from kickoff (penalty shot kickoffs are 
+     * direct)
      *
      * todo it is allowed in FIFA rules, so we should get rid of it e.g. by
      * adding noise to the beam effector so that kickoff kicks cannot be
      * precisely planned
      */
     boost::shared_ptr<AgentAspect> agent;
-    if (WasLastKickFromKickOff(agent))
+    boost::shared_ptr<GameControlServer> game_control;
+    if (WasLastKickFromKickOff(agent) 
+        && (SoccerBase::GetGameControlServer(*this, game_control)
+            && game_control->GetAgentCount() > 2) // todo: remove this when there is a "penalty" playmode
+        && !mPenaltyShootout)
     {
         PunishKickOffFoul(agent);
         // Return true so that we know the ball is in the goal and don't check
