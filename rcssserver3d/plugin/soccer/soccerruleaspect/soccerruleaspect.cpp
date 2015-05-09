@@ -93,6 +93,9 @@ SoccerRuleAspect::MoveBall(const Vector3f& pos)
     mBallBody->SetVelocity(Vector3f(0,0,0));
     mBallBody->SetAngularVelocity(Vector3f(0,0,0));
     mBallBody->Enable();
+    // Set the free kick position to where we have moved the ball so as to not
+    // accidentally use an old ball position for the next free kick.
+    mFreeKickPos = Vector3f(pos.x(), pos.y(), mBallRadius);
 }
 
 /* Uses only Ball and Players positions and detects overcrowind near ball and areas and
@@ -1141,7 +1144,6 @@ SoccerRuleAspect::UpdateFreeKick(TTeamIndex idx)
             mRightPenaltyArea.minVec[1] : mRightPenaltyArea.maxVec[1];
     }
 
-    MoveBall(mFreeKickPos);
 //--------------------------
 
     // move away opponent team
