@@ -760,6 +760,11 @@ Supported expressions are:
 
   Example: ((ball (pos 0.0 0.0 50.0))(getAck moved_ball_in_the_air))
 
+- (time <time>):
+  Set current game time
+
+- (score (left <score>) (right <score>)):
+  Set current game score
 
 
 4. External Links
