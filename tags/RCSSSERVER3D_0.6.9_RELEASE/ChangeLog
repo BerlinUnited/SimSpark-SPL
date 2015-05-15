@@ -1,0 +1,850 @@
+2015-05-15  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt:
+	* NEWS:
+	- updated for version 0.6.9
+
+2015-05-11  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE:
+	- prepared release notes for 0.6.9 release
+
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- add small doc for new trainer commands to set score and time
+
+2014-06-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	* CMakeLists.txt: 
+	- prepared for 0.6.8.1 release
+	
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	* data/rsg/agent/nao/naoleg.rsg: 
+	* data/rsg/agent/nao/naolegtoe.rsg: 
+	* rcssserver3d/naorobottypes.rb:
+	- update robot types for RoboCup 2014 including two new types, one of which
+	  has toes! Thanks to Patrick, Stefan and Klaus.
+
+2014-05-30  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS:
+	* RELEASE:
+	* CMakeLists.txt:
+	- prepared for 0.6.8 release; including changes in this release like hear
+	  message labeling, score reporting and bug fixes not documented in 
+	  ChangeLog
+
+2013-06-20  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccermonitor/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	- link boost libraries
+	
+	* CMakeLists.txt: 
+	* cmake/AdditionalSearchPaths.cmake: 
+	- support cross-compiling from multiple root dirs
+
+2013-06-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- added a note about fixing side changing bug in 0.6.7 release
+	 
+	* rcssserver3d/naosoccersim.rb: 
+	- disabled ChangeSidesInSecondHalf by default for 0.6.7 release, since this
+	  is what we use currently in competitions. But it should work fine if
+	  enabled.
+
+2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	* CMakeLists.txt:
+	- Updated for 0.6.7 release
+
+	* rcssagent3d/naobehavior.cpp:
+	- use the new style scene command to load standard Nao 
+
+	* rcssserver3d/naorobottypes.rb: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- re-formatted for better readability & consistency
+	(SoccerRuleAspect::SwapTeamSides): 
+	- swap gamestateaspect internal team data too (should fix bugs related to
+	  changing team's sides in the second half)
+
+	* rcssserver3d/naosoccersim.rb: 
+	- added charging foul parameters to silent 'variable not found' errors
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	- added new functions to swap teams internal data structures when they
+	  change sides
+
+2013-06-12  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	* rcssserver3d/naosoccersim.rb: 
+	- added Patrick's charging foul rules, plus soccervar parameters
+	to enable and configure them. these fouls are not penalized, only
+	recorded and sent to the monitor
+
+2013-06-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	* plugin/soccer/agentstate/agentstate.cpp (AgentState::OnUnlink): 
+	* rcssserver3d/naosoccersim.rb: 
+	- control the number of heterogeneous players each team can use. It limits
+	  both the total number of heterogeneous players of each team
+	  (MaxTotalHeteroCount variable in naosoccersim.rb), and the number of 
+	  heterogeneous players of each type (MaxHeteroTypeCount variable)
+
+2013-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor_c.cpp: 
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	- added MyOrientation sensing by Patrick (setSenseMyOrien in rsg file)
+	
+2013-04-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	* plugin/soccer/agentstate/agentstate.h: 
+	* plugin/soccer/agentstate/agentstate.cpp: 
+	* plugin/soccer/agentstate/agentstate_c.cpp: 
+	- added robot type to agent state
+
+2012-11-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* data/rsg/agent/nao/nao_hetero.rsg: 
+	- nao_hetero.rsg can be used to create different variants of Nao robot
+	- nao.rsg a compatbility scene to create default Nao type (type 0)
+	
+	* rcssserver3d/naorobottypes.rb: 
+	* rcssserver3d/naosoccersim.rb: 
+	* rcssserver3d/CMakeLists.txt: 
+	- added naorobottypes.rb to initialize Nao heterogeneous robot parameters
+
+2012-06-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- let a player kick the ball more than once in kickoff if there are not 
+	  more than 2 players inside the game. Should be removed when a proper 
+	  "Penalty mode" is added to the simulator
+	- small cleanup: call SoccerBase::GetGameControlServer() to access 
+	  game control server 
+
+2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE: 
+	- updated for 0.6.6
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp: 
+	- do not allow direct goals from kickoff
+	- do not let the kickoff taker to kick the ball again befor other players
+
+2012-05-22  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp: 
+	* plugin/soccer/gamestateaspect/gamestateaspect.h:
+	- added knowledge about a 'paused' state, in which game is not really 
+	  running (waiting for the referee to allow the game to continue, e.g. in
+	  goal left/right state or at the beginning of a kick in state)
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	- a little cleanup, and fixed comment for mAutoKickOffTimeOrigin
+	- removed an unused variable mLastValidBallPosition
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- update game's paused state 
+	- consider the referee rules always while the game is running (not paused),
+	  and reset all counters otherwise. 
+	 
+2012-05-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.6 release
+	 
+	* data/rsg/agent/nao/naoleg.rsg: 
+	- reduce Nao's foot height (patch by Sander) and modify the position of
+	  ankle accordingly
+
+2012-05-19  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	  (SoccerRuleAspect::CheckBallLeftField):
+	  - fix the position of right corner kick to use mBallRadius rather than 
+	    a hard coded value
+	  - use new value for corner kick position for RoboCup 2012, to be between
+	    the goal and field's corner position
+	   
+	* NEWS: 
+	* RELEASE: 
+	- added information about the new dimensions in this release
+	
+	* CMakeLists.txt:
+	- updated version to 0.6.6
+
+	* rcssserver3d/naosoccersim.rb: 
+	- increased free kick distance to 2.0. actually it should be 2.75, but
+	  since we are going to have an artificial corner point it should be 
+	  probably smaller too.
+	
+	* plugin/soccer/rcs3dmonitor/rcs3dmonitor.h: 
+	* plugin/soccer/rcs3dmonitor/rcs3dmonitor.cpp: 
+	* plugin/soccer/sexpmonitor/sexpmonitor.h: 
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	- fixed spelling error in GetMonitorInformation()
+
+2012-05-17  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssserver3d/naosoccersim.rb: 
+	- use new field dimensions: 20x30
+	
+	* data/rsg/agent/nao/soccer.rsg: 
+	- The radius of center circle (field ring) should be equal to 
+	  FreeKickDistance (they are equal in FIFA rules too) 
+2012-05-16  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- initial version for 0.6.6 release
+	
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp
+	 (TrainerCommandParser::OnLink):
+	- fixed a typo where mGameControl was checked instead of mSimServer to see
+	  if it is valid
+	  
+	* data/rsg/agent/nao/soccer.rsg: 
+	- use correct penalty width which is equal to PenaltyWidth + GoalWidth
+	
+	* rcssserver3d/naosoccersim.rb: 
+	- changed default value of 'WaitBeforeKickOff' to 30, since 5 seconds
+	  is too small for any team to start.
+	- disabled AutomaticQuit mode by default for consistency with older versions
+
+2012-04-15  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp 
+	(TrainerCommandParser::ParsePlayerCommand):
+	- fixed a small bug in parsing move paramter (Thanks to Andreas Seekircher)  
+
+2012-04-10  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	 (SoccerRuleAspect::UpdateBeforeKickOff):
+	 - WaitBeforeKickOff is now calculated from when the first agent connects
+	   rather than from the beginning of the before kickoff playmode (when the
+	   simulator is started) 
+
+2012-04-09  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/gamestateaspect/gamestateaspect.h (GameStateAspect): 
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp (GameStateAspect::KickOff): 
+    - Fix KickOff for the second half: give the ball to the other team in all
+      cases (both when the teams change their sides in the second half and when
+      they don't). 
+	
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::SwapTeamSides): 
+	- change teams' sides in the second half if enabled (enabled by default)
+	
+	* rcssserver3d/naosoccersim.rb:
+	- add new variables for the above changes: CoinTossForKickOff and 
+	  ChangeSidesInSecondHalf. The former specifies if in the automatic kickoff
+	  mode, the first half kick off is always given to the left team or is
+	  determined randomly. The latter specifies if the teams should change 
+	  their sides in the second half. 
+
+2012-04-07  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp (SoccerRuleAspect::UpdateGameOver): 
+	- add AutomaticQuit mode to shutdown automatically when the game is over
+
+2012-02-14  Sander van Dijk  <sgvandik@gmail.com>
+
+	* rcssserver3d/main.cpp (Spark): 
+	* rcssmonitor3d/main.cpp (Spark):
+	- add --init-script-prefix option to specify location of spark.rb,
+	  zeitgeist.rb, etc
+
+2011-06-06  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	 (SoccerRuleAspect::AnalyseTouchGroups):
+	- fixed a horrible mistake of mine which prevented from touch group rules
+	  to be applied at all 
+
+2011-05-14  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp 
+	(SoccerRuleAspect::CheckGoal):
+	- fixed a small bug in goal counting which cause this function to always
+	  count a goal when ball moved out of the field 
+
+2011-05-02  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- strip files when creating a binary package
+
+2011-05-01  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* windows/uninstall_extra.nsi: 
+	* windows/install_extra.nsi: 
+	- install an rcsoccersim3d script under Windows
+	- fixed path commands to not include = sign
+	
+	* cmake/FindODE.cmake: 
+	- don't overwrite config options obtained from ode-config if available 
+	
+	* rcssagent3d/CMakeLists.txt: 
+	- use lowercase ws2_32 to be compatible with mingw32
+	
+	* CMakeLists.txt: 
+	- include AdditionalSearchPaths.cmake
+	- added -shared flag for mingw when linking modules
+	
+	* cmake/AdditionalSearchPaths.cmake: 
+	- sets up additional search paths under Windows to find dependencies in
+	  common directories and the ones documented on the wiki
+	
+	* cmake/FindFreetype.cmake: 
+	- removed; and additional search paths have been added to 
+	  AdditionalSearchPaths.cmake file
+
+2011-04-29  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt: 
+	- use static boost libraries under Windows
+	
+	* windows/install_extra.nsi: 
+	- adopt the script for the latest version of CMake and NSIS
+	
+	* rcssserver3d/CMakeLists.txt: 
+	- don't install Linux only files in Windows
+	
+	* cmake/FindBoost.cmake: 
+	- removed in favor of CMake's own version
+
+2011-04-21  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.5 to reflect removing an opponent from a touch group when 
+	  there are more opponents in the group than teammates
+	 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp
+	(SoccerRuleAspect::CheckGoal):
+	- if goal recorder's cannot detect any goals, geometrically check to 
+	  make sure that no goal is actually happened. Thanks to Luis for starting
+	  the effort and Mahdi for the initial code for calculating where the ball
+	  crosses the goal geometrically. 
+	(SoccerRuleAspect::AnalyseTouchGroups): 
+	- reposition a player from a team with more players in a touch group. Thanks
+	  to Nexus3D (Mehdi?) for the initial patch. It intended to reposition the
+	  player who joined last even from the opponent team, but we don't have
+	  this info now so remove an unspecified player from the opponent if the
+	  last player is not going to be removed. 
+
+2011-03-28  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssmonitor3d/rcssmonitor3d.rb: 
+	- only log error messages to output (a small cleanup for 0.6.5 release)
+
+2011-03-26  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* NEWS: 
+	* RELEASE:
+	- updated for 0.6.5 release
+
+2011-03-25  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* rcssserver3d/CMakeLists.txt: 
+	* rcssserver3d/main.cpp: 
+	* rcssserver3d/rcssserver3d.rb:
+	* doc/users/rcssmonitor3d.tex: 
+	- rename: simspark.rb -> rcssserver3d.rb 
+
+2011-03-24  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* plugin/soccer/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt: 
+	- fixed to use CMake's own FindDevIL module
+	
+	* plugin/soccer/gamestateaspect/gamestateitem.cpp
+	  (GameStateItem::GetInitialPredicates): 
+	- do not try to send obsolete variables: AgentMass and AgentMaxSpeed 
+	
+	* rcssserver3d/naosoccersim.rb: 
+	- added MaxTouchGroupSize variable
+	- added a BorderSize variable to stop simulator from complaining for 
+	  missing variable
+	
+	* CMakeLists.txt: 
+	- updated PACKAGE_VERSION to 0.6.5 for the next release
+	
+	* rcssserver3d_config.h.cmake: 
+	- added a RCSS_VERSION constant to store rcssserver3d version
+	
+	* rcssserver3d/main.cpp (SimSpark::PrintGreeting): 
+	- use RCSS_VERSION instead of the hard coded version number
+	
+	* rcssserver3d/simspark.rb: 
+	* rcssmonitor3d/rcssmonitor3d.rb:
+	- use the new sparkSetupTimer()  
+
+2011-03-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* RELEASE: 
+	- updated release information for the next release
+	
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	- enable sensing field lines by default
+
+2011-02-10  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* rcssserver3d/rcssserver3d/main.cpp
+	- set different agent and monitor ports with --agent-posrt and --server-port
+
+	* /trunk/rcssserver3d/data/textures/rcs-naofield.png
+	- new field texture
+
+2011-01-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* cmake/UseLATEX.cmake: 
+	- updated to version 1.7.2
+	
+	* plugin/soccermonitor/CMakeLists.txt: 
+	- link OpenGL libraries to fix MacOSX compile issue(Thanks to Giuliani)
+
+2010-12-14 Yuan Xu <xu@informatik.hu-berlin.de>
+	* rcssserver3d/plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp
+	* rcssserver3d/plugin/soccer/trainercommandparser/trainercommandparser.cpp
+	* spark/lib/oxygen/proxyserver/agentproxy.cpp
+	- compile by VC10
+	
+2010-09-28  Sander van Dijk <sgvandijk@gmail.com>
+
+	* plugin/soccermonitor/soccerrender.cpp
+	- render team names and scores in appropriate colors
+  
+2010-06-08  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* linux/rcssserver3d.desktop: 
+	- changed the binary name to rcsoccersim3d
+	
+	* rcssserver3d/CMakeLists.txt: 
+	- simspark is now a relative symlink, hopefully fixing some problems on
+	  'make install'
+
+2010-06-07  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* NEWS: 
+	- prepared for 0.6.4 release
+	
+	* RELEASE: 
+	- add some documentation about new monitor controls
+	
+	* plugin/soccer/gamestateaspect/gamestateitem.cpp:
+	- send game state with initial predicates, so that the logger will not 
+	  miss them in the next cycle 
+
+	* rcssserver3d/rcsoccersim3d.in:
+	- removed some extra lines checking for rcssagent3d
+	 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	- make the first letter of CheckVisuable() capital
+	 
+2010-06-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* RELEASE: 
+	* CMakeLists.txt: 
+	- preparing for 0.6.4 release
+
+2010-05-23  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssserver3d/naosoccersim.rb: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- added the simple referee patch from FCPortugal team (thanks to
+	  Luis Paulo Reis) 
+
+2010-02-28  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake:
+	- added new version of FindBoost.cmake: finding boost libraries created by Visual C++ 2010 compiler.
+
+	* plugin/soccer/agentintegration/soccerbotbehavior.cpp:
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp:
+	* plugin/soccer/ballstateaspect/ballstateaspect.cpp:
+	* plugin/soccer/beameffector/beameffector.cpp:
+	* plugin/soccer/catcheffector/catcheffector.cpp:
+	* plugin/soccer/createeffector/createeffector.cpp:
+	* plugin/soccer/driveeffector/driveeffector.cpp:
+	* plugin/soccer/gamestateaspect/gamestateaspect.cpp:
+	* plugin/soccer/hmdp_effector/hmdpeffector.cpp:
+	* plugin/soccer/hmdp_effector/hmdpperceptor.cpp:
+	* plugin/soccer/initeffector/initeffector.cpp:
+	* plugin/soccer/initeffector/singlematiniteffector.cpp:
+	* plugin/soccer/initeffector/staticmeshiniteffector.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerinput.cpp:
+	* plugin/soccer/internalsoccermonitor/internalsoccerrender.cpp:
+	* plugin/soccer/kickeffector/kickeffector.cpp:
+	* plugin/soccer/pantilteffector/pantilteffector.cpp:
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp:
+	* plugin/soccer/sayeffector/sayeffector.cpp:
+	* plugin/soccer/sexpmonitor/sexpmonitor.cpp:
+	* plugin/soccer/soccerbase/soccerbase.cpp:
+	* plugin/soccer/soccercontrolaspect/soccercontrolaspect.cpp:
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	* plugin/soccer/trainercommandparser/trainercommandparser.cpp:
+	* plugin/soccer/visionperceptor/visionperceptor.cpp:
+	* plugin/soccermonitor/soccerinput.cpp:
+	* rcssagent3d/hoap2behavior.cpp:
+	* rcssagent3d/naobehavior.cpp:
+	* rcssagent3d/soccerbehavior.cpp:
+	* rcssagent3d/soccerbotbehavior.cpp:
+	* rcssmonitor3d/main.cpp:
+	* rcssserver3d/main.cpp:
+
+	- change shared_ptr -> boost::shared_ptr because of Visual Studio 2010 compatibility. Issue between boost::shared_ptr and std::tr1::shared_ptr
+
+
+2010-01-18  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* windows/uninstall_extra.nsi: 
+	- rename: simspark -> rcssserver3d 
+
+2010-01-17  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* doc/users/gettingstarted.tex: 
+	* doc/users/simulations.tex: 
+	* doc/users/user-manual.tex: 
+	- updated to reflect some new changes
+	
+	* RELEASE: 
+	* NEWS: 
+	- preparing for a new release
+	
+	* CMakeLists.txt: 
+	- removed installation of third party libraries. these are now included
+	  in simspark package.
+	- bumped package version to 0.6.3
+	
+	* windows/install_extra.nsi: 
+	- use rcssserver3d instead of simspark.
+	- added thirdparty library path to the path
+	
+	* rcssserver3d/CMakeLists.txt: 
+	- do not install shell scripts and symbolic links on Windows
+
+2010-01-11  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* RELEASE: 
+	- added some notes about the name change and also the new script
+	  (rcsoccersim3d)
+	
+	* CMakeLists.txt: 
+	* rcssserver3d/main.cpp:
+	* rcssserver3d/CMakeLists.txt: 
+	- renamed simspark -> rcssserver3d. creating a simspark symbolic link for
+	  backward compatibility
+	
+	* rcssserver3d/rcsoccersim3d.in: 
+	- added rcsoccersim3d script to run both rcssserver3d (simspark) and 
+	  rcssmonitor3d, and terminate the simulator when the monitor stops
+
+2010-01-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/models/leftgoal.obj:
+	* data/models/rightgoal.obj:
+	- fixed net visualization in the new models
+
+2010-01-03  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/models/leftgoal.obj:
+	* data/models/rightgoal.obj:
+	* data/rsg/agent/nao/goal.rsg: 
+	- Fix visual goal object so that it'll follow server dimensions (GoalWidth,
+	  GoalHeight and GoalDepth)
+
+2009-12-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssmonitor3d/main.cpp: 
+	- changed the name printed on execution
+
+2009-12-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* data/rsg/agent/nao/nao.rsg: 
+	- added AgentSyncEffector
+	
+	* rcssmonitor3d/main.cpp:
+	- some cleanup 
+	- added a new option to specify the server address: --server
+
+2009-12-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* simspark/naosoccersim.rb: 
+	- added new field settings (field height/width, goal width/depth and penalty
+	  area width/length multiplied by 1.5
+
+2009-10-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* RELEASE: 
+	- write about changes sine 0.6.2, initial draft.
+
+2009-08-24  Marian Buchta  <marian.buchta@gmail.com>
+
+	* CMakeLists.txt:
+	- add search path when using 32bit SDL library in 64bit Windows
+
+2009-08-21  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake:
+	* cmake/FindDevIL.cmake:
+	* cmake/FindFreetype.cmake:
+	* cmake/FindODE.cmake:
+	* cmake/FindSpark.cmake:
+	- add search paths when using 32bit libraries in 64bit Windows
+
+2009-08-13  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* simspark/CMakeLists.txt: 
+	* rcssmonitor3d/CMakeLists.txt: 
+	* rcssagent3d/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	- removing duplicate include dirs
+	
+	* cmake/FindODE.cmake: 
+	- updated with spark FindODE.cmake module which adds proper compiler flags
+	  for possible ode usage
+	
+	* CMakeLists.txt: 
+	- add ode flags and include dir to compiler flags
+	- add common include directories to compiler flags
+
+2009-08-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/CMakeLists.txt: 
+	- incrementing soccer.so minor version
+	
+	* plugin/soccer/hmdp_effector/hmdp_c/base.c: 
+	* plugin/soccer/hmdp_effector/hmdpwrapper.cpp:
+	- compilation fix: add missing return command to some functions 
+	 
+	* windows/install_extra.nsi: 
+	* windows/uninstall_extra.nsi:
+	- extra install/uninstall commands for NSIS installer
+	 
+	* CMakeLists.txt: 
+	- use external files for extra NSIS install/uninstall commands
+
+2009-07-31  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/hmdp_effector/hmdp_c/sine_fixed.h: 
+	* plugin/soccer/hmdp_effector/hmdp_c/sine_fixed.c: 
+	* plugin/soccer/hmdp_effector/hmdp_c/hmdp_c.h: 
+	* plugin/soccer/hmdp_effector/hmdp_c/hmdp_c.c: 
+	* plugin/soccer/hmdp_effector/hmdp_c/compatible.h: 
+	* plugin/soccer/hmdp_effector/hmdp_c/base.h: 
+	* plugin/soccer/hmdp_effector/hmdp_c/base.c: 
+	* plugin/soccer/hmdp_effector/naospecific.h: 
+	* plugin/soccer/hmdp_effector/naospecific.cpp: 
+	* plugin/soccer/hmdp_effector/hmdpwrapper.cpp: 
+	* plugin/soccer/hmdp_effector/hmdpperceptor.h: 
+	* plugin/soccer/hmdp_effector/hmdpperceptor.cpp: 
+	* plugin/soccer/hmdp_effector/hmdpperceptor_c.cpp: 
+	* plugin/soccer/hmdp_effector/hmdpeffector.h: 
+	* plugin/soccer/hmdp_effector/hmdpeffector.cpp: 
+	* plugin/soccer/hmdp_effector/hmdpeffector_c.cpp: 
+	* plugin/soccer/hmdp_effector/hmdpaction.h: 
+	* plugin/soccer/CMakeLists.txt: 
+	* plugin/soccer/export.cpp: 
+	* data/rsg/agent/nao/nao.rsg: 
+	- added HMDP effector/perceptor. Thanks to N. Michael Mayer and Joschka.
+	- some code cleanup and formatting
+	- replacing the use of the obsolete function boost::make_shared()
+
+2009-07-30  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/CMakeLists.txt: 
+	* plugin/soccer/CMakeLists.txt: 
+	* plugin/soccermonitor/CMakeLists.txt:
+	- do not link plugins with spark libraries. prevents segfault for
+	  rcssmonitor3d on exit. 
+	
+	* simspark/naosoccersim.rb: 
+	- do not setup materials when internal monitor doesn't run
+	
+	* simspark/simspark.rb: 
+	- disable internal monitor by default
+
+2009-07-27  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	- create .cmd files for executables in Windows, and remove them on 
+	  uninstallation
+
+2009-07-26  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	- try to find and copy all thirdparty dlls in the binary package's bin/ 
+	  directory.
+	- set RCSSSERVER3D_DIR environment variable when using NSIS installer
+	- creating simspark.bat file in windows (by the installer)
+
+2009-07-24  Marian Buchta  <marian.buchta@gmail.com>
+
+	* cmake/FindBoost.cmake
+	* cmake/FindFreetype.cmake
+	- add missing macros (Windows needed)
+
+2009-06-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* NEWS: 
+	* RELEASE:
+	- prepared for 0.6.2 release
+	 
+	* simspark/main.cpp: 
+	- simspark.rb path should be given using "--script-path" option.
+	- add the new option to --help output
+
+2009-06-16  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * simspark/main.cpp
+  - simspark can take command line argument specifying the rb script to run
+  (Simon Raffeiner)
+  
+  * plugin/soccermonitor/soccerinput.cpp
+  * plugin/soccermonitor/soccerinput.h
+  * rcssmonitor3d/soccerbindings.rb
+  - new soccer input command to give kick-off to the team on the right (bound
+  to 'j') (Simon Raffeiner)
+  
+2009-06-15  Sander van Dijk  <sgvandijk@gmail.com>
+
+  * plugin/soccer/ballstateaspect/ballstateaspect.h
+  * plugin/soccer/ballstateaspect/ballstateaspect.cpp
+  * data/rsg/agent/nao/goal.rsg
+  - change goal and out-of-field checks to only accept when ball is
+  completely over the line
+  
+2009-04-30  Sander van Dijk  <sgvandijk@gmail.com>
+
+	* rcssmonitor3d/rcssmonitor3d.rb
+	- set camera parameters to those used in internal monitor
+	
+	* plugin/soccermonitor/soccerinputlogplayer.h
+	* plugin/soccermonitor/soccerinputlogplayer.cpp
+	* rcssmonitor3d/soccerbindings.rb
+	- add camera controls to external monitor
+
+2009-04-08  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/beameffector/beamaction.h (BeamAction): 
+	- fixed const function declaration
+	
+	* plugin/soccer/soccerbase/soccerbase.cpp (SoccerBase::MoveAgent): 
+	- removed useless statements
+	
+	* plugin/soccer/kickeffector/kickaction.h: 
+	* plugin/soccer/soccerruleaspect/soccerruleaspect.cpp:
+	- fixed variables order in ctor
+	 
+	* plugin/soccer/visionperceptor/visionperceptor.h: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.h:
+	- added missing return statement 
+
+2009-03-05  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* linux/rcssserver3d.desktop:
+	- updated the icon name
+	 
+	* data/logos/simspark.png:
+	* data/logos/simsparklogo.png:
+	* data/logos/simsparklogo2.png:
+	- added simspark logos created by Joschka, and a 48x48 version of
+	  simsparklogo.png which can be used as an icon
+
+2009-02-09  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* doc/users/user-manual.tex: 
+	* doc/users/simspark.tex: 
+	* doc/users/rcssmonitor3d.tex: 
+	* doc/users/introduction.tex: 
+	* doc/users/gettingstarted.tex: 
+	* doc/users/definitions.tex: 
+	* doc/users/CMakeLists.txt: 
+	* doc/TEXT_INSTEAD_OF_A_MANUAL.txt:
+	- monitorspark -> rcssmonitor3d
+	- Say effector message lenght limit is 20 characters now
+	- Updated some info about RestrictedVisionPerceptor
+
+2009-01-29  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* INSTALL: 
+	- added requirements
+	
+	* README: 
+	- updated with the recent changes
+
+2009-01-28  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* INSTALL: 
+	- added new installation instructions (cmake oriented)
+	
+	* data/rsg/agent/nao/nao.rsg: 
+	- disable VisionPerceptor
+	
+	* data/rsg/agent/nao/naoneckhead.rsg: 
+	* data/rsg/agent/nao/naoleg.rsg: 
+	* data/rsg/agent/nao/naoarm.rsg:
+	- enabled RestrictedVisionPerceptor and ObjectState nodes
+	- some whitespace fix 
+
+2009-01-24  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* CMakeLists.txt: 
+	* cmake_uninstall.cmake.in: 
+	- added 'make uninstall' support
+	
+	* doc/users/CMakeLists.txt: 
+	* cmake/UseLATEX.cmake: 
+	- do not build users-manual.pdf by default. can be built using 'make pdf'
+	- add an output to tell the user how it can build the manual
+
+2009-01-20  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* rcssmonitor3d/Makefile.am: 
+	- added rpath
+	
+	* rcssmonitor3d/rcssmonitor3d.rb: 
+	- changed monitorspark.rb to rcssmonitor3d.rb
+	
+	* rcssmonitor3d/main.cpp (MonitorSpark::InitApp): 
+	* simspark/main.cpp (SimSpark::InitApp): 
+	- adding rcss3d's installation directory to the list of resource locations.
+	
+	* windows/rcssserver3d_config.h: 
+	* configure.ac: 
+	- added new define: RCSS_BUNDLE_PATH to store rcss3d's data directory.
+
+2008-12-19  Hedayat Vatankhah  <hedayat@grad.com>
+
+	* plugin/soccer/kickeffector/kickeffector.cpp: 
+	* plugin/soccer/driveeffector/driveeffector.cpp: 
+	* plugin/soccer/catcheffector/catcheffector.cpp: 
+	* plugin/soccer/visionperceptor/visionperceptor.cpp: 
+	* plugin/soccer/sayeffector/sayeffector.cpp: 
+	* plugin/soccer/pantilteffector/pantilteffector.cpp: 
+	* plugin/soccer/restrictedvisionperceptor/restrictedvisionperceptor.cpp: 
+	* plugin/soccer/agentstateperceptor/agentstateperceptor.cpp: 
+	- replaced make_shared() with .lock() function call.(fixed compilation
+	error with recent boost versions.) 
