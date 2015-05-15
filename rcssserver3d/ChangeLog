@@ -1,3 +1,9 @@
+2015-05-15  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* CMakeLists.txt:
+	* NEWS:
+	- updated for version 0.6.9
+
 2015-05-11  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* RELEASE:
