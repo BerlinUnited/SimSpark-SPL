@@ -72,11 +72,8 @@ protected:
     /** the cached agent radius */
     float mAgentRadius;
 
-    /** random number generator for beam X and Y noise */
-    UniformRngPtr mXYRng;
-
-    /** random number generator for beam angle noise */
-    UniformRngPtr mThetaRng;
+    /** random number generator for noise */
+    UniformRngPtr mNoiseRng;
 
     /** amount of noise added to beam X and Y values */
     float mBeamNoiseXY;
