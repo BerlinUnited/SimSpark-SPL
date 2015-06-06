@@ -142,7 +142,8 @@
     ;
     ;Models obj
     ;
-    (def $UpperArmObj (join models/ $LeftOrRight upperarm.obj))
+    ;(def $UpperArmObj (join models/ $LeftOrRight upperarm .obj))
+    (def $UpperArmObj (join models/ $LeftOrRight upperarm $type .obj))
     (def $LowerArmObj (join models/ $LeftOrRight lowerarm.obj))
 
     ;
