@@ -187,7 +187,8 @@
     ;Models obj
     ;
     (def $ThighObj (join models/ $LeftOrRight thigh.obj))
-    (def $ShankObj (join models/ $LeftOrRight shank.obj))
+    ;(def $ShankObj (join models/ $LeftOrRight shank.obj))
+    (def $ShankObj (join models/ $LeftOrRight shank $type .obj))
     (def $FootObj (join models/ $LeftOrRight foot.obj))
 
     ;

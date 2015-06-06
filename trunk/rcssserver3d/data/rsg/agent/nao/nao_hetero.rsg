@@ -47,7 +47,8 @@
             (nd Transform
                 (setLocalRotation -90 0 180)
                 (nd StaticMesh
-                    (load 'models/naobody.obj')
+                    ;(load 'models/naobody.obj')
+                    (load (join models/naobody $type .obj))
                     (setScale $TorsoLength $TorsoLength $TorsoLength)
                 )
           )
