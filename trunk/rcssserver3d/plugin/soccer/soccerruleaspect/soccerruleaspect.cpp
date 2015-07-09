@@ -109,6 +109,11 @@ SoccerRuleAspect::AutomaticSimpleReferee(TPlayMode playMode)
     {
         ResetFoulCounter(TI_LEFT);
         ResetFoulCounter(TI_RIGHT);
+
+        if (mPenaltyShootout && mGameState->GetPlayMode() == PM_Goal_Left) {
+            // Cancel penalty shootout mode now that a goal has been scored
+            mPenaltyShootout = false;
+        }
     }
     else
     {
