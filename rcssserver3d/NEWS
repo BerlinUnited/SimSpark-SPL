@@ -1,3 +1,15 @@
+[0.6.10]
+This is the final release of rcssserver3d for RoboCup 2015, which brings a few
+bug fixes and enhancements for the competitions:
+   * Turning off penalty shootout mode as soon as a goal is scored by the left
+     team so that a later second goal won't be recorded if the goalie leaves
+     the penalty area after the goal was scored.
+   * Added models for visually differentiating between different robot body
+     types.  This changes some of the black coloring on the robot's body to be
+     a different type dependent neutral color.
+   * Fixed bug where the server may hang on certain systems if beam effector
+     noise (BeamNoiseXY and BeamNoiseAngle) are set to 0.
+
 [0.6.9]
 This release comes with a number of bug fixes and also adds some new features
 to enhance managing games and also to add more challenges to games, most notably
