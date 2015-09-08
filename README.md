@@ -30,3 +30,11 @@ Installation
   ```
 
   PPA: https://launchpad.net/~xu-informatik/+archive/simspark-spl
+  
+    If you have a newer Ubuntu version that is not yet supported by the PPA
+  Then after you added the PPA, change the first line in /etc/apt/sources.list.d/xu-informatik-simspark-spl-trusty.list
+  to: http://ppa.launchpad.net/xu-informatik/simspark-spl/ubuntu <Version> main
+  
+  Where <Version> refers to the adjective of your Ubuntu release.
+  
+  Then continue with the other two steps mentioned above.
