@@ -33,7 +33,7 @@ Installation
   
     If you have a newer Ubuntu version that is not yet supported by the PPA
   Then after you added the PPA, change the first line in /etc/apt/sources.list.d/xu-informatik-simspark-spl-trusty.list
-  to: http://ppa.launchpad.net/xu-informatik/simspark-spl/ubuntu <Version> main
+  to:  ```sh http://ppa.launchpad.net/xu-informatik/simspark-spl/ubuntu <Version> main```
   
   Where <Version> refers to the adjective of your Ubuntu release.
   
