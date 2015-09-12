@@ -103,6 +103,7 @@ if (WIN32)
 endif (WIN32)
  
 ########## add extra flags ########## 
+include(EnableCXX11)
 if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
@@ -112,14 +113,7 @@ include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
 link_directories(${Boost_LIBRARY_DIRS})
 
 if (UNIX)
-  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} "--std=gnu++11" CACHE
-        STRING "Common C++ compiler flags" FORCE)
-  set(CMAKE_C_FLAGS $ENV{CFLAGS} CACHE
-        STRING "Common C compiler flags" FORCE)
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual" CACHE
-        STRING "C++ compiler flags for Debug builds" FORCE)
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
-        STRING "C++ compiler flags for Release builds" FORCE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Woverloaded-virtual")
 endif (UNIX)
 
 set(BINDIR "bin" CACHE PATH "The directory to install binaries into.")
