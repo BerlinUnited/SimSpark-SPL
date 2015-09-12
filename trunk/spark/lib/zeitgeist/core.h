@@ -213,6 +213,9 @@ public:
         object */
     void Desctruct();
 
+    /** Resets the (strong) self pointer. */
+    void Remove();
+
     /** creates a context for this Core */
     boost::shared_ptr<CoreContext> CreateContext();
 

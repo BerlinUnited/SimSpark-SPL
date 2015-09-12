@@ -39,9 +39,9 @@ LogServer::~LogServer()
     delete rdbuf();
 }
 
-void LogServer::AddStream(std::ostream* stream, unsigned int mask)
+void LogServer::AddStream(std::ostream* stream, unsigned int mask, bool syncStream)
 {
-    GetStreamBuf().AddStream(stream, mask);
+    GetStreamBuf().AddStream(stream, mask, syncStream);
 }
 
 bool LogServer::RemoveStream(const std::ostream* stream)

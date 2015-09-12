@@ -28,6 +28,7 @@ using namespace boost;
 using namespace std;
 using namespace zeitgeist;
 
+
 FUNCTION(Leaf,setName)
 {
     string inName;
@@ -59,10 +60,20 @@ FUNCTION(Leaf,isLeaf)
     return obj->IsLeaf();
 }
 
+/* cant use function name '::unlink' because it is already used 
+in stdio.h, which is included in some files */
+FUNCTION(Leaf,unlinkLeaf)
+{
+    obj->Unlink();
+    return true;
+}
+
+
 void CLASS(Leaf)::DefineClass()
 {
     DEFINE_FUNCTION(getFullPath);
     DEFINE_FUNCTION(setName);
     DEFINE_FUNCTION(getName);
     DEFINE_FUNCTION(isLeaf);
+    DEFINE_FUNCTION(unlinkLeaf);
 }

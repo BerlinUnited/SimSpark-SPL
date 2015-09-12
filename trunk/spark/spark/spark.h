@@ -72,7 +72,11 @@ namespace spark
 class SPARK_API Spark
 {
 public:
-    Spark();
+    
+    /** Constructor*/
+    Spark(const std::string& relPathPrefix = std::string(""));
+
+    /** Destructor. */
     virtual ~Spark();
 
     /** inits the Spark lib, returns true on success, has to be called once
@@ -139,6 +143,8 @@ protected:
 #if HAVE_KEROSIN_KEROSIN_H
     boost::shared_ptr<kerosin::Kerosin> mKerosin;
 #endif
+
+    std::string mRelPathPrefix;
 };
 
 } // namespace kerosin

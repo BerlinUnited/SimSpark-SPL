@@ -28,6 +28,7 @@
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/monitorserver/monitorserver.h>
 #include <boost/thread/barrier.hpp>
+#include <boost/thread/mutex.hpp>
 
 namespace oxygen
 {
@@ -53,7 +54,8 @@ public:
                            // agents
             CE_ActAgent,   // collect (and possibly wait for) agent
                            // commands and carry them out
-            CE_EndCycle // the current cycle ended
+            CE_EndCycle, // the current cycle ended
+            CE_WaitCycle // the simulation does not advance for one cycle
         };
 
 public:
@@ -138,6 +140,12 @@ public:
     /** returns the current simulation cycle */
     int GetCycle();
 
+    /** returns true if simulation is in the run cycle after Init() and before Done() */
+    bool GetRunning();
+
+    /** returns true if the simulation is paused and in the run cycle after Init() and before Done() */
+    bool GetPaused();
+
     float GetSumDeltaTime() const { return mSumDeltaTime; }
 
     /** set the simulation run in multi-threads or in a signal thread */
@@ -150,17 +158,24 @@ public:
     /** set the maximum allowed steps per simulation cycle */
     void SetMaxStepsPerCycle(int max);
 
-protected:
-    virtual void OnLink();
+    /** sets or unsets the simulation cycle into/from idle mode */
+    void PauseCycle(bool state = true);
 
     /** increases the accumulated time since the last simulation step,
         but does not step the simulation
      */
     virtual void AdvanceTime(float deltaTime);
 
+protected:
+    virtual void OnLink();
+
+
     /** advances the simulation mSumDeltaTime seconds. If mSimStep is
         nonzero this is done in discrete steps */
     virtual void Step();
+
+    /** Wait for one step. Calculates time since last step or wait step but does not change state of the simulation. */
+    virtual void WaitStep();
 
 protected:
     /** dispatches a ControlEvent to the set of registered
@@ -195,7 +210,19 @@ protected:
     char** mArgV;
 
     /** if true, the simulaion will exit on next simulation step */
-    static bool mExit;
+    bool mExit;
+
+    /** if true, the simulaion will do nothing during simulation cycles until PauseCycle(false) has been called */
+    bool mCyclePaused;
+
+    /** if true, the simulaion will end the pause cycle and continue running at the end of the current cycle */
+    bool mContinueCycle;
+
+    /** true while being in the Run() method after Init() and before Done() */
+    bool mRunning;
+
+    /** list of all servers. Used to close all instances when a sigint is caught */
+    static std::vector<SimulationServer*> mServers;
 
     /** the current simulation time */
     float mSimTime;
@@ -215,6 +242,9 @@ protected:
 
     /** the current simulation cycle */
     int mCycle;
+
+    /** the amount of paused simulation cycles */
+    int mPausedCycle;
 
     /** a cached reference to the monitor server */
     CachedPath<MonitorServer> mMonitorServer;

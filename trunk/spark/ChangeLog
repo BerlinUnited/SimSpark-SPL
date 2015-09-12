@@ -10,6 +10,26 @@
 	* cmake/AdditionalSearchPaths.cmake: 
 	- fixed some problems in building Windows installer (with MinGW)
 
+2013-06-13  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* README:
+	* ChangeLog:
+	- added Patrick changes and documentation about the new parts
+
+2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
+
+	* carbon/:
+	* guiplugin/:
+	* guilayout/:
+	* data/guisetups/:
+	* plugin/inputsysqt/:
+	* plugin/openglsysqt/:
+	- fixed compilation issues under GNU/Linux+GCC.
+
+	* lib/salt/gmath.h:
+	- removed type specifier for std::isnan, since not all overloads are
+	  templates
+
 2013-06-12  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 
 	* NEWS: 
@@ -23,6 +43,105 @@
 	* plugin/sceneeffector/sceneeffector.cpp:
 	- added the ability to receive and apply scene parameters
 	 
+2012-06-23  Patrick Geib <Patrick.Geib@online.de>
+
+	* carbon/
+	- the Carbon library
+
+	* guiplugin/
+	- generic (not soccer related) plugins for the carbon gui
+
+	* guilayout/
+	- layout projects for the Gui
+
+	* data/guisetups/
+	- image resources for the carbon gui.
+
+	* plugin/inputsysqt/
+	- a new spark plugin which handles inputs to a spark simulation by
+	  converting from qt to spark defines.
+
+	* plugin/openglsysqt/
+	- empty placeholder openglsystem to be used in simspark when an external
+	  rendering by carbon is used.
+
+	* spark/spark.h:
+	* spark/spark.cpp:
+	- relative path prefix can now be given in constructor as optional
+	  parameter. Needed by carbon.
+
+	* spark.rb:
+	- the spark script now contains logging functions and other functions
+	  needed by the carbon gui
+
+	* plugin/odeimps/odecollider.cpp:
+	- fixed bug where body was deleted twice
+
+	* lib/zeitgeist/core.h:
+	* lib/zeitgeist/core.cpp:
+	- added function to reset the self pointer. Needed by carbon.
+
+	* lib/zeitgeist/leaf_c.cpp:
+	- added unlinkLeaf() function to ruby interface.
+
+	* lib/zeitgeist/logserver/logserverstreambuf.h:
+	* lib/zeitgeist/logserver/logserverstreambuf.cpp:
+	- replaced typedef TMaskStream with struct MaskStream. Now it not only
+	  contains the integer mask and stream pointer, but also a synchronization
+	  flag. If the flag is true, the stream will by sync()'ed every time the
+	  input stream flushes a message. This is needed for carbons message stream
+	  appenders, so it can receive the logservers messages immediately when the
+	  simulation thread sends them.
+
+	* lib/zeitgeist/logserver/logserver.h:
+	* lib/zeitgeist/logserver/logserver.cpp:
+	* lib/zeitgeist/logserver/logserver_c.cpp:
+	- streams can now be added with an optional synchronization flag.
+	- updated the script interface for AddStream too.
+
+	* lib/zeitgeist/scriptserver/scriptserver.cpp:
+	- ruby error messages are now sent to ->Error() instead of ->Debug().
+
+	* lib/oxygen/simulationserver/simulationserver.h:
+	* lib/oxygen/simulationserver/simulationserver.cpp:
+	- the Simulation can now be paused. There is a flag in the simulation
+	  server and a pause/unpause function. When a simulation is paused, the next
+	  simulation cycle will not call StartCycle, SenseAgent, ActAgent and
+	  EndCycle, but a new control event CE_WaitCycle.
+	  When a simulation is paused, the simulation time does not advance and
+	  agents are not notified about changed time. The wait cycle lasts as long
+	  as a normal simulation cycle. Calling pause(false) will resume the normal
+	  simulation cycle after the current wait cycle and agents are
+	  notified again.
+	  The pausing function is meant to pause and observe the state of the
+	  simulation using the carbon library and the gui. It was tested with
+	  several agent implementations and seemed to work perfectly.
+
+	* lib/oxygen/simulationserver/simcontrolnode.h:
+	- the new control event CE_WaitCycle calls a new interface function
+	  WaitCycle() in simcontrolnodes. This way control nodes can be notified
+	  about running and paused simulation steps. This is used by carbon.
+	  WaitCycle() and EndCycle() are used for SimControlNodes which act as
+	  interface between carbon and spark.
+
+	* lib/kerosin/inputsystem/inputsystem.h:
+	* lib/kerosin/inputsystem/inputsystem.cpp:
+	- AddInput() and GetInput() now use a  boost::shared_mutex to make the
+	  access thread safe. This is neccessary because there may be simulatneous
+	  access from different threads in a carbon simulation.
+
+	* lib/kerosin/renderserver/renderserver.cpp:
+	- added OpenGlError-code checking between rendering stages. Removed double
+	  picking-end-bracket glPopName() which caused picking to fail.
+
+	* lib/kerosin/renderserver/rendercontrol.cpp:
+	* lib/kerosin/renderserver/rendercontrol.h:
+	* lib/kerosin/renderserver/rendercontrol_c.cpp:
+	- RenderControlNodes can now be activated or deactivated. Carbon uses this
+	  feature to deactivate them in the spark simulation if the rendering is
+	  done in the gui thread or any other than the server thread.
+	- Added setActive() function to ruby interface.
+
 2012-05-23  Hedayat Vatankhah  <hedayat.fwd@gmail.com>
 	
 	* lib/kerosin/CMakeLists.txt: 

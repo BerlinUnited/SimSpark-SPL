@@ -60,7 +60,10 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = @top_srcdir@/lib \
                          @top_srcdir@/spark \
-                         @top_srcdir@/plugin
+                         @top_srcdir@/plugin \
+                         @top_srcdir@/carbon \
+                         @top_srcdir@/guiplugin \
+                         @top_srcdir@/guilayout
 FILE_PATTERNS          = *.h \
                          *.cpp
 RECURSIVE              = YES

@@ -41,6 +41,7 @@
 #include <deque>
 #include <zeitgeist/node.h>
 #include <kerosin/kerosin_defines.h>
+#include <boost/thread/shared_mutex.hpp>
 
 namespace kerosin
 {
@@ -90,6 +91,8 @@ protected:
 
 private:
     std::deque<Input>  mInputQueue;
+
+    boost::shared_mutex mMutex;
 };
 
 DECLARE_ABSTRACTCLASS(InputSystem);
