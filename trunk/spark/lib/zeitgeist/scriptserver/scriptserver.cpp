@@ -614,6 +614,25 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
 
     ERunScriptErrorType result = eNotFound;
 
+    // Trying directory given in mRelPathPrefix
+    if (!mRelPathPrefix.empty())
+    {
+        result = RunInitScriptInternal(mRelPathPrefix, fileName, validDotDir, dotDir);
+        if (result == eOK)
+        {
+            GetLog()->Debug() << "(ScriptServer) : Ran init script '"
+                              << mRelPathPrefix << salt::RFile::Sep() << fileName << "'\n";
+            return true;
+        }
+        else if (result == eError)
+        {
+            GetLog()->Error() << "(ScriptServer) ERROR: Found error in init script '"
+                              << mRelPathPrefix << salt::RFile::Sep() << fileName << "'\n";
+            return false;
+        }
+    }
+
+
     if (validDotDir)
     {
         // Trying dot-dir in home directory
