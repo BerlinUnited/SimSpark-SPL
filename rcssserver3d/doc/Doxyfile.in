@@ -58,7 +58,9 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = @top_srcdir@/plugin
+INPUT                  = @top_srcdir@/plugin \
+                         @top_srcdir@/guiplugin \
+                         @top_srcdir@/sparkgui
 FILE_PATTERNS          = *.h \
                          *.cpp
 RECURSIVE              = YES
