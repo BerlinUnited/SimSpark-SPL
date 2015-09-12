@@ -96,7 +96,7 @@ boost::shared_ptr<Core> Object::GetCore() const
           if (leaf != 0)
               {
                   std::cout << "for '" << leaf->GetName()
-                            << std::cout << "' installed at '"
+                            << "' installed at '"
                             << leaf->GetFullPath()
                             << "'";
               }
