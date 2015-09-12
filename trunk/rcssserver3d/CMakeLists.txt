@@ -42,16 +42,17 @@ endif(NOT CMAKE_BUILD_TYPE)
 add_definitions(-DHAVE_CONFIG_H ${ODE_CFLAGS})
 include_directories(${CMAKE_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${ODE_INCLUDE_DIR}
   ${SPARK_INCLUDE_DIR} ${SALT_INCLUDE_DIR} ${ZEITGEIST_INCLUDE_DIR}
-  ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR} ${CARBON_INCLUDE_DIR})
+  ${OXYGEN_INCLUDE_DIR} ${KEROSIN_INCLUDE_DIR})
+
+if (CARBON_FOUND)
+  include(EnableCXX11)
+  include_directories(${CARBON_INCLUDE_DIR})
+endif (CARBON_FOUND)
+
 link_directories(${Boost_LIBRARY_DIRS})
 
 if (UNIX)
-  set(CMAKE_CXX_FLAGS $ENV{CXXFLAGS} "-std=gnu++11" CACHE
-        STRING "Common C++ compiler flags" FORCE)
-  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -W -Wall -Woverloaded-virtual" CACHE
-        STRING "C++ compiler flags for Debug builds" FORCE)
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG" CACHE
-        STRING "C++ compiler flags for Release builds" FORCE)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Woverloaded-virtual")
 endif (UNIX)
 
 if(WIN32)
