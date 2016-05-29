@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.6.10")
+set(PACKAGE_VERSION "0.6.11")
+
+option(RVDRAW "Enable roboviz drawings" OFF)
+if (RVDRAW)
+  add_definitions(-DRVDRAW)
+endif (RVDRAW)
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 
@@ -26,7 +31,7 @@ include(AdditionalSearchPaths)
 
 find_package(Spark REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(Boost REQUIRED system)
+find_package(Boost REQUIRED system regex)
 find_package(SDL REQUIRED)
 find_package(DevIL REQUIRED)
 find_package(ODE REQUIRED)

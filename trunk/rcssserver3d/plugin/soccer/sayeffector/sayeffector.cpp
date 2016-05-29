@@ -25,6 +25,7 @@
 #include <agentstate/agentstate.h>
 #include <soccerbase/soccerbase.h>
 #include <soccerruleaspect/soccerruleaspect.h>
+#include <boost/regex.hpp>
 
 using namespace boost;
 using namespace oxygen;
@@ -76,12 +77,24 @@ SayEffector::Realize(boost::shared_ptr<ActionObject> action)
     sayAction->GetMessage(mMessage);
     ifText=true;
 
-    // If " ", "(" or ")" are in mMessage, return false
-    if (mMessage.find_first_of("() ") != std::string::npos)
+    // If characters outside allowed value range or " ", "(" or ")" are in mMessage, return false
+    boost::regex allowedCharacterRange("[\x20-\x7E]*");
+    if (!boost::regex_match(mMessage, allowedCharacterRange)
+        || mMessage.find_first_of("() ") != std::string::npos)
     {
-        GetLog()->Debug()
+        std::string teamName = mAgentState->GetTeamIndex() == TI_RIGHT ? "Right" : "Left";
+
+        // get the GameStateAspect
+        boost::shared_ptr<GameStateAspect> mGameState = dynamic_pointer_cast<GameStateAspect>
+            (SoccerBase::GetControlAspect(*this, "GameStateAspect"));
+        if (mGameState.get() != 0)
+        {
+            teamName = mGameState->GetTeamName(mAgentState->GetTeamIndex());
+        }
+        GetLog()->Error()
             << "(SayEffector) found illegal character. Ignoring message ["
-            << mMessage << "]\n";
+            << mMessage << "] from " << teamName << " " 
+            << mAgentState->GetUniformNumber() << "\n";
 
         ifText=false;
 

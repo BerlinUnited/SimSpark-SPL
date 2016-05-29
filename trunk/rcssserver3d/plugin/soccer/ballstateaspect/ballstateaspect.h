@@ -47,6 +47,11 @@ public:
     */
     virtual void Update(float deltaTime);
 
+    /** returns list of agents colliding with the ball 
+     */
+    bool GetCollidingAgents
+    (std::list<boost::shared_ptr<oxygen::AgentAspect> >& agents);
+
     /** returns the last agent that collided with the ball and the
         time when this happened*/
     bool GetLastCollidingAgent
@@ -88,10 +93,8 @@ protected:
     /** reset the reference to the ball and field recorder */
     virtual void OnUnlink();
 
-    /** updates the reference to the last agent that collided with the
-        ball
-    */
-    void UpdateLastCollidingAgent();
+    /** updates the references to agents colliding with the ball */
+    void UpdateCollidingAgents();
 
     /** checks if the ball is on the playing field an updates the
         mBallOnField flag
@@ -119,6 +122,9 @@ protected:
 
     /** reference to the right goal recorder */
     boost::shared_ptr<oxygen::RecorderHandler> mRightGoalRecorder;
+
+    /** list of references to agents currently colliding with the ball */
+    std::list<boost::shared_ptr<oxygen::AgentAspect> > mCollidingAgents;
 
     /** holds a reference to the last agent that collided with the
         ball */

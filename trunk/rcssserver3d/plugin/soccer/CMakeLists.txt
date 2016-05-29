@@ -51,6 +51,11 @@ set(soccer_LIB_HDRS
    rcs3dmonitor/rcs3dmonitor.h
 )
 
+if (RVDRAW)
+  list(APPEND soccer_LIB_HDRS rvdraw/rvdraw.h)
+endif (RVDRAW)
+
+
 set(soccer_LIB_SRCS
    export.cpp
    agentstate/agentstate.cpp
@@ -130,6 +135,11 @@ set(soccer_LIB_SRCS
    rcs3dmonitor/rcs3dmonitor.cpp
    rcs3dmonitor/rcs3dmonitor_c.cpp
 )
+
+if (RVDRAW)
+  list(APPEND soccer_LIB_SRCS rvdraw/rvdraw.cpp)
+endif (RVDRAW)
+
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}
   ${IL_INCLUDE_DIR})

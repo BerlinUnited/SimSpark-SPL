@@ -47,6 +47,7 @@ addSoccerVar('PenaltyLength',1.8)
 addSoccerVar('PenaltyWidth',3.9)
 addSoccerVar('FreeKickDistance', 2.0)
 addSoccerVar('FreeKickMoveDist', 2.2)
+addSoccerVar('KickRepelDist', 0.5)
 addSoccerVar('GoalKickDist', 1.0)
 addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
@@ -58,6 +59,15 @@ addSoccerVar('PenaltyShootout', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', false)
+
+# keepaway settings
+addSoccerVar('Keepaway', false)
+addSoccerVar('KeepawayCenterX', 0.0)
+addSoccerVar('KeepawayCenterY', 0.0)
+addSoccerVar('KeepawayLength', 20.0)
+addSoccerVar('KeepawayWidth', 20.0)
+addSoccerVar('KeepawayLengthReductionRate', 4.0)
+addSoccerVar('KeepawayWidthReductionRate', 4.0)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
@@ -79,10 +89,16 @@ addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
 
 # charging foul parameters
-addSoccerVar('UseCharging', false)
-addSoccerVar('ChargingMinSpeed', 0.2)
-addSoccerVar('ChargingMinBallDist', 0.2)
-addSoccerVar('IllegalInterceptMinAngle', 70)
+addSoccerVar('UseCharging', true)
+addSoccerVar('ChargingMinSpeed', 0.4)
+addSoccerVar('ChargingMinBallSpeedAngle', 30)
+addSoccerVar('ChargingMinDeltaDist', 0.05)
+addSoccerVar('ChargingMinDeltaAng', 15)
+addSoccerVar('ChargingImmunityTime', 1)
+addSoccerVar('ChargingCollisionMinTime', 0.2)
+addSoccerVar('ChargingMaxBallRulesDist', 1)
+addSoccerVar('ChargingMinCollBallDist', 0.1)
+addSoccerVar('ChargingMinCollisionSpeed', 0.2)
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       
@@ -93,6 +109,8 @@ addSoccerVar('MaxPlayersInsideOwnArea',3)
 addSoccerVar('MinOppDistance',0.8)       
 addSoccerVar('Min2PlDistance',0.4)       
 addSoccerVar('Min3PlDistance',1.0)  
+
+addSoccerVar('FoulHoldTime', 0.5)
 
 # 2014 server changes     
 addSoccerVar('ReportScore', true)

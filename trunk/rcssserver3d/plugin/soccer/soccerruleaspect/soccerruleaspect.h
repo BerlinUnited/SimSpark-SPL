@@ -29,6 +29,10 @@
 
 class AgentState;
 
+#ifdef RVDRAW
+class RVSender;
+#endif // RVDRAW
+
 namespace salt
 {
     class AABB2;
@@ -54,7 +58,8 @@ public:
         FT_IllegalAttack,
         FT_Incapable,
         FT_KickOff,
-        FT_Charging
+        FT_Charging,
+        FT_None
     };
 
     struct Foul
@@ -117,6 +122,10 @@ public:
     */
     void ProcessAgentState(salt::Vector3f pos, int unum, TTeamIndex idx);
 
+    /** Resets time since last ball touch for agents currently colliding with ball
+    */
+    void UpdateTimesSinceLastBallTouch();
+
     /** Reset the foul time counter for all players and also other counters
     */
     void ResetFoulCounter(TTeamIndex idx);
@@ -129,6 +138,16 @@ public:
     */
     void AnalyseFouls(TTeamIndex idx);
 
+#ifdef RVDRAW
+    /** Draws players' velocities with colors for debugging charging fouls
+     */
+    void DrawVelocities(TTeamIndex idx);
+#endif // RVDRAW
+
+    /** Checks if there are any charging fouls
+     */
+    void AnalyseChargingFouls();
+
     /** Check whether too many agents are touching
      */
     void AnalyseTouchGroups(TTeamIndex idx);
@@ -139,7 +158,7 @@ public:
 
     /** Automatic Referee that clears players that violate the rules
     */
-    void AutomaticSimpleReferee(TPlayMode playMode);
+    void AutomaticSimpleReferee();
 
     /** broadcast a said message to all players
         \param message said message-
@@ -209,7 +228,7 @@ protected:
     void UpdateKickIn(TTeamIndex ti = TI_NONE);
 
     /** updates the RuleAspect during FreeKick mode */
-    void UpdateFreeKick(TTeamIndex ti = TI_NONE);
+    void UpdateFreeKick(TTeamIndex ti = TI_NONE, bool indirect = true);
 
     /** updates the RuleAspect during Goal Kick mode */
     void UpdateGoalKick(TTeamIndex ti = TI_NONE);
@@ -244,8 +263,16 @@ protected:
     /** checks if the assistant referee should raise the flag for offside */
     bool CheckOffside();
 
-    /** checks if kickoff taker has kicked the ball again before other players */
-    bool CheckKickOffTakerFoul();
+    /** Resets values for if we should be checking for kick taker fouls */
+    void ResetKickChecks();
+
+    /** Sets values for when a kick is taken */
+    void SetKickTakenValues(TTime time,  
+                            boost::shared_ptr<oxygen::AgentAspect> agent, 
+                            bool indirect);
+
+    /** checks if kick taker has kicked the ball again before other players */
+    bool CheckFreeKickTakerFoul();
 
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
@@ -284,21 +311,70 @@ protected:
      */
     void ClearPlayersBeforeKickOff(TTeamIndex idx);
 
+    /** Move all the players from a team which are within radius of pos to 
+        be a distance radius from pos.
+        \param pos the center of the area to be checked
+        \param radius the radius of the area to be checked
+        \param idx the team which should be checked.
+
+        If idx is TI_NONE, nothing will happen.
+    */
+    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx);
+
+    /**
+     * Moves players taking a kick slightly away from the ball when it is placed
+     * in case the player would be right on top of the ball
+     */
+    void RepelPlayersForKick(TTeamIndex idx);
+
     /**
      * swaps the side of the teams
      */
     void SwapTeamSides();
 
     /**
-     * Punish agent's foul committed during kickoff
+     * Awards the given team a goal kick
      */
-    void PunishKickOffFoul(boost::shared_ptr<oxygen::AgentAspect> agent);
+    void AwardGoalKick(TTeamIndex idx);
 
-    /** returns true if last kick was happenned in kick off */
-    bool WasLastKickFromKickOff(
+    /**
+     * Awards the given team a corner kick
+     */
+    void AwardCornerKick(TTeamIndex idx);
+
+    /**
+     * Awards the given team a kick in
+     */
+    void AwardKickIn(TTeamIndex idx);
+
+    /**
+     * Awards the given team a free kick
+     */
+    void AwardFreeKick(TTeamIndex idx, bool indirect);
+
+    /**
+     * Punish agent for scoring on an indirect kick
+     */
+    void PunishIndirectKickGoal(boost::shared_ptr<oxygen::AgentAspect> agent,
+                                TTeamIndex scoredOnTeamIdx);
+
+    /**
+     * Punish agent's foul (double touch) committed during a kick 
+     */
+    void PunishFreeKickFoul(boost::shared_ptr<oxygen::AgentAspect> agent);
+
+    /** returns true if last kick was from free kick */
+    bool WasLastKickFromFreeKick(
         boost::shared_ptr<oxygen::AgentAspect> &lastKicker);
 
+    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos);
+
+    /** if a player has committed a foul that should be enforced */
+    bool HaveEnforceableFoul(int unum, TTeamIndex ti);
+
 protected:
+    static const int AVERAGE_VELOCITY_MEASUREMENTS = 5;
+
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::RigidBody> mBallBody;
 
@@ -310,6 +386,8 @@ protected:
 
     /** the radius of the Ball */
     float mBallRadius;
+    /** the radius of an agent */
+    float mAgentRadius;
 
     /** the length of the pause after a goal */
     float mGoalPauseTime;
@@ -327,6 +405,10 @@ protected:
     float mFieldWidth;
     /** the goal width (in meters) */
     float mGoalWidth;
+    /** the penalty width (in meters) */
+    float mPenaltyWidth;
+    /** the penalty length (in meters) */
+    float mPenaltyLength;
     /** the goal height (in meters) */
     float mGoalHeight;
     /** the absolute x coordinate of the goal which ball should pass (in meters) */
@@ -340,6 +422,12 @@ protected:
     /** the (least) distance opponents will be moved away if they are to close
         during a free kick, kick in and situations like that. */
     float mFreeKickMoveDist;
+    /** if players should be repeled from a ball being placed for a kick. */
+    bool mRepelPlayersForKick;
+    /** the distance players taking a kick should be moved away from the ball 
+        when it is placed for the kick so that players don't accidentally run 
+        into the ball. */
+    float mKickRepelDist;
     /** the distance from the back line the ball should be placed at for a goal kick */
     float mGoalKickDist;
 
@@ -356,6 +444,11 @@ protected:
     /** the time origin from which mWaitBeforeKickOff is calculated */
     float mAutoKickOffTimeOrigin;
 
+    /** say message size max limit */
+    int mSayMsgSize;
+    /** max distance that player can hear a message */
+    float mAudioCutDist;
+
     //FCP 2010 - New Parameters (added by FCPortugal for Singapure 2010)
     /** max time player may be sitted or laying down before being repositioned */
     int mNotStandingMaxTime;
@@ -365,12 +458,12 @@ protected:
     int mGoalieNotStandingMaxTime;
     /** max time goalie (player number 1) may be on the ground before being repositioned */
     int mGoalieGroundMaxTime;
+    /** min dist for closest Opponent to ball in order to use repositions for the second and third player*/
+    float mMinOppDistance;
     /** min dist for second closest of team before being repositioned */
     float mMin2PlDistance;
     /** min dist for third closest of team before being repositioned */
     float mMin3PlDistance;
-    /** min dist for closest Opponent to ball in order to use repositions for the second and third player*/
-    float mMinOppDistance;
     /** maximum number of players of the defending team that may be inside own penalty area */
     int mMaxPlayersInsideOwnArea;
     /** maximum number of players that may be in a single touch group */
@@ -378,7 +471,7 @@ protected:
     /** maximum time allowed for a player to commit a positional foul before being repositioned */
     int mMaxFoulTime;
 
-    /* Useful arrays for dealing with agent state an fouls */
+    /* Useful arrays for dealing with agent state and fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
     int playerGround[12][3];  		//Time Players are on the ground
     int playerNotStanding[12][3];  	//Time Players are not standing (head up for more than 0.5s)
@@ -394,6 +487,8 @@ protected:
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
     int closestPlayer[3]; 		//Closest Player from each team
     float closestPlayerDist[3]; 	//Closest Player distance to ball from each team
+    salt::Vector3f playerVelocities[12][3][AVERAGE_VELOCITY_MEASUREMENTS];  // Player velocities over last AVERAGE_VELOCITY_MEASUREMENTS cycles 
+
     /* FCP 2010 - New Parameters */
 
     // areas where opponents are not allowed in certain play modes
@@ -405,11 +500,6 @@ protected:
     salt::AABB2 mRightPenaltyArea;
     /** bounding box for the left penalty area */
     salt::AABB2 mLeftPenaltyArea;
-
-    /** say message size max limit */
-    int mSayMsgSize;
-    /** max distance that player can hear a message */
-    float mAudioCutDist;
 
     /** list of players that are in offside position */
     std::vector<int> mInOffsideLeftPlayers;
@@ -430,31 +520,83 @@ protected:
 
     /** use charging law */
     bool mUseCharging;
-
     /** minimum player speed to apply charging rules */
     float mChargingMinSpeed;
-    /** minimum player distance to ball to apply charging rules */
-    float mChargingMinBallDist;
-    /** maximum angle between move direction and opponent to apply
-     * charging rules */
-    float mChargingMaxOppSpeedAngle;
-    /** minimum angle between move directions to apply illegal
-     * intercept part of charging rules */
-    float mChargingIllInterceptMinMutualSpeedAngel;
+    /**Minimum angle between move direction and ball to apply
+     * charging rules*/
+    float mChargingMinBallSpeedAngle;
+    /**Minimum difference between agents distance to ball
+     */
+    float mChargingMinDeltaDist;
+    /**Minimum difference between angles between move direction and opponent
+     */
+    float mChargingMinDeltaAng;
+    /**Immunity time after touching the ball.
+     */
+    int mChargingImmunityTime;
+    /**Time since last ball touch
+     */
+    int playerTimeSinceLastBallTouch[12][3];
+    /**Interval time between charging checks.
+	 */
+    float mChargingCollisionMinTime;
+    /**Time since last checked if commited charging foul.
+	 */
+    int playerChargingTime[12][3];
+    /**Time since player was moved
+     */
+    int playerTimeSinceLastWasMoved[12][3];
+    /**Maximum distance to ball for charging rules regarding the relative
+     * position of the ball to be used
+     */
+    float mChargingMaxBallRulesDist;
+    /**Minimum distance from collision point to ball for a charging foul to
+     * be called
+     */
+    float mChargingMinCollBallDist;
+    /** minimum collision speed threshold*/
+    float mMinCollisionSpeed;
 
-    /** the time of the kick in the last kick off mode */
-    TTime mLastKickOffKickTime;
+    /** Time in seconds agent is held in air after committing a  foul */
+    float mFoulHoldTime;
+    
+    /** the time of the kick during the last kick mode */
+    TTime mLastFreeKickKickTime;
+    /** the player which kicked during the last kick mode */
+    boost::shared_ptr<oxygen::AgentAspect> mLastFreeKickTaker;
+    /** if kick taker should be checked for single kick rule */
+    bool mCheckFreeKickKickerFoul;
     /** the player which kicked in the last kick off mode */
     boost::shared_ptr<oxygen::AgentAspect> mLastKickOffTaker;
-    /** if kickoff taker should be checked for single kick rule */
-    bool mCheckKickOffKickerFoul;
     /** if kickoff taking team has met requirements/rules to score */
     bool mAllowKickOffTeamToScore;
+    /** if an indirect kick has been taken and no one but the kicker 
+     * has touched the ball */
+    bool mIndirectKick;
     /** if in penalty shootout mode */
     bool mPenaltyShootout;
 
     /** complete foul history */
     std::vector<Foul> mFouls;
+
+    /** if in keepaway mode */
+    bool mKeepaway;
+    /** center X value of keepaway box */
+    float mKeepawayCenterX;
+    /** center Y value of keepaway box */
+    float mKeepawayCenterY;
+    /** length of keepaway box */
+    float mKeepawayLength;
+    /** width of keepaway box */
+    float mKeepawayWidth;
+    /** reduction rate of length of keepaway box per minute */
+    float mKeepawayLengthReductionRate;
+    /** reduction rate of width of keepaway box per minute */
+    float mKeepawayWidthReductionRate;
+
+#ifdef RVDRAW
+    boost::shared_ptr<RVSender> mRVSender;
+#endif // RVDRAW
 };
 
 DECLARE_CLASS(SoccerRuleAspect);

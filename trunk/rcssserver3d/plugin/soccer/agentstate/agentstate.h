@@ -122,6 +122,9 @@ public:
     /** Set the current touch group */
     void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
 
+    /** Point at which collision with another agent occurred */
+    salt::Vector3f mCollisionPos;
+
 protected:
     /** team index */
     TTeamIndex mTeamIndex;

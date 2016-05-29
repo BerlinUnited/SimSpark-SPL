@@ -49,6 +49,13 @@ BallStateAspect::~BallStateAspect()
 {
 }
 
+
+bool BallStateAspect::GetCollidingAgents(list<boost::shared_ptr<AgentAspect> >& agents)
+{
+    agents = mCollidingAgents;
+    return agents.size() > 0;
+}
+
 bool BallStateAspect::GetLastCollidingAgent(boost::shared_ptr<AgentAspect>& agent,
                                             TTime& time)
 {
@@ -67,10 +74,11 @@ bool BallStateAspect::GetLastKickingAgent(boost::shared_ptr<AgentAspect>& agent,
     return (agent.get() != 0);
 }
 
-void BallStateAspect::UpdateLastCollidingAgent()
+void BallStateAspect::UpdateCollidingAgents()
 {
     mCollidingWithLeftTeamAgent = false;
     mCollidingWithRightTeamAgent = false;
+    mCollidingAgents = list<boost::shared_ptr<AgentAspect> >();
 
     // get a list of agents that collided with the ball since the last
     // update of the recorder and remember the first returned node as
@@ -96,6 +104,7 @@ void BallStateAspect::UpdateLastCollidingAgent()
                             " get AgentState from an AgentAspect\n";
                     }
                 else {
+                    mCollidingAgents.push_back(agent);
                     TTeamIndex team = agentState->GetTeamIndex(); 
                     if (team == TI_LEFT) {
                         mCollidingWithLeftTeamAgent = true;
@@ -184,7 +193,7 @@ void BallStateAspect::Update(float deltaTime)
             return;
         }
 
-    UpdateLastCollidingAgent();
+    UpdateCollidingAgents();
     UpdateBallOnField();
     UpdateLastValidBallPos();
     UpdateGoalState();
