@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.6.11")
+set(PACKAGE_VERSION "0.7.0")
 
 option(RVDRAW "Enable roboviz drawings" OFF)
 if (RVDRAW)
