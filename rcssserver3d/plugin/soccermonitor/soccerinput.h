@@ -64,8 +64,10 @@ public:
             //JAN
             CmdLeft      = CmdZero + 1,
             CmdRight   = CmdLeft + 1,
+            CmdDirectLeft      = CmdRight + 1,
+            CmdDirectRight   = CmdDirectLeft + 1,
             
-            CmdPlayerSelectMode = CmdRight + 1,
+            CmdPlayerSelectMode = CmdDirectRight + 1,
             CmdSelectNextAgent = CmdPlayerSelectMode + 1,
             CmdResetSelection = CmdSelectNextAgent + 1,
             CmdKillSelection = CmdResetSelection + 1,

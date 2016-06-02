@@ -33,6 +33,7 @@ RenderControl::RenderControl()
     : SimControlNode()
 {
     mFramesRendered = 0;
+    mActive = true;
 }
 
 RenderControl::~RenderControl()
@@ -78,6 +79,7 @@ RenderControl::RenderCustom()
 void RenderControl::EndCycle()
 {
     if (
+        (!IsActive()) ||
         (mOpenGLServer.expired()) ||
         (mRenderServer.expired())
         )
@@ -100,4 +102,19 @@ int
 RenderControl::GetFramesRendered() const
 {
     return mFramesRendered;
+}
+
+void 
+RenderControl::SetActive(bool active)
+{
+    mActive = active;
+
+    GetLog()->Debug() 
+        << "(RenderControl) Render control node " << (active ? "activated" : "deactivated") << "\n";
+}
+
+bool 
+RenderControl::IsActive() const
+{
+    return mActive;
 }

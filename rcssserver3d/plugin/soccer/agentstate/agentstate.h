@@ -132,6 +132,9 @@ public:
 
     TTime getWhenPenalized() const {return whenPenalized;}
 
+    /** Point at which collision with another agent occurred */
+    salt::Vector3f mCollisionPos;
+
 protected:
     /** team index */
     TTeamIndex mTeamIndex;
