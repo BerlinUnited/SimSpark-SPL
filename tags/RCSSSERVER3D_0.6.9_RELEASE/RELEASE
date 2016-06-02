@@ -1,0 +1,46 @@
+RELEASE News of rcssserver3d-0.6.9
+
+This release comes with a number of bug fixes and also adds some new features
+to enhance managing games and also to add more challenges to games, most notably
+adding noise to the beam effector. The changes are:
+
+* Rule Changes:
+  - Added new rule requiring that the ball must either touch an opponent, or
+    touch a teammate outside the center circle, before a team taking a
+    kickoff can score.
+  - Penalty shootout kickoffs are direct now.
+
+* New Features:
+  - Added noise to the beam effector with the amount of noise added controlled
+    by the 'BeamNoiseXY' (in meters) and 'BeamNoiseAngle' (in degrees)
+    values in naosoccersim.rb.  Noise is added to beam X and Y values from
+    a uniform distribution within the range [-BeamNoiseXY, BeamNoiseXY]
+    and to beam angle values from a uniform distribution within the range
+    [-BeamNoiseAngle, BeamNoiseAngle].
+  - Added new training command parser commands for setting the game time and
+    score.  They are the following commands:
+        (time <time>)
+        (score (left <score>) (right <score>))
+  - Added penalty shootout mode where a goal is awarded to the left team
+    (penalty kicker) if the right team's player (penalty goalie) leaves the
+    penalty area.
+
+* Bug fixes:
+  - Fixing a bug with free kicks where as soon as the ball was touched,
+    and the playmode transitioned from freekick to play on, the ball was
+    still moved back to the location of the freekick preventing the ball from
+    being directly kicked out of a free kick. Also ensuring that the ball
+    position for free kicks is updated correctly as this wasn't happening
+    right after the ball was placed back at the center of the field after
+    a goal was scored.
+  - Fixing a bug where a player would be incorrectly called for double
+    touching the ball on a kickoff if the player first kicked the ball
+    directly in the opponent's goal from a kickoff, resulting in no goal
+    being awarded a nd the opposing team being given a kickoff, and then is
+    the next player to touch the ball in the PlayOn playmode after a dropball
+    when the opponent doesn't take their kickoff.
+  - Fixing a bug where rules such as too many players in their own penalty
+    area was not being enforced.
+
+You can get the package on the Simspark page on SourceForge at
+http://sourceforge.net/projects/simspark/

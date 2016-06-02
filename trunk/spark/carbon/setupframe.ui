@@ -1,0 +1,2733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SetupFrame</class>
+ <widget class="AttachableFrame" name="SetupFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>261</width>
+    <height>653</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="setupLayout">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="whatsThis">
+      <string>test</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <property name="spacing">
+       <number>4</number>
+      </property>
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
+      <property name="bottomMargin">
+       <number>2</number>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>4</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="setupToolButtonWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="setupToolButtonLayout">
+             <item>
+              <layout class="QHBoxLayout" name="setupToolControlButtonLayout">
+               <property name="spacing">
+                <number>2</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QToolButton" name="setupToolAddButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>23</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Add new Simulation Setup</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/add</normaloff>:/add</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="setupToolRemoveButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>23</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Remove current Simulation Setup</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/subtract</normaloff>:/subtract</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="setupToolRenameButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>23</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Rename current Simulation Setup and set its target file</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/font</normaloff>:/font</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="setupToolSaveButton">
+                 <property name="toolTip">
+                  <string>Save current Simulation Setup</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/save</normaloff>:/save</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="setupToolControlButtonLayout2">
+               <property name="spacing">
+                <number>2</number>
+               </property>
+               <item>
+                <widget class="QToolButton" name="setupToolInitButton">
+                 <property name="toolTip">
+                  <string>Initialize this Simulation Setup</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/accept</normaloff>:/accept</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="setupToolStartButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>23</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Start simulation with this Simulation Setup</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/play</normaloff>:/play</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="setupToolStopButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>23</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Stop current Simulation</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="imageresources.qrc">
+                   <normaloff>:/pause</normaloff>:/pause</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="setupToolSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>45</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="setupComboBox">
+            <property name="toolTip">
+             <string>Available Simulations</string>
+            </property>
+            <property name="editable">
+             <bool>false</bool>
+            </property>
+            <property name="insertPolicy">
+             <enum>QComboBox::NoInsert</enum>
+            </property>
+            <item>
+             <property name="text">
+              <string notr="true">NaoSoccer</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string notr="true">SimSpark</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="setupReloadButton">
+            <property name="minimumSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Reload Setups</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="imageresources.qrc">
+              <normaloff>:/arrow_refresh</normaloff>:/arrow_refresh</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="setupLoadButton">
+            <property name="toolTip">
+             <string>Load additional setup from file</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="imageresources.qrc">
+              <normaloff>:/folder</normaloff>:/folder</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="pluginPage">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="pluginPageHeaderLayout">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
+         <property name="rightMargin">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="pluginPageLabel">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Gui Plugins</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="pluginPageSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="pluginPageLabel2">
+           <property name="font">
+            <font>
+             <pointsize>7</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>(Page 1/2)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="pluginPageLeftButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::LeftArrow</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="pluginPageRightButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::RightArrow</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QSplitter" name="pluginPageSplitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="childrenCollapsible">
+          <bool>true</bool>
+         </property>
+         <widget class="QFrame" name="pluginFrame">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QWidget" name="pluginLayout" native="true">
+             <layout class="QVBoxLayout" name="verticalLayout_11">
+              <property name="margin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="loadPluginsWidget" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>3</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="loadPluginsLabelLayout">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="loadPluginsLabel">
+                     <property name="text">
+                      <string>Plugins to Load:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="loadPluginsLabelSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="loadPluginsReloadAllCheckBox">
+                     <property name="toolTip">
+                      <string>All plugins that are not deleted will be reloaded</string>
+                     </property>
+                     <property name="layoutDirection">
+                      <enum>Qt::LeftToRight</enum>
+                     </property>
+                     <property name="text">
+                      <string>Reload All</string>
+                     </property>
+                     <property name="tristate">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="loadPluginsLayout">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="loadPluginsButtonWidget" native="true">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>25</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_5">
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QToolButton" name="loadPluginsAddButton">
+                        <property name="toolTip">
+                         <string>Add new plugin</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="imageresources.qrc">
+                          <normaloff>:/add</normaloff>:/add</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QToolButton" name="loadPluginsRemoveButton">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="toolTip">
+                         <string>Remove selected plugin</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="imageresources.qrc">
+                          <normaloff>:/subtract</normaloff>:/subtract</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="loadPluginsSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QListWidget" name="loadPluginsListWidget">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>3</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Contains precise definitions of plugins to load upon initialization of the setup. Caption, type, plugin name, reload definition, current and maximum amount.</string>
+                     </property>
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAsNeeded</enum>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="unloadPluginsWidget" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>2</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_8">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="unloadPluginsLabelLayout">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="unloadPluginsLabel">
+                     <property name="text">
+                      <string>Plugins to Unload:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="unloadPluginsLabelSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="unloadPluginsRemoveAllCheckBox">
+                     <property name="toolTip">
+                      <string>All plugins that are not in add list will be deleted</string>
+                     </property>
+                     <property name="text">
+                      <string>Remove All</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="unloadPluginsLayout">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="unloadPluginsButtonWidget" native="true">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>25</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_6">
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QToolButton" name="unloadPluginsAddButton">
+                        <property name="toolTip">
+                         <string>Add plugin definition to unload list</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="imageresources.qrc">
+                          <normaloff>:/add</normaloff>:/add</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QToolButton" name="unloadPluginsRemoveButton">
+                        <property name="enabled">
+                         <bool>false</bool>
+                        </property>
+                        <property name="toolTip">
+                         <string>Remove selected plugin definition from unload list</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="imageresources.qrc">
+                          <normaloff>:/subtract</normaloff>:/subtract</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="unloadPluginsSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>21</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QListWidget" name="unloadPluginsListWidget">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>3</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="toolTip">
+                      <string>Contains vague descriptions of plugins that should be removed upon initialization of the setup.</string>
+                     </property>
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="pluginPropertiesWidget" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>1</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QFormLayout" name="formLayout">
+                 <property name="fieldGrowthPolicy">
+                  <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>4</number>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="pluginTypeLabel">
+                   <property name="text">
+                    <string>Plugin Type:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QComboBox" name="pluginTypeComboBox">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Type of the plugin</string>
+                   </property>
+                   <property name="editable">
+                    <bool>false</bool>
+                   </property>
+                   <property name="insertPolicy">
+                    <enum>QComboBox::NoInsert</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>Name:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="pluginNameEdit">
+                   <property name="toolTip">
+                    <string>Unique name of the plugin</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="pluginCaptionLabel">
+                   <property name="text">
+                    <string>Caption:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="pluginCaptionEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Caption of the plugin</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="pluginAttachmentsLabel">
+                   <property name="text">
+                    <string>Attachments:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QPlainTextEdit" name="pluginAttachmentsTextEdit">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>1</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>References to tasks of the setup</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="pluginParametersLabel">
+                   <property name="text">
+                    <string>Parameters:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QPlainTextEdit" name="pluginParametersTextEdit">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>1</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Parameters/attachment points for the plugin</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="pluginReloadLabel">
+                   <property name="text">
+                    <string>Reload:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QComboBox" name="pluginReloadComboBox">
+                   <property name="toolTip">
+                    <string>Change plugin reload behaviour. Inherit from list, always reload or never reload</string>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>Inherit</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Always</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Never</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QFrame" name="pluginListFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <property name="margin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="pluginListLabel">
+             <property name="text">
+              <string>Plugin List:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListWidget" name="pluginListListWidget">
+             <property name="contextMenuPolicy">
+              <enum>Qt::CustomContextMenu</enum>
+             </property>
+             <property name="toolTip">
+              <string>List of all available plugins with their plugin type and maximum amount of instances.</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tasksPage">
+      <layout class="QVBoxLayout" name="verticalLayout_16">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="tasksPageHeaderLayout">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
+         <property name="rightMargin">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="tasksPageLabel">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Simulation Tasks</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="tasksPageSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="tasksPageLabel2">
+           <property name="font">
+            <font>
+             <pointsize>7</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>(Page 2/2)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tasksPageLeftButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::LeftArrow</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tasksPageRightButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::RightArrow</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QWidget" name="tasksWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QSplitter" name="tasksSplitter">
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <widget class="QFrame" name="fratasksFrame">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Sunken</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_18">
+              <property name="margin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="tasksMainWidget" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>1</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_15">
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="tasksListLabel">
+                   <property name="text">
+                    <string>Tasks:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="tasksListLayout">
+                   <property name="spacing">
+                    <number>3</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="tasksListButtonWidget" native="true">
+                     <layout class="QVBoxLayout" name="verticalLayout_12">
+                      <property name="spacing">
+                       <number>2</number>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QToolButton" name="tasksListAddButton">
+                        <property name="toolTip">
+                         <string>Add new task</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="imageresources.qrc">
+                          <normaloff>:/add</normaloff>:/add</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QToolButton" name="tasksListRemoveButton">
+                        <property name="toolTip">
+                         <string>Remove current task</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="imageresources.qrc">
+                          <normaloff>:/subtract</normaloff>:/subtract</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <spacer name="tasksListButtonSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>79</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QListWidget" name="tasksList">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>2</verstretch>
+                      </sizepolicy>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="tasksSettingsWidget" native="true">
+                   <layout class="QFormLayout" name="formLayout_2">
+                    <property name="fieldGrowthPolicy">
+                     <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+                    </property>
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="tasksTypeLabel">
+                      <property name="text">
+                       <string>Type:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QComboBox" name="tasksTypeComboBox">
+                      <property name="toolTip">
+                       <string>Type of the task. Defines default firsts, scripts and handling in the Gui. There must only be one Server at a time</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="tasksCaptionLabel">
+                      <property name="text">
+                       <string>Caption:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLineEdit" name="tasksCaptionEdit">
+                      <property name="toolTip">
+                       <string>Caption of the task. Can be used by plugins to reference it. In this case a unique caption is advised</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="tasksParametersLabel">
+                      <property name="text">
+                       <string>Parameters:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QPlainTextEdit" name="tasksParametersTextEdit">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>60</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Commandline parameters for the first start. Separate by blanks or enter</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="taskPriorityLabel">
+                      <property name="text">
+                       <string>Priority:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QComboBox" name="tasksPriorityComboBox">
+                      <property name="toolTip">
+                       <string>Scheduling priority of the task</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="tasksListWidget" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>1</verstretch>
+                 </sizepolicy>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_13" stretch="0,0">
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QWidget" name="tasksScriptWidget" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>72</height>
+                    </size>
+                   </property>
+                   <layout class="QFormLayout" name="formLayout_3">
+                    <property name="horizontalSpacing">
+                     <number>3</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>3</number>
+                    </property>
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="tasksFirstLabel">
+                      <property name="text">
+                       <string>First:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QWidget" name="tasksFirstWidget" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_2">
+                       <property name="spacing">
+                        <number>3</number>
+                       </property>
+                       <property name="margin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLineEdit" name="tasksFirstEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Absolute or relative path from an include directory to the tasks first. Only needed for external processes</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QToolButton" name="tasksFirstLoadButton">
+                         <property name="toolTip">
+                          <string>Load an first</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="imageresources.qrc">
+                           <normaloff>:/folder</normaloff>:/folder</iconset>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="tasksSecondLabel">
+                      <property name="text">
+                       <string>Main Script:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QWidget" name="tasksSecondWidget" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_8">
+                       <property name="spacing">
+                        <number>3</number>
+                       </property>
+                       <property name="margin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLineEdit" name="tasksSecondEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Absolute or relative path from an include directory to a script for the main task to start with</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QToolButton" name="tasksSecondLoadButton">
+                         <property name="toolTip">
+                          <string>Load an initialization script</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="imageresources.qrc">
+                           <normaloff>:/folder</normaloff>:/folder</iconset>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="tasksThirdLabel">
+                      <property name="text">
+                       <string>Spark Script:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QWidget" name="tasksthirdWidget" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_9">
+                       <property name="spacing">
+                        <number>3</number>
+                       </property>
+                       <property name="margin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLineEdit" name="tasksThirdEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Absolute or relative path from an include directory to a script to start the spark core with</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QToolButton" name="tasksThirdLoadButton">
+                         <property name="toolTip">
+                          <string>Load a spark initialization script</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="imageresources.qrc">
+                           <normaloff>:/folder</normaloff>:/folder</iconset>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="tasksAdditionalListWidget" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>2</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QVBoxLayout" name="tasksAdditionalListLayout">
+                    <property name="margin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="tasksAdditionalListLabel">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Additional List:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="tasksAdditionalListInnerWidget" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <layout class="QHBoxLayout" name="tasksAdditionalListHorizontalLayout">
+                       <property name="spacing">
+                        <number>1</number>
+                       </property>
+                       <property name="margin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QScrollArea" name="tasksAdditionalListButtonScrollArea">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>26</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>26</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="frameShape">
+                          <enum>QFrame::NoFrame</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Plain</enum>
+                         </property>
+                         <property name="lineWidth">
+                          <number>0</number>
+                         </property>
+                         <property name="verticalScrollBarPolicy">
+                          <enum>Qt::ScrollBarAlwaysOff</enum>
+                         </property>
+                         <property name="horizontalScrollBarPolicy">
+                          <enum>Qt::ScrollBarAlwaysOff</enum>
+                         </property>
+                         <property name="widgetResizable">
+                          <bool>true</bool>
+                         </property>
+                         <widget class="QWidget" name="tasksAdditionalListScrollAreaWidgetContents">
+                          <property name="geometry">
+                           <rect>
+                            <x>0</x>
+                            <y>0</y>
+                            <width>26</width>
+                            <height>106</height>
+                           </rect>
+                          </property>
+                          <layout class="QVBoxLayout" name="verticalLayout_20">
+                           <property name="spacing">
+                            <number>2</number>
+                           </property>
+                           <property name="margin">
+                            <number>0</number>
+                           </property>
+                           <item>
+                            <widget class="QToolButton" name="tasksAdditionalListAddButton">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>22</height>
+                              </size>
+                             </property>
+                             <property name="baseSize">
+                              <size>
+                               <width>30</width>
+                               <height>30</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Add new script</string>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="icon">
+                              <iconset resource="imageresources.qrc">
+                               <normaloff>:/add</normaloff>:/add</iconset>
+                             </property>
+                             <property name="popupMode">
+                              <enum>QToolButton::DelayedPopup</enum>
+                             </property>
+                             <property name="arrowType">
+                              <enum>Qt::NoArrow</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QToolButton" name="tasksAdditionalListRemoveButton">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>22</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Remove current script</string>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="icon">
+                              <iconset resource="imageresources.qrc">
+                               <normaloff>:/subtract</normaloff>:/subtract</iconset>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QToolButton" name="tasksAdditionalListUpButton">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>22</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Move current script up</string>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="icon">
+                              <iconset resource="imageresources.qrc">
+                               <normaloff>:/arrow_up</normaloff>:/arrow_up</iconset>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QToolButton" name="tasksAdditionalListDownButton">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>22</height>
+                              </size>
+                             </property>
+                             <property name="toolTip">
+                              <string>Move current script down</string>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="icon">
+                              <iconset resource="imageresources.qrc">
+                               <normaloff>:/arrow_down</normaloff>:/arrow_down</iconset>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <spacer name="tasksAdditionalListButtonSpacer">
+                             <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                             </property>
+                             <property name="sizeType">
+                              <enum>QSizePolicy::Expanding</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>20</width>
+                               <height>2</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                          </layout>
+                         </widget>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QListWidget" name="tasksAdditionalListList">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>70</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Additional scripts to run after task initialization</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QFrame" name="tasksExplorerFrame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <property name="margin">
+               <number>6</number>
+              </property>
+              <property name="horizontalSpacing">
+               <number>6</number>
+              </property>
+              <item row="0" column="0">
+               <layout class="QVBoxLayout" name="tasksExplorerLayout">
+                <item>
+                 <widget class="QLabel" name="tasksExplorerLabel">
+                  <property name="text">
+                   <string>Explorer:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTreeView" name="tasksExplorerTreeView">
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::CustomContextMenu</enum>
+                  </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::NoEditTriggers</set>
+                  </property>
+                  <property name="showDropIndicator" stdset="0">
+                   <bool>false</bool>
+                  </property>
+                  <property name="dragEnabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="uniformRowHeights">
+                   <bool>true</bool>
+                  </property>
+                  <property name="sortingEnabled">
+                   <bool>true</bool>
+                  </property>
+                  <attribute name="headerVisible">
+                   <bool>false</bool>
+                  </attribute>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AttachableFrame</class>
+   <extends>QWidget</extends>
+   <header>attachableframe.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="imageresources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>setupToolAddButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>addSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>19</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupToolRemoveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>removeSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>55</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>43</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupToolRenameButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>renameSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changeSetup(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupToolStartButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>startSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>197</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>181</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupToolStopButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>stopSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>163</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginCaptionEdit</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginCaption(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>398</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>342</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginPageLeftButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>decreaseStackedWidgetPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginPageRightButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>increaseStackedWidgetPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksPageLeftButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>decreaseStackedWidgetPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksPageRightButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>increaseStackedWidgetPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadPluginsAddButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>addLoadPlugin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>47</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadPluginsRemoveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>removeLoadPlugin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unloadPluginsAddButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>addUnloadPlugin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unloadPluginsRemoveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>removeUnloadPlugin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupReloadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>reloadSetups()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupLoadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>loadSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>83</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupToolSaveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>saveSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>123</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unloadPluginsRemoveAllCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changeRemoveAll(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadPluginsReloadAllCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changeReloadAll(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>126</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadPluginsListWidget</sender>
+   <signal>pressed(QModelIndex)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>chooseLoadPlugin(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>153</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unloadPluginsListWidget</sender>
+   <signal>pressed(QModelIndex)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>chooseUnloadPlugin(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginTypeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changePluginType(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setupToolInitButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>initSetup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>169</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginCaptionEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>398</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>485</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginCaptionEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>398</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>523</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginNameEdit</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginName(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginNameEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginName()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginNameEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginName()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>374</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>347</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginReloadComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changePluginReload(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>510</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>515</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginParametersTextEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editPluginParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>486</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>632</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksListAddButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>addTask()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksListRemoveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>removeTask()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksList</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>chooseTask(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksTypeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changeTaskType(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>240</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksCaptionEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editTaskCaption(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksParametersTextEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editTaskParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>315</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksFirstLoadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>loadTaskFirst()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>353</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksSecondLoadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>loadTaskSecond()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>378</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksThirdLoadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>loadTaskThird()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>403</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>411</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksFirstEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>taskFirstCheckText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksFirstEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>taskFirstChangeText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksSecondEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>taskSecondCheckText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>358</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksSecondEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>taskSecondChangeText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>358</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksThirdEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>taskThirdCheckText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksThirdEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>taskThirdChangeText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>197</x>
+     <y>385</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>373</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksAdditionalListAddButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>addTaskListEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>12</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>507</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksAdditionalListRemoveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>removeTaskListEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>17</x>
+     <y>462</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>545</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksAdditionalListUpButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>moveTaskListEntryUp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>18</x>
+     <y>485</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>578</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksAdditionalListDownButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>moveTaskListEntryDown()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>607</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksAdditionalListList</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>chooseTaskListEntry(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>475</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>467</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksAdditionalListList</sender>
+   <signal>itemChanged(QListWidgetItem*)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>editTaskListEntry(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>510</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksExplorerTreeView</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>showTasksExplorerTreeViewContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>585</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>578</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tasksPriorityComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>changeTaskPriority(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginListListWidget</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>SetupFrame</receiver>
+   <slot>showPluginListContextMenu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>47</x>
+     <y>615</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>623</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addSetup()</slot>
+  <slot>removeSetup()</slot>
+  <slot>renameSetup()</slot>
+  <slot>changeSetup(int)</slot>
+  <slot>loadSecond()</slot>
+  <slot>loadThird()</slot>
+  <slot>addListEntry()</slot>
+  <slot>removeListEntry()</slot>
+  <slot>moveListEntryUp()</slot>
+  <slot>moveListEntryDown()</slot>
+  <slot>secondCheckText(QString)</slot>
+  <slot>secondChangeText()</slot>
+  <slot>thirdCheckText(QString)</slot>
+  <slot>thirdChangeText()</slot>
+  <slot>startSetup()</slot>
+  <slot>stopSetup()</slot>
+  <slot>addLoadPlugin()</slot>
+  <slot>removeLoadPlugin()</slot>
+  <slot>addUnloadPlugin()</slot>
+  <slot>removeUnloadPlugin()</slot>
+  <slot>editPluginCaption(QString)</slot>
+  <slot>chooseLoadPlugin(QModelIndex)</slot>
+  <slot>chooseUnloadPlugin(QModelIndex)</slot>
+  <slot>increaseStackedWidgetPage()</slot>
+  <slot>decreaseStackedWidgetPage()</slot>
+  <slot>addTask()</slot>
+  <slot>removeTask()</slot>
+  <slot>editTaskType(QString)</slot>
+  <slot>editTaskCaption(QString)</slot>
+  <slot>editTaskParameters()</slot>
+  <slot>chooseTask(QModelIndex)</slot>
+  <slot>loadTaskSecond()</slot>
+  <slot>loadTaskThird()</slot>
+  <slot>taskSecondCheckText(QString)</slot>
+  <slot>taskSecondChangeText()</slot>
+  <slot>taskThirdCheckText(QString)</slot>
+  <slot>taskThirdChangeText()</slot>
+  <slot>moveTaskListEntryUp()</slot>
+  <slot>moveTaskListEntryDown()</slot>
+  <slot>addTaskListEntry()</slot>
+  <slot>removeTaskListEntry()</slot>
+  <slot>chooseTaskListEntry(int)</slot>
+  <slot>createSetupFromCurrentSimulation()</slot>
+  <slot>reloadSetups()</slot>
+  <slot>loadSetup()</slot>
+  <slot>saveSetup()</slot>
+  <slot>editCurrentListEntry(QString)</slot>
+  <slot>chooseListEntry(int)</slot>
+  <slot>changeReloadAll(bool)</slot>
+  <slot>changeRemoveAll(bool)</slot>
+  <slot>changeFrameType(int)</slot>
+  <slot>editPluginParameters()</slot>
+  <slot>changePluginType(int)</slot>
+  <slot>initSetup()</slot>
+  <slot>editPluginReferences()</slot>
+  <slot>editPluginCaption()</slot>
+  <slot>editPluginName()</slot>
+  <slot>editPluginName(QString)</slot>
+  <slot>changePluginReload(int)</slot>
+  <slot>firstCheckText(QString)</slot>
+  <slot>firstChangeText()</slot>
+  <slot>loadTaskFirst()</slot>
+  <slot>taskFirstChangeText()</slot>
+  <slot>taskFirstCheckText(QString)</slot>
+  <slot>editParameters()</slot>
+  <slot>editListEntry(QListWidgetItem*)</slot>
+  <slot>scrollToExplorerSelection()</slot>
+  <slot>stopScrollingExplorer()</slot>
+  <slot>chooseTask(int)</slot>
+  <slot>changeTaskType(int)</slot>
+  <slot>editTaskListEntry(QListWidgetItem*)</slot>
+  <slot>showExplorerTreeViewContextMenu(QPoint)</slot>
+  <slot>showTasksExplorerTreeViewContextMenu(QPoint)</slot>
+  <slot>changeTaskPriority(int)</slot>
+  <slot>showPluginListContextMenu(QPoint)</slot>
+ </slots>
+</ui>

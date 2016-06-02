@@ -230,6 +230,11 @@ void Core::Desctruct()
     mScriptServer.reset();
 }
 
+void Core::Remove()
+{
+    mSelf.reset();
+}
+
 boost::shared_ptr<CoreContext> Core::CreateContext()
 {
     return boost::shared_ptr<CoreContext>(new CoreContext(mSelf.lock(), GetRoot()));

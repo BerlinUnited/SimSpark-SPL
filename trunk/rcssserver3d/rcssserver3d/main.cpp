@@ -73,7 +73,7 @@ void SimSpark::PrintGreeting()
             RCSS_VERSION"\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
         << "Universität Koblenz.\n"
-        << "Copyright (C) 2004-2009, "
+        << "Copyright (C) 2004-2016, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
         << "\nType '--help' for further information\n\n";
 }
@@ -88,6 +88,9 @@ void SimSpark::PrintHelp()
         << " --init-script-prefix PATH\t path prefix for init scripts (spark.rb, oxygen.rb, etc.).\n"
         << " --agent-port PORTNUM\t\t port for agents to connect to.\n"
         << " --server-port PORTNUM\t\t port for monitors to connect to.\n"
+#ifdef RVDRAW
+        << " --rvdraw-host HOST\t\t host to connect to for drawing in roboviz.\n"
+#endif // RVDRAW
         << "\n";
 }
 
@@ -133,7 +136,19 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
                return false;
             }
         }
-
+#ifdef RVDRAW
+        else if (strcmp(argv[i], "--rvdraw-host") == 0)
+        {
+          i++;
+          if (i < argc)
+              setenv("RVDRAW_HOST", argv[i], true);
+          else
+            {
+               PrintHelp();
+               return false;
+            }
+        }
+#endif // RVDRAW
       }
 
     return true;

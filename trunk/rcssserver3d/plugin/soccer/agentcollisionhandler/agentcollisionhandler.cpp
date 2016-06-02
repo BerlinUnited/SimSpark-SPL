@@ -7,6 +7,8 @@ void AgentCollisionHandler::OnLink()
 {   
 }
 
+#include <ode/ode.h>
+
 void AgentCollisionHandler::HandleCollision(boost::shared_ptr<Collider> collidee, GenericContact& contact)
 {
   if (!mAgentState.get())
@@ -44,6 +46,14 @@ void AgentCollisionHandler::HandleCollision(boost::shared_ptr<Collider> collidee
           myGroup->clear();
           mAgentState->SetTouchGroup(otherGroup);
       }
+          dContact& ODEContact = (dContact&) contact;
+          //GetLog()->Error() << "(AgentCollisionHandler) contact pos " << ODEContact.geom.pos[0]<<","<< ODEContact.geom.pos[1]  << ","<< ODEContact.geom.pos[2] << "\n";
+          mAgentState->mCollisionPos.x() = ODEContact.geom.pos[0];
+          mAgentState->mCollisionPos.y() = ODEContact.geom.pos[1];
+          mAgentState->mCollisionPos.z() = ODEContact.geom.pos[2];
+          other->mCollisionPos.x() = ODEContact.geom.pos[0];
+          other->mCollisionPos.y() = ODEContact.geom.pos[1];
+          other->mCollisionPos.z() = ODEContact.geom.pos[2];
   }
 }
 

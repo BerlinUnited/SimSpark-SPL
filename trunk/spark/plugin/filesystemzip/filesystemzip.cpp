@@ -102,7 +102,7 @@ bool FileSystemZIP::SetPath(const string& inName)
         }
 
     // get a stdio file
-    mHandle = shared_ptr<StdFile>(new StdFile());
+    mHandle = boost::shared_ptr<StdFile>(new StdFile());
 
     // try inName directly
     if(! mHandle->Open(inName.c_str()))
@@ -178,7 +178,7 @@ bool FileSystemZIP::SetPath(const string& inName)
     return true;
 }
 
-shared_ptr<salt::RFile> FileSystemZIP::Open(const string& inName)
+boost::shared_ptr<salt::RFile> FileSystemZIP::Open(const string& inName)
 {
     char            *fileName;
     TArchiveEntry   *cur;
@@ -193,7 +193,7 @@ shared_ptr<salt::RFile> FileSystemZIP::Open(const string& inName)
     // if no file is open, return 0
     if(mHandle.get() == 0)
         {
-            return shared_ptr<salt::RFile>();
+            return boost::shared_ptr<salt::RFile>();
         }
 
     // we have an archive, now get a local copy of inName
@@ -206,7 +206,7 @@ shared_ptr<salt::RFile> FileSystemZIP::Open(const string& inName)
 
     if (i == mEntryMap.end())
         {
-            return shared_ptr<salt::RFile>();
+            return boost::shared_ptr<salt::RFile>();
         }
 
     // we have found a file
@@ -268,7 +268,7 @@ shared_ptr<salt::RFile> FileSystemZIP::Open(const string& inName)
             break;
         }
 
-    shared_ptr<salt::RFile> f;
+    boost::shared_ptr<salt::RFile> f;
     if(uncompr != 0)
         {
             MemFile* mf = new MemFile();
