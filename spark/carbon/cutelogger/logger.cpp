@@ -378,7 +378,7 @@ public:
             }
         }
 
-        mLogSources.push_back(std::make_pair(mLogSources.size(), std::string(name)));
+        mLogSources.push_back(std::make_pair(mLogSources.size(), name);
         if (Carbon::get() != 0)
             Carbon::get()->updateLogSourceAdded(mLogSources.size() -1);
 
@@ -400,7 +400,7 @@ private:
     LogDevice* mLogDevice;         /*!< Log device. */
     QReadWriteLock mLogDeviceLock; /*!< Locker for log device. */
 
-    std::vector<std::pair<unsigned int, const std::string> > mLogSources; /*!< Only-expanding list (with fixed indices) of log sources. */
+    std::vector<std::pair<unsigned int, std::string> > mLogSources; /*!< Only-expanding list (with fixed indices) of log sources. */
     std::string mEmptyLogSourceName;                                      /*!< Default name for illegal log source. */
 };
 
