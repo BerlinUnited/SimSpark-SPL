@@ -62,9 +62,9 @@ class SparkController;
 */
 class SimulationTask
 {
-    friend Simulation;
-    friend SimulationTaskMessenger;
-    friend SparkController;
+    friend class Simulation;
+    friend class SimulationTaskMessenger;
+    friend class SparkController;
 
 public:
     //public types
@@ -340,7 +340,7 @@ class SimulationTaskMessenger : public QObject
 {
     Q_OBJECT
 
-    friend SimulationTask;
+    friend class SimulationTask;
 
 public:
     //public functions

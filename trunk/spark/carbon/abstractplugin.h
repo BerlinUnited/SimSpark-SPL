@@ -180,8 +180,8 @@ class Carbon;
 */
 class AbstractPlugin
 {
-    friend PluginManager;
-    friend PluginFactory;
+    friend class PluginManager;
+    friend class PluginFactory;
 
 public:
     //public types

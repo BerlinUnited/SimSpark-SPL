@@ -116,7 +116,7 @@ class SimulationManager : public QObject
 {
     Q_OBJECT
 
-    friend SimulationTask;
+    friend class SimulationTask;
 
 public:
     // public types

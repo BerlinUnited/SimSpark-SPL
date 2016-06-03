@@ -50,7 +50,7 @@ class AbstractCommand : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(AbstractCommand)
 
-    friend AbstractCommandQueue;
+    friend class AbstractCommandQueue;
 
 public:
     // public functions
