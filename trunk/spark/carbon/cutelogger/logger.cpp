@@ -378,7 +378,7 @@ public:
             }
         }
 
-        mLogSources.push_back(std::make_pair(mLogSources.size(), name);
+        mLogSources.push_back(std::make_pair(mLogSources.size(), name));
         if (Carbon::get() != 0)
             Carbon::get()->updateLogSourceAdded(mLogSources.size() -1);
 
