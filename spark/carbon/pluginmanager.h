@@ -94,9 +94,9 @@ class PluginManager : public QObject
 {
     Q_OBJECT
 
-    friend Carbon;
-    friend PluginFactory;
-    friend LibraryLoader;
+    friend class Carbon;
+    friend class PluginFactory;
+    friend class LibraryLoader;
 
 public:
     // protected types
