@@ -13,7 +13,7 @@ Improvements
  * Kinematics parameters
  * Image camera (optional)
 
-* For Standar Platform League
+* For Standard Platform League
  * Field, goal, ball
  * Game rules
 
