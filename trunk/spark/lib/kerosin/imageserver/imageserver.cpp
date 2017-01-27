@@ -73,7 +73,7 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
 
     if (fileServer.get() == 0)
     {
-        return boost::shared_ptr<Image>();
+        //return boost::shared_ptr<Image>();
     }
 
     // create a new image
@@ -87,7 +87,7 @@ ImageServer::Load(const string& inName, ImageServer::EImgType inType) const
     scoped_array<unsigned char> buffer(new unsigned char[rfile->Size()]);
     rfile->Read(buffer.get(), rfile->Size());
     ilLoadL(inType, buffer.get(), rfile->Size());
-
+    
     // check for errors
     if (HandleErrors(inName) == true)
     {

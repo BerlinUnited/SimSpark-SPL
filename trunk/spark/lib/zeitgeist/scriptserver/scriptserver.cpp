@@ -607,7 +607,7 @@ ScriptServer::RunInitScript(const string &fileName, const string &relPath,
     // get the (OS specific) path to the script directory
     string pkgdatadir = salt::RFile::BundlePath();
 #if __APPLE__
-#if USE_COREFOUNDATION
+#if USE_COREFOUNDATION_
     pkgdatadir += "Contents/Resources/";
 #endif
 #endif
