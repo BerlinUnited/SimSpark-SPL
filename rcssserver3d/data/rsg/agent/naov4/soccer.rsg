@@ -292,6 +292,6 @@
 ;;
 ;; add the ball
 ;;
-(importScene rsg/agent/ball-spl.rsg)
+(importScene rsg/agent/ball.rsg)
 
 )
