@@ -138,7 +138,7 @@ ADD_CUSTOM_TARGET(uninstall
 
 ########### CPack section #############
 include(InstallRequiredSystemLibraries)
-set(CPACK_SOURCE_GENERATOR TGZ)
+set(CPACK_SOURCE_GENERATOR TXZ)
 set(CPACK_SOURCE_IGNORE_FILES
     /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /autom4te[.]cache/ /[.].* /bootstrap
     /RELEASE /rpm.am /msi.am)

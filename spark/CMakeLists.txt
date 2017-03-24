@@ -290,7 +290,7 @@ ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 ########### CPack section #############
-set(CPACK_SOURCE_GENERATOR TGZ)
+set(CPACK_SOURCE_GENERATOR TXZ)
 set(CPACK_SOURCE_IGNORE_FILES
     /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /autom4te[.]cache/ /[.].* /bootstrap 
     /RELEASE /styles/ /papers/ /rpm.am /msi.am /codingstyle.txt)
