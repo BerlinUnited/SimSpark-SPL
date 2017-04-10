@@ -25,9 +25,13 @@
 #include <oxygen/agentaspect/effector.h>
 #include <oxygen/physicsserver/rigidbody.h>
 #include <gamestateaspect/gamestateaspect.h>
+#include <salt/random.h>
 
 class BeamEffector : public oxygen::Effector
 {
+protected:
+    typedef boost::shared_ptr<salt::UniformRNG<> > UniformRngPtr;
+
 public:
     BeamEffector();
     virtual ~BeamEffector();
@@ -65,8 +69,17 @@ protected:
     /** the cached field width */
     float mFieldWidth;
 
-    /** thec cached agent radius */
+    /** the cached agent radius */
     float mAgentRadius;
+
+    /** random number generator for noise */
+    UniformRngPtr mNoiseRng;
+
+    /** amount of noise added to beam X and Y values */
+    float mBeamNoiseXY;
+
+    /** amount of noise added to beam angle value */
+    float mBeamNoiseAngle;
 };
 
 DECLARE_CLASS(BeamEffector);

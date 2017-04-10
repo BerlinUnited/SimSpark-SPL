@@ -61,6 +61,8 @@ void InternalSoccerInput::OnLink()
     //JAN
     scriptServer->CreateVariable("Command.FreeKickLeft", CmdFreeKickLeft);
     scriptServer->CreateVariable("Command.FreeKickRight", CmdFreeKickRight);
+    scriptServer->CreateVariable("Command.DirectFreeKickLeft", CmdDirectFreeKickLeft);
+    scriptServer->CreateVariable("Command.DirectFreeKickRight", CmdDirectFreeKickRight);
 
     scriptServer->CreateVariable("Command.NextCamera", CmdNextCamera);
     scriptServer->CreateVariable("Command.PreviousCamera", CmdPreviousCamera);
@@ -252,6 +254,19 @@ void InternalSoccerInput::ProcessInput(const Input& input)
             if (input.GetKeyPress())
                 {
                     mGameState->SetPlayMode(PM_FREE_KICK_RIGHT);
+
+                }
+            break;
+        case CmdDirectFreeKickLeft:
+            if (input.GetKeyPress())
+                {
+                    mGameState->SetPlayMode(PM_DIRECT_FREE_KICK_LEFT);
+                }
+            break;
+        case CmdDirectFreeKickRight:
+            if (input.GetKeyPress())
+                {
+                    mGameState->SetPlayMode(PM_DIRECT_FREE_KICK_RIGHT);
 
                 }
             break;

@@ -54,6 +54,11 @@ set(soccer_LIB_HDRS
    splstate/splstate.h
 )
 
+if (RVDRAW)
+  list(APPEND soccer_LIB_HDRS rvdraw/rvdraw.h)
+endif (RVDRAW)
+
+
 set(soccer_LIB_SRCS
    export.cpp
    agentstate/agentstate.cpp
@@ -140,12 +145,18 @@ set(soccer_LIB_SRCS
    splstate/splstate_c.cpp
 )
 
+if (RVDRAW)
+  list(APPEND soccer_LIB_SRCS rvdraw/rvdraw.cpp)
+endif (RVDRAW)
+
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${FREETYPE_INCLUDE_DIRS}
   ${IL_INCLUDE_DIR})
 
 add_library(soccer MODULE ${soccer_LIB_SRCS} ${soccer_LIB_HDRS})
 
-target_link_libraries(soccer ${spark_libs} ${OPENGL_gl_LIBRARY}
+target_link_libraries(soccer ${spark_libs}
+  ${spark_debug_libs} ${spark_release_libs} ${OPENGL_gl_LIBRARY}
   ${Boost_LIBRARIES})
 
 if (NOT APPLE)

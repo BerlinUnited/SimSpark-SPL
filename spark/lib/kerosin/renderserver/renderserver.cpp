@@ -58,7 +58,13 @@ RenderServer::PreparePicking()
 void
 RenderServer::Render(bool clean)
 {
+    int err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError before picking preparation: " << err << std::endl;
+
     PreparePicking();
+
+    err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError after picking preparation: " << err << std::endl;
 
     if (! GetActiveScene())
     {
@@ -75,9 +81,14 @@ RenderServer::Render(bool clean)
             << "(RenderServer) ERROR: found no camera node in the active scene\n";
         return;
   }
+     err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError before binding camera: " << err << std::endl;
 
     // set the view transformation
     BindCamera(mCamera);
+
+    err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError after binding camera: " << err << std::endl;
 
     glClearColor(
       mAmbientColor.r(),
@@ -132,9 +143,18 @@ RenderServer::Render(bool clean)
         }
     }
 
+    err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError before render pass 0: " << err << std::endl;
     // standard rendering
     RenderScene(mActiveScene, 0);
+    
+    err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError after render pass 0: " << err << std::endl;
+
     RenderScene(mActiveScene, 1);
+
+    err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError after render pass 1: " << err << std::endl;
 
     // reset GL lights
     glDisable(GL_LIGHTING);
@@ -143,6 +163,9 @@ RenderServer::Render(bool clean)
     {
         ProcessPicks();
     }
+
+    err = glGetError();
+    if (err) GetLog()->Error() << "OpenGLError after processing picks: " << err << std::endl;
 }
 
 
@@ -276,15 +299,21 @@ RenderServer::RenderScene(boost::shared_ptr<BaseNode> node, unsigned pass)
                     glPushName(name);
                 }
 
+			///////////////////////////////////////////////
+			//DEBUG CODE 
+			//:TODO: REMOVE THIS CODE
+			//const float *matr  = node->GetWorldTransform().m;
+			//std::cout << "drawing with this matrix: \n[ ";
+			//for(int i=0; i<16;i++){
+			//	if(i!=0 && (i%4)==0)
+			//		std::cout << "]" << std::endl << "[ ";
+			//	std::cout << matr[i] << " ";
+			//}
+			//std::cout << "]" << std::endl;
+			////////////////////////////////////////////////
             glMultMatrixf(node->GetWorldTransform().m);
 
             renderNode->RenderInternal();
-
-            if (mEnablePicking)
-                {
-                    // pop name from OpenGL name stack
-                    glPopName();
-                }
 
             if (mEnablePicking)
                 {
@@ -339,6 +368,8 @@ RenderServer::BindCamera(boost::shared_ptr<Camera>& camera)
 
             glMultMatrixf(camera->GetProjectionTransform().m);
             glMatrixMode(GL_MODELVIEW);
+            //glLoadIdentity();
+            //glMultMatrixf(camera->GetViewTransform().m);
 
             glInitNames();
         } else

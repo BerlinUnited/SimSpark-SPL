@@ -21,6 +21,8 @@
 */
 #include "inputsystem.h"
 
+#include <boost/thread/locks.hpp>
+
 using namespace kerosin;
 using namespace zeitgeist;
 
@@ -50,6 +52,7 @@ InputSystem::AddInput(const Input& input)
 bool
 InputSystem::GetInput(Input& input)
 {
+    boost::unique_lock<boost::shared_mutex> lock(mMutex);
     static bool hasDoneTimer = false;
     if (mInputQueue.size() > 0)
     {
@@ -73,6 +76,7 @@ InputSystem::GetInput(Input& input)
 void
 InputSystem::AddInputInternal(const Input& input)
 {
+    boost::unique_lock<boost::shared_mutex> lock(mMutex);
     mInputQueue.push_back(input);
 }
 

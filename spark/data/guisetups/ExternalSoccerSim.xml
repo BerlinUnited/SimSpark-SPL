@@ -1,0 +1,22 @@
+<root>
+  <name>ExternalSoccerSim</name>
+  <addplugins reloadall="true">
+    <frame caption="Log" reload="false" name="logframe" attachment="bottom_attachment">
+      <attachments>
+        <attachment>right_attachment</attachment>
+      </attachments>
+    </frame>
+    <frame caption="Simulation" name="simulationframe" attachment="left_attachment"/>
+  </addplugins>
+  <removeplugins removeall="true"/>
+  <tasks>
+    <process third="" second="" priority="7" first="rcssserver3d.exe" name="Server"/>
+    <process third="" second="" priority="7" first="rcssmonitor3d.exe" name="Monitor"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_1"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_2"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_3"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_4"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_5"/>
+    <process third="" second="" priority="7" first="rcssagent3d.exe" name="Agent_6"/>
+  </tasks>
+</root>
