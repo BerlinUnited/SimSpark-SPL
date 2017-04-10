@@ -54,6 +54,19 @@ namespace zeitgeist
 
 class LogServerStreamBuf : public std::streambuf
 {
+    struct MaskStream
+    {
+        MaskStream(unsigned int mask, std::ostream* stream, bool sync) :
+            mMask(mask), mStream(stream), mSync(sync) {};
+        MaskStream(const MaskStream& obj) :
+            mMask(obj.mMask), mStream(obj.mStream), mSync(obj.mSync) {};
+            MaskStream& operator=(const MaskStream& obj){mMask = obj.mMask; mStream = obj.mStream; mSync = obj.mSync; return *this;}
+
+        unsigned int mMask;
+        std::ostream* mStream;
+        bool mSync;
+    };
+
     // types
     //
 protected:
@@ -61,8 +74,8 @@ protected:
     typedef traits_type::int_type       TIntType;
 
 private:
-    typedef std::pair<unsigned int, std::ostream*> TMaskStream;
-    typedef std::vector<TMaskStream> TMaskStreams;
+    //typedef std::pair<unsigned int, std::ostream*> TMaskStream;
+    typedef std::vector<MaskStream> TMaskStreams;
 
     // functions
     //
@@ -79,7 +92,7 @@ public:
         @param stream   the stream to add
         @param mask     the (new) priority mask for the stream
     */
-    void AddStream(std::ostream *stream, unsigned int mask);
+    void AddStream(std::ostream *stream, unsigned int mask, bool syncStream = false);
 
     /*! Remove a stream from the list of streams.
         @param stream   the stream to remove
@@ -113,10 +126,12 @@ public:
     */
     void SetCurrentPriority(unsigned int priority);
 
+    void SyncStreams();
+
 protected:
     // these functions implement the streambuf interface ... handle with care
     TIntType    overflow(TIntType c);
-    int                 sync();
+    int         sync();
 
 private:
     LogServerStreamBuf(const LogServerStreamBuf &obj);
@@ -130,14 +145,14 @@ private:
     void PutChar(TIntType chr);
 
     //! A predicate to compare streams in a MaskStream list (or vector).
-    class MaskStreamEQ : public std::unary_function<TMaskStream, bool>
+    class MaskStreamEQ : public std::unary_function<MaskStream, bool>
     {
     private:
-        const std::ostream      *stream;
+        const std::ostream *stream;
     public:
         explicit MaskStreamEQ(const std::ostream *str) : stream(str) {}
-        bool operator ()(const TMaskStream &ms)
-        { return ms.second == stream; }
+        bool operator ()(const MaskStream &ms)
+        { return ms.mStream == stream; }
     };
 
     // members

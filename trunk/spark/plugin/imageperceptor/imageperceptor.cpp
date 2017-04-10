@@ -29,6 +29,7 @@ using namespace std;
 
 ImagePerceptor::ImagePerceptor() : oxygen::Perceptor()
 {
+    SetPredicateName("");
 }
 
 ImagePerceptor::~ImagePerceptor()
@@ -80,7 +81,7 @@ bool ImagePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     return false;
 
   Predicate &predicate = predList->AddPredicate();
-  predicate.name = "IMG";
+  predicate.name = mPredicateName + "IMG";
   predicate.parameter.Clear();
 
   ParameterList &sizeElement = predicate.parameter.AddList();

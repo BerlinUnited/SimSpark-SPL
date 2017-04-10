@@ -47,6 +47,11 @@ public:
     */
     virtual void Update(float deltaTime);
 
+    /** returns list of agents colliding with the ball 
+     */
+    bool GetCollidingAgents
+    (std::list<boost::shared_ptr<oxygen::AgentAspect> >& agents);
+
     /** returns the last agent that collided with the ball and the
         time when this happened*/
     bool GetLastCollidingAgent
@@ -76,6 +81,11 @@ public:
     /** updates the reference to the last agent that kicked the ball */
     void UpdateLastKickingAgent(boost::shared_ptr<oxygen::AgentAspect> agent);
 
+    /** returns if ball is currently colliding with an agent from the given
+        team 
+    */
+    bool GetBallCollidingWithAgentTeam(TTeamIndex team);
+
 protected:
     /** set up the reference to the ball and field collider */
     virtual void OnLink();
@@ -83,10 +93,8 @@ protected:
     /** reset the reference to the ball and field recorder */
     virtual void OnUnlink();
 
-    /** updates the reference to the last agent that collided with the
-        ball
-    */
-    void UpdateLastCollidingAgent();
+    /** updates the references to agents colliding with the ball */
+    void UpdateCollidingAgents();
 
     /** checks if the ball is on the playing field an updates the
         mBallOnField flag
@@ -115,6 +123,9 @@ protected:
     /** reference to the right goal recorder */
     boost::shared_ptr<oxygen::RecorderHandler> mRightGoalRecorder;
 
+    /** list of references to agents currently colliding with the ball */
+    std::list<boost::shared_ptr<oxygen::AgentAspect> > mCollidingAgents;
+
     /** holds a reference to the last agent that collided with the
         ball */
     boost::shared_ptr<oxygen::AgentAspect> mLastCollidingAgent;
@@ -127,6 +138,12 @@ protected:
 
     /** then time when the last agent collided with the ball */
     TTime mLastAgentCollisionTime;
+
+    /** if ball is currently colliding with left team agent */
+    bool mCollidingWithLeftTeamAgent;
+
+    /** if ball is currently colliding with right team agent */
+    bool mCollidingWithRightTeamAgent;
 
     /** then time when the last agent kicked the ball */
     TTime mLastAgentKickTime;

@@ -94,11 +94,11 @@ public:
     bool ReduceBattery(float consumption);
 
     /** Add a new message to the list */
-    void AddMessage(const std::string& msg, float direction, bool teamMate);
+    void AddMessage(const std::string& msg, const std::string& team, float direction, bool teamMate);
     void AddSelfMessage(const std::string& msg);
 
     /** Get the first message from the list */
-    bool GetMessage(std::string& msg, float& direction, bool teamMate);
+    bool GetMessage(std::string& msg, std::string& team, float& direction, bool teamMate);
     bool GetSelfMessage(std::string& msg);
 
     /** Whether agent is selected */
@@ -143,10 +143,12 @@ protected:
 
     /** team-mate's message */
     std::string mMateMsg;
+    std::string mMateTeam;
     float mMateMsgDir;
 
     /** opponent's message */
     std::string mOppMsg;
+    std::string mOppTeam;
     float mOppMsgDir;
 
     /** max hear capacity units */

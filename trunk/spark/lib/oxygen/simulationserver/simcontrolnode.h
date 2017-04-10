@@ -67,6 +67,9 @@ public:
     /** called when the current simulation cycle ends */
     virtual void EndCycle() {};
 
+    /** called once instead of StartCycle, SenseAgent, ActAgent, EndCycle and WaitCycle when the simulation is paused */
+    virtual void WaitCycle() {};
+
     float GetTime() const { return mTime; }
 
     void SetStep(float step) { mStep = step; }

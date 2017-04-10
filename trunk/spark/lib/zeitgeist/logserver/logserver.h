@@ -75,8 +75,9 @@ public:
 
         @param stream   the stream to add
         @param mask     the (new) priority mask for the stream
+        @param syncStream if true, stream will be synced too
     */
-    void AddStream(std::ostream *stream, unsigned int mask = eAll);
+    void AddStream(std::ostream *stream, unsigned int mask = eAll, bool syncStream = false);
 
     /** removes a stream from the list of streams.
         @param stream   the stream to remove

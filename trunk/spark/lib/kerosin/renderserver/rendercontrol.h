@@ -43,9 +43,17 @@ public:
     /** renders the scene at the end of each simulation cycle */
     virtual void EndCycle();
 
+    /** activates or deactivates the render control node */
+    virtual void SetActive(bool active);
+
+    /** returns true if render control node is active */
+    bool IsActive() const;
+
+    /** renders all CustomRender nodes */
+    void RenderCustom();
+
 protected:
     virtual void OnLink();
-    void RenderCustom();
 
 protected:
     /** cached reference to the RenderServer */
@@ -56,6 +64,9 @@ protected:
 
     /** total frames rendered */
     int mFramesRendered;
+
+    /** if false, the rendercontrol node will do nothing on EndCycle() */
+    bool mActive;
 };
 
 DECLARE_CLASS(RenderControl);

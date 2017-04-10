@@ -53,6 +53,11 @@ protected:
     
     /** reference to the GameStateAspect */
     boost::shared_ptr<GameStateAspect> mGameState;
+
+    /** label agent messages with the team of the sender */
+    bool mLabelMessages;
+
+    
 };
 
 DECLARE_CLASS(HearPerceptor);

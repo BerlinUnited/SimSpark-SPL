@@ -69,6 +69,8 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.Zero", CmdZero);
     scriptServer->CreateVariable("Command.Left", CmdLeft);
     scriptServer->CreateVariable("Command.Right", CmdRight);
+    scriptServer->CreateVariable("Command.DirectLeft", CmdDirectLeft);
+    scriptServer->CreateVariable("Command.DirectRight", CmdDirectRight);
     
     scriptServer->CreateVariable("Command.PlayerSelectMode", CmdPlayerSelectMode);
     scriptServer->CreateVariable("Command.SelectNextAgent", CmdSelectNextAgent);
@@ -250,6 +252,24 @@ void SoccerInput::ProcessInput(const Input& input)
                 {
                     if (mCmdMode == CmdModeDefault)
                         SendCommand("(playMode free_kick_right)");
+                    else if (mCmdMode == CmdModePlayerSelect || mCmdMode == CmdModeLeftPlayerSelect)
+                        mCmdMode = CmdModeRightPlayerSelect;
+                }
+            break;
+        case CmdDirectLeft:
+            if (input.GetKeyPress())
+                {
+                    if (mCmdMode == CmdModeDefault)
+                        SendCommand("(playMode direct_free_kick_left)");
+                    else if (mCmdMode == CmdModePlayerSelect || mCmdMode == CmdModeRightPlayerSelect)
+                        mCmdMode = CmdModeLeftPlayerSelect;
+                }
+            break;
+        case CmdDirectRight:
+            if (input.GetKeyPress())
+                {
+                    if (mCmdMode == CmdModeDefault)
+                        SendCommand("(playMode direct_free_kick_right)");
                     else if (mCmdMode == CmdModePlayerSelect || mCmdMode == CmdModeLeftPlayerSelect)
                         mCmdMode = CmdModeRightPlayerSelect;
                 }
