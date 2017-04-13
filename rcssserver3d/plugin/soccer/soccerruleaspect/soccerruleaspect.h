@@ -26,6 +26,7 @@
 #include <soccertypes.h>
 #include <ballstateaspect/ballstateaspect.h>
 #include <gamestateaspect/gamestateaspect.h>
+#include <monitormessages/monitormessages.h>
 
 class AgentState;
 
@@ -451,6 +452,9 @@ protected:
 
     /** complete foul history */
     std::vector<Foul> mFouls;
+
+    /** reference to the monitor message broadcaster */
+    boost::shared_ptr<MonitorMessages> mMonitorMessenger;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);
