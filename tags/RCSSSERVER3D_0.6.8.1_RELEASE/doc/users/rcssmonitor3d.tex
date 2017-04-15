@@ -1,0 +1,89 @@
+\chapter{Rcssmonitor3d}
+\label{cha:rcssmonitor3d}
+
+This chapter gives an overview about the available monitor and log
+player setups available in SimSpark, their configuration and usage.
+
+\section{Internal Monitor}
+
+The internal monitor implementation is part of the SimSpark server. It
+is enabled in the \texttt{rcssserver3d.rb} setup script by enabling the
+rendering and input plugins of the server. To do so please uncomment
+the lines \texttt{sparkSetupRendering()} and
+\texttt{sparkSetupInput()}, i.e. remove the leading \texttt{'\#'} comment markers.
+
+\section{External Monitor}
+
+The external monitor implementation is called
+\texttt{rcssmonitor3d}. It either connects to a running SimSpark
+instance or replays a simulation run from a log file.
+
+\section{Playing Log files}
+
+The monitor is able to replay a simulation that is recorded in a log
+file. It accepts a \texttt{--logfile} parameter on its command line
+that enables the log player mode.
+
+\section{Key Assignments}
+
+The monitor accepts a number of commands by key or mouse. These
+commands either control the movement of the camera or send commands
+back to the server to control the simulation. The soccer simulation
+uses these commands to implement the controls for the human referee.
+
+\begin{table}
+\label {table:rcssmonitor3d}
+\caption{Key assignments for rcssmonitor3d}
+\begin{center}
+\begin{tabular}{|l|l|}
+{\bf key} & {\bf function} \\
+\hline
+q & quit monitor \\
+\hline
+left mouse button & mouse look \\
+right mouse button & move camera up \\
+keypad plus & move camera up \\
+pageup & move camera up \\
+pagedown & move camera down \\
+keypad minus & move camera down \\
+a & move camera left \\
+left arrow & move camera left \\
+d & move camera right \\
+right arrow & move camera right \\
+w & move camera forward \\
+up arrow & move camera forward \\
+s & move camera backward \\
+down arrow & move camera backward \\
+\hline
+1 & camera to left goal \\
+2 & camera to left corner \\
+3 & camera to middle left \\
+4 & camera to middle right \\
+5 & camera to middle \\
+6 & camera to right corner \\
+7 & camera to right goal \\
+\hline
+l & free kick left \\
+r & free kick right \\
+k & kick off \\
+b & drop ball \\
+m & move agent \\
+n & shoot ball \\
+x & move ball \\
+\hline
+p & pause the playback of a log file \\
+f & move forward in the log file \\
+b & move backwards in the log file \\
+l & playback the log file \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The list of accepted default command short cuts is given in table
+\ref{table:rcssmonitor3d}. These short cuts are configured in the two setup
+scripts \texttt{bindings.rb} and \texttt{soccerbindings.rb} that the
+SimSpark monitor reads on start up.
+
+ %%% Local Variables: %%% mode: latex %%% TeX-master:
+"user-manual" %%% End:

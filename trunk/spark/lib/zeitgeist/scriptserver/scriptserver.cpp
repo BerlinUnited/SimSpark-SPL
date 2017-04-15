@@ -403,7 +403,7 @@ ScriptServer::GetVariable(const string &varName)
 
             if (error)
             {
-                GetLog()->Debug() << "(ScriptServer) Ruby ERROR: "
+                GetLog()->Error() << "(ScriptServer) Ruby ERROR: "
                                   << RbGetError() << "\n";
                 v = Qnil;
             }

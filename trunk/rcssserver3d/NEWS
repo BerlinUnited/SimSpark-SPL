@@ -1,6 +1,219 @@
+[0.7.0]
+A new GUI application is developed to run and control simspark simulations.
+Additinoally, there are a number changes to the soccer rules enforced in
+the simulator. More details about changes in this release follows:
+
+* Updates to charging foul model and other fouls:
+An initial implementation of the charging foul model is documented at
+http://www.acso.uneb.br/bahiart/uploads/Main/FoulModel2016.pdf.  The
+following are some updates to the charging foul model which will hopefully
+be added to the documentation of the charging foul model soon:
+
+  - Rules for charging involving agents' relative positions to the ball
+    are only active for agents within 1 meter (ChargingMaxBallRulesDist) of
+    the ball
+  - Players are immune to committing a charging foul after touching the
+    ball for 1 second (ChargingImmunityTime)
+  - There is no maximum distance from the ball that a charging foul will
+    be called -- charging fouls can be called at any position on or off the
+    field
+  - After a player is moved/beamed by the server no charging fouls in any
+    collision involving that agent will be called for 1 second after the
+    player is moved.
+  - There is no longer a concept of ChargingMinCollisionPoint.  Instead a
+    threshold of velocity  exerted in a collision (ChargingMinCollisionSpeed
+    with a default value of 0.2) must be exceeded for a charging foul to be
+    called.  This value is calculated as a cross product between an agent's
+    velocity vector and the normalized vector from the agent to the average of
+    the opponent agent and collision point.
+
+General foul changes:
+
+  - For visualization purposes after any foul (charging, crowding, illegal
+    defense, touching, incapable) agents are lifted up in the air for
+    FoulHoldTime (default 0.5 seconds) before being beamed to the sideline.
+  - Touching fouls in groups of three or more are no longer called on
+    goalies (a goalie's teammate will be called for a touching foul instead).
+
+
+* New kick rules:
+
+The following is a summary of the rule changes for kicking:
+  - A player taking a kick can't touch the ball more than once before
+    another player touches the ball -- touching the ball more than once
+    results in an indirect free kick for the opponent (same as in human
+    soccer).  Note that a goal kick doesn't count as having been taken until
+    the ball leaves the penalty area
+  - You can never score an own goal directly off your own kick -- the
+    result of such an own goal is a corner kick for the opponent (same as in
+    human soccer).
+  - Kick-ins are indirect (same as throw-ins in human soccer).
+  - Goal kicks and corner kicks are direct (same as in human soccer).
+  - Scoring a goal directly from an indirect kick results in a goal kick
+    for the opponent (same as in human soccer).
+  - Kickoffs are still indirect and the ball must be touched outside the
+    center circle, or an opponent must first touch the ball, before the team
+    taking a kickoff can score (in human soccer kickoffs are direct, but this
+    artificial rule is needed to prevent "kickoff taking contests").
+  - Players within KickRepelDist (defined in naosoccersim.rb) of the ball
+    when it is placed for a kick are moved back to a position exactly
+    KickRepelDist from the ball to prevent players from accidentally touching
+    the ball and losing a kick if the ball is placed right underneath their
+    current position on the field.
+  - Two new direct kick playmodes have been added
+    (direct_free_kick_[left|right]).  While there is no plan to use these
+    playmodes at this year's competition, shift+L and shift+R key bindings for
+    them have been added to rcssmonitor3d and roboviz.
+
+
+* Keepaway mode:
+
+The keepaway playmode sets the playmode to GameOver if a player on the
+right team touches the ball or if the ball leaves a predefined keepaway
+area. During keepaway no charging fouls will be called on agents on the
+right team (the team trying to take the ball).
+
+The keepaway mode adds the following parameters to naosoccersim.rb:
+
+// if in keepaway mode
+Keepaway
+// center X value of keepaway box
+KeepawayCenterX
+// center Y value of keepaway box
+KeepawayCenterY
+// length of keepaway box
+KeepawayLength
+// width of keepaway box
+KeepawayWidth
+// reduction rate of length of keepaway box per minute
+KeepawayLengthReductionRate
+// reduction rate of width of keepaway box per minute
+KeepawayWidthReductionRate
+
+
+* Blocking of say messages with illegal characters:
+
+While most agents have been sending legal say messages, there have been a
+few instances of agents sending say messages with illegal characters.  The
+server now throws out say messages containing illegal characters (space,
+parenthesis, and those outside the range [0x20-0x7E]).  The server also
+prints an error message containing the illegal say message and the agent
+who said it.  When running in sync mode the proxy still needs to be used
+to protect against bad say messages that break parsing (or really any
+unparseable messages sent to the server) -- this change only throws out
+say messages with illegal that were able to be parsed.
+
+
+* Plugin for drawing objects in roboviz:
+
+You can activate a new plugin (rvdraw) within rcssserver3d allowing it to
+draw objects in roboviz by using the "-DRVDRAW=ON" command line argument
+when running cmake before building rcssserver3d.  The plugin likely only
+works in linux which is why it isn't enabled by default.  Currently this
+plugin is set to draw debugging information for the charging foul model,
+but one might find it useful to add their own code to the server to draw
+things in roboviz.
+
+After rcssserver3d is compiled with the rvdraw plugin enabled use the
+following command line argument when running the server to have it send
+draw commands to roboviz:
+rcssserver3d --rvdraw-host <roboviz_host_machine>
+
+
+[0.6.10]
+This is the final release of rcssserver3d for RoboCup 2015, which brings a few
+bug fixes and enhancements for the competitions:
+   * Turning off penalty shootout mode as soon as a goal is scored by the left
+     team so that a later second goal won't be recorded if the goalie leaves
+     the penalty area after the goal was scored.
+   * Added models for visually differentiating between different robot body
+     types.  This changes some of the black coloring on the robot's body to be
+     a different type dependent neutral color.
+   * Fixed bug where the server may hang on certain systems if beam effector
+     noise (BeamNoiseXY and BeamNoiseAngle) are set to 0.
+
+[0.6.9]
+This release comes with a number of bug fixes and also adds some new features
+to enhance managing games and also to add more challenges to games, most notably
+adding noise to the beam effector. The changes are:
+
+* Rule Changes:
+  - Added new rule requiring that the ball must either touch an opponent, or
+    touch a teammate outside the center circle, before a team taking a
+    kickoff can score.
+  - Penalty shootout kickoffs are direct now.
+
+* New Features:
+  - Added noise to the beam effector with the amount of noise added controlled
+    by the 'BeamNoiseXY' (in meters) and 'BeamNoiseAngle' (in degrees)
+    values in naosoccersim.rb.  Noise is added to beam X and Y values from
+    a uniform distribution within the range [-BeamNoiseXY, BeamNoiseXY]
+    and to beam angle values from a uniform distribution within the range
+    [-BeamNoiseAngle, BeamNoiseAngle].
+  - Added new training command parser commands for setting the game time and
+    score.  They are the following commands:
+        (time <time>)
+        (score (left <score>) (right <score>))
+  - Added penalty shootout mode where a goal is awarded to the left team
+    (penalty kicker) if the right team's player (penalty goalie) leaves the
+    penalty area.
+
+* Bug fixes:
+  - Fixing a bug with free kicks where as soon as the ball was touched,
+    and the playmode transitioned from freekick to play on, the ball was
+    still moved back to the location of the freekick preventing the ball from
+    being directly kicked out of a free kick. Also ensuring that the ball
+    position for free kicks is updated correctly as this wasn't happening
+    right after the ball was placed back at the center of the field after
+    a goal was scored.
+  - Fixing a bug where a player would be incorrectly called for double
+    touching the ball on a kickoff if the player first kicked the ball
+    directly in the opponent's goal from a kickoff, resulting in no goal
+    being awarded a nd the opposing team being given a kickoff, and then is
+    the next player to touch the ball in the PlayOn playmode after a dropball
+    when the opponent doesn't take their kickoff.
+  - Fixing a bug where rules such as too many players in their own penalty
+    area was not being enforced.
+
+[0.6.8.1]
+This is a bug-fix release for 0.6.8, which had a bug in labeling hear messages.
+It also includes few other changes: a small bug fix, and new hetero robot types
+for RoboCup 2014. Now, our Nao robots can have toe! :)
+
+[0.6.8]
+This release mainly comes with 2 new features: 1. labeling hear messages with
+team names so that it is clear which team the message comes from. 2. Score
+reporting. A few bug fixes are also included. 
+
+* Hear message labeling: 
+  - Now hear messages include team names - Ex: (hear teamName 9 10 text)
+  
+* Score Reporting:
+  - Example: (GS (unum 8) (team left) (sl 1) (sr 2) (t 0.00) (pm BeforeKickOff))
+
+* New Options in naosoccersim.rb:
+  - LabelMessages - Toggles on/off labeling of messages (default on)
+  - ReportScores - Toggles on/off score reporting (default on)
+  - MaxRobotTypeCount - Maximum number of any one robot type that may be 
+    used (default 7 and can be set to 11 to preserve 2013 competition behavior)
+  - MinRobotTypesCount - Minimum number of robot types that must be used for a
+    full team (default 3 and can be set to 1 to preserve 2013 competition
+    behavior)
+  - MaxSumTwoRobotTypes - The maximum sum of robots for any two robot types
+    (default 9 but can be set to 11 to preserve 2013 competition behavior)
+   
+* Other changes:
+  - Robot type checking to ensure that enough robot types (3) are used and that
+    not too many of any one (7) or two (9) types is used.
+  - Updating naorobottypes.rb with robot types used in 2013 competitions
+  - Clear Players in GoalLeft/Right before kickoff to make sure that opponent
+    doesn't touch ball at the middle of the field.
+  - Don't enforce crowding rules on kickoff, since opponent should not come
+    near the ball
+
 [0.6.7]
 This is the RoboCup 2013 release. It comes with some bug fixes, and also
-compatibility with latest Boost libraries. New foulds and new debugging
+compatibility with latest Boost libraries. New fouls and new debugging
 facility are provided. Now, fouls are sent to the monitor so that it can
 provide visual feedback about them. Finally, support for heterogeneous robots
 is added and two sample types are provided. 

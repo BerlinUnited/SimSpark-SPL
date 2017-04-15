@@ -563,7 +563,7 @@ ScriptServer::CreateDotDir(const string& dotDir)
     }
 
 #if WIN32
-    if (! SetCurrentDirectory(dotDir.c_str()))
+    if (SetCurrentDirectory(dotDir.c_str()))
 #else
     if (chdir(dotDir.c_str()) == 0)
 #endif

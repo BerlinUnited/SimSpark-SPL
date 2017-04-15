@@ -48,6 +48,8 @@ enum TPlayMode
     PM_Goal_Right,
     PM_FREE_KICK_LEFT,         /*!< free_kick_l:       free kick for left team */
     PM_FREE_KICK_RIGHT,        /*!< free_kick_r:       free kick for right team*/
+    PM_DIRECT_FREE_KICK_LEFT,  /*!< direct_free_kick_l:       direct free kick for left team */
+    PM_DIRECT_FREE_KICK_RIGHT, /*!< direct_free_kick_r:       direct free kick for right team*/
     PM_NONE                    /*!< no play mode, this must be the last entry */
 };
 
@@ -69,6 +71,8 @@ enum TPlayMode
 #define STR_PM_Goal_Right "Goal_Right"
 #define STR_PM_FREE_KICK_LEFT "free_kick_left"
 #define STR_PM_FREE_KICK_RIGHT "free_kick_right"
+#define STR_PM_DIRECT_FREE_KICK_LEFT "direct_free_kick_left"
+#define STR_PM_DIRECT_FREE_KICK_RIGHT "direct_free_kick_right"
 #define STR_PM_Unknown "unknown"
 
 enum TTeamIndex

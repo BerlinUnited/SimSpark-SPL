@@ -136,7 +136,7 @@ SexpParser::ListToString(stringstream& ss, const ParameterList& lst)
     string space;
 
     ss.setf(ios_base::fixed,ios_base::floatfield);
-    ss.precision(2);
+    ss.precision(3);
 
     for (
          ParameterList::TVector::const_iterator i = lst.begin();

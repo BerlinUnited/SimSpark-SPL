@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(simspark CXX C)
-set(PACKAGE_VERSION "0.2.3")
+set(PACKAGE_VERSION "0.2.4")
 
 
 ########## check for headerfiles/libraries ##########
@@ -39,7 +39,7 @@ endif (NOT USE_COREFOUNDATION STREQUAL "OFF")
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
 
 if (WIN32)
-  set(Boost_USE_STATIC_LIBS        ON)
+  set(Boost_USE_STATIC_LIBS        OFF)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME    OFF)
 
@@ -162,13 +162,13 @@ endif(WIN32)
 set(SALT_SO_VERSION 1)
 set(SALT_VERSION ${SALT_SO_VERSION}.0.0)
 set(ZEITGEIST_SO_VERSION 3)
-set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.1.3)
+set(ZEITGEIST_VERSION ${ZEITGEIST_SO_VERSION}.1.4)
 set(OXYGEN_SO_VERSION 6)
-set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.0.0)
+set(OXYGEN_VERSION ${OXYGEN_SO_VERSION}.0.1)
 set(KEROSIN_SO_VERSION 2)
-set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.1.0)
+set(KEROSIN_VERSION ${KEROSIN_SO_VERSION}.1.1)
 set(SPARK_SO_VERSION 1)
-set(SPARK_VERSION ${SPARK_SO_VERSION}.0.0)
+set(SPARK_VERSION ${SPARK_SO_VERSION}.0.1)
 set(CARBON_SO_VERSION 1)
 set(CARBON_VERSION ${CARBON_SO_VERSION}.0.0)
 set(RCSSNET_SO_VERSION 0)
@@ -225,34 +225,41 @@ install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/sparkconfig.h DESTINATION
 if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directory
         set(THLIBDIR ${LIBDIR}/thirdparty)
 	   
-	    # MinGW dll installation on a single root system
+        # MinGW dll installation on a single root system
         if (${CMAKE_CXX_COMPILER} MATCHES "mingw")
-            set(MINGW_BIN_DIR "${Boost_LIBRARY_DIRS}/../bin/")
-            install(DIRECTORY ${MINGW_BIN_DIR} DESTINATION ${THLIBDIR}
-                FILES_MATCHING
-                PATTERN "libstdc++*.dll"
-                PATTERN "libgcc_s_sjlj*.dll"
-                PATTERN "libode*.dll"
-                PATTERN "tbb*.dll"
-                PATTERN "*boost*regex*mt*.dll"
-                PATTERN "*boost*date_time*mt*.dll"
-                PATTERN "*boost*thread*mt*.dll"
-                PATTERN "libIL*.dll"
-                PATTERN "libjpeg*.dll"
-                PATTERN "libpng*.dll"
-                PATTERN "*freetype*.dll"
-                PATTERN "*SDL*.dll")
+            foreach(ROOT_DIR ${CMAKE_FIND_ROOT_PATH})
+            file(GLOB inst_lib_files "${ROOT_DIR}/*/libstdc++*.dll"
+                "${ROOT_DIR}/*/libstdc++*.dll"
+                "${ROOT_DIR}/*/libgcc_s_sjlj*.dll"
+                "${ROOT_DIR}/*/libode*.dll"
+                "${ROOT_DIR}/*/tbb*.dll"
+                "${ROOT_DIR}/*/*boost*system*mt*.dll"
+                "${ROOT_DIR}/*/*boost*chrono*mt*.dll"
+                "${ROOT_DIR}/*/*boost*regex*mt*.dll"
+                "${ROOT_DIR}/*/*boost*date_time*mt*.dll"
+                "${ROOT_DIR}/*/*boost*thread*mt*.dll"
+                "${ROOT_DIR}/*/libIL*.dll"
+                "${ROOT_DIR}/*/libjpeg*.dll"
+                "${ROOT_DIR}/*/libpng*.dll"
+                "${ROOT_DIR}/*/libbz2*.dll"
+                "${ROOT_DIR}/*/*freetype*.dll"
+                "${ROOT_DIR}/*/*ruby*.dll"
+                "${ROOT_DIR}/*/*SDL*.dll")
+            install(PROGRAMS ${inst_lib_files} DESTINATION ${THLIBDIR})
+            endforeach(ROOT_DIR)
         endif (${CMAKE_CXX_COMPILER} MATCHES "mingw")
         
         string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" ODEDLL "${ODE_LIBRARY}")
         if (EXISTS ${ODEDLL} AND ${ODEDLL} MATCHES ".dll$")
             install(PROGRAMS ${ODEDLL} DESTINATION ${THLIBDIR})
         endif (EXISTS ${ODEDLL} AND ${ODEDLL} MATCHES ".dll$")
-        
-        install(DIRECTORY "${Boost_LIBRARY_DIRS}/" DESTINATION ${THLIBDIR}
-            FILES_MATCHING PATTERN "*boost*regex*mt*.dll"
-                PATTERN "*boost*date_time*mt*.dll"
-                PATTERN "*boost*thread*mt*.dll")
+
+        file(GLOB INST_BOOST "${Boost_LIBRARY_DIRS}/*boost*system*mt*.dll" 
+             "${Boost_LIBRARY_DIRS}/*boost*chrono*mt*.dll"
+             "${Boost_LIBRARY_DIRS}/*boost*regex*mt*.dll"
+             "${Boost_LIBRARY_DIRS}/*boost*date_time*mt*.dll"
+             "${Boost_LIBRARY_DIRS}/*boost*thread*mt*.dll")
+        install(PROGRAMS ${INST_BOOST} DESTINATION ${THLIBDIR})
         
         string(REGEX REPLACE "(.*)\\.lib" "\\1.dll" DevIL_DLL "${IL_LIBRARIES}")
         if (EXISTS ${DevIL_DLL} AND ${DevIL_DLL} MATCHES ".dll$")
@@ -262,10 +269,11 @@ if (WIN32) # try to find and install third-party .dlls to lib/thirdparty directo
         string(REGEX REPLACE "(.*)/ruby(.exe)?" "\\1/" RUBY_BINDIR "${RUBY_EXECUTABLE}")
         install(DIRECTORY "${RUBY_BINDIR}"
             DESTINATION ${THLIBDIR} FILES_MATCHING PATTERN "*.dll")
-        
-        install(DIRECTORY "${FREETYPE_INCLUDE_DIR_ft2build}/../bin/"
-            DESTINATION ${THLIBDIR} FILES_MATCHING 
-            PATTERN "*freetype*.dll" PATTERN "*zlib*.dll")
+       
+        set(FREETYPE_BIN_DIR "${FREETYPE_INCLUDE_DIR_ft2build}/../bin") 
+        file(GLOB INST_FREETYPE "${FREETYPE_BIN_DIR}/*freetype*.dll" 
+             "${FREETYPE_BIN_DIR}/*zlib*.dll")
+        install(PROGRAMS ${INST_FREETYPE} DESTINATION ${THLIBDIR})
 
         set(SDL_DLL "${SDL_INCLUDE_DIR}/../lib/sdl.dll")
         if (EXISTS ${SDL_DLL})

@@ -28,8 +28,26 @@ FUNCTION(RenderControl, getFramesRendered)
     return obj->GetFramesRendered();
 }
 
+FUNCTION(RenderControl,setActive)
+{
+    bool inActive = true;
+
+    if (
+        (in.GetSize() < 0) ||
+        (in.GetSize() > 1) ||
+        ((in.GetSize() == 1) && (! in.GetValue(in[0], inActive)))
+        )
+        {
+            return false;
+        }
+
+    obj->SetActive(inActive);
+    return true;
+}
+
 void CLASS(RenderControl)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SimControlNode);
     DEFINE_FUNCTION(getFramesRendered);
+    DEFINE_FUNCTION(setActive)
 }
