@@ -122,7 +122,7 @@ endif (CARBON_FOUND)
 
 ########### install files ###############
 
-install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO 
+install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS 
        DESTINATION ${DATADIR}/doc/${CMAKE_PROJECT_NAME})
 install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h 
        DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
