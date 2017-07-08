@@ -102,6 +102,23 @@ public:
     */
     salt::Vector3f RepositionOutsidePos(salt::Vector3f initPos, int unum, TTeamIndex idx);
 
+    /** Helper for GetSafeReposition that adjusts positions if they are in 
+        a team's penalty area and would cause an illegal defense foul if an
+        agent was moved there
+    */
+    bool GetSafeRepositionHelper_AdjustPositionForPenaltyArea(const salt::Vector2f agent_pos, int unum, TTeamIndex idx, salt::Vector2f &current_pos);
+
+    /** Helper for GetSafeReposition that samples new positions to try and
+        move an agent to for repositioning
+    */
+    void GetSafeRepositionHelper_SamplePositions(const salt::Vector2f agent_pos, int unum, TTeamIndex idx, salt::Vector2f current_pos, std::list<salt::Vector2f> &candidatePosList); 
+
+    /** Checks the current position for an agent to be repositioned to for
+        potential collisions with other agents, and adjusts the position if need
+        be to avoid collisions
+    */
+    salt::Vector3f GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx);
+
     /** Calculates the inside field reposition pos for a given agent with unum and team idx
         Agents are repositioned at distance from the ball, that is, at: plpos + (plpos-ballpos).normalize()*dist
     */
@@ -367,13 +384,13 @@ protected:
     bool WasLastKickFromFreeKick(
         boost::shared_ptr<oxygen::AgentAspect> &lastKicker);
 
-    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos);
+    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos, bool fSafe=true);
 
     /** if a player has committed a foul that should be enforced */
     bool HaveEnforceableFoul(int unum, TTeamIndex ti);
 
 protected:
-    static const int AVERAGE_VELOCITY_MEASUREMENTS = 5;
+    static const int AVERAGE_VELOCITY_MEASUREMENTS = 3;
 
     /** reference to the body node of the Ball */
     boost::shared_ptr<oxygen::RigidBody> mBallBody;
@@ -485,6 +502,8 @@ protected:
     int playerFoulTime[12][3];		//Time player is commiting a positional foul
     EFoulType playerLastFoul[12][3];	//Type of last foul committed by player
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
+    int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area
+    std::list<salt::Vector2f> reposLocs; // List of locations players have been repositioned to 
     int closestPlayer[3]; 		//Closest Player from each team
     float closestPlayerDist[3]; 	//Closest Player distance to ball from each team
     salt::Vector3f playerVelocities[12][3][AVERAGE_VELOCITY_MEASUREMENTS];  // Player velocities over last AVERAGE_VELOCITY_MEASUREMENTS cycles 
@@ -593,6 +612,13 @@ protected:
     float mKeepawayLengthReductionRate;
     /** reduction rate of width of keepaway box per minute */
     float mKeepawayWidthReductionRate;
+
+    /** Maximum number of attempts made to safely reposition an agent */
+    int mMaxNumSafeRepositionAttempts;
+
+    /** Allow starting at any field position including on opponent's
+        side of the field */
+    bool mStartAnyFieldPosition;
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;

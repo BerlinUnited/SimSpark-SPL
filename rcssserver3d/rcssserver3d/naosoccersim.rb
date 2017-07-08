@@ -56,6 +56,7 @@ addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
 addSoccerVar('PenaltyShootout', false)
+addSoccerVar('StartAnyFieldPosition', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', false)
@@ -106,9 +107,13 @@ addSoccerVar('GoalieNotStandingMaxTime',60)
 addSoccerVar('GroundMaxTime',15)    
 addSoccerVar('GoalieGroundMaxTime', 30)     
 addSoccerVar('MaxPlayersInsideOwnArea',3)
-addSoccerVar('MinOppDistance',0.8)       
-addSoccerVar('Min2PlDistance',0.4)       
-addSoccerVar('Min3PlDistance',1.0)  
+#addSoccerVar('MinOppDistance',0.8)       
+#addSoccerVar('Min2PlDistance',0.4)       
+#addSoccerVar('Min3PlDistance',1.0)
+# Turning off crowding for 2017 competition  
+addSoccerVar('MinOppDistance',0.0)       
+addSoccerVar('Min2PlDistance',0.0)       
+addSoccerVar('Min3PlDistance',0.0)
 
 addSoccerVar('FoulHoldTime', 0.5)
 
@@ -128,7 +133,9 @@ addSoccerVar('BeamNoiseAngle',10.0)
 #addSoccerVar('MaxPlayersInsideOwnArea',2)
 #addSoccerVar('MinOppDistance',1.0)       
 #addSoccerVar('Min2PlDistance',0.6)       
-#addSoccerVar('Min3PlDistance',1.5)      
+#addSoccerVar('Min3PlDistance',1.5)   
+
+addSoccerVar('MaxNumSafeRepositionAttempts', 100)   
 
 # recorders
 addSoccerVar('BallRecorder',"Ball/geometry/recorder")

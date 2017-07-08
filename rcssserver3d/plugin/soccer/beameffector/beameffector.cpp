@@ -94,15 +94,18 @@ BeamEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
                 return;
             }
 
-        // an agent can only beam within it's own field half
-        float minX = -mFieldLength/2;
-        pos[0] = std::max<float>(pos[0],minX);
-        pos[0] = std::min<float>(pos[0],0.0f);
-
-        float minY = -mFieldWidth/2;
-        float maxY = mFieldWidth/2;
-        pos[1] = std::max<float>(minY,pos[1]);
-        pos[1] = std::min<float>(maxY,pos[1]);
+        if (!mStartAnyFieldPosition) 
+        {
+            // an agent can only beam within it's own field half
+            float minX = -mFieldLength/2;
+            pos[0] = std::max<float>(pos[0],minX);
+            pos[0] = std::min<float>(pos[0],0.0f);
+            
+            float minY = -mFieldWidth/2;
+            float maxY = mFieldWidth/2;
+            pos[1] = std::max<float>(minY,pos[1]);
+            pos[1] = std::min<float>(maxY,pos[1]);
+        }
 
         // fix z coordinate
         pos[2] = mAgentRadius;
@@ -189,6 +192,9 @@ BeamEffector::OnLink()
 
     mBeamNoiseAngle = 10.0f;
     SoccerBase::GetSoccerVar(*this, "BeamNoiseAngle",mBeamNoiseAngle);
+
+    mStartAnyFieldPosition = false;
+    SoccerBase::GetSoccerVar(*this,"StartAnyFieldPosition",mStartAnyFieldPosition);
 
     UniformRngPtr rng1(new salt::UniformRNG<>(-1,1));
     mNoiseRng = rng1;
