@@ -47,6 +47,7 @@ addSoccerVar('PenaltyLength',0.6)
 addSoccerVar('PenaltyWidth',2.2)
 addSoccerVar('FreeKickDistance', 0.75) # radius of the center circle 
 addSoccerVar('FreeKickMoveDist', 1.0)
+#addSoccerVar('KickRepelDist', 0.5)
 addSoccerVar('GoalKickDist', 0.6)
 addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
@@ -60,10 +61,19 @@ addSoccerVar('SayMsgSize', 128)
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
+addSoccerVar('PenaltyShootout', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', true)
 
+# keepaway settings
+addSoccerVar('Keepaway', false)
+addSoccerVar('KeepawayCenterX', 0.0)
+addSoccerVar('KeepawayCenterY', 0.0)
+addSoccerVar('KeepawayLength', 20.0)
+addSoccerVar('KeepawayWidth', 20.0)
+addSoccerVar('KeepawayLengthReductionRate', 4.0)
+addSoccerVar('KeepawayWidthReductionRate', 4.0)
 
 # agent parameters
 addSoccerVar('AgentRadius',  0.4)
@@ -72,8 +82,8 @@ addSoccerVar('MinRobotTypesCount', 3)
 addSoccerVar('MaxSumTwoRobotTypes', 9)
 
 # ball parameters
-addSoccerVar('BallRadius', 0.0325)
-addSoccerVar('BallMass',0.055)
+addSoccerVar('BallRadius', 0.05)
+addSoccerVar('BallMass',0.05)
 
 # SPL rule parameters
 addSoccerVar('RuleGoalPauseTime', 3.0)
@@ -84,19 +94,17 @@ addSoccerVar('SingleHalfTime', false)
 addSoccerVar('UseOffside', false)
 addSoccerVar('MaxTouchGroupSize', 2)
 
-# charging foul parameters (S3D)
-addSoccerVar('UseCharging', false)
-addSoccerVar('ChargingMinSpeed', 0.2)
-addSoccerVar('ChargingMinBallDist', 0.2)
-addSoccerVar('IllegalInterceptMinAngle', 70)
-
-# soccer rule parameters
-addSoccerVar('RuleGoalPauseTime',3.0)
-addSoccerVar('RuleKickInPauseTime',1.0)
-addSoccerVar('RuleDropBallTime',15)   
-addSoccerVar('SingleHalfTime', false)
-addSoccerVar('UseOffside',false)
-addSoccerVar('MaxTouchGroupSize', 2)
+# charging foul parameters
+addSoccerVar('UseCharging', true)
+addSoccerVar('ChargingMinSpeed', 0.4)
+addSoccerVar('ChargingMinBallSpeedAngle', 30)
+addSoccerVar('ChargingMinDeltaDist', 0.05)
+addSoccerVar('ChargingMinDeltaAng', 15)
+addSoccerVar('ChargingImmunityTime', 1)
+addSoccerVar('ChargingCollisionMinTime', 0.2)
+addSoccerVar('ChargingMaxBallRulesDist', 1)
+addSoccerVar('ChargingMinCollBallDist', 0.1)
+addSoccerVar('ChargingMinCollisionSpeed', 0.2)
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       
@@ -108,9 +116,15 @@ addSoccerVar('MinOppDistance',0.8)
 addSoccerVar('Min2PlDistance',0.4)       
 addSoccerVar('Min3PlDistance',1.0)  
 
+addSoccerVar('FoulHoldTime', 0.5)
+
 # 2014 server changes     
 addSoccerVar('ReportScore', true)
 addSoccerVar('LabelMessages', true)
+
+# Noise added to requested beam positions
+addSoccerVar('BeamNoiseXY',0.05)
+addSoccerVar('BeamNoiseAngle',10.0)
 
 # auto ref parameters for testing (not for use in competition...)
 #addSoccerVar('NotStandingMaxTime',10)       
