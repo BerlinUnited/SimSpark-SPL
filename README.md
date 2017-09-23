@@ -41,4 +41,4 @@ Installation
 
 * Windows
 
-  download: https://db.tt/ymRTwNcT
+  download: https://dainas.dai-labor.de:5001/sharing/9s6N1iM2K
