@@ -60,12 +60,14 @@
 #include "splrule/splrule.h"
 #include "splstate/splstate.h"
 #include "splstate/splstateitem.h"
+#include "monitormessages/monitormessages.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
         ZEITGEIST_EXPORT(GameStateAspect);
         ZEITGEIST_EXPORT(GameStateItem);
         ZEITGEIST_EXPORT(BallStateAspect);
+        ZEITGEIST_EXPORT(MonitorMessages);
         ZEITGEIST_EXPORT(SoccerRuleAspect);
         ZEITGEIST_EXPORT(SoccerRuleItem);
         ZEITGEIST_EXPORT(BeamEffector);
