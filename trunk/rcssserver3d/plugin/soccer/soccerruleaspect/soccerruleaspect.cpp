@@ -2348,6 +2348,8 @@ SoccerRuleAspect::OnLink()
         }
 
     SoccerBase::GetBallBody(*this,mBallBody);
+
+    mMonitorMessenger = boost::dynamic_pointer_cast<MonitorMessages>(GetCore()->Get("/sys/server/monitor/MonitorMessages"));
 }
 
 void
@@ -2358,6 +2360,7 @@ SoccerRuleAspect::OnUnlink()
     mGameState.reset();
     mBallState.reset();
     mBallBody.reset();
+    mMonitorMessenger.reset();
 }
 
 void
@@ -2448,6 +2451,15 @@ void
 SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
                             int number, TTeamIndex idx)
 {
+    // do we have a message monitor?
+    if(mMonitorMessenger.get() != 0) {
+        // yes - add message of the robot from the team
+        mMonitorMessenger.get()->addMessage(message, idx, number);
+    } else {
+        // try to find one
+        mMonitorMessenger = boost::dynamic_pointer_cast<MonitorMessages>(GetCore()->Get("/sys/server/monitor/MonitorMessages"));
+    }
+
     SoccerBase::TAgentStateList agent_states;
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx))
     {
@@ -2463,6 +2475,7 @@ SoccerRuleAspect::Broadcast(const string& message, const Vector3f& pos,
 
     if (static_cast<int>(message.size()) > mSayMsgSize)
     {
+        std::cout << "message is to large! (" << static_cast<int>(message.size()) << ">" << mSayMsgSize << ")" << std::endl;
         return;
     }
 

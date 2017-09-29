@@ -130,6 +130,14 @@ public:
      */
     void BlockOnReadMessages(bool block);
 
+    /** Retrieves the addr of the client with the given id.
+     */
+    void GetClientAddr(int id, std::string& addr);
+
+    /** Retrieves the port of the client with the given id.
+     */
+    void GetClientPort(int id, std::string& port);
+
 protected:
     /** returns a human readable description of the socket type and
         port*/
