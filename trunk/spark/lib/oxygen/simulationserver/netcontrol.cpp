@@ -698,3 +698,27 @@ void NetControl::BlockOnReadMessages(bool block)
         mReadTimeout = 0;
     }
 }
+
+void NetControl::GetClientAddr(int id, std::string& addr)
+{
+    for (TAddrMap::iterator iter = mClients.begin(); iter != mClients.end(); ++iter)
+    {
+        if (iter->second->id == id)
+        {
+            addr = iter->second->addr.getHostStr();
+            break;
+        }
+    }
+}
+
+void NetControl::GetClientPort(int id, std::string& port)
+{
+    for (TAddrMap::iterator iter = mClients.begin(); iter != mClients.end(); ++iter)
+    {
+        if (iter->second->id == id)
+        {
+            port = iter->second->addr.getPort();
+            break;
+        }
+    }
+}
