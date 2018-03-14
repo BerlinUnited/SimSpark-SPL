@@ -1,3 +1,18 @@
+[0.3.0]
+This release comes with a new library: carbon. The carbon library contains a
+gui-framework and a simulation-framework which wraps simspark using qt.
+Its main features are:
+ - Offering a graphical user interface which can be extended
+   by visual and functional plugins. The plugins can be used
+   to write easy-to-use interfaces to simspark simulations.
+ - Creating, managing and executing simspark-simulations
+   alongside with any additional threads and processes.
+ - The gui can be altered flexibly. Its main window with
+   "attachment points" is loaded from a shared library, and
+   its used plugins are loaded from shared libraries too.
+   Plugins with visual representation can be attached to the
+   Gui.
+
 [0.2.4]
 Simspark 0.2.4 is ready. This release is mostly a bug fix and compile fix
 release for RoboCup 2013. New exciting changes are pending, but will be

@@ -51,6 +51,8 @@ else
 
     inputServer.bindCommand('l',      Command.Left);
     inputServer.bindCommand('r',      Command.Right);
+    inputServer.bindCommand('shift l',      Command.DirectLeft);
+    inputServer.bindCommand('shift r',      Command.DirectRight);
     inputServer.bindCommand('lctrl s',      Command.PlayerSelectMode);
     inputServer.bindCommand('n',      Command.SelectNextAgent);
     inputServer.bindCommand('e',      Command.ResetSelection);

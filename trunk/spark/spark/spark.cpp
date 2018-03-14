@@ -38,7 +38,8 @@ using namespace salt;
 using namespace std;
 using namespace boost;
 
-Spark::Spark()
+Spark::Spark(const string& relPathPrefix) :
+    mRelPathPrefix(relPathPrefix)
 {
 }
 
@@ -100,7 +101,7 @@ bool
 Spark::Init(int argc, char** argv)
 {
     // See if user gave path prefix for init scripts
-    string relPathPrefix = "";
+    string relPathPrefix = mRelPathPrefix;
     for (int i = 1; i < argc; ++i)
     {
         if (strcmp(argv[i], "--init-script-prefix") == 0)

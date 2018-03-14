@@ -30,6 +30,7 @@ using namespace std;
 
 HearPerceptor::HearPerceptor() : oxygen::Perceptor()
 {
+    mLabelMessages = true;
 }
 
 HearPerceptor::~HearPerceptor()
@@ -50,6 +51,7 @@ HearPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     bool result = false;
 
     string message;
+    string team;
     float direction;
 		
     if (mAgentState->GetSelfMessage(message))
@@ -58,28 +60,37 @@ HearPerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         Predicate& predicate = predList->AddPredicate();
         predicate.name = "hear";
         predicate.parameter.Clear();
+        if (mLabelMessages) {
+            predicate.parameter.AddValue(mAgentState->GetPerceptName(ObjectState::PT_Player));
+        }
         predicate.parameter.AddValue(mGameState->GetTime());
         predicate.parameter.AddValue(self);
         predicate.parameter.AddValue(message);
         result = true;
     }
 
-    if (mAgentState->GetMessage(message, direction, true))
+    if (mAgentState->GetMessage(message, team, direction, true))
     {
         Predicate& predicate = predList->AddPredicate();
         predicate.name = "hear";
         predicate.parameter.Clear();
+        if (mLabelMessages) {
+            predicate.parameter.AddValue(team);
+        }
         predicate.parameter.AddValue(mGameState->GetTime());
         predicate.parameter.AddValue(direction);
         predicate.parameter.AddValue(message);
         result = true;
     }
 
-    if (mAgentState->GetMessage(message, direction, false))
+    if (mAgentState->GetMessage(message, team, direction, false))
     {
         Predicate& predicate = predList->AddPredicate();
         predicate.name = "hear";
         predicate.parameter.Clear();
+        if (mLabelMessages) {
+            predicate.parameter.AddValue(team);
+        }
         predicate.parameter.AddValue(mGameState->GetTime());
         predicate.parameter.AddValue(direction);
         predicate.parameter.AddValue(message);
@@ -94,6 +105,7 @@ HearPerceptor::OnLink()
 {
     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetGameState(*this, mGameState);
+    SoccerBase::GetSoccerVar(*this, "LabelMessages", mLabelMessages);
 }
 
 void

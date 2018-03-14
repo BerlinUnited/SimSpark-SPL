@@ -14,9 +14,10 @@ else
   inputServer.bindCommand('axisy',      Command.MouseY);
   inputServer.bindCommand('mouse_left', Command.Mouselook);
   inputServer.bindCommand('mouse_right',Command.Up);
+  inputServer.bindCommand('mouse_middle',Command.Down);
   inputServer.bindCommand('pagedown',   Command.Down);
-  inputServer.bindCommand('kp_minus', Command.Down);
-  inputServer.bindCommand('kp_plus',Command.Up);
+  inputServer.bindCommand('kp_minus',   Command.Down);
+  inputServer.bindCommand('kp_plus',    Command.Up);
   inputServer.bindCommand('pageup',     Command.Up);
   inputServer.bindCommand('q',          Command.Quit)
   inputServer.bindCommand('a',          Command.Left)

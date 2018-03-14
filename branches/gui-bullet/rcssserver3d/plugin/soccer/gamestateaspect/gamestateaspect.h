@@ -119,6 +119,9 @@ public:
     /** sets the game running state (paused or not) */
     void SetPaused(bool paused);
 
+    /** swaps the team index (side) of current teams */
+    void SwapTeamIndexes();
+
 protected:
     /** setup the init positions for the agents */
     virtual void OnLink();
@@ -152,6 +155,13 @@ protected:
     */
     TTeamIndex GetTeamIndex(const std::string& teamName);
 
+    /**
+     * @param[in] idx the team index
+     * @return the internal index used for indexing variables storing data
+     * about teams. If idx is TI_NONE, it will return -1
+     */
+    int GetInternalIndex(TTeamIndex idx) const;
+
 protected:
     /** the current play mode */
     TPlayMode mPlayMode;
@@ -177,6 +187,10 @@ protected:
     /** the team that has to start the next half */
     TTeamIndex mNextHalfKickOff;
 
+    /** the internal index for a team, since its TTeamIndex might change in
+     * the second half */
+    int mInternalIndex[3];
+
     /** the names of the two teams */
     std::string mTeamName[2];
 
@@ -185,9 +199,6 @@ protected:
 
     /** the array of robot type counts for each team */
     std::vector<int> mRobotTypeCount[2];
-
-    /** the number of heterogeneous players for each team */
-    int mHeteroCount[2];
 
     /** the scores of two teams */
     int mScore[2];
@@ -207,11 +218,14 @@ protected:
     /** flag if the game is running or paused (e.g. in goal_left/right state) */
     bool mGamePaused;
 
-    /** the maximum number of heterogeneous players of a single type per team */
-    int mMaxHeteroTypeCount;
+    /** the maximum number of players of a single type per team */
+    int mMaxRobotTypeCount;
 
-    /** the maximum number of total heterogeneous players for a team */
-    int mMaxTotalHeteroCount;
+    /** the minimum number of different robot types per team */
+    int mMinRobotTypesCount;
+
+    /** the maximum sum of robots for any two robot types */
+    int mMaxSumTwoRobotTypes;
 };
 
 DECLARE_CLASS(GameStateAspect);

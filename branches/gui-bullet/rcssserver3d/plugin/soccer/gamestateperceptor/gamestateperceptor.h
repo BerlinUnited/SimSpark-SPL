@@ -73,6 +73,9 @@ protected:
         is assigned to a team with a successful init command
     */
     bool mFirstPercept;
+
+    /** report game score to agent */
+    bool mReportScore;
 };
 
 DECLARE_CLASS(GameStatePerceptor);

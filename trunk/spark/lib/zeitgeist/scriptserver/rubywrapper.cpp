@@ -55,11 +55,11 @@ std::string zeitgeist::RbGetError()
   //VALUE msg = rb_inspect(rb_gv_get("$!"));
 
   // Note: this is a better way of getting the error message
-  VALUE msg = rb_errinfo();
+  //VALUE msg = rb_errinfo();
   
-  return RSTRING_PTR(rb_obj_as_string(msg));
+  //return RSTRING_PTR(rb_obj_as_string(msg));
 
-  //return std::string("(zeitgeist::RbGetError) [BUG] dont use this function until the multithreaded access to ruby environment is solved properly!!!");
+  return std::string("(zeitgeist::RbGetError) [BUG] dont use this function until the multithreaded access to ruby environment is solved properly!!!");
 }
 
 void zeitgeist::RbPrintError()

@@ -15,4 +15,14 @@
         (setSenseLine true)
         (setSenseLineName true)
         )
+        
+    ;(nd ImagePerceptor
+    ;    (setPredicateName $name)
+	; 	(setInterval 30)
+	; 	(setOffScreen true)
+	; 	(setResolution 320 240)
+	; 	(setFOV 58)
+	; 	(setZNear 0.003)
+	; 	(setZFar 50)
+	; 	)
 )

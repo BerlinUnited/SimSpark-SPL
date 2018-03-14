@@ -56,7 +56,9 @@ public:
             //JAN
             CmdFreeKickLeft      = CmdCameraRightGoal + 1,
             CmdFreeKickRight     = CmdFreeKickLeft + 1,
-            CmdKillAgentLeft     = CmdFreeKickRight + 1,
+            CmdDirectFreeKickLeft      = CmdFreeKickRight + 1,
+            CmdDirectFreeKickRight     = CmdDirectFreeKickLeft + 1,
+            CmdKillAgentLeft     = CmdDirectFreeKickRight + 1,
             CmdKillAgentRight    = CmdKillAgentLeft + 1,
             
             CmdNextCamera        = CmdKillAgentRight + 1,
