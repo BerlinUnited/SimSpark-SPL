@@ -172,6 +172,7 @@ void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
 
         if (! ParsePredicate(predicate))
         {
+            GetLog()->Error() << "(TrainerCommandParser) Couldn't parse command "<<predicate.name<<".\n";
             continue;
         }
     }
@@ -403,7 +404,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
 
          // set new temperature
-        (*iter)->SetBattery(temperature);
+        (*iter)->SetTemperature(temperature);
 
     }
 }

@@ -116,7 +116,7 @@ AgentState::SetBattery(float battery)
 float
 AgentState::GetTemperature() const
 {
-    return 23.0;
+    return mTemperature;
 }
 
 void
