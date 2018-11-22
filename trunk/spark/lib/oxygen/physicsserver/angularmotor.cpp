@@ -76,6 +76,10 @@ void AngularMotor::OnLink()
     }
 
     mTempMotor = mTempEnvironment;
+
+    if (mPhysicsServer.get() == 0) {
+        mPhysicsServer = static_pointer_cast<PhysicsServer>(GetCore()->Get("/sys/server/physics"));
+    }
 }
 
 void AngularMotor::SetMode(int mode)
@@ -170,13 +174,15 @@ void AngularMotor::PrePhysicsUpdateInternal(float deltaTime)
 
   if ( mBattery.get() != 0 )
   {
-    if (!mBattery->Consume(E))
+    if (mPhysicsServer->GetBatteryDischarge() && !mBattery->Consume(E))
     {
       SetMaxMotorForce(Joint::AI_FIRST, 0);
     }
   }
 
-  mTempMotor += (Pr - mThermalConductivity*(mTempMotor-mTempEnvironment)) * deltaTime / mHeatCapacity;
+  if(mPhysicsServer->GetJointHeating()) {
+      mTempMotor += (Pr - mThermalConductivity*(mTempMotor-mTempEnvironment)) * deltaTime / mHeatCapacity;
+  }
 }
 
 void AngularMotor::SetBattery(const std::string& batteryPath)

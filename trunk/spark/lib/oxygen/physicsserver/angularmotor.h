@@ -21,6 +21,7 @@
 #define OXYGEN_ANGULARMOTOR_H
 
 #include <oxygen/oxygen_defines.h>
+#include <oxygen/physicsserver/physicsserver.h>
 #include <oxygen/physicsserver/joint.h>
 #include <oxygen/physicsserver/battery.h>
 #include <oxygen/physicsserver/hingejoint.h>
@@ -160,6 +161,7 @@ protected:
 private:
     static boost::shared_ptr<AngularMotorInt> mAngularMotorImp;
 
+    boost::shared_ptr<PhysicsServer> mPhysicsServer;
     boost::shared_ptr<Battery> mBattery;
 
     /** parameters of motor */
