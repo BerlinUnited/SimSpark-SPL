@@ -25,7 +25,9 @@
 #include <list>
 #include <string>
 #include <functional>
+#ifndef Q_MOC_RUN
 #include <boost/any.hpp>
+#endif
 #include <salt/vector.h>
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/oxygen_defines.h>

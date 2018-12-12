@@ -28,7 +28,9 @@
 #include "sparkpropertydata.h"
 
 #include <map>
+#ifndef Q_MOC_RUN
 #include <boost/weak_ptr.hpp>
+#endif
 #include <QString>
 #include <vector>
 #include <QSemaphore>

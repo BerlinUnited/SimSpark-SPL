@@ -32,7 +32,9 @@
 #include "plugintype.h"
 #include "cutelogger/logger.h"
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 #include <vector>
 #include <QString>

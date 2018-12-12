@@ -28,7 +28,9 @@
 #include "plugintype.h"
 #include "abstractplugin.h"
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <vector>
 #include <QAbstractTableModel>
 

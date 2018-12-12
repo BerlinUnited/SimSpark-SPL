@@ -19,8 +19,12 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef Q_MOC_RUN
 #include <boost/any.hpp>
+#endif
+#ifndef Q_MOC_RUN
 #include <boost/scoped_array.hpp>
+#endif
 #include <sstream>
 #include <salt/fileclasses.h>
 #include <zeitgeist/core.h>

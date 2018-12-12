@@ -19,11 +19,15 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "timersystemboost.h"
+#ifndef Q_MOC_RUN
 #include <boost/date_time/posix_time/posix_time.hpp>
+#endif
 #include <zeitgeist/logserver/logserver.h>
 
 #ifdef _MSC_VER
+#ifndef Q_MOC_RUN
 #include <boost/math/special_functions/round.hpp>
+#endif
 using boost::math::round;
 #endif
 

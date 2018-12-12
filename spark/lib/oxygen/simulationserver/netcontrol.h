@@ -24,7 +24,9 @@
 #include "netbuffer.h"
 #include <vector>
 #include <rcssnet/socket.hpp>
+#ifndef Q_MOC_RUN
 #include <boost/shared_array.hpp>
+#endif
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen

@@ -37,7 +37,9 @@
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>
 #include <oxygen/oxygen_defines.h>
+#ifndef Q_MOC_RUN
 #include <boost/thread/recursive_mutex.hpp>
+#endif
 #include "scene.h"
 
 namespace oxygen

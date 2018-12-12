@@ -28,7 +28,9 @@
 #include "ui_settingsdialog.h"
 
 #include <QToolButton>
+#ifndef Q_MOC_RUN
 #include <boost/weak_ptr.hpp>
+#endif
 
 /*!
  \brief Helper-Class. A QToolButton, that contains a number and emits it when clicked.

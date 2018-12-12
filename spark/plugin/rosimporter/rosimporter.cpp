@@ -44,7 +44,9 @@
 #include <kerosin/sceneserver/capsule.h>
 #include <kerosin/sceneserver/staticmesh.h>
 #include <kerosin/renderserver/renderserver.h>
+#ifndef Q_MOC_RUN
 #include <boost/scoped_array.hpp>
+#endif
 
 using namespace salt;
 using namespace zeitgeist;

@@ -22,8 +22,12 @@
 #ifndef KEROSIN_TEXTURE_H
 #define KEROSIN_TEXTURE_H
 
+#ifndef Q_MOC_RUN
 #include <boost/weak_ptr.hpp>
+#endif
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <kerosin/kerosin_defines.h>
 #include <kerosin/openglserver/openglwrapper.h>
 
