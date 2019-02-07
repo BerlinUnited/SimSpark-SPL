@@ -1,4 +1,0 @@
-Icon Author: AvoSoft
-
-HomePage: http://www.avo-soft.com
-License: Free for non-commercial use.

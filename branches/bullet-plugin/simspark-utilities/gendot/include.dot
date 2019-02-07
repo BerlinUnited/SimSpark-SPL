@@ -1,8 +1,0 @@
-# include.dot: include file for the gendot tool
-#
-size ="7.5,10";
-ratio = "1.01";
-rotate ="90";
-
-  edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",color="black",labelfontsize=10];
-  node [fontname="Helvetica",fontsize=8,shape=box,height=0.2,width=0.4];
