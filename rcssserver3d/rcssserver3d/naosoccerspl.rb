@@ -55,7 +55,7 @@ addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 # game flow parameters
 addSoccerVar('ReadyDuration', 45)
 addSoccerVar('SetDuration', 5)
-addSoccerVar('SayMsgSize', 128)
+addSoccerVar('SayMsgSize', 256)
 
 # soccer game settings
 addSoccerVar('AutomaticKickOff', false)
@@ -171,7 +171,10 @@ end
 monitorServer = get($serverPath+'monitor')
 if (monitorServer != nil)
   monitorServer.registerMonitorItem('GameStateItem')
+
   monitorServer.registerMonitorItem('SoccerRuleItem')
+
+  monitorServer.registerMonitorItem('MonitorMessages')
 end
 
 # install the TrainerCommandParser to parse commands received from a

@@ -63,7 +63,7 @@ RFile::Sep()
 std::string
 RFile::BundlePath()
 {
-#if USE_COREFOUNDATION
+#if USE_COREFOUNDATION_
 #if HAVE_COREFOUNDATION_COREFOUNDATION_H
     char path[1024];
     CFBundleRef mainBundle = CFBundleGetMainBundle();

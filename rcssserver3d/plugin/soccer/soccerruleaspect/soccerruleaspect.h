@@ -26,6 +26,7 @@
 #include <soccertypes.h>
 #include <ballstateaspect/ballstateaspect.h>
 #include <gamestateaspect/gamestateaspect.h>
+#include <monitormessages/monitormessages.h>
 
 class AgentState;
 
@@ -579,6 +580,7 @@ protected:
     /** complete foul history */
     std::vector<Foul> mFouls;
 
+
     /** if in keepaway mode */
     bool mKeepaway;
     /** center X value of keepaway box */
@@ -597,6 +599,9 @@ protected:
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;
 #endif // RVDRAW
+
+    /** reference to the monitor message broadcaster */
+    boost::shared_ptr<MonitorMessages> mMonitorMessenger;
 };
 
 DECLARE_CLASS(SoccerRuleAspect);

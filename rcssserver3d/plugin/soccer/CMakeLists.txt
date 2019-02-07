@@ -52,6 +52,7 @@ set(soccer_LIB_HDRS
    splrule/splrule.h
    splstate/splstateitem.h
    splstate/splstate.h
+   monitormessages/monitormessages.h
 )
 
 if (RVDRAW)
@@ -143,6 +144,8 @@ set(soccer_LIB_SRCS
    splstate/splstateitem_c.cpp
    splstate/splstate.cpp
    splstate/splstate_c.cpp
+   monitormessages/monitormessages.cpp
+   monitormessages/monitormessages_c.cpp
 )
 
 if (RVDRAW)

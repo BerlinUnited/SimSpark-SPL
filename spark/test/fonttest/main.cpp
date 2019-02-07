@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #else
 #include <SDL.h>
+#include <SDL_main.h>
 #endif 
 #ifdef _WIN32
 #include <windows.h>
@@ -45,6 +46,7 @@ static void processEvents( void )
 }
 
 int main(int argc, char **argv)
+//int SDL_main(int argc, char **argv)
 {
         Zeitgeist       zg("." PACKAGE_NAME);
 
