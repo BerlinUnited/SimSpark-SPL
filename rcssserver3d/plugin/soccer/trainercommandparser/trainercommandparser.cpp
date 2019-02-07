@@ -172,6 +172,7 @@ void TrainerCommandParser::ParsePredicates(oxygen::PredicateList & predList)
 
         if (! ParsePredicate(predicate))
         {
+            GetLog()->Error() << "(TrainerCommandParser) Couldn't parse command "<<predicate.name<<".\n";
             continue;
         }
     }
@@ -205,7 +206,7 @@ TrainerCommandParser::ParsePredicate(const oxygen::Predicate & predicate)
     case CT_DROP_BALL:
         // DEBUG
         GetLog()->Error() << "(TrainerCommandParser) Dropping ball.\n";
-        mSoccerRule->DropBall();
+        mSoccerRule->DropBall(true);
         break;
     case CT_KICK_OFF:
         ParseKickOffCommand(predicate);
@@ -403,7 +404,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         }
 
          // set new temperature
-        (*iter)->SetBattery(temperature);
+        (*iter)->SetTemperature(temperature);
 
     }
 }

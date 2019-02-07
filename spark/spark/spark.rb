@@ -748,7 +748,9 @@ $printAllMessages = true
 
 #
 # setup the PhysicsServer
-sparkGetPhysicsServer()
+physicsServer = sparkGetPhysicsServer()
+#physicsServer.setJointHeating(false)
+#physicsServer.setBatteryDischarge(false)
 
 #
 # setup the SceneServer

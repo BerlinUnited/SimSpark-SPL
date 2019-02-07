@@ -156,7 +156,13 @@ bool SimSpark::ProcessCmdLine(int argc, char* argv[])
 
 bool SimSpark::InitApp(int argc, char** argv)
 {
-    GetCore()->GetFileServer()->AddResourceLocation(RCSS_BUNDLE_PATH);
+    const char *envPrefix = getenv("RCSS_BUNDLE_PATH");
+    if (envPrefix) {
+        GetCore()->GetFileServer()->AddResourceLocation(envPrefix);
+    } else {
+        GetCore()->GetFileServer()->AddResourceLocation(RCSS_BUNDLE_PATH);
+    }
+
     GetSimulationServer()->SetSimStep(0.01f);
     PrintGreeting();
 

@@ -140,8 +140,9 @@ void SPLRule::Update(float /*deltaTime*/)
 
 void SPLRule::UpdateInitialKickOff()
 {
-
-  HideBall();
+  if(!mdropBallForced) {
+    HideBall();
+  }
   //all robots must be in the initial state and must be placed on the
   //sidelines in their own half of the field
 
@@ -211,7 +212,9 @@ void SPLRule::UnpenalizeRobot(boost::shared_ptr<AgentState> robot)
 
 void SPLRule::UpdateReady()
 {
-  HideBall();
+  if(!mdropBallForced) {
+    HideBall();
+  }
 
   if (mState->GetStateTime() > mReadyDuration)
   {
@@ -337,6 +340,9 @@ void SPLRule::UpdateSet()
     bool wasManual = 0;
 
     //if (timeNow - lastTimeBeforePlacement > crange) {
+
+    // the ball doesn't get hidden after this state
+    resetDropBallForced();
 
     SoccerBase::TAgentStateList agentStates;
     if (mBallState.get() == 0)
@@ -464,6 +470,9 @@ void SPLRule::ManualPlacement(TTeamIndex idx) {
 
 void SPLRule::UpdatePlaying()
 {
+
+    // the ball doesn't get hidden after this state
+    resetDropBallForced();
 
     if(CheckGoal()) {
         mState->SetState(Ready);
@@ -605,6 +614,9 @@ void SPLRule::CheckTime()
 
 void SPLRule::UpdateFinish()
 {
+    // the ball doesn't get hidden after this state
+    resetDropBallForced();
+
     if (mAutomaticQuit)
     {
         boost::shared_ptr<GameControlServer> gameControlServer =

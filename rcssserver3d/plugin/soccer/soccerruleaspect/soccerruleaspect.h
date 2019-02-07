@@ -90,7 +90,7 @@ public:
     /** Drop ball at its current position and move all players away
         by the free kick radius.
     */
-    void DropBall();
+    void DropBall(bool force=false);
     /** Drop ball at a given position and move all players away from that
         position by the free kick radius.
         \param pos position where the ball should be dropped-
@@ -373,6 +373,9 @@ protected:
     /** if a player has committed a foul that should be enforced */
     bool HaveEnforceableFoul(int unum, TTeamIndex ti);
 
+    /** Resets the drop ball forced state to false */
+    void resetDropBallForced();
+
 protected:
     static const int AVERAGE_VELOCITY_MEASUREMENTS = 5;
 
@@ -399,6 +402,8 @@ protected:
     /** the time we wait before dropping the ball in play modes where only
         one team can touch the ball */
     float mDropBallTime;
+    /** If the ball was dropped by a trainer (forced). */
+    bool mdropBallForced;
 
     /** the field length (in meters) */
     float mFieldLength;

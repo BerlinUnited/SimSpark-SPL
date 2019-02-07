@@ -49,6 +49,7 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mKickInPauseTime(1),
     mHalfTime(2.25 * 60),
     mDropBallTime(15),
+    mdropBallForced(false),
     mFreeKickDist(9.15),
     mFreeKickMoveDist(15.15),
     mRepelPlayersForKick(false),
@@ -1359,8 +1360,9 @@ SoccerRuleAspect::GetFoulsSince(unsigned index) const
 }
 
 void
-SoccerRuleAspect::DropBall()
+SoccerRuleAspect::DropBall(bool force)
 {
+    mdropBallForced = force;
     DropBall(mBallBody->GetPosition());
 }
 
@@ -2957,4 +2959,8 @@ SoccerRuleAspect::HaveEnforceableFoul(int unum, TTeamIndex ti)
         && (playerFoulTime[unum][ti] > mMaxFoulTime / 0.02
             || playerLastFoul[unum][ti] == FT_Charging
             || playerLastFoul[unum][ti] == FT_Touching);
+}
+
+void SoccerRuleAspect::resetDropBallForced() {
+    mdropBallForced = false;
 }

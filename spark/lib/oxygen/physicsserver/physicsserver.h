@@ -43,7 +43,7 @@ class OXYGEN_API PhysicsServer : public zeitgeist::Leaf
     //
 public:
     PhysicsServer();
-    virtual ~PhysicsServer(){};
+    virtual ~PhysicsServer(){}
     
     virtual void OnLink();
     
@@ -61,6 +61,26 @@ public:
     
     /** Creates a new Box and adds it to the SceneGraph */
     void SetUpBox(boost::shared_ptr<RigidBody> body, std::string name);
+
+    /** Enables/Disables the joint heating. */
+    void SetJointHeating(bool enable) {
+        enableJointHeating = enable;
+    }
+
+    /** Returns, whether the joints should be heating. */
+    bool GetJointHeating() {
+        return enableJointHeating;
+    }
+
+    /** Enables/Disables the battery discharge. */
+    void SetBatteryDischarge(bool enable) {
+        enableBatteryDischarge = enable;
+    }
+
+    /** Returns, whether the battery should be discharging. */
+    bool GetBatteryDischarge() {
+        return enableBatteryDischarge;
+    }
     
 private:
     static boost::shared_ptr<PhysicsServerInt> mPhysicsServerImp;
@@ -70,6 +90,12 @@ private:
 
     /** cached reference to the World node below the active scene */
     boost::shared_ptr<World> mActiveWorld;
+
+    /** indicates, whether the joints should be heating */
+    bool enableJointHeating = true;
+
+    /** indicates, whether battery should be discharging */
+    bool enableBatteryDischarge = true;
 };
 
 DECLARE_CLASS(PhysicsServer);

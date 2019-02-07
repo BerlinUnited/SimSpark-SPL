@@ -24,7 +24,33 @@
 using namespace boost;
 using namespace oxygen;
 
+FUNCTION(PhysicsServer,setJointHeating)
+{
+    bool enable;
+    if ( (in.GetSize() != 1) || (! in.GetValue(in.begin(),enable)) )
+    {
+        return false;
+    }
+    obj->SetJointHeating(enable);
+
+    return true;
+}
+
+FUNCTION(PhysicsServer,setBatteryDischarge)
+{
+    bool enable;
+    if ( (in.GetSize() != 1) || (! in.GetValue(in.begin(),enable)) )
+    {
+        return false;
+    }
+    obj->SetBatteryDischarge(enable);
+
+    return true;
+}
+
 void CLASS(PhysicsServer)::DefineClass()
 {
         DEFINE_BASECLASS(zeitgeist/Leaf);
+        DEFINE_FUNCTION(setJointHeating);
+        DEFINE_FUNCTION(setBatteryDischarge);
 }
