@@ -1,1 +1,0 @@
-$pdflatex  =  'pdflatex --file-line-error --synctex=1 --shell-escape %O %S';

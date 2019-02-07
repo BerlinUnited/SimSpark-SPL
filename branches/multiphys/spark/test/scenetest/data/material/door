@@ -1,4 +1,0 @@
-Material.Diffuse	= "texture/door2_d.tga";
-Material.Normal		= "texture/door2_local.tga";
-Material.Specular	= "texture/door2_s.tga";
-

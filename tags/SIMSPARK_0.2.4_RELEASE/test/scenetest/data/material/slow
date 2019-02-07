@@ -1,4 +1,0 @@
-Material.Diffuse	= "texture/grid_d.tga";
-Material.Normal		= "texture/grid_local.tga";
-Material.Specular	= "texture/grid_d.tga";
-

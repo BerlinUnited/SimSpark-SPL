@@ -1,9 +1,0 @@
-; -*- mode: lisp; -*-
-
-(RSG 0 1)
-(
-    (nd DragController
-        (setAngularDrag 0.01)
-        (setLinearDrag 0.01)
-    )
-)
