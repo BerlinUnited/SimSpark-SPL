@@ -1,124 +1,47 @@
-RELEASE News of rcssserver3d-0.7.0
+RELEASE News of rcssserver3d-0.7.1
 
-A new GUI application is developed to run and control simspark simulations.
-Additinoally, there are a number changes to the soccer rules enforced in
-the simulator. More details about changes in this release follows:
+New changes for the RoboCup 2017 competition:
 
-* Updates to charging foul model and other fouls:
-An initial implementation of the charging foul model is documented at
-http://www.acso.uneb.br/bahiart/uploads/Main/FoulModel2016.pdf.  The
-following are some updates to the charging foul model which will hopefully
-be added to the documentation of the charging foul model soon:
+* Bug Fixes:
+    - Fixed bug where double touches on kicks (kickoffs, free kicks,
+      kick-ins, corner kicks) were not always being detected correctly
+    - Fixed bug where if a player is touching the ball right when the wait
+      time at the beginning of a kick play mode ends the play mode could end up
+      recording the touch and inadvertently end the kick.
+    - Fixed bug where if two players enter their own penalty area at the
+      same time, and in doing so cause the maximum allowed number of players in
+      the penalty area to be exceeded, both players will be called for illegal
+      defense even if the team is only one player over the allowed number of
+      players in the penalty area.
+    - Fixed issue where free kicks and kicks-in printed an error message
+      and didn't behave correctly if the ball has yet to be touched by an agent.
 
-  - Rules for charging involving agents' relative positions to the ball
-    are only active for agents within 1 meter (ChargingMaxBallRulesDist) of
-    the ball
-  - Players are immune to committing a charging foul after touching the
-    ball for 1 second (ChargingImmunityTime)
-  - There is no maximum distance from the ball that a charging foul will
-    be called -- charging fouls can be called at any position on or off the
-    field
-  - After a player is moved/beamed by the server no charging fouls in any
-    collision involving that agent will be called for 1 second after the
-    player is moved.
-  - There is no longer a concept of ChargingMinCollisionPoint.  Instead a
-    threshold of velocity  exerted in a collision (ChargingMinCollisionSpeed
-    with a default value of 0.2) must be exceeded for a charging foul to be
-    called.  This value is calculated as a cross product between an agent's
-    velocity vector and the normalized vector from the agent to the average of
-    the opponent agent and collision point.
-
-General foul changes:
-
-  - For visualization purposes after any foul (charging, crowding, illegal
-    defense, touching, incapable) agents are lifted up in the air for
-    FoulHoldTime (default 0.5 seconds) before being beamed to the sideline.
-  - Touching fouls in groups of three or more are no longer called on
-    goalies (a goalie's teammate will be called for a touching foul instead).
-
-
-* New kick rules:
-
-The following is a summary of the rule changes for kicking:
-  - A player taking a kick can't touch the ball more than once before
-    another player touches the ball -- touching the ball more than once
-    results in an indirect free kick for the opponent (same as in human
-    soccer).  Note that a goal kick doesn't count as having been taken until
-    the ball leaves the penalty area
-  - You can never score an own goal directly off your own kick -- the
-    result of such an own goal is a corner kick for the opponent (same as in
-    human soccer).
-  - Kick-ins are indirect (same as throw-ins in human soccer).
-  - Goal kicks and corner kicks are direct (same as in human soccer).
-  - Scoring a goal directly from an indirect kick results in a goal kick
-    for the opponent (same as in human soccer).
-  - Kickoffs are still indirect and the ball must be touched outside the
-    center circle, or an opponent must first touch the ball, before the team
-    taking a kickoff can score (in human soccer kickoffs are direct, but this
-    artificial rule is needed to prevent "kickoff taking contests").
-  - Players within KickRepelDist (defined in naosoccersim.rb) of the ball
-    when it is placed for a kick are moved back to a position exactly
-    KickRepelDist from the ball to prevent players from accidentally touching
-    the ball and losing a kick if the ball is placed right underneath their
-    current position on the field.
-  - Two new direct kick playmodes have been added
-    (direct_free_kick_[left|right]).  While there is no plan to use these
-    playmodes at this year's competition, shift+L and shift+R key bindings for
-    them have been added to rcssmonitor3d and roboviz.
-
-
-* Keepaway mode:
-
-The keepaway playmode sets the playmode to GameOver if a player on the
-right team touches the ball or if the ball leaves a predefined keepaway
-area. During keepaway no charging fouls will be called on agents on the
-right team (the team trying to take the ball).
-
-The keepaway mode adds the following parameters to naosoccersim.rb:
-
-// if in keepaway mode
-Keepaway
-// center X value of keepaway box
-KeepawayCenterX
-// center Y value of keepaway box
-KeepawayCenterY
-// length of keepaway box
-KeepawayLength
-// width of keepaway box
-KeepawayWidth
-// reduction rate of length of keepaway box per minute
-KeepawayLengthReductionRate
-// reduction rate of width of keepaway box per minute
-KeepawayWidthReductionRate
-
-
-* Blocking of say messages with illegal characters:
-
-While most agents have been sending legal say messages, there have been a
-few instances of agents sending say messages with illegal characters.  The
-server now throws out say messages containing illegal characters (space,
-parenthesis, and those outside the range [0x20-0x7E]).  The server also
-prints an error message containing the illegal say message and the agent
-who said it.  When running in sync mode the proxy still needs to be used
-to protect against bad say messages that break parsing (or really any
-unparseable messages sent to the server) -- this change only throws out
-say messages with illegal that were able to be parsed.
-
-
-* Plugin for drawing objects in roboviz:
-
-You can activate a new plugin (rvdraw) within rcssserver3d allowing it to
-draw objects in roboviz by using the "-DRVDRAW=ON" command line argument
-when running cmake before building rcssserver3d.  The plugin likely only
-works in linux which is why it isn't enabled by default.  Currently this
-plugin is set to draw debugging information for the charging foul model,
-but one might find it useful to add their own code to the server to draw
-things in roboviz.
-
-After rcssserver3d is compiled with the rvdraw plugin enabled use the
-following command line argument when running the server to have it send
-draw commands to roboviz:
-rcssserver3d --rvdraw-host <roboviz_host_machine>
+* Rule Changes:
+    - The automated referee will no longer move/reposition agents on top
+      of each other or into their own penalty area if it will trigger an illegal
+      defense penalty.  This is accomplished by doing a breadth first search
+      around the position that an agent is to be repositioned to until a safe
+      position is found.   The number of positions that will be considered by
+      the breadth first search is bounded by the MaxNumSafeRepositionAttempts
+      value (default 100) in naosocersim.rb.  Setting this value to 0 turns this
+      feature off.  If ever the server isn't able to safely reposition a player
+      it will print an error message.
+    - The order in which players are evaluated for fouls and are penalized
+      is now randomized so as to not have any bias associated with players'
+      teams and uniform numbers.
+    - Averaging the velocity of an agent over the last 3 time steps
+      instead of 5 when determining charging fouls.  This allows agents to
+      reduce their effective velocities faster so as to have a better chance of
+      avoiding charging fouls when colliding with an opponent.
+    - Removing code that takes into account the opponent's velocity moving
+      away from a colliding agent when determining fouls.  This code was
+      decreasing the likelihood of an agent being called for a foul when running
+      down an opponent from behind.
+    - Turning off crowding rules in naosoccersim.rb
+    - Adding StartAnyFieldPosition flag (default false) to
+      naosoccersim.rb.  Turning this flag on allows agents to be at, beam, or be
+      moved to any position on the field at the start of kickoffs including the
+      opponent's side of the field.
 
 
 You can get the package on the Simspark page on SourceForge at

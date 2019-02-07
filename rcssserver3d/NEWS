@@ -1,3 +1,47 @@
+[0.7.1]
+New changes for the RoboCup 2017 competition:
+
+* Bug Fixes:
+    - Fixed bug where double touches on kicks (kickoffs, free kicks,
+      kick-ins, corner kicks) were not always being detected correctly
+    - Fixed bug where if a player is touching the ball right when the wait
+      time at the beginning of a kick play mode ends the play mode could end up
+      recording the touch and inadvertently end the kick.
+    - Fixed bug where if two players enter their own penalty area at the
+      same time, and in doing so cause the maximum allowed number of players in
+      the penalty area to be exceeded, both players will be called for illegal
+      defense even if the team is only one player over the allowed number of
+      players in the penalty area.
+    - Fixed issue where free kicks and kicks-in printed an error message
+      and didn't behave correctly if the ball has yet to be touched by an agent.
+
+* Rule Changes:
+    - The automated referee will no longer move/reposition agents on top
+      of each other or into their own penalty area if it will trigger an illegal
+      defense penalty.  This is accomplished by doing a breadth first search
+      around the position that an agent is to be repositioned to until a safe
+      position is found.   The number of positions that will be considered by
+      the breadth first search is bounded by the MaxNumSafeRepositionAttempts
+      value (default 100) in naosocersim.rb.  Setting this value to 0 turns this
+      feature off.  If ever the server isn't able to safely reposition a player
+      it will print an error message.
+    - The order in which players are evaluated for fouls and are penalized
+      is now randomized so as to not have any bias associated with players'
+      teams and uniform numbers.
+    - Averaging the velocity of an agent over the last 3 time steps
+      instead of 5 when determining charging fouls.  This allows agents to
+      reduce their effective velocities faster so as to have a better chance of
+      avoiding charging fouls when colliding with an opponent.
+    - Removing code that takes into account the opponent's velocity moving
+      away from a colliding agent when determining fouls.  This code was
+      decreasing the likelihood of an agent being called for a foul when running
+      down an opponent from behind.
+    - Turning off crowding rules in naosoccersim.rb
+    - Adding StartAnyFieldPosition flag (default false) to
+      naosoccersim.rb.  Turning this flag on allows agents to be at, beam, or be
+      moved to any position on the field at the start of kickoffs including the
+      opponent's side of the field.
+
 [0.7.0]
 A new GUI application is developed to run and control simspark simulations.
 Additinoally, there are a number changes to the soccer rules enforced in
