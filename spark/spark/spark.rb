@@ -83,6 +83,7 @@ $physicsGlobalGravity = -9.81
 #
 $monitorMultiThreadedMode = false
 $serverMultiThreadedMode = true
+$serverSimulationStep = 0.02
 
 #
 # below is a set of utility functions for the user app
@@ -261,6 +262,7 @@ def sparkResetScene
   # reset simulation time
   simulationServer = sparkGetSimulationServer()
   if (simulationServer != nil)
+    simulationServer.setSimStep($serverSimulationStep)
     simulationServer.resetTime()
   end
 end

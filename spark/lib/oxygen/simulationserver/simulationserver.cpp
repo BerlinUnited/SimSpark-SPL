@@ -56,7 +56,7 @@ SimulationServer::SimulationServer() :
     mThreadBarrier(0)
 {
     mSimTime      = 0.0f;
-    mSimStep      = 0.2f;
+    mSimStep      = 0.02f;
     mAutoTime     = true;
     mCycle        = 0;
     mPausedCycle  = 0;
