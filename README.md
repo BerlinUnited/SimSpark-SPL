@@ -21,24 +21,43 @@ Improvements
 Installation
 ------------
 
-* Ubuntu
+* Linux
 
-  ```sh
-  sudo add-apt-repository ppa:xu-informatik/simspark-spl
-  sudo apt-get update
-  sudo apt-get install rcssserver3d-spl
-  ```
+  * AppImage:
 
-  PPA: https://launchpad.net/~xu-informatik/+archive/simspark-spl
+    Download the appimage from https://github.com/BerlinUnited/SimSpark-SPL/releases and make it executable
 
-  If you have a newer Ubuntu version that is not yet supported by the PPA
-  Then after you added the PPA, change the first line in /etc/apt/sources.list.d/xu-informatik-simspark-spl-trusty.list
-  to:  ```http://ppa.launchpad.net/xu-informatik/simspark-spl/ubuntu <Version> main```
+  * Compile manually
 
-  Where ```<Version>``` refers to the adjective of your Ubuntu release.
+    * download/install dependencies (see https://gitlab.com/robocup-sim/SimSpark/wikis/Installation-on-Linux)
 
-  Then continue with the other two steps mentioned above.
+    ```sh
+    git clone https://github.com/BerlinUnited/SimSpark-SPL.git simspark
+    cd simspark/spark/
+    mkdir build
+    cd build
+    cmake ..
+    make
+    make install
+    cd ../../rcssserver3d/
+    mkdir build
+    cd build
+    cmake ..
+    make
+    make install
+    ```
+
+    if you want to install simspark somewhere else, you can specify an environment variable and modify the `cmake` calls:
+
+    ```sh
+    SIMSPARK_INSTALL="/path/to/install"
+    # ...
+    cmake -DCMAKE_INSTALL_PREFIX:STRING="$SIMSPARK_INSTALL" ..
+    # ...
+    cmake -DCARBON_DATA_DIR:STRING="$SIMSPARK_INSTALL/share" -DCARBON_INCLUDE_DIR:STRING="$SIMSPARK_INSTALL/include/simspark" -DKEROSIN_INCLUDE_DIR:STRING="$SIMSPARK_INSTALL/include/simspark" -DOXYGEN_INCLUDE_DIR:STRING="$SIMSPARK_INSTALL/include/simspark" -DRCSSNET3D_INCLUDE_DIR:STRING="$SIMSPARK_INSTALL/include/simspark" -DSALT_INCLUDE_DIR:STRING="$SIMSPARK_INSTALL/include/simspark" -DSPARK_INCLUDE_DIR:STRING="$SIMSPARK_INSTALL/include/simspark" -DCMAKE_INSTALL_PREFIX:STRING="$SIMSPARK_INSTALL" ..
+    # ...
+    ```
 
 * Windows
 
-  download: https://dainas.dai-labor.de:5001/sharing/9s6N1iM2K
+  TODO!
