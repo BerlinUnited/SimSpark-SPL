@@ -62,6 +62,12 @@ protected:
     void InsertSoccerParam(oxygen::Predicate& predicate,
                            const std::string& name);
 
+    /**
+     * @brief Returns the side name of the given team index
+     * @param ti    the team index
+     * @return      the side of the team (left, right, none)
+     */
+    std::string GetTeamSide(TTeamIndex ti);
 protected:
     //! a reference to the game state
     boost::shared_ptr<GameStateAspect> mGameState;

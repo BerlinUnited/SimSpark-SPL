@@ -53,6 +53,16 @@ void SPLState::KickOff(TTeamIndex ti)
   }
 }
 
+void SPLState::UpdateKickOff()
+{
+  const TPlayMode& pm = GetPlayMode();
+  if((pm == PM_KickOff_Left || pm == PM_Goal_Right) && mNextHalfKickOff != TI_LEFT) {
+    mNextHalfKickOff = TI_LEFT;
+  } else if((pm == PM_KickOff_Right || pm == PM_Goal_Left) && mNextHalfKickOff != TI_RIGHT) {
+    mNextHalfKickOff = TI_RIGHT;
+  }
+}
+
 void SPLState::SetState(TSPLState state)
 {
   if (mSPLState == state)

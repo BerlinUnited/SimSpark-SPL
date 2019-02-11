@@ -136,6 +136,7 @@ void SPLRule::Update(float /*deltaTime*/)
 	SoccerBase::GetSoccerVar(*this,"ReadyDuration",mReadyDuration);
 
     CheckTime();
+    mState->UpdateKickOff();
 }
 
 void SPLRule::UpdateInitialKickOff()
@@ -151,18 +152,19 @@ void SPLRule::UpdateInitialKickOff()
   {
       mGameState->KickOff();
   }
-
 }
 
 // for testing
 void SPLRule::Test(TTeamIndex idx)
 {
-    if (idx == TI_NONE || mBallState.get() == 0)
-        return;
+    if (idx == TI_NONE || mBallState.get() == 0) {
+      return;
+    }
 
     SoccerBase::TAgentStateList robots;
-    if (! SoccerBase::GetAgentStates(*mBallState.get(), robots, idx))
-        return;
+    if (! SoccerBase::GetAgentStates(*mBallState.get(), robots, idx)) {
+      return;
+    }
 
     for (SoccerBase::TAgentStateList::const_iterator i = robots.begin();
          i != robots.end(); ++i)
@@ -182,7 +184,7 @@ void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
-  float height = agent_aspect->GetWorldTransform().Pos().z();
+  //float height = agent_aspect->GetWorldTransform().Pos().z();
 
   SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 
@@ -201,7 +203,7 @@ void SPLRule::UnpenalizeRobot(boost::shared_ptr<AgentState> robot)
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
-  float height = agent_aspect->GetWorldTransform().Pos().z();
+  //float height = agent_aspect->GetWorldTransform().Pos().z();
 
   SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
 
@@ -459,7 +461,7 @@ bool SPLRule::IsIllegalPosition(boost::shared_ptr<AgentState> robot)
     return IsIllegalDefender(robot);
 }
 
-void SPLRule::ManualPlacement(TTeamIndex idx) {
+void SPLRule::ManualPlacement(TTeamIndex /*idx*/) {
 
 }
 

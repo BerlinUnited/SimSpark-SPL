@@ -42,6 +42,8 @@ public:
 
     virtual void KickOff(TTeamIndex ti = TI_NONE);
 
+    void UpdateKickOff();
+
     virtual std::string GetPlayModeStr() const;
 
     void UpdateTime(float deltaTime);

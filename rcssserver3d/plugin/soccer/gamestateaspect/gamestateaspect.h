@@ -55,6 +55,8 @@ public:
 
     virtual std::string GetPlayModeStr() const;
 
+    TTeamIndex GetKickoffTeam() const;
+
     /** sets the current play mode */
     void SetPlayMode(TPlayMode mode);
 

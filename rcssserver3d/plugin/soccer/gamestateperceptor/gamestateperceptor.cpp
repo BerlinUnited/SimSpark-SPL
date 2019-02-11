@@ -54,6 +54,20 @@ GameStatePerceptor::InsertSoccerParam(Predicate& predicate, const std::string& n
     element.AddValue(value);
 }
 
+std::string
+GameStatePerceptor::GetTeamSide(TTeamIndex ti) {
+    switch (ti)
+    {
+        case TI_LEFT :
+            return "left";
+        case TI_RIGHT :
+            return "right";
+        case TI_NONE:
+            ;
+    }
+    return "none";
+}
+
 void
 GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
 {
@@ -63,23 +77,9 @@ GameStatePerceptor::InsertInitialPercept(Predicate& predicate)
     unumElement.AddValue(mAgentState->GetUniformNumber());
 
     // team index
-    std::string team;
-    switch (mAgentState->GetTeamIndex())
-    {
-    case TI_NONE :
-        team = "none";
-        break;
-    case TI_LEFT :
-        team = "left";
-        break;
-    case TI_RIGHT :
-        team = "right";
-        break;
-    }
-
     ParameterList& teamElement = predicate.parameter.AddList();
     teamElement.AddValue(string("team"));
-    teamElement.AddValue(team);
+    teamElement.AddValue(GetTeamSide(mAgentState->GetTeamIndex()));
 
     // soccer variables
     // field geometry parameter
@@ -152,6 +152,11 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
         pmElement.AddValue(string("penalized"));
     else
         pmElement.AddValue(mGameState->GetPlayModeStr());
+
+    // kickoff
+    ParameterList& kickoffElement = predicate.parameter.AddList();
+    kickoffElement.AddValue(string("k"));
+    kickoffElement.AddValue(GetTeamSide(mGameState->GetKickoffTeam()));
 
     return true;
 }

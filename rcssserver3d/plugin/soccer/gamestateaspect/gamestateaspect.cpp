@@ -95,6 +95,12 @@ string GameStateAspect::GetPlayModeStr() const
   return SoccerBase::PlayMode2Str(GetPlayMode());
 }
 
+TTeamIndex
+GameStateAspect::GetKickoffTeam() const
+{
+  return mNextHalfKickOff;
+}
+
 void
 GameStateAspect::SetPlayMode(TPlayMode mode)
 {
@@ -124,17 +130,18 @@ GameStateAspect::KickOff(TTeamIndex ti)
 
         if (mGameHalf != mLastKickOffGameHalf)
         {
-            if (mNextHalfKickOff != TI_NONE)
+            if (mNextHalfKickOff != TI_NONE) {
                 ti = mNextHalfKickOff;
+            }
 
             bool changeSides;
-            SoccerBase::GetSoccerVar(*this, "ChangeSidesInSecondHalf",
-                changeSides);
+            SoccerBase::GetSoccerVar(*this, "ChangeSidesInSecondHalf", changeSides);
 
-            if (changeSides)
+            if (changeSides) {
                 mNextHalfKickOff = ti;
-            else
+            } else {
                 mNextHalfKickOff = SoccerBase::OpponentTeam(ti);
+            }
         }
     }
 
@@ -172,8 +179,9 @@ void
 GameStateAspect::SetTeamName(TTeamIndex idx, const std::string& name)
 {
     int i = GetInternalIndex(idx);
-    if (i > -1)
+    if (i > -1) {
         mTeamName[i] = name;
+    }
     return;
 }
 
@@ -181,8 +189,9 @@ std::string
 GameStateAspect::GetTeamName(TTeamIndex idx) const
 {
     int i = GetInternalIndex(idx);
-    if (i < 0)
+    if (i < 0) {
         return "";
+    }
     return mTeamName[i];
 }
 
@@ -216,8 +225,9 @@ bool
 GameStateAspect::InsertUnum(TTeamIndex idx, int unum)
 {
     int i = GetInternalIndex(idx);
-    if (i < 0)
+    if (i < 0) {
         return false;
+    }
 
     TUnumSet& set = mUnumSet[i];
 
@@ -238,8 +248,9 @@ bool
 GameStateAspect::EraseUnum(TTeamIndex idx, int unum)
 {
     int i = GetInternalIndex(idx);
-    if (i < 0)
+    if (i < 0) {
         return false;
+    }
 
     TUnumSet& set = mUnumSet[i];
 
@@ -259,17 +270,19 @@ bool
 GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
 {
     int i = GetInternalIndex(idx);
-    if (i < 0)
+    if (i < 0) {
         return false;
+    }
 
     int numRobots = 0;
     int numRobotTypes = 0;
     int maxSumTwoRobotTypes = 0;
 
-    if (mRobotTypeCount[i].size() <= type)
+    if (mRobotTypeCount[i].size() <= type) {
         mRobotTypeCount[i].resize(type+1);
+    }
 
-    for (int j = 0; j < mRobotTypeCount[i].size(); j++) 
+    for (size_t j = 0; j < mRobotTypeCount[i].size(); j++)
     {
         if (mRobotTypeCount[i][j] > 0)
         {
@@ -277,11 +290,13 @@ GameStateAspect::InsertRobotType(TTeamIndex idx, int type)
             numRobotTypes++;
         }
         int sumTwoRobotTypes = mRobotTypeCount[i][type]+1;
-        if (j != type)
+        if (j != type) {
             sumTwoRobotTypes += mRobotTypeCount[i][j];
+        }
        
-        if (sumTwoRobotTypes > maxSumTwoRobotTypes)
+        if (sumTwoRobotTypes > maxSumTwoRobotTypes) {
             maxSumTwoRobotTypes = sumTwoRobotTypes;
+        }
     }
 
     if (mRobotTypeCount[i][type] == mMaxRobotTypeCount)
@@ -328,8 +343,9 @@ bool
 GameStateAspect::EraseRobotType(TTeamIndex idx, int type)
 {
     int i = GetInternalIndex(idx);
-    if (i < 0)
+    if (i < 0) {
         return false;
+    }
 
     if (mRobotTypeCount[i].size() <= type || !mRobotTypeCount[i][type])
     {
@@ -451,8 +467,9 @@ int
 GameStateAspect::GetScore(TTeamIndex idx) const
 {
     int i = GetInternalIndex(idx);
-    if (i < 0)
+    if (i < 0) {
         return 0;
+    }
 
     return mScore[i];
 }
@@ -527,8 +544,9 @@ GameStateAspect::OnLink()
 
     bool coinTossKickOff = true;
     SoccerBase::GetSoccerVar(*this, "CoinTossForKickOff", coinTossKickOff);
-    if (!coinTossKickOff)
+    if (!coinTossKickOff) {
         mNextHalfKickOff = TI_LEFT;
+    }
 
     SoccerBase::GetSoccerVar(*this, "MaxRobotTypeCount", mMaxRobotTypeCount);
     SoccerBase::GetSoccerVar(*this, "MinRobotTypesCount", mMinRobotTypesCount);
@@ -539,12 +557,15 @@ int
 GameStateAspect::RequestUniformNumber(TTeamIndex ti) const
 {
     int idx = GetInternalIndex(ti);
-    if (idx < 0)
+    if (idx < 0) {
         return 0;
+    }
 
-    for (int i = 1; i <=11; ++i)
-      if (mUnumSet[idx].find(i) == mUnumSet[idx].end())
+    for (int i = 1; i <=11; ++i) {
+      if (mUnumSet[idx].find(i) == mUnumSet[idx].end()) {
         return i;
+      }
+    }
 
     return 0;
 }
