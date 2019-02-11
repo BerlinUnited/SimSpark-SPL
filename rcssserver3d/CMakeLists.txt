@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
-set(PACKAGE_VERSION "0.7.0-naoth-3")
+set(PACKAGE_VERSION "0.7.1-naoth-3")
 
 option(RVDRAW "Enable roboviz drawings" OFF)
 if (RVDRAW)
@@ -96,9 +96,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/rcssserver3d_config.h.cmake
 ########## Additional variables for config files ##########
 if (CARBON_FOUND)
   set(carbondatadir ${CARBON_DATA_DIR})
-  set(carbonlayoutlibdir ${CARBON_ROOT_DIR}/lib/guilayout)
-  set(carbonpluginlibdir ${CARBON_ROOT_DIR}/lib/guiplugin)
-  set(guipluginlibdir ${CMAKE_INSTALL_PREFIX}/lib/guiplugin)
+  set(carbonlayoutlibdir ${CARBON_ROOT_DIR}/${LIBDIR}/guilayout)
+  set(carbonpluginlibdir ${CARBON_ROOT_DIR}/${LIBDIR}/guiplugin)
+  set(guipluginlibdir ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/guiplugin)
   set(GUI_PLUGIN_INCLUDE_DIR include/guiplugin)
 
   set(carbonsetupdir ${carbondatadir}/setups)
@@ -138,7 +138,7 @@ ADD_CUSTOM_TARGET(uninstall
 
 ########### CPack section #############
 include(InstallRequiredSystemLibraries)
-set(CPACK_SOURCE_GENERATOR TGZ)
+set(CPACK_SOURCE_GENERATOR TXZ)
 set(CPACK_SOURCE_IGNORE_FILES
     /CVS/ /[.]svn/ /.*[.]o$ /.*[.]o/ /autom4te[.]cache/ /[.].* /bootstrap
     /RELEASE /rpm.am /msi.am)

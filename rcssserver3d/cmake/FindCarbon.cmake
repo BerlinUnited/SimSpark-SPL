@@ -14,21 +14,25 @@ IF (CARBON_INCLUDE_DIR)
   SET(CARBON_FIND_QUIETLY TRUE)
 ENDIF (CARBON_INCLUDE_DIR)
 
-SET(CARBON_DIR $ENV{CARBON_DIR} "C:/Program Files/simspark" "C:/Program Files (x86)/simspark" "C:/library/simspark")
+SET(CARBON_DIR "C:/Program Files/simspark" "C:/Program Files (x86)/simspark" "C:/library/simspark")
 
 FIND_PATH(CARBON_INCLUDE_DIR carbon/carbon.h
+  HINTS ENV CARBON_DIR
   PATHS ${CARBON_DIR}
   PATH_SUFFIXES simspark include/simspark)
 
 FIND_PATH(CARBON_ROOT_DIR share/carbon/setups/DefaultSetupGrid.xml
+  HINTS ENV CARBON_DIR
   PATHS ${CARBON_DIR})  
   
 FIND_PATH(CARBON_DATA_DIR setups/DefaultSetupGrid.xml
+  HINTS ENV CARBON_DIR
   PATHS ${CARBON_DIR}
   PATH_SUFFIXES share/carbon)
   
 SET(CARBON_NAMES carbon carbon_debug)
 FIND_LIBRARY(CARBON_LIBRARY NAMES ${CARBON_NAMES}
+  HINTS ENV CARBON_DIR
   PATHS ${CARBON_DIR}
   PATH_SUFFIXES simspark lib/simspark)
     
