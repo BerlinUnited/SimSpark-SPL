@@ -27,8 +27,10 @@
 #include <kerosin/textureserver/texture2d.h>
 #include <kerosin/fontserver/fontserver.h>
 #include <kerosin/fontserver/font.h>
+#include <kerosin/renderserver/rendercontrol.h>
 #include <gamestateaspect/gamestateaspect.h>
 #include <soccerbase/soccerbase.h>
+#include <oxygen/sceneserver/sceneserver.h>
 
 using namespace kerosin;
 using namespace boost;
@@ -45,41 +47,47 @@ InternalSoccerRender::~InternalSoccerRender()
 void InternalSoccerRender::OnLink()
 {
     // get the FontServer
-    mFontServer =
-        static_pointer_cast<FontServer>(GetCore()->Get("/sys/server/font"));
+    mFontServer = static_pointer_cast<FontServer>(GetCore()->Get("/sys/server/font"));
 
-    if (mFontServer.get() == 0)
-        {
-            GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get FontServer\n";
-        } else
-        {
-            string font = "fonts/VeraMono.ttf";
-            int fontSize = 16;
-            mFont = mFontServer->GetFont(font, fontSize);
+    if (mFontServer.get() == nullptr) {
+        GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get FontServer\n";
+    } else {
+        string font = "fonts/VeraMono.ttf";
+        int fontSize = 16;
+        mFont = mFontServer->GetFont(font, fontSize);
 
-            if (mFont.get() == 0)
-                {
-                    GetLog()->Error() << "(InternalSoccerRender) Unable to get font "
-                                      << font << " " << fontSize << "\n";
-                }
+        if (mFont.get() == nullptr)
+        {
+            GetLog()->Error() << "(InternalSoccerRender) Unable to get font "
+                              << font << " " << fontSize << "\n";
         }
+    }
 
     // get the TextureServer
     mTextureServer = static_pointer_cast<TextureServer>(GetCore()->Get("/sys/server/texture"));
-
-    if (mTextureServer.get() == 0)
-        {
-            GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get TextureServer\n";
-        }
+    if (mTextureServer.get() == nullptr)
+    {
+        GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get TextureServer\n";
+    }
 
     // get the GameStateAspect
-    mGameState = dynamic_pointer_cast<GameStateAspect>
-        (SoccerBase::GetControlAspect(*this, "GameStateAspect"));
+    mGameState = dynamic_pointer_cast<GameStateAspect>(SoccerBase::GetControlAspect(*this, "GameStateAspect"));
+    if (mGameState.get() == nullptr)
+    {
+        GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get GameStateAspect\n";
+    }
 
-    if (mGameState.get() == 0)
-        {
-            GetLog()->Error() << "ERROR: (InternalSoccerRender) Unable to get GameStateAspect\n";
-        }
+    // TODO: parent should be RenderControl
+    //auto t = dynamic_pointer_cast<kerosin::RenderControl>(GetParentSupportingClass("RenderControl"));
+
+    mRenderCtrl = dynamic_pointer_cast<kerosin::RenderControl>(GetCore()->Get("/sys/server/simulation/RenderControl"));
+    // get the RenderControl
+    if (mRenderCtrl.get() == nullptr)
+    {
+        GetLog()->Error() << "ERROR: (InternalSoccerInput) Unable to get RenderControl\n";
+    } else {
+        mLastTime = mRenderCtrl->GetTime();
+    }
 }
 
 void InternalSoccerRender::OnUnlink()
@@ -127,14 +135,13 @@ void InternalSoccerRender::glDisable2D()
 
 void InternalSoccerRender::Render()
 {
-    if (
-        (mFontServer.get() == 0) ||
-        (mFont.get() == 0) ||
-        (mGameState.get() == 0)
-        )
-        {
-            return;
-        }
+    if ((mFontServer.get() == nullptr) ||
+        (mFont.get() == nullptr) ||
+        (mGameState.get() == nullptr) ||
+        (mRenderCtrl.get() == nullptr))
+    {
+        return;
+    }
 
     stringstream ss_l, ss_c, ss_r;
 
@@ -188,6 +195,23 @@ void InternalSoccerRender::Render()
     // FIXME: remove the magic numbers.
     xPos = int(1014-(mFont->GetStringWidth(ss_r.str().c_str())));
     mFont->DrawString(xPos, 0, ss_r.str().c_str());
+
+    stringstream bottom;
+    std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
+    auto frameDuration = std::chrono::duration_cast<std::chrono::milliseconds>(current - mLastFPS).count();
+
+    bottom.setf(ios_base::fixed,ios_base::floatfield);
+    bottom.precision(2);
+    bottom << (1000.0 / frameDuration) << " fps";
+    float currentTime = mRenderCtrl->GetTime();
+    bottom << " Speed = " << ((currentTime - mLastTime)*1000.0*100.0)/frameDuration << " %";
+    //bottom << "GS: " << mGameState->GetTime() << "ST: " << mRenderCtrl->GetTime();
+
+    mLastFPS = current;
+    mLastTime = currentTime;
+
+    mFont->DrawString(10, 700, bottom.str().c_str());
+
 
     // draw game state info centered
     // Window Width is mapped to 1024

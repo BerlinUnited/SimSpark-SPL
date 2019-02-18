@@ -22,6 +22,7 @@
 #ifndef KEROSIN_INTERNALSOCCERRENDER_H
 #define KEROSIN_INTERNALSOCCERRENDER_H
 
+#include <chrono>
 #include <kerosin/renderserver/customrender.h>
 
 namespace kerosin
@@ -29,6 +30,7 @@ namespace kerosin
     class Font;
     class FontServer;
     class TextureServer;
+    class RenderControl;
 }
 
 class GameStateAspect;
@@ -65,7 +67,15 @@ protected:
     boost::shared_ptr<kerosin::TextureServer> mTextureServer;
 
     /** cached reference to the game state info */
-    boost::shared_ptr<GameStateAspect> mGameState;    
+    boost::shared_ptr<GameStateAspect> mGameState;
+
+    /** cached reference to the game state info */
+    boost::shared_ptr<kerosin::RenderControl> mRenderCtrl;
+
+    /** represents the last timestamp the fps was updated */
+    std::chrono::steady_clock::time_point mLastFPS = std::chrono::steady_clock::now();
+
+    float mLastTime = 0;
 };
 
 DECLARE_CLASS(InternalSoccerRender);
