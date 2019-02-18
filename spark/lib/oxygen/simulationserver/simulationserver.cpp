@@ -386,33 +386,30 @@ void SimulationServer::Run(int argc, char** argv)
     GetLog()->Normal() << "(SimulationServer) entering runloop\n";
 
     if ( !mAutoTime && !mTimerSystem )
-        {
-            GetLog()->Error()<< "(SimulationServer) ERROR: can not get"
-                    " any TimerSystem objects.\n";
-        }
+    {
+        GetLog()->Error()<< "(SimulationServer) ERROR: can not get any TimerSystem objects.\n";
+    }
     else
-        {
-            mRunning = true;
-            mCyclePaused = false;
-            mContinueCycle = false;
-            mPausedCycle = 0;
+    {
+        mRunning = true;
+        mCyclePaused = false;
+        mContinueCycle = false;
+        mPausedCycle = 0;
 
-            if ( mMultiThreads )
-                {
-                    GetLog()->Normal()<< "(SimulationServer) running in "
-                            "multi-threaded mode\n";
-                    RunMultiThreaded();
-                }
-            else
-                {
-                    GetLog()->Normal()<< "(SimulationServer) running in single "
-                            "thread mode\n";
-                    while (! mExit)
-                        {
-                            Cycle();
-                        }
-                }
+        if ( mMultiThreads )
+        {
+            GetLog()->Normal()<< "(SimulationServer) running in multi-threaded mode\n";
+            RunMultiThreaded();
         }
+        else
+        {
+            GetLog()->Normal()<< "(SimulationServer) running in single thread mode\n";
+            while (!mExit)
+            {
+                Cycle();
+            }
+        }
+    }
 
     mRunning = false;
     Done();

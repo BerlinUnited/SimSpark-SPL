@@ -62,19 +62,23 @@ f_inline TYPE gSqrt(const TYPE &v)
 template <class TYPE>
 f_inline TYPE gClamp(TYPE &val, TYPE min, TYPE max)
 {
-    if (val<min) val=min; if (val>max) val=max; return val;
+    if (val<min) { val=min; }
+    if (val>max) { val=max; }
+    return val;
 }
 
 template <class TYPE>
 f_inline TYPE gMin(TYPE a, TYPE b)
 {
-    if (a<b) return a; return b;
+    if (a<b) { return a; }
+    return b;
 }
 
 template <class TYPE>
 f_inline TYPE gMax(TYPE a, TYPE b)
 {
-    if (a>b) return a; return b;
+    if (a>b) { return a; }
+    return b;
 }
 
 template <class TYPE>

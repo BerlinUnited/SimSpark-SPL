@@ -36,7 +36,7 @@ MonitorMessages::~MonitorMessages()
 {
 }
 
-void MonitorMessages::GetInitialPredicates(PredicateList& pList)
+void MonitorMessages::GetInitialPredicates(PredicateList& /*pList*/)
 {
 }
 

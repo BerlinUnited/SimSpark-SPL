@@ -181,7 +181,7 @@ TTeamIndex BallStateAspect::GetGoalState()
     return mGoalState;
 }
 
-void BallStateAspect::Update(float deltaTime)
+void BallStateAspect::Update(float /*deltaTime*/)
 {
     if (
         (mBall.get() == 0) ||

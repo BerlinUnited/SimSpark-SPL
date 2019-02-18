@@ -57,14 +57,12 @@ void RCS3DMonitor::UpdateCached()
 void RCS3DMonitor::OnLink()
 {
     // setup SceneServer reference
-    mSceneServer = dynamic_pointer_cast<SceneServer>
-        (GetCore()->Get("/sys/server/scene"));
+    mSceneServer = dynamic_pointer_cast<SceneServer>(GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
-        {
-            GetLog()->Error()
-                << "(RCS3DMonitor) ERROR: SceneServer not found\n";
-        }
+    {
+        GetLog()->Error() << "(RCS3DMonitor) ERROR: SceneServer not found\n";
+    }
 }
 
 void RCS3DMonitor::OnUnlink()
@@ -85,10 +83,9 @@ void RCS3DMonitor::ParseMonitorMessage(const std::string& data)
          iter != items.end();
          ++iter
          )
-        {
-            static_pointer_cast<MonitorCmdParser>(*iter)
-                ->ParseMonitorMessage(data);
-        }
+    {
+        static_pointer_cast<MonitorCmdParser>(*iter)->ParseMonitorMessage(data);
+    }
 }
 
 string RCS3DMonitor::GetMonitorInformation(const PredicateList& pList)
@@ -121,61 +118,57 @@ void RCS3DMonitor::DescribeCustomPredicates(stringstream& ss,const PredicateList
          iter != pList.end();
          ++iter
          )
+    {
+        const Predicate& pred = (*iter);
+
+        ss << "(";
+        ss << pred.name;
+
+        const ParameterList& paramList = pred.parameter;
+        ParameterList::TVector::const_iterator pIter = paramList.begin();
+
+        std::string param;
+        while (
+               (pIter != paramList.end()) &&
+               (paramList.AdvanceValue(pIter, param))
+               )
         {
-            const Predicate& pred = (*iter);
-
-            ss << "(";
-            ss << pred.name;
-
-            const ParameterList& paramList = pred.parameter;
-            ParameterList::TVector::const_iterator pIter = paramList.begin();
-
-            std::string param;
-            while (
-                   (pIter != paramList.end()) &&
-                   (paramList.AdvanceValue(pIter, param))
-                   )
-                {
-                    ss << " ";
-                    ss << param;
-                }
-
-            ss << ")";
+            ss << " ";
+            ss << param;
         }
+
+        ss << ")";
+    }
 
     ss << ")";
 }
 
 void RCS3DMonitor::DescribeBall(stringstream& ss, NodeCache& entry, boost::shared_ptr<Ball> ball)
 {
-      if (mFullState)
-          {
-              ss << "(nd Ball";
-          } else
-              {
-                  ss << "(nd";
-              }
+  if (mFullState) {
+    ss << "(nd Ball";
+  } else {
+    ss << "(nd";
+  }
 
   DescribeTransform(ss, entry, boost::static_pointer_cast<Transform>(ball), false);
 }
 
 void RCS3DMonitor::DescribeBaseNode(stringstream& ss)
 {
-    if (mFullState)
-        {
-            ss << "(nd BN";
-        } else
-            {
-                ss << "(nd";
-            }
+    if (mFullState) {
+        ss << "(nd BN";
+    } else {
+        ss << "(nd";
+    }
 }
 
 void RCS3DMonitor::DescribeLight(stringstream& ss, boost::shared_ptr<Light> light)
 {
     if (! mFullState)
-        {
-            return DescribeBaseNode(ss);
-        }
+    {
+        return DescribeBaseNode(ss);
+    }
 
     ss << "(nd Light ";
 
@@ -194,14 +187,13 @@ void RCS3DMonitor::DescribeLight(stringstream& ss, boost::shared_ptr<Light> ligh
 
 void RCS3DMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, boost::shared_ptr<Transform> transform, bool prefix)
 {
-    if (prefix)
-      if (mFullState)
-          {
-              ss << "(nd TRF";
-          } else
-              {
-                  ss << "(nd";
-              }
+    if (prefix) {
+        if (mFullState) {
+            ss << "(nd TRF";
+        } else {
+            ss << "(nd";
+        }
+    }
 
     // include transform data only for fullstate or a modified
     // transform node
@@ -211,67 +203,70 @@ void RCS3DMonitor::DescribeTransform(stringstream& ss, NodeCache& entry, boost::
     bool update = false;
 
     if (mFullState)
+    {
+        update = true;
+    } else
+    {
+        const salt::Matrix& old = entry.transform;
+
+        for (int i=0;i<16;++i)
         {
-            update = true;
-        } else
+            const float d = fabs(old.m[i] - mat.m[i]);
+
+            if (d > precision)
             {
-                const salt::Matrix& old = entry.transform;
-
-                for (int i=0;i<16;++i)
-                    {
-                        const float d = fabs(old.m[i] - mat.m[i]);
-
-                        if (d > precision)
-                            {
-                                update = true;
-                                break;
-                            }
-                    }
+                update = true;
+                break;
             }
+        }
+    }
 
     if (update)
+    {
+        ss << " (SLT";
+
+        for (int i=0;i<16;++i)
         {
-            ss << " (SLT";
-
-            for (int i=0;i<16;++i)
-                {
-                    ss << " " << mat.m[i];
-                }
-
-            ss << ")";
-
-            // update cache
-            entry.transform = mat;
+            ss << " " << mat.m[i];
         }
+
+        ss << ")";
+
+        // update cache
+        entry.transform = mat;
+    }
 }
 
 void RCS3DMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> mesh)
 {
     boost::shared_ptr<SingleMatNode> singleMat =
-        dynamic_pointer_cast<SingleMatNode>(mesh);
+            dynamic_pointer_cast<SingleMatNode>(mesh);
 
     if (singleMat.get() != 0)
-        {
-            ss << "(nd SMN";
-        } else
-            {
-                ss << "(nd StaticMesh";
-            }
+    {
+        ss << "(nd SMN";
+    } else
+    {
+        ss << "(nd StaticMesh";
+    }
 
-    if (mFullState || mesh->VisibleToggled())
-        if (mesh->IsVisible())
+    if (mFullState || mesh->VisibleToggled()) {
+        if (mesh->IsVisible()) {
             ss << " (setVisible 1)";
-        else
+        } else {
             ss << " (setVisible 0)";
-        
-    if (! mFullState)
-      return;
+        }
+    }
+
+    if (! mFullState) {
+        return;
+    }
 
     if (mesh->IsTransparent())
-        {
-            ss << " (setTransparent)";
-        }
-        
+    {
+        ss << " (setTransparent)";
+    }
+
     ss << " (load " << mesh->GetMeshName();
 
     const ParameterList& params = mesh->GetMeshParameter();
@@ -280,11 +275,11 @@ void RCS3DMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
          iter != params.end();
          ++iter
          )
-        {
-            string str;
-            params.GetValue(iter,str);
-            ss << " " << str;
-        }
+    {
+        string str;
+        params.GetValue(iter,str);
+        ss << " " << str;
+    }
 
     ss << ")";
 
@@ -296,19 +291,20 @@ void RCS3DMonitor::DescribeMesh(stringstream& ss, boost::shared_ptr<StaticMesh> 
        << scale[2] << ")";
     
     if (singleMat.get() != 0)
+    {
+        boost::shared_ptr<Material> mat = singleMat->GetMaterial();
+        if (mat.get() != 0)
         {
-            boost::shared_ptr<Material> mat = singleMat->GetMaterial();
-            if (mat.get() != 0)
-                {
-                    ss << " (sMat " << mat->GetName() << ")";
-                }
+            ss << " (sMat " << mat->GetName() << ")";
         }
-    else{
+    }
+    else {
         std::vector<std::string> mats = mesh->GetMaterialNames();
         if ( !mats.empty() ){
             ss<<"(resetMaterials";
             for(std::vector<std::string>::const_iterator iter = mats.begin();
-                mats.end() != iter; ++iter){
+                mats.end() != iter; ++iter)
+            {
                 ss<<' '<<*iter;
             }
             ss<<')';

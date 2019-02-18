@@ -37,8 +37,9 @@ AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
                            mHearOppCap(2), mIfSelfMsg(false),
                            mIfMateMsg(false), mIfOppMsg(false),
                            mSelected(false),
-                           mOldTouchGroup(new TouchGroup), mTouchGroup(new TouchGroup),
-                           isPenelized(false), whenPenalized(0)
+                           isPenelized(false), whenPenalized(0),
+                           mOldTouchGroup(new TouchGroup),
+                           mTouchGroup(new TouchGroup)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
