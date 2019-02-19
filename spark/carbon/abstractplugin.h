@@ -351,7 +351,7 @@ public:
      \param data source file
      \return true if something was loaded
     */
-    virtual bool loadData(boost::shared_ptr<QSettings> data) {return false;}
+    virtual bool loadData(boost::shared_ptr<QSettings> /*data*/) {return false;}
     /*!
      \brief Abstract function to signal a plugin to save its data to a QSettings save file.
 
@@ -361,7 +361,7 @@ public:
      \param data target file
      \return true if something was saved
     */
-    virtual bool saveData(boost::shared_ptr<QSettings> data) const {return false;}
+    virtual bool saveData(boost::shared_ptr<QSettings> /*data*/) const {return false;}
 
     /*!
      \brief Run function that is called when the plugin is executed by either another plugin, the plugin manager, or when they are executed in another thread.
