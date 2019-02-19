@@ -26,6 +26,7 @@
 #include <signal.h>
 #include <algorithm>
 #include <boost/bind.hpp>
+#include <chrono>
 
 using namespace oxygen;
 using namespace zeitgeist;
@@ -269,37 +270,32 @@ void SimulationServer::WaitStep()
 
 void SimulationServer::Step()
 {
-    if (
-        mSceneServer.expired() ||
-        mGameControlServer.expired()
-        )
-        {
-            return;
-        }
+    if (mSceneServer.expired() || mGameControlServer.expired())
+    {
+        return;
+    }
 
     if (mSimStep > 0)
+    {
+        // world is stepped in discrete steps
+        float finalStep = 0;
+        while (int(mSumDeltaTime*100) >= int(mSimStep*100))
         {
-            // world is stepped in discrete steps
-            float finalStep = 0;
-            while (int(mSumDeltaTime*100) >= int(mSimStep*100))
-                {
-                    mSceneServer->PrePhysicsUpdate(mSimStep);
-                    mSceneServer->PhysicsUpdate(mSimStep);
-                    UpdateDeltaTimeAfterStep(mSumDeltaTime);
-                    finalStep += mSimStep;
-                }
-            mSceneServer->PostPhysicsUpdate();
-            mGameControlServer->Update(finalStep);
-            mSimTime += finalStep;
-
-        } else
-        {
-            // simulate passed time in one single step
-            mSceneServer->Update(mSumDeltaTime);
-            mGameControlServer->Update(mSumDeltaTime);
-            mSimTime += mSumDeltaTime;
-            mSumDeltaTime = 0;
+            mSceneServer->PrePhysicsUpdate(mSimStep);
+            mSceneServer->PhysicsUpdate(mSimStep);
+            UpdateDeltaTimeAfterStep(mSumDeltaTime);
+            finalStep += mSimStep;
         }
+        mSceneServer->PostPhysicsUpdate();
+        mGameControlServer->Update(finalStep);
+        mSimTime += finalStep;
+    } else {
+        // simulate passed time in one single step
+        mSceneServer->Update(mSumDeltaTime);
+        mGameControlServer->Update(mSumDeltaTime);
+        mSimTime += mSumDeltaTime;
+        mSumDeltaTime = 0;
+    }
 }
 
 void SimulationServer::ControlEvent(EControlEvent event)
@@ -465,18 +461,16 @@ void SimulationServer::Cycle()
 void SimulationServer::Done()
 {
     if (mTimerSystem)
-        {
-            mTimerSystem->Finalize();
-        }
+    {
+        mTimerSystem->Finalize();
+    }
 
     ControlEvent(CE_Done);
 
     mArgC = 0;
     mArgV = 0;
 
-    GetLog()->Normal()
-        << "(SimulationServer) leaving runloop at t="
-        << mSimTime << "\n";
+    GetLog()->Normal() << "(SimulationServer) leaving runloop at t=" << mSimTime << "\n";
 }
 
 boost::shared_ptr<GameControlServer> SimulationServer::GetGameControlServer()
@@ -512,11 +506,16 @@ void SimulationServer::RunMultiThreaded()
             boost::shared_ptr<SimControlNode> ctrNode =  dynamic_pointer_cast<SimControlNode>(*iter);
             if (ctrNode.get() == 0) continue;
 
-            ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread,
-                                                   this, ctrNode));
+            GetLog()->Normal()<< "(SimulationServer) Start thread for " << ctrNode->GetName() << "\n";
+
+            ctrThrdGroup.create_thread(boost::bind(&SimulationServer::SimControlThread, this, ctrNode));
         }
 
+    GetLog()->Normal()<< "(SimulationServer) Started " << count << " threads." << std::endl;
+
     boost::shared_ptr<SimControlNode> renderControl = GetControlNode("RenderControl");
+
+    double meanStep = 0, meanTime = 0, meanRender = 0;
 
     //float initDelta, finalDelta;      //unused variables
     mExitThreads = false;
@@ -556,18 +555,28 @@ void SimulationServer::RunMultiThreaded()
 
                     // Signal start of cycle
                     mThreadBarrier->wait();
-                    if (mExit)
+                    if (mExit) {
                         mExitThreads = true;
+                    }
 
                     // Wait for SimControlNodes' acts at the beginning of a cycle
                     mThreadBarrier->wait();
 
+                    auto t1 = std::chrono::high_resolution_clock::now();
                     Step();
-                    SyncTime();
+                    auto t2 = std::chrono::high_resolution_clock::now();
+                    meanStep += (std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() - meanStep)/mCycle;
 
-                    if (renderControl
-                        && renderControl->GetTime() - mSimTime < 0.005f )
+                    SyncTime();
+                    auto t3 = std::chrono::high_resolution_clock::now();
+                    meanTime += (std::chrono::duration_cast<std::chrono::milliseconds>(t3-t2).count() - meanTime)/mCycle;
+
+                    if (renderControl && renderControl->GetTime() - mSimTime < 0.005f ) {
                         renderControl->EndCycle();
+                    }
+                    auto t4 = std::chrono::high_resolution_clock::now();
+                    meanRender += (std::chrono::duration_cast<std::chrono::milliseconds>(t4-t3).count() - meanRender)/mCycle;
+
 
                     // End Cycle
                     mThreadBarrier->wait();
@@ -576,50 +585,56 @@ void SimulationServer::RunMultiThreaded()
 
     // wait for threads
     ctrThrdGroup.join_all();
+    GetLog()->Normal() << "(SimulationServer) Average execution time for SimulationServer: " << meanStep << " ms, " << meanTime << "ms, " << meanRender << "ms" << "\n";
 }
 
 void SimulationServer::SimControlThread(boost::shared_ptr<SimControlNode> controlNode)
 {
     if (!mThreadBarrier)
-        {
-            GetLog()->Error()
-                << "(SimulationServer) mThreadBarrier is not initialized.\n";
-            return;
-        }
+    {
+        GetLog()->Error() << "(SimulationServer) mThreadBarrier is not initialized.\n";
+        return;
+    }
 
     bool isRenderControl = (controlNode->GetName() == "RenderControl");
     bool newCycle = false;
+    double mean = 0, cycles = 0;
 
     while (!mExitThreads)
+    {
+        if (mCyclePaused)
         {
-            if (mCyclePaused)
-                {
-                    mThreadBarrier->wait();
-                    controlNode->WaitCycle();
-                    mThreadBarrier->wait();
-                }
-            else
-                {
-                    mThreadBarrier->wait();
+            mThreadBarrier->wait();
+            controlNode->WaitCycle();
+            mThreadBarrier->wait();
+        } else {
+            mThreadBarrier->wait();
 
-                    newCycle = false;
-                    if ( controlNode->GetTime() - mSimTime <= 0.005f)
-                        {
-                            newCycle = true;
-                            controlNode->StartCycle();
-                            controlNode->SenseAgent();
-                            controlNode->ActAgent();
-                            controlNode->SetSimTime(mSimTime);
-                        }
+            auto t1 = std::chrono::high_resolution_clock::now();
+            newCycle = false;
+            if ( controlNode->GetTime() - mSimTime <= 0.005f)
+            {
+                newCycle = true;
+                controlNode->StartCycle();
+                controlNode->SenseAgent();
+                controlNode->ActAgent();
+                controlNode->SetSimTime(mSimTime);
+            }
 
-                    mThreadBarrier->wait();
+            cycles++;
+            auto t2 = std::chrono::high_resolution_clock::now();
+            mean += (std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() - mean)/cycles;
 
-                    // wait for physics update
-                    mThreadBarrier->wait();
-                    if (!isRenderControl && newCycle)
-                        controlNode->EndCycle();
-                }
+            mThreadBarrier->wait();
+
+            // wait for physics update
+            mThreadBarrier->wait();
+            if (!isRenderControl && newCycle) {
+                controlNode->EndCycle();
+            }
         }
+    }
+    GetLog()->Normal() << "(SimulationServer) Average execution time for " << controlNode->GetName() << ": " << mean << " ms \n";
 }
 
 void SimulationServer::SetMultiThreads(bool isMThreas)
@@ -639,31 +654,26 @@ void SimulationServer::SetMaxStepsPerCycle(int max)
 
 inline void SimulationServer::UpdateDeltaTimeAfterStep(float &deltaTime)
 {
-    if (mAdjustSpeed && deltaTime > mMaxStepsPerCycle
-            * mSimStep)
+    if (mAdjustSpeed && deltaTime > mMaxStepsPerCycle * mSimStep)
     {
         float diff = deltaTime - mSimStep;
         if (diff > 0.0001)
         {
-            GetLog()->Debug()
-                    << "(SimulationServer) Warning: Skipping remaining time: "
-                    << diff << '\n';
+            GetLog()->Debug() << "(SimulationServer) Warning: Skipping remaining time: " << diff << '\n';
         }
         deltaTime = 0;
-    }
-    else
+    } else {
         deltaTime -= mSimStep;
+    }
 }
 
 inline void SimulationServer::SyncTime()
 {
     if (mAutoTime)
-        {
-            AdvanceTime(mSimStep);
-        }
-    else
-        {
-            mTimerSystem->WaitFromLastQueryUntil(mSimStep - mSumDeltaTime);
-            AdvanceTime(mTimerSystem->GetTimeSinceLastQuery());
-        }
+    {
+        AdvanceTime(mSimStep);
+    } else {
+        mTimerSystem->WaitFromLastQueryUntil(mSimStep - mSumDeltaTime);
+        AdvanceTime(mTimerSystem->GetTimeSinceLastQuery());
+    }
 }
