@@ -107,6 +107,7 @@ protected:
     salt::AABB2 mFieldLeftHalf;
     salt::AABB2 mFieldRightHalfDefense;
     salt::AABB2 mFieldLeftHalfDefense;
+    salt::AABB2 mCenterCircle;
     salt::AABB2 mWholeField;
 };
 

@@ -74,16 +74,18 @@ void SPLRule::UpdateCachedInternal()
 {
     SoccerRuleAspect::UpdateCachedInternal();
 
-    mFieldRightHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0),
-                                  Vector2f(mFieldLength/2.0, mFieldWidth/2.0));
-    mFieldLeftHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0),
-                                 Vector2f(-mFieldLength/2.0, mFieldWidth/2.0));
-    mFieldRightHalfDefense = salt::AABB2(Vector2f(1.2, -mFieldWidth/2.0),
-                                         Vector2f(mFieldLength/2.0, mFieldWidth/2.0));
-    mFieldLeftHalfDefense = salt::AABB2(Vector2f(-1.2, -mFieldWidth/2.0),
-                                        Vector2f(-mFieldLength/2.0, mFieldWidth/2.0));
-    mWholeField = salt::AABB2(Vector2f(mFieldLength/2.0+0.7, -mFieldWidth/2.0-0.7),
-                              Vector2f(-mFieldLength/2.0-0.7, mFieldWidth/2.0+0.7));
+    mFieldRightHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0f),
+                                  Vector2f(mFieldLength/2.0f, mFieldWidth/2.0f));
+    mFieldLeftHalf = salt::AABB2(Vector2f(0, -mFieldWidth/2.0f),
+                                 Vector2f(-mFieldLength/2.0f, mFieldWidth/2.0f));
+    mFieldRightHalfDefense = salt::AABB2(Vector2f(1.2f, -mFieldWidth/2.0f),
+                                         Vector2f(mFieldLength/2.0f, mFieldWidth/2.0f));
+    mFieldLeftHalfDefense = salt::AABB2(Vector2f(-1.2f, -mFieldWidth/2.0f),
+                                        Vector2f(-mFieldLength/2.0f, mFieldWidth/2.0f));
+    mCenterCircle = salt::AABB2(Vector2f(-mFreeKickDist, -mFreeKickDist),
+                                        Vector2f(mFreeKickDist, mFreeKickDist)); // approx. of the center circle
+    mWholeField = salt::AABB2(Vector2f(mFieldLength/2.0f+0.7f, -mFieldWidth/2.0f-0.7f),
+                              Vector2f(-mFieldLength/2.0f-0.7f, mFieldWidth/2.0f+0.7f));
 }
 
 void SPLRule::Update(float /*deltaTime*/)
@@ -433,7 +435,7 @@ bool SPLRule::IsIllegalPosition(boost::shared_ptr<AgentState> robot)
                 }
             }
             else if (idx == TI_RIGHT) {
-                if (!mFieldRightHalfDefense.Contains(pos2D)) {
+                if (!mFieldRightHalf.Contains(pos2D) || mCenterCircle.Contains(pos2D)) {
                     return true;
                 }
             }
@@ -441,7 +443,7 @@ bool SPLRule::IsIllegalPosition(boost::shared_ptr<AgentState> robot)
         else if (mGameState->GetPlayMode() == PM_KickOff_Right || mGameState->GetPlayMode() == PM_Goal_Left)
         {
             if (idx == TI_LEFT) {
-                if (!mFieldLeftHalfDefense.Contains(pos2D)) {
+                if (!mFieldLeftHalf.Contains(pos2D) ||  mCenterCircle.Contains(pos2D)) {
                     return true;
                 }
             }
