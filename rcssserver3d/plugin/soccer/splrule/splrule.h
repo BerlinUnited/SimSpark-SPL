@@ -78,7 +78,7 @@ public:
 
     void CheckTime();
 
-    void RemoveRobot(boost::shared_ptr<AgentState> robot);
+    void RemoveRobot(boost::shared_ptr<AgentState> robot, const spl::TSPLPenalty cause);
 	void UnpenalizeRobot(boost::shared_ptr<AgentState> robot);
 
     void Test(TTeamIndex idx);
@@ -100,6 +100,7 @@ protected:
 
     float mReadyDuration;
     float mSetDuration;
+    float mPenaltyDuration;
 
     /** bounding box for the right half of the field */
     salt::AABB2 mFieldRightHalf;

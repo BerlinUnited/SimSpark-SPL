@@ -190,6 +190,9 @@ public:
     /** returns a string representing a SPL state */
     static std::string SPLState2Str(const spl::TSPLState state);
 
+    /** returns a string representing a SPL penalty */
+    static std::string SPLPenalty2Str(const spl::TSPLPenalty penalty);
+
     /* move an agent including all its connected bodies */
     static bool
     MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos);

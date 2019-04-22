@@ -68,6 +68,8 @@ protected:
      * @return      the side of the team (left, right, none)
      */
     std::string GetTeamSide(TTeamIndex ti);
+
+    void GetTeamInfo(zeitgeist::ParameterList& info, TTeamIndex ti);
 protected:
     //! a reference to the game state
     boost::shared_ptr<GameStateAspect> mGameState;

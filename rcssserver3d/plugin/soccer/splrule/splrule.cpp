@@ -39,7 +39,8 @@ using namespace spl;
 
 SPLRule::SPLRule() : SoccerRuleAspect(),
   mReadyDuration(45),
-  mSetDuration(10)
+  mSetDuration(10),
+  mPenaltyDuration(30)
 {
 	//mSayMsgSize = 20; // default is the same as in S3D
 }
@@ -109,6 +110,7 @@ void SPLRule::Update(float /*deltaTime*/)
 
       SoccerBase::GetSoccerVar(*this,"ReadyDuration",mReadyDuration);
       SoccerBase::GetSoccerVar(*this,"SetDuration",mSetDuration);
+      SoccerBase::GetSoccerVar(*this,"PenaltyDuration",mPenaltyDuration);
 	  
       // debug ----
       /*float factor = 0.1;
@@ -171,26 +173,28 @@ void SPLRule::Test(TTeamIndex idx)
     for (SoccerBase::TAgentStateList::const_iterator i = robots.begin();
          i != robots.end(); ++i)
     {
-      RemoveRobot(*i);
+      RemoveRobot(*i, spl::penalty_manual);
     }
 }
 
-void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot)
+void SPLRule::RemoveRobot(boost::shared_ptr<AgentState> robot, const spl::TSPLPenalty cause)
 {
   // move the robot to outside of the field
   // for penalized robots
 
   // Choose x side based on team
   float xFac = (robot->GetTeamIndex() == TI_LEFT) ? -0.5f : 0.5f;
-  salt::Vector3f pos(xFac * robot->GetUniformNumber(), -1.f*(mFieldWidth / 2.f + 1.f), 0.4f);
+  float yFac = (robot->GetTeamIndex() == TI_LEFT) ? -1.f : 1.f;
+  float rot = (robot->GetTeamIndex() == TI_LEFT) ? -180 : 0;
+  salt::Vector3f pos(xFac * robot->GetUniformNumber(), yFac*(mFieldWidth / 2.f + 0.5f), 0.4f);
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
   //float height = agent_aspect->GetWorldTransform().Pos().z();
 
-  SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
+  SoccerBase::MoveAndRotateAgent(agent_aspect, pos, rot);
 
-  robot->Penalize(mGameState->GetTime());
+  robot->Penalize(mGameState->GetTime(), cause, mPenaltyDuration);
 
 }
 
@@ -201,13 +205,15 @@ void SPLRule::UnpenalizeRobot(boost::shared_ptr<AgentState> robot)
 
   // Choose x side based on team
   float xFac = (robot->GetTeamIndex() == TI_LEFT) ? -0.5f : 0.5f;
-  salt::Vector3f pos(xFac * robot->GetUniformNumber(), -1.f*(mFieldWidth / 2.f - 0.4f), 0.4f);
+  float yFac = (robot->GetTeamIndex() == TI_LEFT) ? -1.f : 1.f;
+  float rot = (robot->GetTeamIndex() == TI_LEFT) ? 0 : -180;
+  salt::Vector3f pos(xFac * robot->GetUniformNumber(), yFac*(mFieldWidth / 2.f + 0.4f), 0.4f);
 
   boost::shared_ptr<oxygen::Transform> agent_aspect;
   SoccerBase::GetTransformParent(*robot, agent_aspect);
   //float height = agent_aspect->GetWorldTransform().Pos().z();
 
-  SoccerBase::MoveAndRotateAgent(agent_aspect, pos, -180);
+  SoccerBase::MoveAndRotateAgent(agent_aspect, pos, rot);
 
   robot->UnPenalize();
 
@@ -523,18 +529,19 @@ void SPLRule::UpdatePlaying()
         {
             if (IsLeavingTheField(*i))   // check player leave the field
             {
-                RemoveRobot(*i);
+                RemoveRobot(*i, spl::penalty_leaving_the_field);
                 std::cout << "(SPLRule) team "<<(*i)->GetTeamIndex()<<" player No.  " << (*i)->GetUniformNumber() << " leaving the field" << std::endl;
             } 
 			else if (IsIllegalDefender(*i)) // check illegal defender 
 			{
-				RemoveRobot(*i);
+                RemoveRobot(*i, spl::penalty_illegal_defender);
 				std::cout << "(SPLRule) team "<<(*i)->GetTeamIndex()<<" player No.  " << (*i)->GetUniformNumber() << " illegal defender" << std::endl;
 			}
         } 
-		else if(mGameState->GetTime() > (*i)->GetWhenPenalized() + 30)
-		{
-			(*i)->UnPenalize();
+        else if(mGameState->GetTime() > (*i)->GetTillPenalized())
+        {
+            //(*i)->UnPenalize();
+            UnpenalizeRobot(*i);
 		}
     }//end for
 
