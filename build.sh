@@ -6,7 +6,7 @@ cd spark
 mkdir build
 cd build
 cmake ..
-make -j
+make -j4
 sudo make install
 
 # Build rcssserver3d
@@ -14,7 +14,7 @@ cd ../../rcssserver3d
 mkdir build
 cd build
 cmake ..
-make -j
+make -j4
 sudo make install
 
 # Configure library paths
