@@ -175,13 +175,10 @@ void SceneServer::Update(float deltaTime)
 
 void SceneServer::PrePhysicsUpdate(float deltaTime)
 {
-    if (
-        (deltaTime == 0.0f) ||
-        (mActiveScene.get() == 0)
-        )
-        {
-            return;
-        }
+    if ((deltaTime == 0.0f) || (mActiveScene.get() == 0))
+    {
+        return;
+    }
 
     UpdateCache();
 
