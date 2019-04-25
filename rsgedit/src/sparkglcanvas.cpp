@@ -58,7 +58,7 @@ using namespace salt;
 
 SparkGLCanvas::SparkGLCanvas(wxWindow *parent, wxWindowID id,
                              const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-    : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name )
+    : wxGLCanvas(parent, id, NULL, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name )
 {
     mMouseCaptured = false;
     mInit = false;
@@ -67,7 +67,7 @@ SparkGLCanvas::SparkGLCanvas(wxWindow *parent, wxWindowID id,
 SparkGLCanvas::SparkGLCanvas(wxWindow *parent, const SparkGLCanvas *other,
                              wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
                              const wxString& name )
-    : wxGLCanvas(parent, other->GetContext(), id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
+    : wxGLCanvas(parent, id, NULL, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 {
     mMouseCaptured = false;
     mInit = false;
@@ -193,7 +193,7 @@ bool SparkGLCanvas::Init()
                 << "(SparkGLCanvas) ERROR: InputSystem not found" << std::endl;
         }
 
-    mRenderServer = shared_dynamic_cast<RenderServer>
+    mRenderServer = dynamic_pointer_cast<RenderServer>
         (spark->GetCore()->Get("/sys/server/render"));
 
     if (mRenderServer.get() == 0)

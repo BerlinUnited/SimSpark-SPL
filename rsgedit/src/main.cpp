@@ -65,7 +65,7 @@ bool RsgEditApp::OnInit()
 
     mSpark = shared_ptr<SimSpark>(new SimSpark());
 
-    if (! mSpark->Init(argc, reinterpret_cast<char**>(argv)))
+    if (! mSpark->Init(argc, argv))
         {
             return false;
         }

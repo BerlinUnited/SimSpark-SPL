@@ -137,13 +137,13 @@ void Property::GenLeafEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries)
 
 void Property::GenBaseNodeEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    boost::shared_ptr<BaseNode> baseNode = shared_static_cast<BaseNode>(leaf);
+    boost::shared_ptr<BaseNode> baseNode = static_pointer_cast<BaseNode>(leaf);
     entries.push_back(Entry(wxT("GetWorldBoundingBox"), FormatAABB3(baseNode->GetWorldBoundingBox())));
 }
 
 void Property::GenClassEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const Class& cl = *shared_static_cast<Class>(leaf);
+    const Class& cl = *static_pointer_cast<Class>(leaf);
 
     // originating bundle
     boost::shared_ptr<salt::SharedLibrary> bundle = cl.GetBundle();
@@ -181,7 +181,7 @@ void Property::GenClassEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries
 
 void Property::GenTransformEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const Transform& trans = *shared_static_cast<Transform>(leaf);
+    const Transform& trans = *static_pointer_cast<Transform>(leaf);
     entries.push_back(Entry(wxT("GetChangedMark"), FormatInt(trans.GetChangedMark())));
     entries.push_back(Entry(wxT("GetLocalTransform"), FormatMatrix(trans.GetLocalTransform())));
     entries.push_back(Entry(wxT("GetWorldTransform"), FormatMatrix(trans.GetWorldTransform())));
@@ -189,7 +189,7 @@ void Property::GenTransformEntries(boost::shared_ptr<Leaf> leaf, TEntryList& ent
 
 void Property::GenBodyEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const RigidBody& body = *shared_static_cast<RigidBody>(leaf);
+    const RigidBody& body = *static_pointer_cast<RigidBody>(leaf);
     entries.push_back(Entry(wxT("GetMass"),FormatFloat(body.GetMass())));
     entries.push_back(Entry(wxT("GetVelocity"),FormatVector3(body.GetVelocity())));
     entries.push_back(Entry(wxT("GetAngularVelocity"),FormatVector3(body.GetAngularVelocity())));
@@ -198,7 +198,7 @@ void Property::GenBodyEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries)
 
 void Property::GenSolidMaterialProperty(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const MaterialSolid& mat = *shared_static_cast<MaterialSolid>(leaf);
+    const MaterialSolid& mat = *static_pointer_cast<MaterialSolid>(leaf);
     entries.push_back(Entry(wxT("GetAmbient"),FormatRGBA(mat.GetAmbient())));
     entries.push_back(Entry(wxT("GetDiffuse"),FormatRGBA(mat.GetDiffuse())));
     entries.push_back(Entry(wxT("GetSpecular"),FormatRGBA(mat.GetSpecular())));
@@ -206,14 +206,14 @@ void Property::GenSolidMaterialProperty(boost::shared_ptr<Leaf> leaf, TEntryList
 
 void Property::GenHingeEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const HingeJoint& hinge = *shared_static_cast<HingeJoint>(leaf);
+    const HingeJoint& hinge = *static_pointer_cast<HingeJoint>(leaf);
     entries.push_back(Entry(wxT("GetAngle"),FormatFloat(hinge.GetAngle())));
     entries.push_back(Entry(wxT("GetAngleRate"),FormatFloat(hinge.GetAngleRate())));
 }
 
 void Property::GenUniversalEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const UniversalJoint& universal = *shared_static_cast<UniversalJoint>(leaf);
+    const UniversalJoint& universal = *static_pointer_cast<UniversalJoint>(leaf);
     entries.push_back(Entry(wxT("GetAngle(0)"),FormatFloat(universal.GetAngle(Joint::AI_FIRST))));
     entries.push_back(Entry(wxT("GetAngle(1)"),FormatFloat(universal.GetAngle(Joint::AI_SECOND))));
     entries.push_back(Entry(wxT("GetAngleRate(0)"),FormatFloat(universal.GetAngleRate(Joint::AI_FIRST))));
@@ -222,7 +222,7 @@ void Property::GenUniversalEntries(boost::shared_ptr<Leaf> leaf, TEntryList& ent
 
 void Property::GenJointEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const Joint& joint = *shared_static_cast<Joint>(leaf);
+    const Joint& joint = *static_pointer_cast<Joint>(leaf);
     entries.push_back(Entry(wxT("FeedBackEnabled"),FormatBool(joint.FeedBackEnabled())));
 
     for (int i=0;i<2;++i)
@@ -257,7 +257,7 @@ void Property::GenJointEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries
 
 void Property::GenWorldEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const World& world = *shared_static_cast<World>(leaf);
+    const World& world = *static_pointer_cast<World>(leaf);
     entries.push_back(Entry(wxT("GetGravity"),FormatVector3(world.GetGravity())));
     entries.push_back(Entry(wxT("GetERP"),FormatFloat(world.GetERP())));
     entries.push_back(Entry(wxT("GetCFM"),FormatFloat(world.GetCFM())));
@@ -265,13 +265,13 @@ void Property::GenWorldEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries
 
 void Property::GenCollisionHandlerEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    boost::shared_ptr<CollisionHandler> ch = shared_static_cast<CollisionHandler>(leaf);
+    boost::shared_ptr<CollisionHandler> ch = static_pointer_cast<CollisionHandler>(leaf);
     entries.push_back(Entry(wxT("IsSymmetricHandler"),FormatBool(ch->IsSymmetricHandler())));
 }
 
 void Property::GenContactJointEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const ContactJointHandler& cjh = *shared_static_cast<ContactJointHandler>(leaf);
+    const ContactJointHandler& cjh = *static_pointer_cast<ContactJointHandler>(leaf);
 
     int mode = cjh.GetContactMode();
     wxString strMode = //replace ODE constants with their actual values
@@ -301,7 +301,7 @@ void Property::GenContactJointEntries(boost::shared_ptr<Leaf> leaf, TEntryList& 
 
 void Property::GenDragControllerEntries(boost::shared_ptr<Leaf> leaf, TEntryList& entries) const
 {
-    const DragController& dc = *shared_static_cast<DragController>(leaf);
+    const DragController& dc = *static_pointer_cast<DragController>(leaf);
 
     entries.push_back(Entry(wxT("GetLinearDrag"),FormatFloat(dc.GetLinearDrag())));
     entries.push_back(Entry(wxT("GetAngularDrag"),FormatFloat(dc.GetAngularDrag())));
@@ -334,7 +334,7 @@ void Property::GetClassList(boost::shared_ptr<Class> cl, TClassList& clList) con
          )
         {
             string basePath = "/classes/"+(*iter);
-            boost::shared_ptr<Class> base = shared_dynamic_cast<Class>
+            boost::shared_ptr<Class> base = dynamic_pointer_cast<Class>
                 (spark->GetCore()->Get(basePath));
 
             if (base.get() == 0)

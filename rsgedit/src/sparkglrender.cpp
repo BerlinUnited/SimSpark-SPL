@@ -72,7 +72,7 @@ void SparkGLRender::Init(shared_ptr<SimSpark> spark)
             return;
         }
 
-    mCamera = shared_dynamic_cast<Camera>
+    mCamera = dynamic_pointer_cast<Camera>
         (mSpark->GetCore()->Get("/usr/scene/camera/camera"));
 
     if (mCamera.get() == 0)
@@ -81,7 +81,7 @@ void SparkGLRender::Init(shared_ptr<SimSpark> spark)
                 << "(SparkGLRender) ERROR: camera node not found\n";
         }
 
-    mRenderServer = shared_dynamic_cast<RenderServer>
+    mRenderServer = dynamic_pointer_cast<RenderServer>
         (mSpark->GetCore()->Get("/sys/server/render"));
 
     if (mRenderServer.get() == 0)
@@ -90,7 +90,7 @@ void SparkGLRender::Init(shared_ptr<SimSpark> spark)
                 << "(SparkGLRender) ERROR: RenderServer not found\n";
         }
 
-    mSceneServer = shared_dynamic_cast<SceneServer>
+    mSceneServer = dynamic_pointer_cast<SceneServer>
         (mSpark->GetCore()->Get("/sys/server/scene"));
 
     if (mSceneServer.get() == 0)
@@ -123,7 +123,7 @@ void SparkGLRender::RenderNodeSelection(shared_ptr<BaseNode> node)
         }
 
     shared_ptr<SingleMatNode> sMatNode =
-        shared_dynamic_cast<SingleMatNode>(node);
+        dynamic_pointer_cast<SingleMatNode>(node);
 
     if (sMatNode.get() != 0)
         {
@@ -143,7 +143,7 @@ void SparkGLRender::RenderNodeSelection(shared_ptr<BaseNode> node)
         }
 
     shared_ptr<RenderNode> renderNode =
-        shared_dynamic_cast<RenderNode>(node);
+        dynamic_pointer_cast<RenderNode>(node);
 
     if (renderNode.get() != 0)
         {
@@ -153,7 +153,7 @@ void SparkGLRender::RenderNodeSelection(shared_ptr<BaseNode> node)
         }
 
     shared_ptr<Joint> jointNode =
-        shared_dynamic_cast<Joint>(node);
+        dynamic_pointer_cast<Joint>(node);
 
     if (jointNode.get() != 0)
     {
@@ -193,7 +193,7 @@ void SparkGLRender::RenderNodeSelection(shared_ptr<BaseNode> node)
 
 void SparkGLRender::RenderSelection()
 {
-    shared_ptr<BaseNode> node = shared_dynamic_cast<BaseNode>
+    shared_ptr<BaseNode> node = dynamic_pointer_cast<BaseNode>
         (SparkContext::GetInstance().GetSelection().lock());
 
     if (node.get() == 0)

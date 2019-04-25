@@ -183,7 +183,7 @@ void kinematicFrame::UpdateCached()
         }
 
     mParent.Update(spark->GetCore());
-    shared_ptr<Node> node = shared_dynamic_cast<Node>(mParent.get());
+    shared_ptr<Node> node = dynamic_pointer_cast<Node>(mParent.get());
     if (node.get() == 0)
         {
             return;
@@ -204,7 +204,7 @@ void kinematicFrame::UpdateCached()
          ++iter
          )
         {
-            shared_ptr<Joint> joint = shared_static_cast<Joint>(*iter);
+            shared_ptr<Joint> joint = static_pointer_cast<Joint>(*iter);
             int jt = joint->GetType();
 
             switch (jt)
@@ -283,7 +283,7 @@ void kinematicFrame::RefreshProperties()
                 case 3: //dJointTypeSlider:
                     {
                         shared_ptr<SliderJoint> sliderJoint
-                            = shared_static_cast<SliderJoint>(entry.joint.lock());
+                            = static_pointer_cast<SliderJoint>(entry.joint.lock());
                         value = static_cast<int>(sliderJoint->GetPosition());
                         break;
                     }
@@ -291,7 +291,7 @@ void kinematicFrame::RefreshProperties()
                 case 5: //dJointTypeUniversal:
                     {
                         shared_ptr<UniversalJoint> universal
-                            = shared_static_cast<UniversalJoint>(entry.joint.lock());
+                            = static_pointer_cast<UniversalJoint>(entry.joint.lock());
                         value = static_cast<int>(universal->GetAngle(static_cast<Joint::EAxisIndex>(entry.axis)));
                         break;
                     }
@@ -299,7 +299,7 @@ void kinematicFrame::RefreshProperties()
                 case 2: //dJointTypeHinge:
                     {
                         shared_ptr<HingeJoint> hinge
-                            = shared_static_cast<HingeJoint>(entry.joint.lock());
+                            = static_pointer_cast<HingeJoint>(entry.joint.lock());
                         value = static_cast<int>(hinge->GetAngle());
                         break;
                     }
@@ -322,7 +322,7 @@ void kinematicFrame::OnScrollChanged(wxScrollEvent& event)
         }
 
     JointControl& entry = (*iter).second;
-    shared_ptr<Joint> joint(shared_static_cast<Joint>(entry.joint.lock()));
+    shared_ptr<Joint> joint(static_pointer_cast<Joint>(entry.joint.lock()));
     joint->SetParameter(2 /*dParamVel*/, 0);
 }
 
@@ -349,7 +349,7 @@ void kinematicFrame::MoveJoint(JointControl& entry)
         case 2: //dJointTypeHinge:
             {
                 shared_ptr<HingeJoint> hinge
-                    = shared_static_cast<HingeJoint>(entry.joint.lock());
+                    = static_pointer_cast<HingeJoint>(entry.joint.lock());
                 float value_joint = static_cast<int>(hinge->GetAngle());
                 float diff = (entry.target - value_joint);
                 if (gAbs(diff) < MIN_JOINT_DIFF)
@@ -366,7 +366,7 @@ void kinematicFrame::MoveJoint(JointControl& entry)
         case 5: //dJointTypeUniversal:
             {
                 shared_ptr<UniversalJoint> universal
-                    = shared_static_cast<UniversalJoint>(entry.joint.lock());
+                    = static_pointer_cast<UniversalJoint>(entry.joint.lock());
                 int value_joint = static_cast<int>
                     (universal->GetAngle(static_cast<Joint::EAxisIndex>(entry.axis)));
                 int diff = (entry.target - value_joint);
