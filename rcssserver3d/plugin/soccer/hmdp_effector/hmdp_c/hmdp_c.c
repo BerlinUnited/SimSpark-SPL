@@ -314,6 +314,8 @@ int lo2(int in)
         return 1;
     if (in < 2)
         return 0;
+
+    return 0;
 }
 ;
 
