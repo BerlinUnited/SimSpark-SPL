@@ -26,7 +26,9 @@
 #include "corecontext.h"
 #include "scriptserver/scriptserver.h"
 #include "logserver/logserver.h"
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 namespace zeitgeist
 {

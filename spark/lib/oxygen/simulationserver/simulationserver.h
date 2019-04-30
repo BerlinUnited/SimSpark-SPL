@@ -27,8 +27,12 @@
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
 #include <oxygen/sceneserver/sceneserver.h>
 #include <oxygen/monitorserver/monitorserver.h>
+#ifndef Q_MOC_RUN
 #include <boost/thread/barrier.hpp>
+#endif
+#ifndef Q_MOC_RUN
 #include <boost/thread/mutex.hpp>
+#endif
 
 namespace oxygen
 {

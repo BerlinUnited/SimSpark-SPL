@@ -24,8 +24,12 @@
 struct sockaddr_in;
 
 #include <string>
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
+#ifndef Q_MOC_RUN
 #include <boost/cstdint.hpp>
+#endif
 #include "rcssnet3D_defines.h"
 
 namespace rcss

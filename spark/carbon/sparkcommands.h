@@ -31,7 +31,9 @@
 #include <QObject>
 #include <QString>
 #include <QSemaphore>
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 #include "cutelogger/logger.h"
 

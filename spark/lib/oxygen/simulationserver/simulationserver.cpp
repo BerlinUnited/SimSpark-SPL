@@ -25,7 +25,9 @@
 #include <zeitgeist/logserver/logserver.h>
 #include <signal.h>
 #include <algorithm>
+#ifndef Q_MOC_RUN
 #include <boost/bind.hpp>
+#endif
 
 using namespace oxygen;
 using namespace zeitgeist;

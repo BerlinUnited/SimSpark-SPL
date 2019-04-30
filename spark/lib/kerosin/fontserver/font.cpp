@@ -23,7 +23,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <salt/gmath.h>
+#ifndef Q_MOC_RUN
 #include <boost/scoped_array.hpp>
+#endif
 #include <zeitgeist/logserver/logserver.h>
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include "fontserver.h"

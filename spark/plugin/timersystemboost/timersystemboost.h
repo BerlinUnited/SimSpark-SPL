@@ -21,7 +21,9 @@
 #ifndef OXYGEN_BOOSTTIMERSYSTEM_H
 #define OXYGEN_BOOSTTIMERSYSTEM_H
 
+#ifndef Q_MOC_RUN
 #include <boost/thread/thread.hpp>
+#endif
 #include <oxygen/simulationserver/timersystem.h>
 
 namespace oxygen

@@ -25,7 +25,9 @@
 #include <zeitgeist/scriptserver/scriptserver.h>
 #include <oxygen/sceneserver/transform.h>
 #include <oxygen/sceneserver/scenedict.h>
+#ifndef Q_MOC_RUN
 #include <boost/scoped_array.hpp>
+#endif
 #include <sstream>
 
 using namespace zeitgeist;

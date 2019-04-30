@@ -26,7 +26,9 @@
  */
 
 #include <oxygen/simulationserver/simcontrolnode.h>
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <QList>
 
 class ISimControl;

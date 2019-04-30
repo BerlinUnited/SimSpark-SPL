@@ -21,7 +21,9 @@
 #include "topic.h"
 #include "topicregistration.h"
 
+#ifndef Q_MOC_RUN
 #include <boost/make_shared.hpp>
+#endif
 
 using namespace boost;
 

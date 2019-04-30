@@ -28,8 +28,12 @@
 #ifndef ZEITGEIST_OBJECT_H
 #define ZEITGEIST_OBJECT_H
 
+#ifndef Q_MOC_RUN
 #include <boost/weak_ptr.hpp>
+#endif
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include "core.h"
 #include "parameterlist.h"
 

@@ -22,8 +22,12 @@
 #ifndef SALT_RANDOM_H
 #define SALT_RANDOM_H
 
+#ifndef Q_MOC_RUN
 #include <boost/random.hpp>
+#endif
+#ifndef Q_MOC_RUN
 #include <boost/version.hpp>
+#endif
 #include "salt_defines.h"
 
 namespace salt
@@ -56,7 +60,9 @@ private:
 };
 
 #if (defined(BOOST_VERSION) && (BOOST_VERSION >= 103100))
+#ifndef Q_MOC_RUN
 #include <boost/random/variate_generator.hpp>
+#endif
 
 /** This random number generator should be used to produce
  *  uniformly distributed random numbers.
