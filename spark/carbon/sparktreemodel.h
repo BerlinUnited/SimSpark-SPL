@@ -28,8 +28,6 @@
 #include <QAbstractItemModel>
 #ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
-#endif
-#ifndef Q_MOC_RUN
 #include <boost/weak_ptr.hpp>
 #endif
 #include <vector>

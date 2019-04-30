@@ -27,8 +27,6 @@
 
 #ifndef Q_MOC_RUN
 #include <boost/cstdint.hpp>
-#endif
-#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
 #endif
 #include "rcssnet3D_defines.h"

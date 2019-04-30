@@ -26,8 +26,6 @@
 #include <zeitgeist/logserver/logserver.h>
 #ifndef Q_MOC_RUN
 #include <boost/scoped_ptr.hpp>
-#endif
-#ifndef Q_MOC_RUN
 #include <boost/scoped_array.hpp>
 #endif
 

@@ -25,8 +25,6 @@
 #include <zeitgeist/node.h>
 #ifndef Q_MOC_RUN
 #include <boost/thread/thread.hpp>
-#endif
-#ifndef Q_MOC_RUN
 #include <boost/thread/condition.hpp>
 #endif
 #include <oxygen/oxygen_defines.h>

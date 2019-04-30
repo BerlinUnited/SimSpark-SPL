@@ -24,8 +24,6 @@
 
 #ifndef Q_MOC_RUN
 #include <boost/random.hpp>
-#endif
-#ifndef Q_MOC_RUN
 #include <boost/version.hpp>
 #endif
 #include "salt_defines.h"

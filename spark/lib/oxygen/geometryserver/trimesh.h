@@ -26,8 +26,6 @@
 #include <list>
 #ifndef Q_MOC_RUN
 #include <boost/shared_array.hpp>
-#endif
-#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
 #endif
 #include <string>
