@@ -24,6 +24,7 @@
 
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/convexcollider.h>
+#include <salt/vector.h>
 
 namespace oxygen
 {
@@ -57,6 +58,9 @@ public:
        on the surface will have zero depth.
      */
     float GetPointDepth(const salt::Vector3f& pos);
+
+    bool CheckSeparatingPlane(const salt::Vector3f& RPos, const salt::Vector3f& Plane, boost::shared_ptr<BoxCollider> box2, float tol=0.0);
+    bool CheckCollisions( boost::shared_ptr<BoxCollider> box2, float tol=0.0);
 
 protected:
     /** constructs a default box with side lengths of 1 */

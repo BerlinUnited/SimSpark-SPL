@@ -325,6 +325,7 @@
         
         (nd BoxCollider
             (setName (join $LeftOrRight ShankCollider))
+            (addNotCollideWithColliderName (join $LeftOrRight ThighCollider) true)
             (setBoxLengths $ShankSizeX $ShankSizeY $ShankSizeZ)
             (importScene rsg/agent/nao/contactjointhandler.rsg)
         )

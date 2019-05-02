@@ -22,10 +22,14 @@
 #ifndef SOCCERRULEASPECT_H
 #define SOCCERRULEASPECT_H
 
+#include <vector>
+
 #include <soccercontrolaspect/soccercontrolaspect.h>
 #include <soccertypes.h>
 #include <ballstateaspect/ballstateaspect.h>
 #include <gamestateaspect/gamestateaspect.h>
+
+#include <oxygen/physicsserver/boxcollider.h>
 
 class AgentState;
 
@@ -59,6 +63,7 @@ public:
         FT_Incapable,
         FT_KickOff,
         FT_Charging,
+        FT_SelfCollision,
         FT_None
     };
 
@@ -164,6 +169,16 @@ public:
     /** Checks if there are any charging fouls
      */
     void AnalyseChargingFouls();
+
+    /** Checks if there are any self collision fouls
+     */
+    void AnalyseSelfCollisionFouls(TTeamIndex idx);
+
+    /** Get all Box Colliders to a vector
+     */
+    void GetTreeBoxColliders(boost::shared_ptr<zeitgeist::Leaf> root, 
+                             std::vector< boost::shared_ptr<oxygen::BoxCollider> > &agentBoxes
+                   ); 
 
     /** Check whether too many agents are touching
      */
@@ -487,6 +502,14 @@ protected:
     int mMaxTouchGroupSize;
     /** maximum time allowed for a player to commit a positional foul before being repositioned */
     int mMaxFoulTime;
+    /** maximum tolerance allowed for self collisions along the box collider separating planes */
+    float mSelfCollisionsTolerance;
+    /** print a line every time a self collision is detected in an agent */
+    bool mPrintSelfCollisions;
+    /** apply foul penalty every time self collision is detected in an agent */
+    bool mFoulOnSelfCollisions;
+    /** time after a selfcollision penalty has been applied in which no self collision penalty will be applied again */
+    float mSelfCollisionCooldownTime;
 
     /* Useful arrays for dealing with agent state and fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
@@ -619,6 +642,11 @@ protected:
     /** Allow starting at any field position including on opponent's
         side of the field */
     bool mStartAnyFieldPosition;
+
+    /**Number of self collisions
+     */
+    int playerSelfCollisions[12][3];
+    float playerTimeLastSelfCollision[12][3];  		//Time of last self collision for each player
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;
