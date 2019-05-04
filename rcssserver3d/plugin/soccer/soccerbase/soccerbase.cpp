@@ -614,6 +614,12 @@ SoccerBase::PlayMode2Str(const TPlayMode mode)
     case PM_DIRECT_FREE_KICK_RIGHT:
         return STR_PM_DIRECT_FREE_KICK_RIGHT;
 
+    case PM_PASS_LEFT:
+        return STR_PM_PASS_LEFT;
+
+    case PM_PASS_RIGHT:
+        return STR_PM_PASS_RIGHT;
+        
     default:
         return STR_PM_Unknown;
     };

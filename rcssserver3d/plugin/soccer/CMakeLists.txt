@@ -24,6 +24,8 @@ set(soccer_LIB_HDRS
    initeffector/staticmeshiniteffector.h
    kickeffector/kickaction.h
    kickeffector/kickeffector.h
+   passeffector/passaction.h
+   passeffector/passeffector.h
    objectstate/objectstate.h
    pantilteffector/pantiltaction.h
    pantilteffector/pantilteffector.h
@@ -91,6 +93,8 @@ set(soccer_LIB_SRCS
    initeffector/staticmeshiniteffector_c.cpp
    kickeffector/kickeffector.cpp
    kickeffector/kickeffector_c.cpp
+   passeffector/passeffector.cpp
+   passeffector/passeffector_c.cpp
    objectstate/objectstate.cpp
    objectstate/objectstate_c.cpp
    pantilteffector/pantilteffector.cpp

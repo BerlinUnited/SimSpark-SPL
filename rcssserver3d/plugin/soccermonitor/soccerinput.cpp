@@ -71,6 +71,8 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.Right", CmdRight);
     scriptServer->CreateVariable("Command.DirectLeft", CmdDirectLeft);
     scriptServer->CreateVariable("Command.DirectRight", CmdDirectRight);
+    scriptServer->CreateVariable("Command.PassLeft", CmdPassLeft);
+    scriptServer->CreateVariable("Command.PassRight", CmdPassRight);
     
     scriptServer->CreateVariable("Command.PlayerSelectMode", CmdPlayerSelectMode);
     scriptServer->CreateVariable("Command.SelectNextAgent", CmdSelectNextAgent);
@@ -274,6 +276,23 @@ void SoccerInput::ProcessInput(const Input& input)
                         mCmdMode = CmdModeRightPlayerSelect;
                 }
             break;
+        case CmdPassLeft:
+            if (input.GetKeyPress())
+                {
+                    if (mCmdMode == CmdModeDefault)
+                        SendCommand("(playMode pass_left)");
+                    else if (mCmdMode == CmdModePlayerSelect || mCmdMode == CmdModeRightPlayerSelect)
+                        mCmdMode = CmdModeLeftPlayerSelect;
+                }
+            break;
+        case CmdPassRight:
+            if (input.GetKeyPress())
+                {
+                    if (mCmdMode == CmdModeDefault)
+                        SendCommand("(playMode pass_right)");
+                    else if (mCmdMode == CmdModePlayerSelect || mCmdMode == CmdModeLeftPlayerSelect)
+                        mCmdMode = CmdModeRightPlayerSelect;
+                }
         };
 }
 

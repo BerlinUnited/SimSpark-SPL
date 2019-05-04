@@ -29,6 +29,7 @@
 #include "initeffector/singlematiniteffector.h"
 #include "initeffector/staticmeshiniteffector.h"
 #include "kickeffector/kickeffector.h"
+#include "passeffector/passeffector.h"
 #include "pantilteffector/pantilteffector.h"
 #include "sayeffector/sayeffector.h"
 #include "soccercontrolaspect/soccercontrolaspect.h"
@@ -73,6 +74,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SingleMatInitEffector);
         ZEITGEIST_EXPORT(StaticMeshInitEffector);
         ZEITGEIST_EXPORT(KickEffector);
+        ZEITGEIST_EXPORT(PassEffector);
         ZEITGEIST_EXPORT(PanTiltEffector);
         ZEITGEIST_EXPORT(SayEffector);
         ZEITGEIST_EXPORT(SoccerNode);
