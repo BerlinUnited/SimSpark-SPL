@@ -28,6 +28,7 @@
 #include <oxygen/physicsserver/boxcollider.h>
 #include <oxygen/sceneserver/scene.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#include <oxygen/agentaspect/effector.h>
 #include <soccerbase/soccerbase.h>
 #include <gamestateaspect/gamestateaspect.h>
 #include <ballstateaspect/ballstateaspect.h>
@@ -76,8 +77,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMaxFoulTime(0.0),              // maximum time allowed for a player to commit a positional foul before being repositioned
     mSelfCollisionsTolerance(0.0),     
     mPrintSelfCollisions(true),     
-    mFoulOnSelfCollisions(false),     
-    mSelfCollisionCooldownTime(10.0),     
+    mFoulOnSelfCollisions(false),
+    mSelfCollisionJointFrozenTime(1.0),
+    mSelfCollisionJointThawTime(2.0),  
     mFirstCollidingAgent(true),
     mNotOffside(false),
     mLastModeWasPlayOn(false),
@@ -131,7 +133,17 @@ SoccerRuleAspect::SoccerRuleAspect() :
             {
                 playerVelocities[i][t][j] = salt::Vector3f(0,0,0);
             }
-            playerTimeLastSelfCollision[i][t] = -1e5;   // large negative value
+        }
+    }
+
+    // Initialize last time joint frozen values
+    for (int i = 0; i <= 11; i++) 
+    {
+        for (int t = 0; t <= 2; t++) 
+        {
+            for (int j = 0; j < JE_COUNT; j++) {
+                lastTimeJointFrozen[i][t][j] = -1000;
+            }
         }
     }
 }
@@ -210,6 +222,7 @@ SoccerRuleAspect::AutomaticSimpleReferee()
     {
         ResetFoulCounter(TI_LEFT);
         ResetFoulCounter(TI_RIGHT);
+        UpdateSelfCollisions(true /*reset*/);
     }
     else
     {
@@ -235,6 +248,8 @@ SoccerRuleAspect::AutomaticSimpleReferee()
         // Reset touch groups
         ResetTouchGroups(TI_LEFT);
         ResetTouchGroups(TI_RIGHT);
+
+        UpdateSelfCollisions(false /*reset*/);
 
         // If in penalty shootout mode check that the goalie remains in the penalty area
         if (mPenaltyShootout) 
@@ -285,6 +300,51 @@ SoccerRuleAspect::ResetFoulCounter(TTeamIndex idx)
         ResetFoulCounterPlayer(t, idx);
     }
 }
+
+void
+SoccerRuleAspect::UpdateSelfCollisions(bool reset)
+{
+
+    boost::shared_ptr<GameControlServer> game_control;
+    if (!SoccerBase::GetGameControlServer(*this, game_control)) {
+        return;
+    }
+            
+    GameControlServer::TAgentAspectList agentAspects;
+    game_control->GetAgentAspectList(agentAspects);
+    GameControlServer::TAgentAspectList::iterator aaiter;
+    for (
+         aaiter = agentAspects.begin();
+         aaiter != agentAspects.end();
+         ++aaiter
+         )
+        {
+            
+            boost::shared_ptr<AgentState> agentState =
+                dynamic_pointer_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
+
+            if (!agentState) {
+                continue;
+            }
+
+            int unum = agentState->GetUniformNumber();
+            TTeamIndex idx = agentState->GetTeamIndex();
+            boost::shared_ptr<oxygen::AgentAspect> agent = static_pointer_cast<oxygen::AgentAspect>(*aaiter);
+                           
+            for (int j = 0; j < JE_COUNT; j++) {
+                if (lastTimeJointFrozen[unum][idx][j] >= 0 && (reset || mGameState->GetTime()-lastTimeJointFrozen[unum][idx][j] >= mSelfCollisionJointFrozenTime)) {
+                    boost::shared_ptr<oxygen::Effector> effector = dynamic_pointer_cast<oxygen::Effector>(agent->GetEffector(mapJointEffectorToName[j]));
+                    if (effector) {
+                        effector->Enable();
+                    }
+                }
+                if (lastTimeJointFrozen[unum][idx][j] >= 0 && (reset || mGameState->GetTime()-lastTimeJointFrozen[unum][idx][j] >= mSelfCollisionJointFrozenTime+mSelfCollisionJointThawTime)) {
+                    lastTimeJointFrozen[unum][idx][j] = -1000;
+                }
+            }
+        }
+}
+
 
 // Resets time since last ball touch for agents currently colliding with ball
 void 
@@ -868,6 +928,8 @@ void SoccerRuleAspect::AnalyseSelfCollisionFouls(TTeamIndex idx)
 
         GetTreeBoxColliders(a3, agentBoxes);
 
+        std::list<EBoxCollider> boxesCollidedList;
+
         unsigned int b1, b2;
         for(b1=0 ; b1 < agentBoxes.size() ; b1++) {
             for(b2=b1+1 ; b2 < agentBoxes.size() ; b2++) {
@@ -885,15 +947,118 @@ void SoccerRuleAspect::AnalyseSelfCollisionFouls(TTeamIndex idx)
                                             << " " << box2_transform->GetName() 
                                             << endl; 
                      }
-                     if(mFoulOnSelfCollisions && mGameState->GetTime() - playerTimeLastSelfCollision[unum][idx] > mSelfCollisionCooldownTime) {
-                         playerTimeLastSelfCollision[unum][idx] = mGameState->GetTime();
-                         playerFoulTime[unum][idx]++;
-                         playerLastFoul[unum][idx] = FT_SelfCollision;
-                     }
+
+                     boxesCollidedList.push_back(mapNameToBoxCollider[box1_transform->GetName()]);
+                     boxesCollidedList.push_back(mapNameToBoxCollider[box2_transform->GetName()]);
                  }
             }
-        }      
+        }
 
+        if(mFoulOnSelfCollisions) {
+            std::list<EJointEffector> jointsCollidedList;
+            
+            std::list<EBoxCollider>::const_iterator itb;
+            for (itb = boxesCollidedList.begin(); itb != boxesCollidedList.end(); ++itb) {
+                // Determine which joints will be frozen based on which boxes have collided
+                switch(*itb) {
+                case BC_RUPPERARM:
+                case BC_RLOWERARM:
+                    jointsCollidedList.push_back(JE_RAE1);
+                    jointsCollidedList.push_back(JE_RAE2);
+                    jointsCollidedList.push_back(JE_RAE3);
+                    jointsCollidedList.push_back(JE_RAE4);
+                    break;                   
+                case BC_LUPPERARM:
+                case BC_LLOWERARM:
+                    jointsCollidedList.push_back(JE_LAE1);
+                    jointsCollidedList.push_back(JE_LAE2);
+                    jointsCollidedList.push_back(JE_LAE3);
+                    jointsCollidedList.push_back(JE_LAE4);
+                    break;
+                case BC_RTHIGH:
+                case BC_RSHANK:
+                case BC_RFOOT:
+                    jointsCollidedList.push_back(JE_RLE1);
+                    jointsCollidedList.push_back(JE_RLE2);
+                    jointsCollidedList.push_back(JE_RLE3);
+                    jointsCollidedList.push_back(JE_RLE4);
+                    jointsCollidedList.push_back(JE_RLE5);
+                    jointsCollidedList.push_back(JE_RLE6);
+                    jointsCollidedList.push_back(JE_RLE7);
+                    break;
+                case BC_LTHIGH:
+                case BC_LSHANK:
+                case BC_LFOOT:
+                    jointsCollidedList.push_back(JE_LLE1);
+                    jointsCollidedList.push_back(JE_LLE2);
+                    jointsCollidedList.push_back(JE_LLE3);
+                    jointsCollidedList.push_back(JE_LLE4);
+                    jointsCollidedList.push_back(JE_LLE5);
+                    jointsCollidedList.push_back(JE_LLE6);
+                    jointsCollidedList.push_back(JE_LLE7);
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            bool haveFoul = false;
+            boost::shared_ptr<oxygen::AgentAspect> agent = NULL;
+            std::list<EJointEffector>::const_iterator itj;
+            for (itj = jointsCollidedList.begin(); itj != jointsCollidedList.end(); ++itj) {
+                if (mGameState->GetTime() - lastTimeJointFrozen[unum][idx][*itj] > mSelfCollisionJointFrozenTime+mSelfCollisionJointThawTime) {
+                    
+                    if (!agent) {
+                        // get game control server to check agent count
+                        boost::shared_ptr<GameControlServer> game_control;
+                        
+                        if (!SoccerBase::GetGameControlServer(*this, game_control))
+                            {
+                                return;
+                            }
+                        
+                        GameControlServer::TAgentAspectList agentAspects;
+                        game_control->GetAgentAspectList(agentAspects);
+                        GameControlServer::TAgentAspectList::iterator aaiter;
+                        for (
+                             aaiter = agentAspects.begin();
+                             aaiter != agentAspects.end();
+                             ++aaiter
+                             )
+                            {
+                                
+                                boost::shared_ptr<AgentState> agentState =
+                                    dynamic_pointer_cast<AgentState>((*aaiter)->GetChild("AgentState", true));
+                                
+                                if (agentState->GetUniformNumber() == unum && agentState->GetTeamIndex() == idx) {
+                                    
+                                    agent = static_pointer_cast<oxygen::AgentAspect>(*aaiter);
+                                    break;
+                                }
+                            }
+                    }
+
+                    if (!agent) {
+                        break;
+                    }
+                    
+                    boost::shared_ptr<oxygen::Effector> effector = dynamic_pointer_cast<oxygen::Effector>(agent->GetEffector(mapJointEffectorToName[*itj]));
+                    if (effector) {
+                        effector->Disable();
+                    }
+                    lastTimeJointFrozen[unum][idx][*itj] = mGameState->GetTime();
+                    
+                    haveFoul = true;
+                    //playerFoulTime[unum][idx]++;
+                    //playerLastFoul[unum][idx] = FT_SelfCollision;
+                }
+            }
+
+            if (haveFoul) {
+                // Record foul
+                mFouls.push_back(Foul(mFouls.size() + 1, FT_SelfCollision, *i));
+            }
+        }
     }
 }
 
@@ -2907,7 +3072,8 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"SelfCollisionsTolerance",mSelfCollisionsTolerance);
     SoccerBase::GetSoccerVar(*this,"PrintSelfCollisions",mPrintSelfCollisions);
     SoccerBase::GetSoccerVar(*this,"FoulOnSelfCollisions",mFoulOnSelfCollisions);
-    SoccerBase::GetSoccerVar(*this,"SelfCollisionCooldownTime",mSelfCollisionCooldownTime);
+    SoccerBase::GetSoccerVar(*this,"SelfCollisionJointFrozenTime",mSelfCollisionJointFrozenTime);
+    SoccerBase::GetSoccerVar(*this,"SelfCollisionJointThawTime",mSelfCollisionJointThawTime);
 
     SoccerBase::GetSoccerVar(*this,"MaxNumSafeRepositionAttempts",mMaxNumSafeRepositionAttempts);
     SoccerBase::GetSoccerVar(*this,"StartAnyFieldPosition",mStartAnyFieldPosition);

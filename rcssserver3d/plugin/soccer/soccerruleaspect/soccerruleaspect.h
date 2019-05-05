@@ -31,6 +31,9 @@
 
 #include <oxygen/physicsserver/boxcollider.h>
 
+#include <boost/assign/list_of.hpp>
+#include <boost/unordered_map.hpp>
+
 class AgentState;
 
 #ifdef RVDRAW
@@ -81,6 +84,54 @@ public:
 
         int time;
     };
+
+    enum EJointEffector
+    {
+        JE_HE1 = 0,
+        JE_HE2,
+        JE_LAE1,
+        JE_LAE2,
+        JE_LAE3,
+        JE_LAE4,
+        JE_LLE1,
+        JE_LLE2,
+        JE_LLE3,
+        JE_LLE4,
+        JE_LLE5,
+        JE_LLE6,
+        JE_LLE7,
+        JE_RAE1,
+        JE_RAE2,
+        JE_RAE3,
+        JE_RAE4,
+        JE_RLE1,
+        JE_RLE2,
+        JE_RLE3,
+        JE_RLE4,
+        JE_RLE5,
+        JE_RLE6,
+        JE_RLE7,
+        JE_COUNT
+    };
+
+    boost::unordered_map<int,std::string> mapJointEffectorToName = boost::assign::map_list_of(JE_HE1,"he1")(JE_HE2,"he2")(JE_LAE1,"lae1")(JE_LAE2,"lae2")(JE_LAE3,"lae3")(JE_LAE4,"lae4")(JE_LLE1,"lle1")(JE_LLE2,"lle2")(JE_LLE3,"lle3")(JE_LLE4,"lle4")(JE_LLE5,"lle5")(JE_LLE6,"lle6")(JE_LLE7,"lle7")(JE_RAE1,"rae1")(JE_RAE2,"rae2")(JE_RAE3,"rae3")(JE_RAE4,"rae4")(JE_RLE1,"rle1")(JE_RLE2,"rle2")(JE_RLE3,"rle3")(JE_RLE4,"rle4")(JE_RLE5,"rle5")(JE_RLE6,"rle6")(JE_RLE7,"rle7");
+
+    enum EBoxCollider
+    {
+        BC_BODY,
+        BC_RUPPERARM,
+        BC_RLOWERARM,
+        BC_LUPPERARM,
+        BC_LLOWERARM,
+        BC_RTHIGH,
+        BC_RSHANK,
+        BC_RFOOT,
+        BC_LTHIGH,
+        BC_LSHANK,
+        BC_LFOOT,
+    };
+    
+    boost::unordered_map<std::string,EBoxCollider> mapNameToBoxCollider = boost::assign::map_list_of("body",BC_BODY)("rupperarm",BC_RUPPERARM)("rlowerarm",BC_RLOWERARM)("lupperarm",BC_LUPPERARM)("llowerarm",BC_LLOWERARM)("rthigh",BC_RTHIGH)("rshank",BC_RSHANK)("rfoot",BC_RFOOT)("lthigh",BC_LTHIGH)("lshank",BC_LSHANK)("lfoot",BC_LFOOT);
 
 public:
     SoccerRuleAspect();
@@ -155,6 +206,10 @@ public:
     /** Reset the foul time counter for a given player
     */
     void ResetFoulCounterPlayer(int unum, TTeamIndex idx);
+
+    /** Checks the status of self collisions and unfreezes joints when appropriate
+    */
+    void UpdateSelfCollisions(bool reset);
 
     /**Analyse Fouls from players and increase foul counter of offending players
     */
@@ -508,8 +563,10 @@ protected:
     bool mPrintSelfCollisions;
     /** apply foul penalty every time self collision is detected in an agent */
     bool mFoulOnSelfCollisions;
-    /** time after a selfcollision penalty has been applied in which no self collision penalty will be applied again */
-    float mSelfCollisionCooldownTime;
+    /** how long joints are frozen after a self collision */
+    float mSelfCollisionJointFrozenTime;
+    /** time after a joint is unfrozen before it can be frozen by a self collision again */
+    float mSelfCollisionJointThawTime;
 
     /* Useful arrays for dealing with agent state and fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
@@ -524,6 +581,7 @@ protected:
     int ordGArr[12][3];			//Distance order of players to own goal (left/right team)
     int playerFoulTime[12][3];		//Time player is commiting a positional foul
     EFoulType playerLastFoul[12][3];	//Type of last foul committed by player
+    TTime lastTimeJointFrozen[12][3][JE_COUNT]; // Time since joint last frozen
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
     int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area
     std::list<salt::Vector2f> reposLocs; // List of locations players have been repositioned to 
@@ -646,7 +704,6 @@ protected:
     /**Number of self collisions
      */
     int playerSelfCollisions[12][3];
-    float playerTimeLastSelfCollision[12][3];  		//Time of last self collision for each player
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;
