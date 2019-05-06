@@ -122,13 +122,16 @@ public:
     /** Set the current touch group */
     void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
     
-    void Penalize(const TTime gameTime);
+    void Penalize(const TTime gameTime, const spl::TSPLPenalty cause, const TTime duration);
 
     void UnPenalize();
 
     bool IsPenalized();
 
+    spl::TSPLPenalty getPenalty() const;
+
 	TTime GetWhenPenalized() const;
+    TTime GetTillPenalized() const;
 
     TTime getWhenPenalized() const {return whenPenalized;}
 
@@ -188,8 +191,9 @@ protected:
     
     /** for SPL */
     /*FIXME .. outsource for SPL*/
-    bool isPenelized;
+    spl::TSPLPenalty penalty;
     TTime whenPenalized;
+    TTime tillPenalized;
 
     boost::shared_ptr<TouchGroup> mOldTouchGroup;
     boost::shared_ptr<TouchGroup> mTouchGroup;

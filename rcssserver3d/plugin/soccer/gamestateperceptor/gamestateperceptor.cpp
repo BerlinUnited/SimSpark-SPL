@@ -148,17 +148,36 @@ GameStatePerceptor::Percept(boost::shared_ptr<PredicateList> predList)
     // playmode
     ParameterList& pmElement = predicate.parameter.AddList();
     pmElement.AddValue(string("pm"));
-    if (mAgentState->IsPenalized())
-        pmElement.AddValue(string("penalized"));
-    else
-        pmElement.AddValue(mGameState->GetPlayModeStr());
+    pmElement.AddValue(mGameState->GetPlayModeStr());
 
     // kickoff
     ParameterList& kickoffElement = predicate.parameter.AddList();
     kickoffElement.AddValue(string("k"));
     kickoffElement.AddValue(GetTeamSide(mGameState->GetKickoffTeam()));
 
+    // team info
+    ParameterList& teamElement = predicate.parameter.AddList();
+    teamElement.AddValue(string("ti"));
+    GetTeamInfo(teamElement, TI_LEFT);
+    GetTeamInfo(teamElement, TI_RIGHT);
+
     return true;
+}
+
+void
+GameStatePerceptor::GetTeamInfo(ParameterList& info, TTeamIndex ti)
+{
+
+    ParameterList& team = info.AddList();
+    SoccerBase::TAgentStateList robots;
+    SoccerBase::GetAgentStates(*mAgentState.get(), robots, ti);
+    for (SoccerBase::TAgentStateList::const_iterator i = robots.begin(); i != robots.end(); ++i)
+    {
+        ParameterList& player = team.AddList();
+        player.AddValue((*i)->GetUniformNumber());
+        player.AddValue(SoccerBase::SPLPenalty2Str((*i)->getPenalty()));
+        player.AddValue((*i)->GetTillPenalized() - mGameState->GetTime());
+    }
 }
 
 void

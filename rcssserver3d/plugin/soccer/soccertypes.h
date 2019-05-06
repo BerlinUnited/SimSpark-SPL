@@ -103,6 +103,23 @@ enum TSPLState
   Penalized,
   Unknown
 };
+
+enum TSPLPenalty
+{
+    penalty_none,
+    penalty_illegal_ball_contact,
+    penalty_player_pushing,
+    penalty_illegal_motion_in_set,
+    penalty_inactive_player,
+    penalty_illegal_defender,
+    penalty_leaving_the_field,
+    penalty_kick_off_goal,
+    penalty_request_for_pickup,
+    penalty_local_game_stuck,
+    penalty_illegal_positioning,
+    penalty_substitute,
+    penalty_manual
+};
 }
 
 #define STR_SPL_STATE_INITIAL "initial"
@@ -112,5 +129,19 @@ enum TSPLState
 #define STR_SPL_STATE_FINISHED "finished"
 #define STR_SPL_STATE_PENALIZED "penalized"
 #define STR_SPL_STATE_UNKNOWN "unknown"
+
+#define STR_SPL_PENALTY_NONE "penalty_none"
+#define STR_SPL_PENALTY_ILLEGAL_BALL_CONTACT "illegal_ball_contact"
+#define STR_SPL_PENALTY_PLAYER_PUSHING "player_pushing"
+#define STR_SPL_PENALTY_ILLEGAL_MOTION_IN_SET "illegal_motion_in_set"
+#define STR_SPL_PENALTY_INACTIVE_PLAYER "inactive_player"
+#define STR_SPL_PENALTY_ILLEGAL_DEFENDER "illegal_defender"
+#define STR_SPL_PENALTY_LEAVING_THE_FIELD "leaving_the_field"
+#define STR_SPL_PENALTY_KICK_OFF_GOAL "kick_off_goal"
+#define STR_SPL_PENALTY_REQUEST_FOR_PICKUP "request_for_pickup"
+#define STR_SPL_PENALTY_LOCAL_GAME_STUCK "local_game_stuck"
+#define STR_SPL_PENALTY_ILLEGAL_POSITIONING "illegal_positioning"
+#define STR_SPL_PENALTY_SUBSTITUTE "substitute"
+#define STR_SPL_PENALTY_MANUAL "manual"
 
 #endif // SOCCERTYPES_H

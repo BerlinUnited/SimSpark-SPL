@@ -324,7 +324,6 @@ public: signals:
     */
     void finished();
     /*!
-    /*!
      \brief Should be emitted whenever run() was called and the plugin just started the execution of the run routine.
 
      It is encouraged to emit this signal in a derived plugin when run() was called.

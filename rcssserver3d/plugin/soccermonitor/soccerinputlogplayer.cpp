@@ -86,7 +86,7 @@ void SoccerInputLogPlayer::OnUnlink()
 {
 }
 
-void SoccerInputLogPlayer::SendCommand(const std::string& cmd)
+void SoccerInputLogPlayer::SendCommand(const std::string& /*cmd*/)
 {
 /*    if (mMonitorClient.get() == 0)
         {

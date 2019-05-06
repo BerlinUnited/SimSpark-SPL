@@ -168,20 +168,18 @@ public:
 
     /** looks up a ruby variable in the Soccer namespace */
     template<typename TYPE>
-    static bool GetSoccerVar(const zeitgeist::Leaf& base, const std::string& name,
-                      TYPE& value)
+    static bool GetSoccerVar(const zeitgeist::Leaf& base, const std::string& name, TYPE& value)
     {
         static const std::string nSpace = "Soccer.";
-        bool ok = base.GetCore()->GetScriptServer()->GetVariable
-            (std::string(nSpace + name),value);
+        bool ok = base.GetCore()->GetScriptServer()->GetVariable(std::string(nSpace + name),value);
 
         if (! ok)
-            {
-                base.GetLog()->Error()
+        {
+            base.GetLog()->Error()
                     << "ERROR: (SoccerBase: " << base.GetName()
                     << ") soccer variable '" << name << "' not found\n";
-                return false;
-            }
+            return false;
+        }
 
         return ok;
     }
@@ -191,6 +189,9 @@ public:
 
     /** returns a string representing a SPL state */
     static std::string SPLState2Str(const spl::TSPLState state);
+
+    /** returns a string representing a SPL penalty */
+    static std::string SPLPenalty2Str(const spl::TSPLPenalty penalty);
 
     /* move an agent including all its connected bodies */
     static bool

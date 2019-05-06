@@ -330,12 +330,7 @@ void
 GameControlServer::Update(float deltaTime)
 {
     // remove disappeared agent
-    for(
-        vector<int>::iterator iter = mDisappearedAgent.begin();
-        iter != mDisappearedAgent.end();
-        ++iter
-        )
-    {
+    for(auto iter = mDisappearedAgent.begin(); iter != mDisappearedAgent.end(); ++iter) {
         AgentDisappear(*iter);
     }
 
@@ -346,15 +341,8 @@ GameControlServer::Update(float deltaTime)
     ListChildrenSupportingClass<ControlAspect>(control,false);
 
     // update all ControlAspects found
-    for (
-        TLeafList::iterator iter = control.begin();
-        iter != control.end();
-        ++iter
-        )
-    {
-        boost::shared_ptr<ControlAspect> aspect =
-            static_pointer_cast<ControlAspect>(*iter);
-
+    for (auto iter = control.begin(); iter != control.end(); ++iter) {
+        boost::shared_ptr<ControlAspect> aspect = static_pointer_cast<ControlAspect>(*iter);
         aspect->Update(deltaTime);
     }
 }

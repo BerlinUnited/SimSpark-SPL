@@ -37,8 +37,9 @@ AgentState::AgentState() : ObjectState(), mTeamIndex(TI_NONE),
                            mHearOppCap(2), mIfSelfMsg(false),
                            mIfMateMsg(false), mIfOppMsg(false),
                            mSelected(false),
-                           mOldTouchGroup(new TouchGroup), mTouchGroup(new TouchGroup),
-                           isPenelized(false), whenPenalized(0)
+                           penalty(spl::penalty_none), whenPenalized(0),
+                           mOldTouchGroup(new TouchGroup),
+                           mTouchGroup(new TouchGroup)
 {
     // set mID and mUniformNumber into a joint state
     SetUniformNumber(0);
@@ -303,25 +304,35 @@ AgentState::GetTouchGroup()
     return mTouchGroup;
 }
 
-void AgentState::Penalize(const TTime gameTime) {
+void AgentState::Penalize(const TTime gameTime, const spl::TSPLPenalty cause, const TTime duration) {
     whenPenalized = gameTime;
-    isPenelized = true;
+    penalty = cause;
+    tillPenalized = gameTime + duration;
 }
 
 void AgentState::UnPenalize() {
-    isPenelized = false;
+    penalty = spl::penalty_none;
 }
 
-bool AgentState:: IsPenalized() {
-
-    if (isPenelized) {
+bool AgentState::IsPenalized()
+{
+    if (penalty != spl::penalty_none) {
         return true;
     } else {
         return false;
     }
 }
+spl::TSPLPenalty AgentState::getPenalty() const
+{
+    return penalty;
+}
 
 TTime AgentState::GetWhenPenalized() const
 {
     return whenPenalized;
+}
+
+TTime AgentState::GetTillPenalized() const
+{
+    return tillPenalized;
 }

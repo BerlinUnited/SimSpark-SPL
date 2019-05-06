@@ -838,3 +838,24 @@ std::string SoccerBase::SPLState2Str(const spl::TSPLState state)
     return STR_SPL_STATE_UNKNOWN;
   }
 }
+
+std::string SoccerBase::SPLPenalty2Str(const spl::TSPLPenalty penalty)
+{
+    switch (penalty)
+    {
+        case spl::penalty_none: return STR_SPL_PENALTY_NONE;
+        case spl::penalty_illegal_ball_contact: return STR_SPL_PENALTY_ILLEGAL_BALL_CONTACT;
+        case spl::penalty_player_pushing: return STR_SPL_PENALTY_PLAYER_PUSHING;
+        case spl::penalty_illegal_motion_in_set: return STR_SPL_PENALTY_ILLEGAL_MOTION_IN_SET;
+        case spl::penalty_inactive_player: return STR_SPL_PENALTY_INACTIVE_PLAYER;
+        case spl::penalty_illegal_defender: return STR_SPL_PENALTY_ILLEGAL_DEFENDER;
+        case spl::penalty_leaving_the_field: return STR_SPL_PENALTY_LEAVING_THE_FIELD;
+        case spl::penalty_kick_off_goal: return STR_SPL_PENALTY_KICK_OFF_GOAL;
+        case spl::penalty_request_for_pickup: return STR_SPL_PENALTY_REQUEST_FOR_PICKUP;
+        case spl::penalty_local_game_stuck: return STR_SPL_PENALTY_LOCAL_GAME_STUCK;
+        case spl::penalty_illegal_positioning: return STR_SPL_PENALTY_ILLEGAL_POSITIONING;
+        case spl::penalty_substitute: return STR_SPL_PENALTY_SUBSTITUTE;
+        case spl::penalty_manual: return STR_SPL_PENALTY_MANUAL;
+    }
+  return "invalid Penalty";
+}

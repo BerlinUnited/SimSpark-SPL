@@ -76,9 +76,7 @@ void AgentControl::ClientConnect(boost::shared_ptr<Client> client)
             << " Agents connecting/disconnecting in same frame !\n";
       nThreads++;
       mThreadBarrierNew = new boost::barrier(nThreads+1);
-      boost::thread* newThread =
-         mThreadGroup.create_thread(boost::bind(&AgentControl::AgentThread,
-                                               this, client));
+      boost::thread* newThread = mThreadGroup.create_thread(boost::bind(&AgentControl::AgentThread, this, client));
     }
 }
 
