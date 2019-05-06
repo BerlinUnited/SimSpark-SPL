@@ -47,7 +47,7 @@ addSoccerVar('PenaltyLength',0.6)
 addSoccerVar('PenaltyWidth',2.2)
 addSoccerVar('FreeKickDistance', 0.75) # radius of the center circle 
 addSoccerVar('FreeKickMoveDist', 1.0)
-#addSoccerVar('KickRepelDist', 0.5)
+addSoccerVar('KickRepelDist', 0.5)
 addSoccerVar('GoalKickDist', 0.6)
 addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 
@@ -55,13 +55,15 @@ addSoccerVar('BorderSize', 0.0) # prevent complaining about missing variable
 # game flow parameters
 addSoccerVar('ReadyDuration', 45)
 addSoccerVar('SetDuration', 5)
-addSoccerVar('SayMsgSize', 256)
+addSoccerVar('PenaltyDuration', 30)
+addSoccerVar('SayMsgSize', 512)
 
 # soccer game settings
 addSoccerVar('AutomaticKickOff', false)
 addSoccerVar('WaitBeforeKickOff', 30.0)
 addSoccerVar('CoinTossForKickOff', false)
 addSoccerVar('PenaltyShootout', false)
+addSoccerVar('StartAnyFieldPosition', false)
 
 addSoccerVar('AutomaticQuit', false)
 addSoccerVar('ChangeSidesInSecondHalf', true)
@@ -134,7 +136,9 @@ addSoccerVar('BeamNoiseAngle',10.0)
 #addSoccerVar('MaxPlayersInsideOwnArea',2)
 #addSoccerVar('MinOppDistance',1.0)       
 #addSoccerVar('Min2PlDistance',0.6)       
-#addSoccerVar('Min3PlDistance',1.5)      
+#addSoccerVar('Min3PlDistance',1.5)
+
+addSoccerVar('MaxNumSafeRepositionAttempts', 100)
 
 # recorders
 addSoccerVar('BallRecorder',"Ball/geometry/recorder")
