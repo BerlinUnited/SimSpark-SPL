@@ -80,6 +80,8 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mFoulOnSelfCollisions(false),
     mSelfCollisionJointFrozenTime(1.0),
     mSelfCollisionJointThawTime(2.0),  
+    mSelfCollisionBeamPenalty(false),     
+    mSelfCollisionBeamCooldownTime(10.0),     
     mFirstCollidingAgent(true),
     mNotOffside(false),
     mLastModeWasPlayOn(false),
@@ -133,14 +135,8 @@ SoccerRuleAspect::SoccerRuleAspect() :
             {
                 playerVelocities[i][t][j] = salt::Vector3f(0,0,0);
             }
-        }
-    }
 
-    // Initialize last time joint frozen values
-    for (int i = 0; i <= 11; i++) 
-    {
-        for (int t = 0; t <= 2; t++) 
-        {
+            playerTimeLastSelfCollision[i][t] = -1e5;   // large negative value
             for (int j = 0; j < JE_COUNT; j++) {
                 lastTimeJointFrozen[i][t][j] = -1000;
             }
@@ -304,6 +300,9 @@ SoccerRuleAspect::ResetFoulCounter(TTeamIndex idx)
 void
 SoccerRuleAspect::UpdateSelfCollisions(bool reset)
 {
+    if (!mFoulOnSelfCollisions || mSelfCollisionBeamPenalty) {
+        return;
+    }
 
     boost::shared_ptr<GameControlServer> game_control;
     if (!SoccerBase::GetGameControlServer(*this, game_control)) {
@@ -947,14 +946,23 @@ void SoccerRuleAspect::AnalyseSelfCollisionFouls(TTeamIndex idx)
                                             << " " << box2_transform->GetName() 
                                             << endl; 
                      }
+                     if(mFoulOnSelfCollisions) {
+                         if (mSelfCollisionBeamPenalty && mGameState->GetTime() - playerTimeLastSelfCollision[unum][idx] > mSelfCollisionBeamCooldownTime) {
+                             playerTimeLastSelfCollision[unum][idx] = mGameState->GetTime();
+                             playerFoulTime[unum][idx]++;
+                             playerLastFoul[unum][idx] = FT_SelfCollision;
+                         }
 
-                     boxesCollidedList.push_back(mapNameToBoxCollider[box1_transform->GetName()]);
-                     boxesCollidedList.push_back(mapNameToBoxCollider[box2_transform->GetName()]);
+                         if (!mSelfCollisionBeamPenalty) {
+                             boxesCollidedList.push_back(mapNameToBoxCollider[box1_transform->GetName()]);
+                             boxesCollidedList.push_back(mapNameToBoxCollider[box2_transform->GetName()]);
+                         }
+                     }
                  }
             }
         }
 
-        if(mFoulOnSelfCollisions) {
+        if(mFoulOnSelfCollisions && !mSelfCollisionBeamPenalty) {
             std::list<EJointEffector> jointsCollidedList;
             
             std::list<EBoxCollider>::const_iterator itb;
@@ -3074,6 +3082,8 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"FoulOnSelfCollisions",mFoulOnSelfCollisions);
     SoccerBase::GetSoccerVar(*this,"SelfCollisionJointFrozenTime",mSelfCollisionJointFrozenTime);
     SoccerBase::GetSoccerVar(*this,"SelfCollisionJointThawTime",mSelfCollisionJointThawTime);
+    SoccerBase::GetSoccerVar(*this,"SelfCollisionBeamPenalty",mSelfCollisionBeamPenalty);
+    SoccerBase::GetSoccerVar(*this,"SelfCollisionBeamCooldownTime",mSelfCollisionBeamCooldownTime);
 
     SoccerBase::GetSoccerVar(*this,"MaxNumSafeRepositionAttempts",mMaxNumSafeRepositionAttempts);
     SoccerBase::GetSoccerVar(*this,"StartAnyFieldPosition",mStartAnyFieldPosition);
@@ -3609,5 +3619,6 @@ SoccerRuleAspect::HaveEnforceableFoul(int unum, TTeamIndex ti)
     return playerLastFoul[unum][ti] != FT_None
         && (playerFoulTime[unum][ti] > mMaxFoulTime / 0.02
             || playerLastFoul[unum][ti] == FT_Charging
-            || playerLastFoul[unum][ti] == FT_Touching);
+            || playerLastFoul[unum][ti] == FT_Touching
+            || playerLastFoul[unum][ti] == FT_SelfCollision);
 }

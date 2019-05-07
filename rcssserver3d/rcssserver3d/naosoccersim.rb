@@ -107,6 +107,8 @@ addSoccerVar('PrintSelfCollisions',  true)
 addSoccerVar('FoulOnSelfCollisions', true)
 addSoccerVar('SelfCollisionJointFrozenTime', 1.0)
 addSoccerVar('SelfCollisionJointThawTime', 2.0)
+addSoccerVar('SelfCollisionBeamPenalty', false)
+addSoccerVar('SelfCollisionBeamCooldownTime',  10.0)
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       

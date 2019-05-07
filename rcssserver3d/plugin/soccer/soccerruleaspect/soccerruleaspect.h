@@ -567,6 +567,10 @@ protected:
     float mSelfCollisionJointFrozenTime;
     /** time after a joint is unfrozen before it can be frozen by a self collision again */
     float mSelfCollisionJointThawTime;
+    /** use beaming to penalize self collisions */
+    bool mSelfCollisionBeamPenalty;
+    /** time after a selfcollision beam penalty has been applied in which no self collision beam penalty will be applied again */
+    float mSelfCollisionBeamCooldownTime;
 
     /* Useful arrays for dealing with agent state and fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
@@ -704,6 +708,7 @@ protected:
     /**Number of self collisions
      */
     int playerSelfCollisions[12][3];
+    float playerTimeLastSelfCollision[12][3];  		//Time of last self collision for each player
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;
