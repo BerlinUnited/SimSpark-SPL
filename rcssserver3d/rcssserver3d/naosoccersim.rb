@@ -101,7 +101,7 @@ addSoccerVar('ChargingMaxBallRulesDist', 1)
 addSoccerVar('ChargingMinCollBallDist', 0.1)
 addSoccerVar('ChargingMinCollisionSpeed', 0.2)
 
-# charging foul parameters
+# self collision parameters
 addSoccerVar('SelfCollisionsTolerance', 0.04)
 addSoccerVar('PrintSelfCollisions',  true)
 addSoccerVar('FoulOnSelfCollisions', true)
@@ -109,6 +109,8 @@ addSoccerVar('SelfCollisionJointFrozenTime', 1.0)
 addSoccerVar('SelfCollisionJointThawTime', 2.0)
 addSoccerVar('SelfCollisionBeamPenalty', false)
 addSoccerVar('SelfCollisionBeamCooldownTime',  10.0)
+addSoccerVar('WriteSelfCollisionsToFile', false)
+addSoccerVar('SelfCollisionRecordFilename', 'SelfCollisions.txt')
 
 # auto ref parameters  FCP 2010
 addSoccerVar('NotStandingMaxTime',30)       

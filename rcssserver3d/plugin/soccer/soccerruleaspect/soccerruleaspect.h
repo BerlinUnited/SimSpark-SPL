@@ -34,6 +34,8 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/unordered_map.hpp>
 
+#include <fstream>
+
 class AgentState;
 
 #ifdef RVDRAW
@@ -571,6 +573,10 @@ protected:
     bool mSelfCollisionBeamPenalty;
     /** time after a selfcollision beam penalty has been applied in which no self collision beam penalty will be applied again */
     float mSelfCollisionBeamCooldownTime;
+    /** write self collisions to file */
+    bool mWriteSelfCollisionsToFile;
+    /** Filename where self collisions are written */
+    std::string mSelfCollisionRecordFilename;
 
     /* Useful arrays for dealing with agent state and fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
@@ -709,6 +715,9 @@ protected:
      */
     int playerSelfCollisions[12][3];
     float playerTimeLastSelfCollision[12][3];  		//Time of last self collision for each player
+
+    /** Output file stream for writing self collision information */
+    std::ofstream selfCollisionsFile;
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;

@@ -81,7 +81,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mSelfCollisionJointFrozenTime(1.0),
     mSelfCollisionJointThawTime(2.0),  
     mSelfCollisionBeamPenalty(false),     
-    mSelfCollisionBeamCooldownTime(10.0),     
+    mSelfCollisionBeamCooldownTime(10.0),
+    mWriteSelfCollisionsToFile(false),
+    mSelfCollisionRecordFilename("SelfCollisions.txt"),
     mFirstCollidingAgent(true),
     mNotOffside(false),
     mLastModeWasPlayOn(false),
@@ -946,11 +948,21 @@ void SoccerRuleAspect::AnalyseSelfCollisionFouls(TTeamIndex idx)
                                             << " " << box2_transform->GetName() 
                                             << endl; 
                      }
+                     if (mWriteSelfCollisionsToFile) {
+                         selfCollisionsFile << "Collision GTime " << mGameState->GetTime() 
+                                            << " Team " << mGameState->GetTeamName(idx) << " Pl " << unum 
+                                            << " " << box1_transform->GetName() 
+                                            << " " << box2_transform->GetName() 
+                                            << endl;
+                     }
                      if(mFoulOnSelfCollisions) {
                          if (mSelfCollisionBeamPenalty && mGameState->GetTime() - playerTimeLastSelfCollision[unum][idx] > mSelfCollisionBeamCooldownTime) {
                              playerTimeLastSelfCollision[unum][idx] = mGameState->GetTime();
                              playerFoulTime[unum][idx]++;
                              playerLastFoul[unum][idx] = FT_SelfCollision;
+                             if (mWriteSelfCollisionsToFile) {
+                                 selfCollisionsFile << "Foul Team " << mGameState->GetTeamName(idx) << " Pl " << unum  << " GTime " << mGameState->GetTime() << endl;
+                             }
                          }
 
                          if (!mSelfCollisionBeamPenalty) {
@@ -1065,6 +1077,9 @@ void SoccerRuleAspect::AnalyseSelfCollisionFouls(TTeamIndex idx)
             if (haveFoul) {
                 // Record foul
                 mFouls.push_back(Foul(mFouls.size() + 1, FT_SelfCollision, *i));
+                if (mWriteSelfCollisionsToFile) {
+                    selfCollisionsFile << "Foul Team " << mGameState->GetTeamName(idx) << " Pl " << unum  << " GTime " << mGameState->GetTime() << endl;
+                }
             }
         }
     }
@@ -2863,6 +2878,9 @@ SoccerRuleAspect::Update(float deltaTime)
         if (! updated)
         {
             UpdateCachedInternal();
+            if (mWriteSelfCollisionsToFile) {
+                selfCollisionsFile.open(mSelfCollisionRecordFilename, std::ios_base::app);
+            }
             updated = true;
         }
         // Below is the check we do during before kick off mode.
@@ -3084,6 +3102,8 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"SelfCollisionJointThawTime",mSelfCollisionJointThawTime);
     SoccerBase::GetSoccerVar(*this,"SelfCollisionBeamPenalty",mSelfCollisionBeamPenalty);
     SoccerBase::GetSoccerVar(*this,"SelfCollisionBeamCooldownTime",mSelfCollisionBeamCooldownTime);
+    SoccerBase::GetSoccerVar(*this,"WriteSelfCollisionsToFile",mWriteSelfCollisionsToFile);
+    SoccerBase::GetSoccerVar(*this,"SelfCollisionRecordFilename",mSelfCollisionRecordFilename);
 
     SoccerBase::GetSoccerVar(*this,"MaxNumSafeRepositionAttempts",mMaxNumSafeRepositionAttempts);
     SoccerBase::GetSoccerVar(*this,"StartAnyFieldPosition",mStartAnyFieldPosition);
