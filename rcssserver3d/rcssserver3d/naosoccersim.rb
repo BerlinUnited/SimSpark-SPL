@@ -141,9 +141,9 @@ addSoccerVar('MaxNumSafeRepositionAttempts', 100)
 addSoccerVar('PassModeMaxBallSpeed',0.05)
 addSoccerVar('PassModeMaxBallDist',0.5)
 addSoccerVar('PassModeMinOppBallDist',1.0)
-addSoccerVar('PassModeDuration',3.0)
+addSoccerVar('PassModeDuration',4.0)
 addSoccerVar('PassModeScoreWaitTime',10.0)
-addSoccerVar('PassModeRetryWaitTime',6.0)
+addSoccerVar('PassModeRetryWaitTime',3.0)
 
 
 # recorders
