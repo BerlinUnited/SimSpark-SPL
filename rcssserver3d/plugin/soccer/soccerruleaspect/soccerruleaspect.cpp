@@ -100,11 +100,19 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mKeepawayLengthReductionRate(4.0),
     mKeepawayWidthReductionRate(4.0),
     mMaxNumSafeRepositionAttempts(100),
-    mStartAnyFieldPosition(false)
+    mStartAnyFieldPosition(false),
+    mPassModeMaxBallSpeed(0.05),
+    mPassModeMaxBallDist(0.5),
+    mPassModeMinOppBallDist(1.0),
+    mPassModeDuration(5.0),
+    mPassModeScoreWaitTime(5.0),
+    mPassModeRetryWaitTime(5.0)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
     ResetFoulCounter(TI_LEFT);
     ResetFoulCounter(TI_RIGHT);
+
+    ResetKickChecks();
       
 #ifdef RVDRAW
     // Create connection for sending draw commands to roboviz
@@ -1429,7 +1437,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 
 void
 SoccerRuleAspect::RepelPlayers(const salt::Vector3f& pos, float radius,
-                               TTeamIndex idx)
+                               TTeamIndex idx, float pad)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
 
@@ -1454,7 +1462,7 @@ SoccerRuleAspect::RepelPlayers(const salt::Vector3f& pos, float radius,
             Vector2f agent_pos = Vector2f(new_pos.x(),new_pos.y());
             Vector2f avoid_pos = Vector2f(pos.x(),pos.y());
             Vector2f pos2Agent = agent_pos-avoid_pos;
-            Vector2f updated_pos = avoid_pos+pos2Agent.Normalize()*radius;
+            Vector2f updated_pos = avoid_pos+pos2Agent.Normalize()*(radius+pad);
             new_pos[0] = updated_pos[0];
             new_pos[1] = updated_pos[1];
             new_pos = GetSafeReposition(new_pos, (*i)->GetUniformNumber(), idx);
@@ -2130,6 +2138,34 @@ SoccerRuleAspect::UpdateCornerKick(TTeamIndex idx)
     }
 }
 
+void
+SoccerRuleAspect::UpdatePassMode(TTeamIndex idx)
+{
+    mGameState->SetPaused(false);
+
+    if (mGameState->GetModeTime() >= mPassModeDuration) { 
+        mGameState->SetPlayMode(PM_PlayOn);
+        return;
+    }
+    
+    boost::shared_ptr<AgentAspect> agent;
+    TTime time;
+    if (mBallState->GetLastCollidingAgent(agent,time))
+    {
+        TTime lastChange = mGameState->GetLastModeChange();
+        if (time >= lastChange) { 
+            mGameState->SetPlayMode(PM_PlayOn);
+            return;
+        }
+    }
+
+    // keep away opponent team from ball
+    RepelPlayers(mBallBody->GetPosition(), mPassModeMinOppBallDist, SoccerBase::OpponentTeam(idx), 0.1);
+
+    lastTimeInPassMode[idx] = mGameState->GetTime();
+}
+    
+
 bool
 SoccerRuleAspect::CheckBallLeftField()
 {
@@ -2307,6 +2343,15 @@ SoccerRuleAspect::CheckGoal()
             }
     }
 
+    // Check that a team hasn't scored out of pass mode
+    if (mGameState->GetTime()-lastTimeInPassMode[SoccerBase::OpponentTeam(idx)] < mPassModeScoreWaitTime) {
+        AwardGoalKick(idx);
+        // Return true so that we know the ball is in the goal and don't
+        // check for other conditions such as the ball being out of 
+        // bounds
+        return true;
+    }
+
     // score the lucky team
     mGameState->ScoreTeam((idx == TI_LEFT) ? TI_RIGHT : TI_LEFT);
     mGameState->SetPlayMode((idx == TI_LEFT) ? PM_Goal_Right : PM_Goal_Left);
@@ -2319,6 +2364,9 @@ SoccerRuleAspect::ResetKickChecks()
 {
     mCheckFreeKickKickerFoul = false;
     mIndirectKick = false;
+    
+    lastTimeInPassMode[TI_LEFT] = -1000;
+    lastTimeInPassMode[TI_RIGHT] = -1000;
 }
 
 void
@@ -2654,11 +2702,17 @@ SoccerRuleAspect::Update(float deltaTime)
     case PM_CORNER_KICK_LEFT:
         UpdateCornerKick(TI_LEFT);
         break;
-
     case PM_CORNER_KICK_RIGHT:
         UpdateCornerKick(TI_RIGHT);
         break;
 
+    case PM_PASS_LEFT:
+        UpdatePassMode(TI_LEFT);
+        break;
+    case PM_PASS_RIGHT:
+        UpdatePassMode(TI_RIGHT);
+        break;
+        
     case PM_Goal_Left:
         ClearPlayersBeforeKickOff(TI_RIGHT);
         UpdateGoal();
@@ -2821,6 +2875,12 @@ SoccerRuleAspect::UpdateCachedInternal()
 
     SoccerBase::GetSoccerVar(*this,"MaxNumSafeRepositionAttempts",mMaxNumSafeRepositionAttempts);
     SoccerBase::GetSoccerVar(*this,"StartAnyFieldPosition",mStartAnyFieldPosition);
+    SoccerBase::GetSoccerVar(*this,"PassModeMaxBallSpeed",mPassModeMaxBallSpeed);
+    SoccerBase::GetSoccerVar(*this,"PassModeMaxBallDist",mPassModeMaxBallDist);
+    SoccerBase::GetSoccerVar(*this,"PassModeMinOppBallDist",mPassModeMinOppBallDist);
+    SoccerBase::GetSoccerVar(*this,"PassModeDuration",mPassModeDuration);
+    SoccerBase::GetSoccerVar(*this,"PassModeScoreWaitTime",mPassModeScoreWaitTime);
+    SoccerBase::GetSoccerVar(*this,"PassModeRetryWaitTime",mPassModeRetryWaitTime);
 
 
     // cout << "MaxInside " << mMaxPlayersInsideOwnArea << endl << endl;
@@ -3354,4 +3414,39 @@ SoccerRuleAspect::HaveEnforceableFoul(int unum, TTeamIndex ti)
         && (playerFoulTime[unum][ti] > mMaxFoulTime / 0.02
             || playerLastFoul[unum][ti] == FT_Charging
             || playerLastFoul[unum][ti] == FT_Touching);
+}
+
+bool
+SoccerRuleAspect::CanActivatePassMode(int unum, TTeamIndex ti)
+{
+    // Only allow when in PlayOn
+    if (mGameState->GetPlayMode() != PM_PlayOn) {
+        return false;
+    }
+
+    // Can't activate pass mode if it was recently used
+    if (mGameState->GetTime() - lastTimeInPassMode[ti] < mPassModeRetryWaitTime) {
+        return false;
+    }
+    
+    salt::Vector3f ballVel = mBallBody->GetVelocity();
+    float ballSpeed = sqrt(pow(ballVel.x(),2)+pow(ballVel.y(),2)+pow(ballVel.z(),2));
+    // Can't acticate when then ball is moving too much
+    if (ballSpeed > mPassModeMaxBallSpeed) {
+        return false;
+    }
+
+    // Can only acticate if the agent is close to the ball
+    if (distArr[unum][ti] > mPassModeMaxBallDist) {
+        return false;
+    }
+
+    // Check that now opponents are too close to the ball before activating
+    for(int i = 1; i <= 11; i++) {
+        if (distArr[i][SoccerBase::OpponentTeam(ti)] < mPassModeMinOppBallDist) {
+            return false;
+        }
+    }            
+
+    return true;
 }

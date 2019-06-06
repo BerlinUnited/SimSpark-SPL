@@ -222,6 +222,9 @@ public:
 
     void ClearSelectedPlayers();
 
+    /** if a player can activate pass mode */
+    bool CanActivatePassMode(int unum, TTeamIndex ti);
+
 protected:
     /** rereads the current soccer script values */
     virtual void UpdateCachedInternal();
@@ -252,6 +255,9 @@ protected:
 
     /** updates the RuleAspect during Corner Kick mode */
     void UpdateCornerKick(TTeamIndex ti = TI_NONE);
+
+    /** updates the RuleAspect during Pass mode */
+    void UpdatePassMode(TTeamIndex ti = TI_NONE);
 
     /** update the RuleAspect during PlayOn mode */
     void UpdatePlayOn();
@@ -329,14 +335,15 @@ protected:
     void ClearPlayersBeforeKickOff(TTeamIndex idx);
 
     /** Move all the players from a team which are within radius of pos to 
-        be a distance radius from pos.
+        be a distance radius+pad from pos.
         \param pos the center of the area to be checked
         \param radius the radius of the area to be checked
         \param idx the team which should be checked.
+        \param pad extra distance beyond radius to move players
 
         If idx is TI_NONE, nothing will happen.
     */
-    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx);
+    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx, float pad=0.0);
 
     /**
      * Moves players taking a kick slightly away from the ball when it is placed
@@ -619,6 +626,22 @@ protected:
     /** Allow starting at any field position including on opponent's
         side of the field */
     bool mStartAnyFieldPosition;
+
+    /** The last game time that a team was in pass mode */
+    TTime lastTimeInPassMode[3];
+
+    /** Maximum speed of ball when pass mode is allowed to be activated */
+    float mPassModeMaxBallSpeed;
+    /** Maximum distance of agent from ball to activate pass mode */
+    float mPassModeMaxBallDist;
+    /** Minimum distance opponents are allowed from ball to activate and during pass mode */
+    float mPassModeMinOppBallDist;
+    /** Duration of pass mode */
+    float mPassModeDuration;
+    /** Time that must pass before a team can score after their pass mode was last being used */
+    float mPassModeScoreWaitTime;
+    /** Time that must pass before a team can use pass mode again after their pass mode was last being used */
+    float mPassModeRetryWaitTime;
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;
