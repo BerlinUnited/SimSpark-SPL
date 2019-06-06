@@ -2,7 +2,7 @@
 
 (RSG 0 1)
 (
- (templ $name $x $y $theta
+ (templ $name $objName $x $y $theta
 	$LeftFlagName $RightFlagName
 	$material)
 
@@ -24,7 +24,7 @@
  (def $BarDiameter     0.04)
  (def $BarRadius       (eval $BarDiameter / 2.0))
 
- (def $GoalObj (join models/ $name .obj))
+ (def $GoalObj (join models/ $objName .obj))
  (def $ObjWidth (eval $GoalWidth + (eval $BarDiameter * 2.0)))
  (def $ObjHeight (eval $GoalHeight + (eval $BarDiameter * 2.0)))
  (def $ObjDepth (eval $GoalDepth + (eval $BarDiameter * 2.0)))
@@ -51,13 +51,13 @@
           (load $GoalObj)
           (setScale $ObjWidth $ObjHeight $ObjDepth)
           (setTransparent)
-        )
-	  )
+         )
+     )
 
 	 ;; create the left goal post
 	 (nd Transform
 	     (setLocalPos 0 (eval -1 * (eval $GoalHalfWidth + $BarRadius)) 0)
-	     ;; (nd Box
+;;		 (nd Box
 ;; 		 (setExtents $GoalDepth $BarDiameter $GoalHeight)
 ;; 		 (setMaterial matWhite)
 ;; 		 )
@@ -69,10 +69,10 @@
 	 ;; create the right goal post
 	 (nd Transform
 	     (setLocalPos 0 (eval $GoalHalfWidth + $BarRadius)  0 )
-;;; 	     (nd Box
-;;; 		 (setExtents $GoalDepth $BarDiameter $GoalHeight)
-;;; 		 (setMaterial matWhite)
-;;; 		 )
+;; 		 (nd Box
+;; 		 (setExtents $GoalDepth $BarDiameter $GoalHeight)
+;; 		 (setMaterial matWhite)
+;; 		 )
 	     (nd BoxCollider
 		 (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
 		 )
@@ -80,16 +80,27 @@
 
 	 ;; create goal back wall
 	 (nd Transform
-	     (setLocalPos (eval -0.2 * $GoalHalfDepth) 0 0)
-	     (setLocalRotation 0 30 0)
-;;; 	     (nd Box
-;;; 		 (setExtents $BarDiameter $GoalWidth $GoalHeight)
-;;; 		 (setMaterial $material)
-;;; 		 )
+	     (setLocalPos (eval -1 * (eval $GoalHalfDepth - $BarRadius)) 0 0)
+;; 		 (nd Box
+;; 		 (setExtents $BarDiameter $GoalWidth $GoalHeight)
+;; 		 (setMaterial $material)
+;; 		 )
 	     (nd BoxCollider
 		 (setBoxLengths $BarDiameter $GoalWidth $GoalHeight)
 		 )
 	     )	 
+
+	 ;; create goal top plate
+	 (nd Transform
+	     (setLocalPos 0 0 (eval $GoalHalfHeight + $BarRadius))
+;; 		 (nd Box
+;; 		 (setExtents $GoalDepth (eval $GoalWidth + (eval $BarDiameter * 2.0)) $BarDiameter)
+;; 		 (setMaterial $material)
+;; 		 )
+	     (nd BoxCollider
+		 (setBoxLengths $GoalDepth (eval $GoalWidth + (eval $BarDiameter * 2.0)) $BarDiameter)
+		 )
+	     )
 
 	 ;; mark the goal (no visualization)
 	 (importScene rsg/agent/flag_no_viz.rsg
