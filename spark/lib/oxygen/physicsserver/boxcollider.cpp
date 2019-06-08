@@ -133,3 +133,13 @@ bool BoxCollider::CheckCollisions( boost::shared_ptr<BoxCollider> box2, float to
              CheckSeparatingPlane(RPos, this->GetWorldTransform().Forward()  .Cross(  box2->GetWorldTransform().Forward()), box2, tol));
 }
 
+void:: BoxCollider::AddSCFreezeJointEffName(const std::string name)
+{
+    selfCollisionFreezeJointEffNames.push_back(name);
+}
+
+const std::list<std::string> BoxCollider::GetSCFreezeJointEffNames()
+{
+    return selfCollisionFreezeJointEffNames;
+}
+

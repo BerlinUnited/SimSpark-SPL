@@ -62,12 +62,16 @@ public:
     bool CheckSeparatingPlane(const salt::Vector3f& RPos, const salt::Vector3f& Plane, boost::shared_ptr<BoxCollider> box2, float tol=0.0);
     bool CheckCollisions( boost::shared_ptr<BoxCollider> box2, float tol=0.0);
 
+    void AddSCFreezeJointEffName(const std::string name);
+    const std::list<std::string> GetSCFreezeJointEffNames();
+
 protected:
     /** constructs a default box with side lengths of 1 */
     virtual bool ConstructInternal();
     
 private:
     static boost::shared_ptr<BoxColliderInt> mBoxColliderImp;
+    std::list<std::string> selfCollisionFreezeJointEffNames;
 };
 
 DECLARE_CLASS(BoxCollider);
