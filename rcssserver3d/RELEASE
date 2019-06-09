@@ -1,48 +1,60 @@
-RELEASE News of rcssserver3d-0.7.1
+RELEASE News of rcssserver3d-0.7.2
 
-New changes for the RoboCup 2017 competition:
+New changes for the RoboCup 2019 competition:
 
-* Bug Fixes:
-    - Fixed bug where double touches on kicks (kickoffs, free kicks,
-      kick-ins, corner kicks) were not always being detected correctly
-    - Fixed bug where if a player is touching the ball right when the wait
-      time at the beginning of a kick play mode ends the play mode could end up
-      recording the touch and inadvertently end the kick.
-    - Fixed bug where if two players enter their own penalty area at the
-      same time, and in doing so cause the maximum allowed number of players in
-      the penalty area to be exceeded, both players will be called for illegal
-      defense even if the team is only one player over the allowed number of
-      players in the penalty area.
-    - Fixed issue where free kicks and kicks-in printed an error message
-      and didn't behave correctly if the ball has yet to be touched by an agent.
+* Pass Mode:
 
-* Rule Changes:
-    - The automated referee will no longer move/reposition agents on top
-      of each other or into their own penalty area if it will trigger an illegal
-      defense penalty.  This is accomplished by doing a breadth first search
-      around the position that an agent is to be repositioned to until a safe
-      position is found.   The number of positions that will be considered by
-      the breadth first search is bounded by the MaxNumSafeRepositionAttempts
-      value (default 100) in naosocersim.rb.  Setting this value to 0 turns this
-      feature off.  If ever the server isn't able to safely reposition a player
-      it will print an error message.
-    - The order in which players are evaluated for fouls and are penalized
-      is now randomized so as to not have any bias associated with players'
-      teams and uniform numbers.
-    - Averaging the velocity of an agent over the last 3 time steps
-      instead of 5 when determining charging fouls.  This allows agents to
-      reduce their effective velocities faster so as to have a better chance of
-      avoiding charging fouls when colliding with an opponent.
-    - Removing code that takes into account the opponent's velocity moving
-      away from a colliding agent when determining fouls.  This code was
-      decreasing the likelihood of an agent being called for a foul when running
-      down an opponent from behind.
-    - Turning off crowding rules in naosoccersim.rb
-    - Adding StartAnyFieldPosition flag (default false) to
-      naosoccersim.rb.  Turning this flag on allows agents to be at, beam, or be
-      moved to any position on the field at the start of kickoffs including the
-      opponent's side of the field.
+Pass mode is a new playmode that can be initiated by an agent of a team, in
+which the corresponding team gets some extra privileges for a short amount of
+time in exchange for some constraints to increase the possibility of a
+sucessful pass.
+Once pass mode for a team has been issued the following happens:
+    - The playmode changes to "pass_left" or "pass_right" depending on which
+      team has initiated the pass playmode
+    - The opponent team is prevented from getting within a certain distance of
+      the ball which is the same as the minimum distance any opponent can be
+      from the ball for the passmode to be initiated (default 1.0 meters)
+    - The pass playmode will end as soon as a player touches the ball or a
+      certain amount of time has passed (default 4 seconds)
+    - After pass mode has ended the team who initiated the pass mode is unable
+      to score for a certain amount of time (default 10 seconds) -- if a team
+      does score within that time the opponent is awarded a goal kick just as
+      if a goal had been scored off an indirect kick
+
+The pass command will only be successful if the following conditions are met:
+    - The current playmode is PlayOn
+    - The agent issuing the pass command is within a certain distance of the
+      ball (default 0.5 meters)
+    - No opponents are within a certain distance of the ball (default 1.0
+      meters)
+    - The ball is stationary as measured by having a speed no greater than a
+      certain amount (default 0.05)
+    - A certain amount of time has passed since the last time the agent issuing
+      the pass command's team has been in pass mode (default 3 seconds)
 
 
-You can get the package on the Simspark page on SourceForge at
-http://sourceforge.net/projects/simspark/
+* Self Collissions:
+
+Self collissions (collisions between body parts of an agent) are now detected
+without the use of a physics engine and penalized with loss of control of the
+involved limbs (default) or beaming the agent to the side.
+This is achieved by freezing joints involved in a self collision for
+SelfCollisionJointFrozenTime, and then unfreezing the joints and let them be
+controlled again before being potentially flagged for another self collision
+for SelfCollisionJointThawTime. Each joint is monitored individually such that
+only those joints involved in a self collision can be specified as needing to
+be frozen. Currently all joints in an arm or leg are frozen if any box collider
+in that arm or leg is involved in a self collision. The penalty for a self
+collision can be changed to beaming an agent if desired. Additionally an output
+file can be specified to write self collision info to.
+
+
+* Rectangular Goals:
+
+    - Changed goal colliders to resemble a rectangular shape
+    - Added new object files and the corresponding material definition files
+      for visualizing rectangular goals
+
+
+You can get the package on the Simspark page on Gitlab
+at https://robocup-sim.gitlab.io/SimSpark/
