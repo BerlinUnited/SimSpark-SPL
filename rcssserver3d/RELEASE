@@ -7,7 +7,7 @@ New changes for the RoboCup 2019 competition:
 Pass mode is a new playmode that can be initiated by an agent of a team, in
 which the corresponding team gets some extra privileges for a short amount of
 time in exchange for some constraints to increase the possibility of a
-sucessful pass.
+successful pass.
 Once pass mode for a team has been issued the following happens:
     - The playmode changes to "pass_left" or "pass_right" depending on which
       team has initiated the pass playmode
@@ -33,9 +33,9 @@ The pass command will only be successful if the following conditions are met:
       the pass command's team has been in pass mode (default 3 seconds)
 
 
-* Self Collissions:
+* Self Collisions:
 
-Self collissions (collisions between body parts of an agent) are now detected
+Self collisions (collisions between body parts of an agent) are now detected
 without the use of a physics engine and penalized with loss of control of the
 involved limbs (default) or beaming the agent to the side.
 This is achieved by freezing joints involved in a self collision for
