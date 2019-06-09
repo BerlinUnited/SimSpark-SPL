@@ -183,8 +183,24 @@
           )
         )
 
-        (importScene rsg/agent/nao/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
-        
+        ;(importScene rsg/agent/nao/box_physics.rsg    $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ $UpperArmMass)
+        (nd RigidBody
+          (setName boxBody)
+          (setBoxTotal $UpperArmMass $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ)
+
+          (importScene rsg/agent/nao/dragcontroller.rsg)
+        )
+        (nd BoxCollider
+          (setBoxLengths $UpperArmSizeX $UpperArmSizeY $UpperArmSizeZ)
+
+          (importScene rsg/agent/nao/contactjointhandler.rsg)
+
+	  (addSCFreezeJointEffName $Joint1EffName)
+	  (addSCFreezeJointEffName $Joint2EffName)
+	  (addSCFreezeJointEffName $Joint3EffName)
+	  (addSCFreezeJointEffName $Joint4EffName)
+        )
+	
         (importScene rsg/agent/nao/hingejoint.rsg
                               $Joint2PerName $Joint2EffName
                               ../boxBody $ShoulderBodyPath
@@ -231,8 +247,24 @@
           )
         )
 
-        (importScene rsg/agent/nao/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
-        
+        ;(importScene rsg/agent/nao/box_physics.rsg    $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ $LowerArmMass)
+        (nd RigidBody
+          (setName boxBody)
+          (setBoxTotal $LowerArmMass $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ)
+
+          (importScene rsg/agent/nao/dragcontroller.rsg)
+        )
+        (nd BoxCollider
+          (setBoxLengths $LowerArmSizeX $LowerArmSizeY $LowerArmSizeZ)
+
+          (importScene rsg/agent/nao/contactjointhandler.rsg)
+
+	  (addSCFreezeJointEffName $Joint1EffName)
+	  (addSCFreezeJointEffName $Joint2EffName)
+	  (addSCFreezeJointEffName $Joint3EffName)
+	  (addSCFreezeJointEffName $Joint4EffName)
+        )
+	
         (importScene rsg/agent/nao/hingejoint.rsg
                               $Joint4PerName $Joint4EffName
                               ../boxBody $ElbowBodyPath

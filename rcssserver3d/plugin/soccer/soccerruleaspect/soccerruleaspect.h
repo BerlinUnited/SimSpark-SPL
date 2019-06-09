@@ -22,10 +22,16 @@
 #ifndef SOCCERRULEASPECT_H
 #define SOCCERRULEASPECT_H
 
+#include <vector>
+
 #include <soccercontrolaspect/soccercontrolaspect.h>
 #include <soccertypes.h>
 #include <ballstateaspect/ballstateaspect.h>
 #include <gamestateaspect/gamestateaspect.h>
+
+#include <oxygen/physicsserver/boxcollider.h>
+
+#include <fstream>
 
 class AgentState;
 
@@ -59,6 +65,7 @@ public:
         FT_Incapable,
         FT_KickOff,
         FT_Charging,
+        FT_SelfCollision,
         FT_None
     };
 
@@ -151,6 +158,10 @@ public:
     */
     void ResetFoulCounterPlayer(int unum, TTeamIndex idx);
 
+    /** Checks the status of self collisions and unfreezes joints when appropriate
+    */
+    void UpdateSelfCollisions(bool reset);
+
     /**Analyse Fouls from players and increase foul counter of offending players
     */
     void AnalyseFouls(TTeamIndex idx);
@@ -164,6 +175,16 @@ public:
     /** Checks if there are any charging fouls
      */
     void AnalyseChargingFouls();
+
+    /** Checks if there are any self collision fouls
+     */
+    void AnalyseSelfCollisionFouls(TTeamIndex idx);
+
+    /** Get all Box Colliders to a vector
+     */
+    void GetTreeBoxColliders(boost::shared_ptr<zeitgeist::Leaf> root, 
+                             std::vector< boost::shared_ptr<oxygen::BoxCollider> > &agentBoxes
+                   ); 
 
     /** Check whether too many agents are touching
      */
@@ -494,6 +515,24 @@ protected:
     int mMaxTouchGroupSize;
     /** maximum time allowed for a player to commit a positional foul before being repositioned */
     int mMaxFoulTime;
+    /** maximum tolerance allowed for self collisions along the box collider separating planes */
+    float mSelfCollisionsTolerance;
+    /** print a line every time a self collision is detected in an agent */
+    bool mPrintSelfCollisions;
+    /** apply foul penalty every time self collision is detected in an agent */
+    bool mFoulOnSelfCollisions;
+    /** how long joints are frozen after a self collision */
+    float mSelfCollisionJointFrozenTime;
+    /** time after a joint is unfrozen before it can be frozen by a self collision again */
+    float mSelfCollisionJointThawTime;
+    /** use beaming to penalize self collisions */
+    bool mSelfCollisionBeamPenalty;
+    /** time after a selfcollision beam penalty has been applied in which no self collision beam penalty will be applied again */
+    float mSelfCollisionBeamCooldownTime;
+    /** write self collisions to file */
+    bool mWriteSelfCollisionsToFile;
+    /** Filename where self collisions are written */
+    std::string mSelfCollisionRecordFilename;
 
     /* Useful arrays for dealing with agent state and fouls */
     salt::Vector3f playerPos[12][3];		//Players Positions - not used
@@ -508,6 +547,7 @@ protected:
     int ordGArr[12][3];			//Distance order of players to own goal (left/right team)
     int playerFoulTime[12][3];		//Time player is commiting a positional foul
     EFoulType playerLastFoul[12][3];	//Type of last foul committed by player
+    std::map<std::string,TTime> lastTimeJointFrozen[12][3]; // Time since joint last frozen
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
     int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area
     std::list<salt::Vector2f> reposLocs; // List of locations players have been repositioned to 
@@ -642,6 +682,14 @@ protected:
     float mPassModeScoreWaitTime;
     /** Time that must pass before a team can use pass mode again after their pass mode was last being used */
     float mPassModeRetryWaitTime;
+
+    /**Number of self collisions
+     */
+    int playerSelfCollisions[12][3];
+    float playerTimeLastSelfCollision[12][3];  		//Time of last self collision for each player
+
+    /** Output file stream for writing self collision information */
+    std::ofstream selfCollisionsFile;
 
 #ifdef RVDRAW
     boost::shared_ptr<RVSender> mRVSender;

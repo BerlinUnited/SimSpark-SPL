@@ -256,6 +256,12 @@
             (addNotCollideWithColliderName TorsoCollider true)
             (setBoxLengths $ThighSizeX $ThighSizeY $ThighSizeZ)
             (importScene rsg/agent/nao/contactjointhandler.rsg)
+	    (addSCFreezeJointEffName $Joint1EffName)
+	    (addSCFreezeJointEffName $Joint2EffName)
+	    (addSCFreezeJointEffName $Joint3EffName)
+	    (addSCFreezeJointEffName $Joint4EffName)
+	    (addSCFreezeJointEffName $Joint5EffName)
+	    (addSCFreezeJointEffName $Joint6EffName)
        )        
 
 
@@ -290,8 +296,15 @@
         
         (nd BoxCollider
             (setName (join $LeftOrRight ShankCollider))
+            (addNotCollideWithColliderName (join $LeftOrRight ThighCollider) true)
             (setBoxLengths $ShankSizeX $ShankSizeY $ShankSizeZ)
             (importScene rsg/agent/nao/contactjointhandler.rsg)
+	    (addSCFreezeJointEffName $Joint1EffName)
+	    (addSCFreezeJointEffName $Joint2EffName)
+	    (addSCFreezeJointEffName $Joint3EffName)
+	    (addSCFreezeJointEffName $Joint4EffName)
+	    (addSCFreezeJointEffName $Joint5EffName)
+	    (addSCFreezeJointEffName $Joint6EffName)
         )
         
         (importScene rsg/agent/nao/hingejoint.rsg
@@ -353,6 +366,12 @@
             (addNotCollideWithColliderName (join $LeftOrRight ShankCollider) true)
             (setBoxLengths $FootSizeX $FootSizeY $FootSizeZ)
             (importScene rsg/agent/nao/touchperceptorhandler.rsg)
+	    (addSCFreezeJointEffName $Joint1EffName)
+	    (addSCFreezeJointEffName $Joint2EffName)
+	    (addSCFreezeJointEffName $Joint3EffName)
+	    (addSCFreezeJointEffName $Joint4EffName)
+	    (addSCFreezeJointEffName $Joint5EffName)
+	    (addSCFreezeJointEffName $Joint6EffName)
         )
         
         (importScene rsg/agent/nao/hingejoint.rsg

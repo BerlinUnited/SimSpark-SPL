@@ -34,7 +34,7 @@ class AgentAspect;
 class OXYGEN_API Effector : public BaseNode
 {
 public:
-    Effector() : BaseNode() {};
+    Effector() : BaseNode() {disabled=false;};
     virtual ~Effector() {};
 
     /** save the ActionObject */
@@ -47,12 +47,18 @@ public:
     virtual boost::shared_ptr<ActionObject>
     GetActionObject(const Predicate& predicate) = 0;
 
+    void Enable();
+    void Disable();
+
 protected:
     /** Returns the AgentAspect this Effector belongs to */
     boost::shared_ptr<AgentAspect> GetAgentAspect();
 
     /** cache the action here, and then realize it in PrePhysicsUpdateInternal */
     boost::shared_ptr<ActionObject> mAction;
+
+    /** if effector should be disabled, currently used for hinge joints */
+    bool disabled;
 };
 
 DECLARE_ABSTRACTCLASS(Effector);

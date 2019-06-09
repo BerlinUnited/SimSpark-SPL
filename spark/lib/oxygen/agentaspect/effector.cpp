@@ -40,3 +40,11 @@ bool Effector::Realize(boost::shared_ptr<ActionObject> action)
     mAction = action;
     return true;
 }
+
+void Effector::Enable() {
+  disabled = false;
+}
+
+void Effector::Disable() {
+  disabled = true;
+}

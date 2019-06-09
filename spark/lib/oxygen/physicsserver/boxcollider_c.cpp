@@ -71,10 +71,27 @@ FUNCTION(BoxCollider,getPointDepth)
     return obj->GetPointDepth(inPos);
 }
 
+FUNCTION(BoxCollider,addSCFreezeJointEffName)
+{
+    std::string inJointEffName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(),inJointEffName))
+        )
+        {
+            return false;
+        }
+
+    obj->AddSCFreezeJointEffName(inJointEffName);
+    return true;
+}
+
 void CLASS(BoxCollider)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/ConvexCollider);
     DEFINE_FUNCTION(setBoxLengths);
     DEFINE_FUNCTION(getBoxLength);
     DEFINE_FUNCTION(getPointDepth);
+    DEFINE_FUNCTION(addSCFreezeJointEffName);
 }
