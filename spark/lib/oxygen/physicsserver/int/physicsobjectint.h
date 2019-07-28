@@ -23,7 +23,9 @@
 #ifndef OXYGEN_PHYSICSOBJECTINT_H
 #define OXYGEN_PHYSICSOBJECTINT_H
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <salt/matrix.h>
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/physicsserver/genericphysicsobjects.h>

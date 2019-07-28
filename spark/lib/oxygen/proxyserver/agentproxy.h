@@ -22,9 +22,11 @@
 #ifndef OXYGEN_AGENTPROXY_H
 #define OXYGEN_AGENTPROXY_H
 
+#ifndef Q_MOC_RUN
 #include <boost/array.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
+#endif
 #include <oxygen/oxygen_defines.h>
 #include <zeitgeist/class.h>
 #include <zeitgeist/node.h>

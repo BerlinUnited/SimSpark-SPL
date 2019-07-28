@@ -26,7 +26,9 @@
                         - initial version
 
 */
+#ifndef Q_MOC_RUN
 #include <boost/tokenizer.hpp>
+#endif
 #include "node.h"
 #include <salt/path.h>
 #include <iostream>

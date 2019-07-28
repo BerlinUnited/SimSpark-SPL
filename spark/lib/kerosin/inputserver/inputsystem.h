@@ -41,7 +41,9 @@
 #include <deque>
 #include <zeitgeist/node.h>
 #include <kerosin/kerosin_defines.h>
+#ifndef Q_MOC_RUN
 #include <boost/thread/shared_mutex.hpp>
+#endif
 
 namespace kerosin
 {

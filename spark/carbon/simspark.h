@@ -33,7 +33,9 @@
 #include <string>
 #include <sstream>
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 class SimulationTimer;
 class LogStream;

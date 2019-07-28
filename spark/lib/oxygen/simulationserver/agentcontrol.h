@@ -23,7 +23,9 @@
 #include "netcontrol.h"
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/gamecontrolserver/gamecontrolserver.h>
+#ifndef Q_MOC_RUN
 #include <boost/thread/barrier.hpp>
+#endif
 
 namespace oxygen
 {

@@ -36,7 +36,9 @@
 #include "cutelogger/functionappender.h"
 
 #include <map>
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 #if defined(_MSC_VER)
         // shared library export/import stuff

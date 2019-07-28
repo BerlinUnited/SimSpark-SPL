@@ -20,7 +20,9 @@
 */
 #include "path.h"
 
+#ifndef Q_MOC_RUN
 #include <boost/tokenizer.hpp>
+#endif
 
 using namespace std;
 using namespace salt;

@@ -25,8 +25,10 @@
  * \brief Contains MonitorFrameUtil::SparkGLRender class.
  */
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#endif
 
 #include <iostream>
 

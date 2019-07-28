@@ -66,8 +66,11 @@ public:
             CmdRight   = CmdLeft + 1,
             CmdDirectLeft      = CmdRight + 1,
             CmdDirectRight   = CmdDirectLeft + 1,
+
+            CmdPassLeft = CmdDirectRight + 1,
+            CmdPassRight = CmdPassLeft + 1,
             
-            CmdPlayerSelectMode = CmdDirectRight + 1,
+            CmdPlayerSelectMode = CmdPassRight + 1,
             CmdSelectNextAgent = CmdPlayerSelectMode + 1,
             CmdResetSelection = CmdSelectNextAgent + 1,
             CmdKillSelection = CmdResetSelection + 1,

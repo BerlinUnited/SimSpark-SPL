@@ -277,7 +277,7 @@ boost::shared_ptr<TriMesh> ObjImporter::ImportMesh
                             // cache this vertex index
                             indeces->Cache(faceCount * 3 + i);
 
-                            if (tex.size() != 0)
+                            if (tex.size() != 0 && faceIter->vertex[i].vt != 0)
                                 {
                                     // indices in the OBJ file start with 1 so subtract 1 here
                                     j = faceIter->vertex[i].vt - 1;

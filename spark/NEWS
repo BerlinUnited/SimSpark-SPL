@@ -1,3 +1,18 @@
+[0.3.1]
+Simspark 0.3.1 is ready. It introduces the option to check collisions between
+two box colliders without using the physics engine and to enable/disable
+effectors. In addition to that, this release contains a couple of minor bug
+fixes and plugin (shared library) loading fixes for some linux systems.
+
+ - Detecting and punishing self collisions without using the physics engine:
+  -- Added collision check between two box colliders
+  -- Added option to enable and disable effectors
+  -- Added option to specify (via rsg files) the joints to disable in case of a
+     self collision to box colliders
+ - Fixed plugin search paths for some linux distributions
+ - Improved support for 32 bit linux systems
+ - Several bug fixes
+
 [0.3.0]
 This release comes with a new library: carbon. The carbon library contains a
 gui-framework and a simulation-framework which wraps simspark using qt.

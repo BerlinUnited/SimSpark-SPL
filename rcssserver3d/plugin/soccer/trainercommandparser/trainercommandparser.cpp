@@ -80,6 +80,8 @@ TrainerCommandParser::TrainerCommandParser() : MonitorCmdParser()
     mPlayModeMap[STR_PM_FREE_KICK_RIGHT] = PM_FREE_KICK_RIGHT;
     mPlayModeMap[STR_PM_DIRECT_FREE_KICK_LEFT] = PM_DIRECT_FREE_KICK_LEFT;
     mPlayModeMap[STR_PM_DIRECT_FREE_KICK_RIGHT] = PM_DIRECT_FREE_KICK_RIGHT;
+    mPlayModeMap[STR_PM_PASS_LEFT] = PM_PASS_LEFT;
+    mPlayModeMap[STR_PM_PASS_RIGHT] = PM_PASS_RIGHT;
     mPlayModeMap[STR_PM_Goal_Left]     = PM_Goal_Left;
     mPlayModeMap[STR_PM_Goal_Right]    = PM_Goal_Right;
     mPlayModeMap[STR_PM_GameOver]      = PM_GameOver;

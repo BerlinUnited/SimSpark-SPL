@@ -1,3 +1,60 @@
+[0.7.2]
+New changes for the RoboCup 2019 competition:
+
+* Pass Mode:
+
+Pass mode is a new playmode that can be initiated by an agent of a team, in
+which the corresponding team gets some extra privileges for a short amount of
+time in exchange for some constraints to increase the possibility of a
+successful pass.
+Once pass mode for a team has been issued the following happens:
+    - The playmode changes to "pass_left" or "pass_right" depending on which
+      team has initiated the pass playmode
+    - The opponent team is prevented from getting within a certain distance of
+      the ball which is the same as the minimum distance any opponent can be
+      from the ball for the passmode to be initiated (default 1.0 meters)
+    - The pass playmode will end as soon as a player touches the ball or a
+      certain amount of time has passed (default 4 seconds)
+    - After pass mode has ended the team who initiated the pass mode is unable
+      to score for a certain amount of time (default 10 seconds) -- if a team
+      does score within that time the opponent is awarded a goal kick just as
+      if a goal had been scored off an indirect kick
+
+The pass command will only be successful if the following conditions are met:
+    - The current playmode is PlayOn
+    - The agent issuing the pass command is within a certain distance of the
+      ball (default 0.5 meters)
+    - No opponents are within a certain distance of the ball (default 1.0
+      meters)
+    - The ball is stationary as measured by having a speed no greater than a
+      certain amount (default 0.05)
+    - A certain amount of time has passed since the last time the agent issuing
+      the pass command's team has been in pass mode (default 3 seconds)
+
+
+* Self Collisions:
+
+Self collisions (collisions between body parts of an agent) are now detected
+without the use of a physics engine and penalized with loss of control of the
+involved limbs (default) or beaming the agent to the side.
+This is achieved by freezing joints involved in a self collision for
+SelfCollisionJointFrozenTime, and then unfreezing the joints and let them be
+controlled again before being potentially flagged for another self collision
+for SelfCollisionJointThawTime. Each joint is monitored individually such that
+only those joints involved in a self collision can be specified as needing to
+be frozen. Currently all joints in an arm or leg are frozen if any box collider
+in that arm or leg is involved in a self collision. The penalty for a self
+collision can be changed to beaming an agent if desired. Additionally an output
+file can be specified to write self collision info to.
+
+
+* Rectangular Goals:
+
+    - Changed goal colliders to resemble a rectangular shape
+    - Added new object files and the corresponding material definition files
+      for visualizing rectangular goals
+
+
 [0.7.1]
 New changes for the RoboCup 2017 competition:
 

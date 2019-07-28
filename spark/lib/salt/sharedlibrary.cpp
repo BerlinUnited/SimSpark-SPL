@@ -80,6 +80,7 @@ SharedLibrary::Open(const std::string &libName)
 #endif
     mLibHandle = ::dlopen((libName + ".so").c_str(), RTLD_LAZY);
 
+   // old code
     if (mLibHandle == 0)
     {   // we didn't find the plugin, so we try again...
         /* mainly to work with MacOS bundles, so that plugins can be located like this:
@@ -93,6 +94,49 @@ SharedLibrary::Open(const std::string &libName)
         */
         mLibHandle = ::dlopen((RFile::BundlePath() + "Contents/plugins/" + libName + ".so").c_str(), RTLD_LAZY);
     }
+    
+    // if we didn't find the plugin try usr/local/lib[64]
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/local/lib/simspark/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+    
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/local/lib64/simspark/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/local/lib/rcssserver3d/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+    
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/local/lib64/rcssserver3d/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+    
+    // if we still didn't find the plugin try usr/lib[64]
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/lib/simspark/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+    
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/lib64/simspark/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/lib/rcssserver3d/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+    
+    if (mLibHandle == 0)
+    {
+        mLibHandle = ::dlopen(("/usr/lib64/rcssserver3d/" + libName + ".so").c_str(), RTLD_LAZY);
+    }
+    
     if (mLibHandle == 0)
     {
         std::cerr << "(SharedLibrary) ERROR: dlopen failed for " << libName

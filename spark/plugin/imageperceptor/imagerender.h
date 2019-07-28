@@ -26,7 +26,9 @@
 #include <kerosin/renderserver/baserenderserver.h>
 #include <kerosin/renderserver/customrender.h>
 #include <kerosin/openglserver/openglserver.h>
+#ifndef Q_MOC_RUN
 #include <boost/shared_array.hpp>
+#endif
 
 class ImageRender: public kerosin::CustomRender
 {

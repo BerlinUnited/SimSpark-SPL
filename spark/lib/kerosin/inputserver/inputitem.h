@@ -20,7 +20,9 @@
 #ifndef KEROSIN_INPUTITEM_H
 #define KEROSIN_INPUTITEM_H
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include "inputserver.h"
 #include <zeitgeist/leaf.h>
 #include <kerosin/kerosin_defines.h>

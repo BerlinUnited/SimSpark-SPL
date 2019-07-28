@@ -274,3 +274,12 @@ const Collider::TColliderNameSet& Collider::GetNotCollideWithSet() const
 {
     return mNotCollideWithSet;
 }
+
+bool Collider::InNotCollideWithSet( boost::shared_ptr<Collider>  col2 )
+{
+     std::string col2Name = col2->GetName(); 
+
+     Collider::TColliderNameSet::iterator it = this->GetNotCollideWithSet().find(col2Name);
+
+     return it != this->GetNotCollideWithSet().end();
+}

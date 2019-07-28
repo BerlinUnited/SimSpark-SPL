@@ -23,8 +23,10 @@
 #define OXYGEN_SIMCONTROLNODE_H
 
 #include <zeitgeist/node.h>
+#ifndef Q_MOC_RUN
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition.hpp>
+#endif
 #include <oxygen/oxygen_defines.h>
 #include <oxygen/sceneserver/scene.h>
 

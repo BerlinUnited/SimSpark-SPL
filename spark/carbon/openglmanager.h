@@ -377,7 +377,7 @@ public:
      \brief Copy operator. Returns reference to the handle.
     */
     GLHandle& operator=(const GLHandle& obj)
-        {mWidget = obj.mWidget; mFlags = mFlags;}
+        {mWidget = obj.mWidget; mFlags = mFlags; return *this;}
 
 public: signals:
 

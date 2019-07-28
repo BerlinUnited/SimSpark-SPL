@@ -105,6 +105,8 @@
 
         (nd AgentSyncEffector)
 
+	(nd PassEffector)
+
     );end of AgentAspect
     
     

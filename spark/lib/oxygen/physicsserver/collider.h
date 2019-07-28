@@ -137,6 +137,8 @@ public:
     /** Get the not collide with collider set */
     const TColliderNameSet& GetNotCollideWithSet() const;
 
+    bool InNotCollideWithSet( boost::shared_ptr<Collider>  col2 );
+
 protected:
     /** registers the managed geom to the Space of the Scene and to
         the associated body
