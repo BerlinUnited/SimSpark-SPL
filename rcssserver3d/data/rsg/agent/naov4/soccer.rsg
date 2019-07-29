@@ -98,7 +98,7 @@
 
  ;; create the left goal
  (def $LeftGoalX (eval -1* (eval $FieldHalfLength + $GoalHalfDepth)))
- (importScene rsg/agent/nao/goal.rsg
+ (importScene rsg/agent/naov4/goal.rsg
               leftgoal
               $LeftGoalX 0 0
               G1L G2L
@@ -106,7 +106,7 @@
 
  ;; create the right goal
  (def $RightGoalX (eval -1 * $LeftGoalX))
- (importScene rsg/agent/nao/goal.rsg
+ (importScene rsg/agent/naov4/goal.rsg
               rightgoal
               $RightGoalX 0 180
               G2R G1R
