@@ -99,9 +99,7 @@ IF (NOT ODE_FOUND)
     /usr/lib64
     /usr/lib/i386-linux-gnu
     /usr/lib/x86_64-linux-gnu
-    /usr/lib/i386-linux-gnu
     /usr/local/lib
-    /usr/lib/x86_64-linux-gnu/
     $ENV{ODE_HOME}/lib
     C:/library/ode/lib/
     "C:/Program Files/ode/lib/"
