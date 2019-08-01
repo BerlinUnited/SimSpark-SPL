@@ -23,7 +23,9 @@
 #ifndef OXYGEN_SLIDERJOINTINT_H
 #define OXYGEN_SLIDERJOINTINT_H
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <oxygen/oxygen_defines.h>
 
 namespace oxygen

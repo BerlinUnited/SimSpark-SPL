@@ -33,7 +33,9 @@
 #include <QDir>
 #include <QMainWindow>
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 /*!
  \brief Class that manages include directories and files for plugin and main window shared libraries.

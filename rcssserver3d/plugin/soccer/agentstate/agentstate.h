@@ -103,25 +103,25 @@ public:
 
     /** Whether agent is selected */
     bool IsSelected() const;
-    
+
     /** Select agent */
     void Select(bool s = true);
-    
+
     /** Unselect agent */
     void UnSelect();
-    
+
     /** Backup old touch group and create new empty one */
     void NewTouchGroup();
-    
+
     /** Get the touch group of the previous step */
     boost::shared_ptr<TouchGroup> GetOldTouchGroup();
-    
+
     /** Get the current touch group */
     boost::shared_ptr<TouchGroup> GetTouchGroup();
-    
+
     /** Set the current touch group */
     void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
-    
+
     void Penalize(const TTime gameTime, const spl::TSPLPenalty cause, const TTime duration);
 
     void UnPenalize();
@@ -188,7 +188,7 @@ protected:
 
     /** is this agent selected */
     bool mSelected;
-    
+
     /** for SPL */
     /*FIXME .. outsource for SPL*/
     spl::TSPLPenalty penalty;

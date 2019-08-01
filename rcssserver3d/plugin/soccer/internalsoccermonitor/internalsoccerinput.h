@@ -58,7 +58,9 @@ public:
             CmdFreeKickRight     = CmdFreeKickLeft + 1,
             CmdDirectFreeKickLeft      = CmdFreeKickRight + 1,
             CmdDirectFreeKickRight     = CmdDirectFreeKickLeft + 1,
-            CmdKillAgentLeft     = CmdDirectFreeKickRight + 1,
+            CmdPassLeft = CmdDirectFreeKickRight + 1,
+            CmdPassRight = CmdPassLeft + 1,
+            CmdKillAgentLeft     = CmdPassRight + 1,
             CmdKillAgentRight    = CmdKillAgentLeft + 1,
             
             CmdNextCamera        = CmdKillAgentRight + 1,

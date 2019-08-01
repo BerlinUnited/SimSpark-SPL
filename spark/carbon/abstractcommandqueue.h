@@ -27,7 +27,9 @@
 
 #include <QString>
 #include <QSemaphore>
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <list>
 
 class AbstractCommand;

@@ -97,13 +97,9 @@ IF (NOT ODE_FOUND)
     ${ODE_CONFIG_PREFIX}/lib
     /usr/lib
     /usr/lib64
-    /usr/local/lib
-<<<<<<< HEAD
-    /usr/lib/x86_64-linux-gnu/
-=======
-    /usr/lib/x86_64-linux-gnu
     /usr/lib/i386-linux-gnu
->>>>>>> c6a1af5647088ccecc9afc3ee4e806ac1e5653c5
+    /usr/lib/x86_64-linux-gnu
+    /usr/local/lib
     $ENV{ODE_HOME}/lib
     C:/library/ode/lib/
     "C:/Program Files/ode/lib/"

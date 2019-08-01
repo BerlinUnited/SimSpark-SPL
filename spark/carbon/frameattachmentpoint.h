@@ -32,7 +32,9 @@
 #include <QMap>
 #include <vector>
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 
 class QWidget;
 class QFrame;

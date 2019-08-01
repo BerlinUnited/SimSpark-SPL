@@ -8,12 +8,12 @@
         (setName boxBody)
         (setBoxTotal $totalMass $lenX $lenY $lenZ)
 
-        (importScene rsg/agent/nao/dragcontroller.rsg)
+        (importScene rsg/agent/naov4/dragcontroller.rsg)
     )
 
     (nd BoxCollider
         (setBoxLengths $lenX $lenY $lenZ)
 
-        (importScene rsg/agent/nao/contactjointhandler.rsg)
+        (importScene rsg/agent/naov4/contactjointhandler.rsg)
     )
 )

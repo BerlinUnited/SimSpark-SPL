@@ -20,7 +20,9 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifndef Q_MOC_RUN
 #include <boost/thread/locks.hpp>
+#endif
 #include <zeitgeist/logserver/logserver.h>
 #include <oxygen/simulationserver/simulationserver.h>
 #include "monitorserver.h"

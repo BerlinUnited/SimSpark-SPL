@@ -89,3 +89,57 @@ float BoxCollider::GetPointDepth(const Vector3f& pos)
     Vector3f worldPos(GetWorldTransform() * pos);
     return mBoxColliderImp->GetPointDepth(worldPos, mGeomID);
 }
+
+
+// check if there's a separating plane in between the selected axes
+bool BoxCollider::CheckSeparatingPlane(const Vector3f& RPos, const Vector3f& Plane, boost::shared_ptr<BoxCollider> box2, float tol)
+{
+    Vector3f halfExtentsB1, halfExtentsB2;
+
+    this->GetBoxLengths(halfExtentsB1);
+    halfExtentsB1 *= 0.5;
+    box2->GetBoxLengths(halfExtentsB2);
+    halfExtentsB2 *= 0.5;
+
+    return (fabs(RPos.Dot(Plane)) + tol > 
+             (fabs((this->GetWorldTransform().Right()   * halfExtentsB1.x()).Dot(Plane) ) +
+              fabs((this->GetWorldTransform().Up()      * halfExtentsB1.y()).Dot(Plane) ) +
+              fabs((this->GetWorldTransform().Forward() * halfExtentsB1.z()).Dot(Plane) ) +
+              fabs((box2->GetWorldTransform().Right()   * halfExtentsB2.x()).Dot(Plane) ) + 
+              fabs((box2->GetWorldTransform().Up()      * halfExtentsB2.y()).Dot(Plane) ) +
+              fabs((box2->GetWorldTransform().Forward() * halfExtentsB2.z()).Dot(Plane) )));
+}
+
+bool BoxCollider::CheckCollisions( boost::shared_ptr<BoxCollider> box2, float tol)
+{
+    Vector3f RPos;
+
+    RPos = box2->GetWorldTransform().Pos() - this->GetWorldTransform().Pos();
+
+    return !(CheckSeparatingPlane(RPos, this->GetWorldTransform().Right()                                                 , box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Up()                                                    , box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Forward()                                               , box2, tol) ||
+             CheckSeparatingPlane(RPos, box2->GetWorldTransform().Right()                                                 , box2, tol) ||
+             CheckSeparatingPlane(RPos, box2->GetWorldTransform().Up()                                                    , box2, tol) ||
+             CheckSeparatingPlane(RPos, box2->GetWorldTransform().Forward()                                               , box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Right()    .Cross(  box2->GetWorldTransform().Right()  ), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Right()    .Cross(  box2->GetWorldTransform().Up()     ), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Right()    .Cross(  box2->GetWorldTransform().Forward()), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Up()       .Cross(  box2->GetWorldTransform().Right()  ), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Up()       .Cross(  box2->GetWorldTransform().Up()     ), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Up()       .Cross(  box2->GetWorldTransform().Forward()), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Forward()  .Cross(  box2->GetWorldTransform().Right()  ), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Forward()  .Cross(  box2->GetWorldTransform().Up()     ), box2, tol) ||
+             CheckSeparatingPlane(RPos, this->GetWorldTransform().Forward()  .Cross(  box2->GetWorldTransform().Forward()), box2, tol));
+}
+
+void:: BoxCollider::AddSCFreezeJointEffName(const std::string name)
+{
+    selfCollisionFreezeJointEffNames.push_back(name);
+}
+
+const std::list<std::string> BoxCollider::GetSCFreezeJointEffNames()
+{
+    return selfCollisionFreezeJointEffNames;
+}
+

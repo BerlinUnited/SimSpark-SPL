@@ -23,7 +23,9 @@
 #include <SDL.h>
 
 #ifdef _MSC_VER
+#ifndef Q_MOC_RUN
 #include <boost/math/special_functions/round.hpp>
+#endif
 using boost::math::round;
 #endif
 

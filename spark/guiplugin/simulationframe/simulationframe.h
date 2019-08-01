@@ -28,7 +28,9 @@
 #include <attachableframe.h>
 #include <simulationtask.h>
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <vector>
 
 #include "ui_simulationframe.h"

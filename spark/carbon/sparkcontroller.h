@@ -25,7 +25,9 @@
  * \brief Contains SparkController class, a QObject derived class used to initialize, run and control SimSpark.
  */
 
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
+#endif
 #include <QObject>
 #include <QStringList>
 #include <QSemaphore>

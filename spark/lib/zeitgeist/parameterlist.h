@@ -22,7 +22,9 @@
 #ifndef ZEITGEIST_PARAMETERLIST_H
 #define ZEITGEIST_PARAMETERLIST_H
 
+#ifndef Q_MOC_RUN
 #include <boost/any.hpp>
+#endif
 #include <vector>
 #include <string>
 #include <salt/vector.h>
