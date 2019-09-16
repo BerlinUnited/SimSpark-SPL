@@ -21,7 +21,7 @@ illum 1
 map_Kd naogoalnet_black.png
 
 
-newmtl white
+newmtl sky-blue
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.800000 0.800000 0.000000
