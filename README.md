@@ -7,23 +7,22 @@ Improvements
 ------------
 
 * NAO V4 Model
- * Realistic motor (stiffness, current, temperature)
- * Two cameras
- * Accurate mass model
- * Kinematics parameters
- * Image camera (optional)
+  * Realistic motor (stiffness, current, temperature)
+  * Two cameras
+  * Accurate mass model
+  * Kinematics parameters
+  * Image camera (optional)
 
 * For Standard Platform League
- * Field, goal, ball
- * Game rules
-
+  * Field, goal, ball
+  * Game rules
 
 Installation
 ------------
 
 * Linux
 
-  * AppImage:
+  * AppImage:  
 
     Download the appimage from https://github.com/BerlinUnited/SimSpark-SPL/releases and make it executable
 
@@ -60,4 +59,7 @@ Installation
 
 * Windows
 
-  TODO!
+  * Download the newest binary release from https://github.com/BerlinUnited/SimSpark-SPL/releases
+  * unpack the ZIP archive to your favorite location
+  * run `<simspark location>/SimSparkSPL.bat` 
+  * or run `<simspark location>/SimSparkSPL_background.bat` if you want only the server without monitor and logging
