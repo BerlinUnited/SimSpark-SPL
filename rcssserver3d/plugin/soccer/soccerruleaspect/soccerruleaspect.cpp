@@ -116,9 +116,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mPassModeMaxBallSpeed(0.05),
     mPassModeMaxBallDist(0.5),
     mPassModeMinOppBallDist(1.0),
-    mPassModeDuration(5.0),
-    mPassModeScoreWaitTime(5.0),
-    mPassModeRetryWaitTime(5.0)
+    mPassModeDuration(4.0),
+    mPassModeScoreWaitTime(10.0),
+    mPassModeRetryWaitTime(3.0)
 {
     mFreeKickPos = Vector3f(0.0,0.0,mBallRadius);
     ResetFoulCounter(TI_LEFT);
@@ -1821,6 +1821,14 @@ SoccerRuleAspect::AwardFreeKick(TTeamIndex idx, bool indirect)
 }
 
 void
+SoccerRuleAspect::StartPassMode(TTeamIndex idx)
+{
+    passModeBallPos[idx] = mBallBody->GetPosition();
+
+    mGameState->SetPlayMode(idx == TI_LEFT ? PM_PASS_LEFT : PM_PASS_RIGHT);
+}
+
+void
 SoccerRuleAspect::PunishIndirectKickGoal(
     boost::shared_ptr<oxygen::AgentAspect> agent, 
     TTeamIndex scoredOnTeamIdx)
@@ -2366,26 +2374,37 @@ SoccerRuleAspect::UpdatePassMode(TTeamIndex idx)
 {
     mGameState->SetPaused(false);
 
-    if (mGameState->GetModeTime() >= mPassModeDuration) { 
-        mGameState->SetPlayMode(PM_PlayOn);
-        return;
-    }
-    
+    lastTimeInPassMode[idx] = mGameState->GetTime();
+    playerUNumTouchedBallSincePassMode[idx] = -1;
+    mulitpleTeammatesTouchedBallSincePassMode[idx] = false;
+    ballLeftPassModeCircle[idx] = false;
+    passModeClearedToScore[idx] = false;
+
+    // Cancel out affects of pass mode for opponent
+    lastTimeInPassMode[SoccerBase::OpponentTeam(idx)] = -1000;
+
     boost::shared_ptr<AgentAspect> agent;
     TTime time;
-    if (mBallState->GetLastCollidingAgent(agent,time))
+
+    if (mGameState->GetModeTime() >= mPassModeDuration) { 
+        mGameState->SetPlayMode(PM_PlayOn);
+    }
+    else if (mBallState->GetLastCollidingAgent(agent,time))
     {
         TTime lastChange = mGameState->GetLastModeChange();
         if (time >= lastChange) { 
             mGameState->SetPlayMode(PM_PlayOn);
-            return;
         }
     }
 
-    // keep away opponent team from ball
-    RepelPlayers(mBallBody->GetPosition(), mPassModeMinOppBallDist, SoccerBase::OpponentTeam(idx), 0.1);
+    UpdatePlayOn();
 
-    lastTimeInPassMode[idx] = mGameState->GetTime();
+    if (mGameState->GetPlayMode() == (idx == TI_LEFT ? PM_PASS_LEFT : PM_PASS_RIGHT)) {
+        passModeBallPos[idx] = mBallBody->GetPosition();
+
+        // keep away opponent team from ball
+        RepelPlayers(mBallBody->GetPosition(), mPassModeMinOppBallDist, SoccerBase::OpponentTeam(idx), 0.1);
+    }
 }
     
 
@@ -2567,7 +2586,8 @@ SoccerRuleAspect::CheckGoal()
     }
 
     // Check that a team hasn't scored out of pass mode
-    if (mGameState->GetTime()-lastTimeInPassMode[SoccerBase::OpponentTeam(idx)] < mPassModeScoreWaitTime) {
+    if (mGameState->GetTime()-lastTimeInPassMode[SoccerBase::OpponentTeam(idx)] < mPassModeScoreWaitTime 
+        && !passModeClearedToScore[SoccerBase::OpponentTeam(idx)]) {
         AwardGoalKick(idx);
         // Return true so that we know the ball is in the goal and don't
         // check for other conditions such as the ball being out of 
@@ -2642,9 +2662,69 @@ SoccerRuleAspect::CheckFreeKickTakerFoul()
 }
 
 void
+SoccerRuleAspect::UpdatePassModeScoringCheckValues()
+{
+    TTeamIndex passModeTeam = TI_NONE;
+    if (mGameState->GetTime() - lastTimeInPassMode[TI_LEFT] < mPassModeScoreWaitTime && !passModeClearedToScore[TI_LEFT]) {
+        passModeTeam = TI_LEFT;
+    } else if (mGameState->GetTime() - lastTimeInPassMode[TI_RIGHT] < mPassModeScoreWaitTime && !passModeClearedToScore[TI_RIGHT]) {
+        passModeTeam = TI_RIGHT;
+    }
+
+    if (passModeTeam != TI_NONE) {
+        if (!ballLeftPassModeCircle[passModeTeam]) {
+            // Check if ball has left original pass mode circle
+            Vector3f ball_pos = mBallBody->GetPosition();
+            Vector3f pm_ball_pos = passModeBallPos[passModeTeam];
+            float dist = sqrt((ball_pos.x()-pm_ball_pos.x())*(ball_pos.x()-pm_ball_pos.x()) +
+                          (ball_pos.y()-pm_ball_pos.y())*(ball_pos.y()-pm_ball_pos.y()));
+            if (dist >= mPassModeMinOppBallDist) {
+                ballLeftPassModeCircle[passModeTeam] = true;
+            }
+        }
+
+        list<boost::shared_ptr<AgentAspect> > agents;
+        if (mBallState->GetCollidingAgents(agents)) {
+            for (list<boost::shared_ptr<AgentAspect> > ::const_iterator agentIt = agents.begin();
+                 agentIt != agents.end();
+                agentIt++) 
+            {
+                boost::shared_ptr<AgentState> agentState;
+                if (!SoccerBase::GetAgentState(*agentIt, agentState))
+                {
+                    GetLog()->Error() << "ERROR: (SoccerRuleAspect) Cannot get "
+                    "AgentState from an AgentAspect\n";
+                }
+                else
+                {
+                    int unum = agentState->GetUniformNumber();
+                    int idx = agentState->GetTeamIndex();
+                    if (idx == passModeTeam) {
+                        if (playerUNumTouchedBallSincePassMode[passModeTeam] > 0 
+                            && (playerUNumTouchedBallSincePassMode[passModeTeam] != unum
+                                || mulitpleTeammatesTouchedBallSincePassMode[passModeTeam])) {
+                            mulitpleTeammatesTouchedBallSincePassMode[passModeTeam] = true;
+                            if (ballLeftPassModeCircle[passModeTeam]) {
+                                GetLog()->Error() << "Pass mode for " << (passModeTeam == TI_LEFT ? "left" : "right") << " team cleared to score.\n";
+                                passModeClearedToScore[passModeTeam] = true;
+                            }
+                            break;
+                        } else {
+                            playerUNumTouchedBallSincePassMode[passModeTeam] = unum;
+                        }   
+                    }
+                }
+            }
+        }
+    }
+}
+
+void
 SoccerRuleAspect::UpdatePlayOn()
 {
     mGameState->SetPaused(false);
+
+    UpdatePassModeScoringCheckValues();
 
     // check that player who took free kick doesn't touch the ball a second
     // time before another agent touches the ball
@@ -2887,7 +2967,8 @@ SoccerRuleAspect::Update(float deltaTime)
 
     case PM_PlayOn:
         UpdatePlayOn();
-        mLastModeWasPlayOn = true;
+        // [patmac] mLastModeWasPlayOn is currently only used in CheckOffside() and will always be false when referenced in CheckOffside() -- should probably be removed
+        mLastModeWasPlayOn = true;  
         break;
 
     case PM_KickOff_Left:
@@ -3673,12 +3754,19 @@ SoccerRuleAspect::CanActivatePassMode(int unum, TTeamIndex ti)
         return false;
     }
 
-    // Can only acticate if the agent is close to the ball
+    // Can only activate if the agent is close to the ball
     if (distArr[unum][ti] > mPassModeMaxBallDist) {
         return false;
     }
 
-    // Check that now opponents are too close to the ball before activating
+    /*
+    // If a player from the team is currently touching the ball don't activate 
+    if (mBallState->GetBallCollidingWithAgentTeam(ti)) {
+        return false;
+    }
+    */
+
+    // Check that no opponents are too close to the ball before activating
     for(int i = 1; i <= 11; i++) {
         if (distArr[i][SoccerBase::OpponentTeam(ti)] < mPassModeMinOppBallDist) {
             return false;

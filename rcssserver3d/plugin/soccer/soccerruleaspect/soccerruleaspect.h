@@ -246,6 +246,9 @@ public:
     /** if a player can activate pass mode */
     bool CanActivatePassMode(int unum, TTeamIndex ti);
 
+    /** starts pass mode for a team */
+    void StartPassMode(TTeamIndex idx);
+
 protected:
     /** rereads the current soccer script values */
     virtual void UpdateCachedInternal();
@@ -317,6 +320,9 @@ protected:
 
     /** checks if kick taker has kicked the ball again before other players */
     bool CheckFreeKickTakerFoul();
+
+    /** Updates values needed when checking if a team can score after pass mode */
+    void UpdatePassModeScoringCheckValues();
 
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
@@ -669,6 +675,16 @@ protected:
 
     /** The last game time that a team was in pass mode */
     TTime lastTimeInPassMode[3];
+    /** Position of the ball during a team's pass mode */
+    salt::Vector3f passModeBallPos[3];
+    /** Ball left original pass mode circle */
+    bool ballLeftPassModeCircle[3];
+    /** Uniform number of a player that has touched the ball since pass mode */
+    int playerUNumTouchedBallSincePassMode[3];
+    /** If multiple teammates have touched ball since pass mode */
+    bool mulitpleTeammatesTouchedBallSincePassMode[3];
+    /** If a team has met the requirements after pass mode to score */
+    bool passModeClearedToScore[3];
 
     /** Maximum speed of ball when pass mode is allowed to be activated */
     float mPassModeMaxBallSpeed;
