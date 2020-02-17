@@ -518,14 +518,21 @@ void SoccerRuleAspect::CalculateDistanceArrays(TTeamIndex idx)
             numPlInsideOwnArea[idx]++;
             playerInsideOwnArea[unum][idx] = 1;
 
-            //goalie is not repositioned when inside own area...
             if (unum == 1)
             {
+                //goalie is not repositioned when inside own area...
                 distGArr[unum][idx] = 0.0;
+            } else if (prevPlayerInsideOwnArea[unum][idx] == 0) {
+                // Ignore players who just entered penalty area, only want to consider existing ones for repositioning when
+                // goalie enters (players who just entered will be automatically repositioned if too many players in area) 
+                distGArr[unum][idx] = 1000.0;
             }
         }
-        else
-          playerInsideOwnArea[unum][idx] = 0;
+        else {
+            playerInsideOwnArea[unum][idx] = 0;
+            // Only keep and effectively rank distances for players inside own area
+            distGArr[unum][idx] = 1000.0;
+        }
 
         // Process agent state: standing, sitted, laying down, ...
         ProcessAgentState(agentPos, unum, idx);
