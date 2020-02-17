@@ -124,7 +124,7 @@ public:
         potential collisions with other agents, and adjusts the position if need
         be to avoid collisions
     */
-    salt::Vector3f GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx);
+    salt::Vector3f GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx, bool fAvoidBall=true);
 
     /** Calculates the inside field reposition pos for a given agent with unum and team idx
         Agents are repositioned at distance from the ball, that is, at: plpos + (plpos-ballpos).normalize()*dist
@@ -166,6 +166,10 @@ public:
     */
     void AnalyseFouls(TTeamIndex idx);
 
+    /** Penalizes an agent for an illegal defense foul
+     */ 
+    void PenalizeIllegelDefenseFoul(int unum, TTeamIndex idx);
+
 #ifdef RVDRAW
     /** Draws players' velocities with colors for debugging charging fouls
      */
@@ -193,6 +197,10 @@ public:
     /** Reset the touch groups
     */
     void ResetTouchGroups(TTeamIndex idx);
+
+    /** Penalizes an agent for a touching foul
+     */
+    void PenalizeTouchingFoul(boost::shared_ptr<AgentState> agentState, const salt::Vector3f touchGroupCenter);
 
     /** Automatic Referee that clears players that violate the rules
     */
@@ -370,7 +378,7 @@ protected:
 
         If idx is TI_NONE, nothing will happen.
     */
-    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx, float pad=0.0);
+    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx, float pad=0.0, bool fAvoidBall=false);
 
     /**
      * Moves players taking a kick slightly away from the ball when it is placed
@@ -418,7 +426,7 @@ protected:
     bool WasLastKickFromFreeKick(
         boost::shared_ptr<oxygen::AgentAspect> &lastKicker);
 
-    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos, bool fSafe=true);
+    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos, bool fSafe=true, bool fAvoidBall=true);
 
     /** if a player has committed a foul that should be enforced */
     bool HaveEnforceableFoul(int unum, TTeamIndex ti);
@@ -517,8 +525,12 @@ protected:
     float mMin3PlDistance;
     /** maximum number of players of the defending team that may be inside own penalty area */
     int mMaxPlayersInsideOwnArea;
+    /** use beaming to penalize illegal defense */
+    bool mIllegalDefenseBeamPenalty;
     /** maximum number of players that may be in a single touch group */
     int mMaxTouchGroupSize;
+    /** use beaming to penalize touching fouls */
+    bool mTouchingFoulBeamPenalty;
     /** maximum time allowed for a player to commit a positional foul before being repositioned */
     int mMaxFoulTime;
     /** maximum tolerance allowed for self collisions along the box collider separating planes */
@@ -555,8 +567,7 @@ protected:
     EFoulType playerLastFoul[12][3];	//Type of last foul committed by player
     std::map<std::string,TTime> lastTimeJointFrozen[12][3]; // Time since joint last frozen
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
-    int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area
-    std::list<salt::Vector2f> reposLocs; // List of locations players have been repositioned to 
+    int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area 
     int closestPlayer[3]; 		//Closest Player from each team
     float closestPlayerDist[3]; 	//Closest Player distance to ball from each team
     salt::Vector3f playerVelocities[12][3][AVERAGE_VELOCITY_MEASUREMENTS];  // Player velocities over last AVERAGE_VELOCITY_MEASUREMENTS cycles 

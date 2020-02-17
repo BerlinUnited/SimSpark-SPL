@@ -73,7 +73,9 @@ SoccerRuleAspect::SoccerRuleAspect() :
     mMin2PlDistance(0),            // min dist for second closest of team before being repositioned
     mMin3PlDistance(0),            // min dist for third closest of team before being repositioned
     mMaxPlayersInsideOwnArea(1000),  // maximum number of players of the defending team that may be inside own penalty area
+    mIllegalDefenseBeamPenalty(false),
     mMaxTouchGroupSize(1000),
+    mTouchingFoulBeamPenalty(false),
     mMaxFoulTime(0.0),              // maximum time allowed for a player to commit a positional foul before being repositioned
     mSelfCollisionsTolerance(0.0),     
     mPrintSelfCollisions(true),     
@@ -237,8 +239,14 @@ SoccerRuleAspect::AutomaticSimpleReferee()
         AnalyseSelfCollisionFouls(TI_RIGHT);
         AnalyseFouls(TI_LEFT);   		// Analyzes simple fouls for the left team
         AnalyseFouls(TI_RIGHT);   		// Analyzes simple fouls for the right team
-        AnalyseTouchGroups(TI_LEFT);            // Analyzes whether too many players are touching for the left team
-        AnalyseTouchGroups(TI_RIGHT);           // Analyzes whether too many players are touching for the right team
+
+        if (rand()%2 == 0) {
+            AnalyseTouchGroups(TI_LEFT);            // Analyzes whether too many players are touching for the left team
+            AnalyseTouchGroups(TI_RIGHT);           // Analyzes whether too many players are touching for the right team
+        } else {
+            AnalyseTouchGroups(TI_RIGHT);           // Analyzes whether too many players are touching for the right team
+            AnalyseTouchGroups(TI_LEFT);            // Analyzes whether too many players are touching for the left team
+        }
 
         if (rand()%2 == 0) {
             ClearPlayersAutomatic(TI_LEFT);   	// enforce standing and not overcrowding rules for left team
@@ -612,6 +620,18 @@ void SoccerRuleAspect::AnalyseChargingFouls()
         // Check if these are opponent agents meaning they have different team indexes
         bool haveOpponent = agentTeamIndex[0] != agentTeamIndex[1];
         
+        if(!haveOpponent
+           || playerNotStanding[agentUNum[0]][agentTeamIndex[0]] != 0
+           || playerNotStanding[agentUNum[1]][agentTeamIndex[1]] != 0
+           || playerTimeSinceLastWasMoved[agentUNum[0]][agentTeamIndex[0]] < 1/.02
+           || playerTimeSinceLastWasMoved[agentUNum[1]][agentTeamIndex[1]] < 1/.02
+           || HaveEnforceableFoul(agentUNum[0],agentTeamIndex[0])
+           || HaveEnforceableFoul(agentUNum[1],agentTeamIndex[1])
+           )
+        {
+            continue;
+        }
+
         // Check if one of the agents is a goalie in their own penalty area
         bool goalieInOwnPenaltyArea[2];
         for (int i = 0; i <= 1; i++)
@@ -633,19 +653,6 @@ void SoccerRuleAspect::AnalyseChargingFouls()
                 }
             }
         }
-                        
-            
-        if(!haveOpponent
-           || playerNotStanding[agentUNum[0]][agentTeamIndex[0]] != 0
-           || playerNotStanding[agentUNum[1]][agentTeamIndex[1]] != 0
-           || playerTimeSinceLastWasMoved[agentUNum[0]][agentTeamIndex[0]] < 1/.02
-           || playerTimeSinceLastWasMoved[agentUNum[1]][agentTeamIndex[1]] < 1/.02
-           || HaveEnforceableFoul(agentUNum[0],agentTeamIndex[0])
-           || HaveEnforceableFoul(agentUNum[1],agentTeamIndex[1])
-           )
-        {
-            continue;
-        }
         
         // Compute speed vector angle to opponent
         for (i = 0; i <= 1; i++)
@@ -662,24 +669,24 @@ void SoccerRuleAspect::AnalyseChargingFouls()
         if(d[0] < mChargingMaxBallRulesDist || d[1] < mChargingMaxBallRulesDist)
         {
         	for (int i = 0; i <= 1; i++)
-                {
-                    isCharging[i] = (aVB[i] >= aVO[i] && aVB[i] >= mChargingMinBallSpeedAngle && s[i] >= mChargingMinSpeed);
-                }
+            {
+                isCharging[i] = (aVB[i] >= aVO[i] && aVB[i] >= mChargingMinBallSpeedAngle && s[i] >= mChargingMinSpeed);
+            }
 
-                float deltaD;
-                float deltaaVO;
-                if (!isCharging[0] && !isCharging[1])
+            float deltaD;
+            float deltaaVO;
+            if (!isCharging[0] && !isCharging[1])
+            {
+                // Handle case where both agents are apparently heading for the ball
+                deltaD = abs(d[0] - d[1]);
+                deltaaVO = abs(aVO[0] - aVO[1]);
+                
+                if(deltaD > mChargingMinDeltaDist)
                 {
-                    // Handle case where both agents are apparently heading for the ball
-                    deltaD = abs(d[0] - d[1]);
-                    deltaaVO = abs(aVO[0] - aVO[1]);
-                    
-                    if(deltaD > mChargingMinDeltaDist)
-                    {
-                        isCharging[0] = d[0] > d[1] && (deltaaVO > mChargingMinDeltaAng || s[1] < mChargingMinSpeed);
-                        isCharging[1] = d[1] > d[0] && (deltaaVO > mChargingMinDeltaAng || s[0] < mChargingMinSpeed);
-                    }
+                    isCharging[0] = d[0] > d[1] && (deltaaVO > mChargingMinDeltaAng || s[1] < mChargingMinSpeed);
+                    isCharging[1] = d[1] > d[0] && (deltaaVO > mChargingMinDeltaAng || s[0] < mChargingMinSpeed);
                 }
+            }
         }
 
         salt::Vector3f agentToCollisionVec[2];
@@ -809,6 +816,7 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             TouchGroup::iterator teammateIt; // stores the last teammate in touch group
 
             int numPlayersCommittedFoul = 0;
+            salt::Vector3f agentsPosSum = salt::Vector3f(0,0,0);
             for (TouchGroup::iterator agentIt = touchGroup->begin();
                     agentIt != touchGroup->end(); ++agentIt)
             {
@@ -819,6 +827,11 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
                     continue;
                 }   
 
+                // Get agent position
+                boost::shared_ptr<Transform> agent_aspect;
+                SoccerBase::GetTransformParent(*(*agentIt), agent_aspect);
+                agentsPosSum += agent_aspect->GetWorldTransform().Pos();
+                
                 pl[(*agentIt)->GetTeamIndex()]++;
                 
                 // Only call touching foul on non-goalies in group
@@ -843,22 +856,22 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
                 continue;
             }   
 
+            salt::Vector3f agentsPosAvg = agentsPosSum/(touchGroup->size()-numPlayersCommittedFoul);
+
             if (pl[idx] >= (int)touchGroup->size() - pl[idx])
             {
                 if ((*i)->GetUniformNumber() == 1 && mMaxTouchGroupSize > 1) 
                 {
                     // I am the last one to enter the group, but remove teammate as
                     // I'm the goalie
-                    playerFoulTime[(*teammateIt)->GetUniformNumber()][idx]++;
-                    playerLastFoul[(*teammateIt)->GetUniformNumber()][idx] = FT_Touching;
+                    PenalizeTouchingFoul(*teammateIt, agentsPosAvg);
                     
                     // Remove player from touch group so no more agents are replaced
                     touchGroup->erase(*teammateIt);
                 }
                 else 
                 {
-                    playerFoulTime[(*i)->GetUniformNumber()][idx]++;
-                    playerLastFoul[(*i)->GetUniformNumber()][idx] = FT_Touching;
+                    PenalizeTouchingFoul(*i, agentsPosAvg);
                     
                     // Remove player from touch group so no more agents are replaced
                     touchGroup->erase(*i);
@@ -868,8 +881,7 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             {
                 // I am the last one to enter the group, but the number of
                 // opponents in the group are more than us
-                playerFoulTime[(*oppIt)->GetUniformNumber()][oppIdx]++;
-                playerLastFoul[(*oppIt)->GetUniformNumber()][oppIdx] = FT_Touching;
+                PenalizeTouchingFoul(*oppIt, agentsPosAvg);
 
                 // Remove player from touch group so no more agents are replaced
                 touchGroup->erase(*oppIt);
@@ -889,6 +901,29 @@ void SoccerRuleAspect::ResetTouchGroups(TTeamIndex idx)
     {
         (*i)->NewTouchGroup();
         (*i)->GetTouchGroup()->insert(*i);
+    }
+}
+
+void SoccerRuleAspect::PenalizeTouchingFoul(boost::shared_ptr<AgentState> agentState, const salt::Vector3f touchGroupCenter)
+{
+    int unum = agentState->GetUniformNumber();
+    TTeamIndex ti = agentState->GetTeamIndex();
+    playerFoulTime[unum][ti]++;
+    playerLastFoul[unum][ti] = FT_Touching;
+
+    if (!mTouchingFoulBeamPenalty) {
+        // Get agent position
+        boost::shared_ptr<Transform> agent_aspect;
+        SoccerBase::GetTransformParent(*agentState, agent_aspect);
+        salt::Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        salt::Vector2f agent_pos = Vector2f(new_pos.x(),new_pos.y());
+
+        salt::Vector2f groupToAgentVec = salt::Vector2f(agent_pos.x()-touchGroupCenter.x(), agent_pos.y()-touchGroupCenter.y()).Normalize();
+        salt::Vector2f move_pos = agent_pos + groupToAgentVec*mAgentRadius;
+        new_pos[0] = move_pos[0];
+        new_pos[1] = move_pos[1];
+
+        MoveAgent(agent_aspect, new_pos);
     }
 }
 
@@ -1091,9 +1126,7 @@ void SoccerRuleAspect::AnalyseFouls(TTeamIndex idx)
                 (prevPlayerInsideOwnArea[unum][idx] == 0 ||
                  (prevPlayerInsideOwnArea[1][idx] == 0 && playerInsideOwnArea[1][idx] == 1 && mMaxPlayersInsideOwnArea + 1 == ordGArr[unum][idx]))))
         {
-            playerFoulTime[unum][idx]++;
-            playerLastFoul[unum][idx] = FT_IllegalDefence;
-            numPlInsideOwnArea[idx]--;
+            PenalizeIllegelDefenseFoul(unum, idx);
         }
         // I am a field player and on the ground for too much time
         else if (unum != 1 && playerGround[unum][idx] > mGroundMaxTime / 0.02)
@@ -1124,6 +1157,46 @@ void SoccerRuleAspect::AnalyseFouls(TTeamIndex idx)
             playerFoulTime[unum][idx]=0;
             playerLastFoul[unum][idx] = FT_None;
         }
+    }
+}
+
+void SoccerRuleAspect::PenalizeIllegelDefenseFoul(int unum, TTeamIndex idx)
+{
+    playerFoulTime[unum][idx]++;
+    playerLastFoul[unum][idx] = FT_IllegalDefence;
+    numPlInsideOwnArea[idx]--;
+
+    if (!mIllegalDefenseBeamPenalty) {
+        boost::shared_ptr<AgentState> agent_state;
+        if (!SoccerBase::GetAgentState(*mBallState.get(), idx, unum, agent_state))
+            return;
+
+        // Get agent position
+        boost::shared_ptr<Transform> agent_aspect;
+        SoccerBase::GetTransformParent(*agent_state, agent_aspect);
+        salt::Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        salt::Vector2f agent_pos = Vector2f(new_pos.x(),new_pos.y());
+
+        salt::AABB2 penaltyArea = idx == TI_LEFT ? mLeftPenaltyArea : mRightPenaltyArea;
+
+        const float PAD = mAgentRadius;
+
+        float closestXTarget = abs(penaltyArea.minVec.x()-agent_pos.x()) < abs(penaltyArea.maxVec.x()-agent_pos.x()) ? penaltyArea.minVec.x()-PAD : penaltyArea.maxVec.x()+PAD;
+        float closestYTarget = abs(penaltyArea.minVec.y()-agent_pos.y()) < abs(penaltyArea.maxVec.y()-agent_pos.y()) ? penaltyArea.minVec.y()-PAD : penaltyArea.maxVec.y()+PAD;
+
+        salt::Vector2f box_edge_pos;
+        if (abs(closestYTarget-agent_pos.y()) < abs(closestXTarget-agent_pos.x())) {
+            new_pos.y() = closestYTarget;
+        } else {
+            new_pos.x() = closestXTarget;
+        }
+
+        if (abs(new_pos.x()) > mFieldLength/2.0 && abs(new_pos.y()) < (mGoalWidth/2.0 + mAgentRadius)) {
+            // Move position to not be inside goal
+            new_pos.y() = (mGoalWidth/2.0 + mAgentRadius + 0.001) * (new_pos.y() < 0 ? -1 : 1);
+        }
+
+        MoveAgent(agent_aspect, new_pos);
     }
 }
 
@@ -1291,33 +1364,21 @@ void SoccerRuleAspect::GetSafeRepositionHelper_SamplePositions(const salt::Vecto
     } 
 }
 
-salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx)
+salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx, bool fAvoidBall)
 {
     salt::Vector3f pos = posIni;
     if (mMaxNumSafeRepositionAttempts == 0 || idx == TI_NONE || mBallState.get() == 0 || mAgentRadius <= 0)
         return pos;
 
-    bool fFoundAgentPos = false;
     salt::Vector3f agentPos = Vector3f(0,0,0);
-    SoccerBase::TAgentStateList agent_states;
-    if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx)) {
+    boost::shared_ptr<AgentState> agent_state;
+    if (SoccerBase::GetAgentState(*mBallState.get(), idx, unum, agent_state)) {
         boost::shared_ptr<oxygen::Transform> agent_aspect;
-        SoccerBase::TAgentStateList::const_iterator i;
-        for (i = agent_states.begin(); i != agent_states.end(); ++i)
-        {
-            int unumAgent = (*i)->GetUniformNumber();
-            if (unum == unumAgent) {
-                SoccerBase::GetTransformParent(**i, agent_aspect);
-                agentPos = agent_aspect->GetWorldTransform().Pos();
-                fFoundAgentPos = true;
-                break;
-            }
-        }
+        SoccerBase::GetTransformParent(*agent_state, agent_aspect);
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
+        agentPos = agent_body->GetPosition();
     } else {
-        return pos;
-    }
-
-    if (!fFoundAgentPos) {
         return pos;
     }
 
@@ -1347,8 +1408,30 @@ salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int un
         SoccerBase::TAgentStateList agent_states;
         salt::BoundingSphere sphere(pos, mAgentRadius);
 
+        if (abs(pos.x()) > mFieldLength/2.0 && abs(pos.y()) < (mGoalWidth/2.0 + mAgentRadius)) {
+            // Don't allow positions inside/behind goal
+            fUnsafePosition = true;
+        }
+
+        if (!fUnsafePosition && fAvoidBall) {
+            salt::Vector3f ball_pos = mBallBody->GetPosition();                 
+            float dist = sqrt((ball_pos.x()-pos.x())*(ball_pos.x()-pos.x()) +
+                                (ball_pos.y()-pos.y())*(ball_pos.y()-pos.y()));
+            if (dist < max(mAgentRadius*2, mPassModeMinOppBallDist)) {
+                /*
+#ifdef RVDRAW
+                if (mRVSender) {
+                    //mRVSender->clearStaticDrawings();
+                    mRVSender->drawPoint(pos.x(), pos.y(), 10, RVSender::ORANGE);
+                }
+#endif
+                */
+                fUnsafePosition = true;
+            }
+        }
+
         // Check for collisions with teammates
-        if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx)) {
+        if (!fUnsafePosition && SoccerBase::GetAgentStates(*mBallState.get(), agent_states, idx)) {
             SoccerBase::TAgentStateList::const_iterator i;
 
             for (i = agent_states.begin(); i != agent_states.end(); ++i)
@@ -1360,7 +1443,12 @@ salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int un
 
                 boost::shared_ptr<oxygen::Transform> agent_aspect;
                 SoccerBase::GetTransformParent(**i, agent_aspect);
+                boost::shared_ptr<RigidBody> agent_body;
+                SoccerBase::GetAgentBody(agent_aspect, agent_body);
+                Vector3f moved_adjustment = agent_body->GetPosition() - agent_aspect->GetWorldTransform().Pos();
                 AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
+                agentAABB.Translate(moved_adjustment);
+
                 if (sphere.Intersects(agentAABB)) {
                     /*
 #ifdef RVDRAW
@@ -1370,8 +1458,6 @@ salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int un
                     }
 #endif
                     */
-                    Vector2f current_pos = Vector2f(pos.x(),pos.y());
-                    GetSafeRepositionHelper_SamplePositions(agent_pos, unum, idx, current_pos, candidatePosList);
                     fUnsafePosition = true;
                     break;
                 }
@@ -1387,7 +1473,12 @@ salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int un
             {
                 boost::shared_ptr<oxygen::Transform> agent_aspect;
                 SoccerBase::GetTransformParent(**i, agent_aspect);
+                boost::shared_ptr<RigidBody> agent_body;
+                SoccerBase::GetAgentBody(agent_aspect, agent_body);
+                Vector3f moved_adjustment = agent_body->GetPosition() - agent_aspect->GetWorldTransform().Pos();
                 AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
+                agentAABB.Translate(moved_adjustment);
+
                 if (sphere.Intersects(agentAABB)) {
 #ifdef RVDRAW
                     if (mRVSender) {
@@ -1395,37 +1486,15 @@ salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int un
                         mRVSender->drawPoint(pos.x(), pos.y(), 10, RVSender::RED);
                     }
 #endif
-                    Vector2f current_pos = Vector2f(pos.x(),pos.y());
-                    GetSafeRepositionHelper_SamplePositions(agent_pos, unum, idx, current_pos, candidatePosList);
                     fUnsafePosition = true;
                     break;
                 }
             }
         }
 
-        if (!fUnsafePosition) {
-            // Check for collisions with other repositioned agents
-            list<Vector2f>::const_iterator i;
-            for (i = reposLocs.begin(); i != reposLocs.end(); ++i)
-            {
-                Vector2f repos_agent_pos = *i;
-                float dist = sqrt((repos_agent_pos.x()-pos.x())*(repos_agent_pos.x()-pos.x()) +
-                                  (repos_agent_pos.y()-pos.y())*(repos_agent_pos.y()-pos.y()));
-                if (dist < mAgentRadius*2) {
-                    /*
-#ifdef RVDRAW
-                    if (mRVSender) {
-                        //mRVSender->clearStaticDrawings();
-                        mRVSender->drawPoint(pos.x(), pos.y(), 10, RVSender::ORANGE);
-                    }
-#endif
-                    */
-                    Vector2f current_pos = Vector2f(pos.x(),pos.y());
-                    GetSafeRepositionHelper_SamplePositions(agent_pos, unum, idx, current_pos, candidatePosList);
-                    fUnsafePosition = true;
-                    break;
-                }
-            }
+        if (fUnsafePosition) {
+            Vector2f current_pos = Vector2f(pos.x(),pos.y());
+            GetSafeRepositionHelper_SamplePositions(agent_pos, unum, idx, current_pos, candidatePosList);
         }
 
         if (!fUnsafePosition || candidatePosList.empty()) {
@@ -1457,8 +1526,6 @@ salt::Vector3f SoccerRuleAspect::GetSafeReposition(salt::Vector3f posIni, int un
         numPlReposInsideOwnArea[idx]--;
     }
 
-    reposLocs.push_back(Vector2f(pos.x(), pos.y()));
-
     return pos;
 }
 
@@ -1484,30 +1551,39 @@ SoccerRuleAspect::ClearPlayersAutomatic(TTeamIndex idx)
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
-        Vector3f agentPos = agent_aspect->GetWorldTransform().Pos();
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
+        Vector3f agentPos = agent_body->GetPosition();
         int unum = (*i)->GetUniformNumber();
 
         if (HaveEnforceableFoul(unum,idx))
         {
             // Record foul
             mFouls.push_back(Foul(mFouls.size() + 1, playerLastFoul[unum][idx], *i));
+
+            bool fNoClear = (playerLastFoul[unum][idx] == FT_IllegalDefence && !mIllegalDefenseBeamPenalty)
+                            || (playerLastFoul[unum][idx] == FT_Touching && !mTouchingFoulBeamPenalty);
             
-            if (playerFoulTime[unum][idx] <= mFoulHoldTime/0.02) {
-                playerFoulTime[unum][idx]++;
-                agentPos[2] = 1.0 + playerFoulTime[unum][idx]*0.01;
-                MoveAgent(agent_aspect, agentPos, false /*fSafe*/);
-            } else {
-                // I am not a very good soccer player... I am violating the rules...
-                salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
-                //Calculate my Reposition pos outside of the field
-                if (mFoulHoldTime > 0) {
-                    new_pos[2] = mAgentRadius;
-                }
-                //Oh my God!! I am flying!! I am going outside of the field
-                MoveAgent(agent_aspect, new_pos);
-                
+            if (fNoClear) {
                 ResetFoulCounterPlayer(unum, idx);
-                //cout << "*********Player Repos Num: " << unum << "  Team: " << team << "  Pos: " << new_pos << endl;
+            } else {
+                if (playerFoulTime[unum][idx] <= mFoulHoldTime/0.02) {
+                    playerFoulTime[unum][idx]++;
+                    agentPos[2] = 1.0 + playerFoulTime[unum][idx]*0.01;
+                    MoveAgent(agent_aspect, agentPos, false /*fSafe*/);
+                } else {
+                    // I am not a very good soccer player... I am violating the rules...
+                    salt::Vector3f new_pos = RepositionOutsidePos(ballPos, unum, idx);
+                    //Calculate my Reposition pos outside of the field
+                    if (mFoulHoldTime > 0) {
+                        new_pos[2] = mAgentRadius;
+                    }
+                    //Oh my God!! I am flying!! I am going outside of the field
+                    MoveAgent(agent_aspect, new_pos);
+                    
+                    ResetFoulCounterPlayer(unum, idx);
+                    //cout << "*********Player Repos Num: " << unum << "  Team: " << team << "  Pos: " << new_pos << endl;
+                }
             }
         }
     }
@@ -1531,14 +1607,17 @@ SoccerRuleAspect::ClearPlayers(const salt::Vector3f& pos, float radius,
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
+        Vector3f moved_adjustment = agent_body->GetPosition() - agent_aspect->GetWorldTransform().Pos();
+        AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
+        agentAABB.Translate(moved_adjustment);
 
         // if agent is too close, move it away
-        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
-        AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
-
+        Vector3f new_pos = agent_body->GetPosition();
         if (sphere.Intersects(agentAABB))
         {
-            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            float dist = min_dist; //salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
             if (idx == TI_LEFT)
             {
@@ -1577,20 +1656,24 @@ SoccerRuleAspect::ClearPlayers(const salt::AABB2& box,
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
+        Vector3f moved_adjustment = agent_body->GetPosition() - agent_aspect->GetWorldTransform().Pos();
+        Vector2f moved_adjustment_xy = Vector2f(moved_adjustment.x(), moved_adjustment.y());
+        AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
+        agentAABB2.Translate(moved_adjustment_xy);
 
         // if agent is too close, move it away
-        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
-        AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
-
+        Vector3f new_pos = agent_body->GetPosition();
         if (box.Intersects(agentAABB2))
         {
             if (idx == TI_LEFT)
             {
-                new_pos[0] = box.minVec[0] -
-                    salt::UniformRNG<>(min_dist, min_dist * 2.0)();
+                new_pos[0] = box.minVec[0] - min_dist;
+                    //salt::UniformRNG<>(min_dist, min_dist * 2.0)();
             } else {
-                new_pos[0] = box.maxVec[0] +
-                    salt::UniformRNG<>(min_dist, min_dist * 2.0)();
+                new_pos[0] = box.maxVec[0] + min_dist;
+                    //salt::UniformRNG<>(min_dist, min_dist * 2.0)();
             }
             MoveAgent(agent_aspect, new_pos);
         }
@@ -1633,11 +1716,17 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
-        // if agent is on opponent half field, move it away
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
+        Vector3f moved_adjustment = agent_body->GetPosition() - agent_aspect->GetWorldTransform().Pos();
+        Vector2f moved_adjustment_xy = Vector2f(moved_adjustment.x(), moved_adjustment.y());
         AABB2 agentAABB2 = SoccerBase::GetAgentBoundingRect(*agent_aspect);
+        agentAABB2.Translate(moved_adjustment_xy);
+
+        // if agent is on opponent half field, move it away
         if (box.Intersects(agentAABB2))
         {
-            Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+            Vector3f new_pos = agent_body->GetPosition();
             // if agent is in the center circle, do not move it
             if ( agentAABB2.minVec.SquareLength() < freeKickDist2
                  && agentAABB2.maxVec.SquareLength() < freeKickDist2
@@ -1647,11 +1736,11 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 
             if (idx == TI_LEFT)
             {
-                new_pos[0] = box.minVec[0] -
-                    salt::UniformRNG<>(mFreeKickMoveDist, mFreeKickMoveDist * 2.0)();
+                new_pos[0] = box.minVec[0] - mFreeKickMoveDist;
+                    //salt::UniformRNG<>(mFreeKickMoveDist, mFreeKickMoveDist * 2.0)();
             } else {
-                new_pos[0] = box.maxVec[0] +
-                    salt::UniformRNG<>(mFreeKickMoveDist, mFreeKickMoveDist * 2.0)();
+                new_pos[0] = box.maxVec[0] + mFreeKickMoveDist;
+                    //salt::UniformRNG<>(mFreeKickMoveDist, mFreeKickMoveDist * 2.0)();
             }
             MoveAgent(agent_aspect, new_pos);
         }
@@ -1660,7 +1749,7 @@ void SoccerRuleAspect::ClearPlayersBeforeKickOff(TTeamIndex idx)
 
 void
 SoccerRuleAspect::RepelPlayers(const salt::Vector3f& pos, float radius,
-                               TTeamIndex idx, float pad)
+                               TTeamIndex idx, float pad, bool fAvoidBall)
 {
     if (idx == TI_NONE || mBallState.get() == 0) return;
 
@@ -1675,9 +1764,11 @@ SoccerRuleAspect::RepelPlayers(const salt::Vector3f& pos, float radius,
     for (i = agent_states.begin(); i != agent_states.end(); ++i)
     {
         SoccerBase::GetTransformParent(**i, agent_aspect);
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
 
         // if agent is too close, move it away
-        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        Vector3f new_pos = agent_body->GetPosition();
         float dist = sqrt((new_pos.x()-pos.x())*(new_pos.x()-pos.x()) +
                           (new_pos.y()-pos.y())*(new_pos.y()-pos.y()));
         if (dist < radius)
@@ -1688,8 +1779,9 @@ SoccerRuleAspect::RepelPlayers(const salt::Vector3f& pos, float radius,
             Vector2f updated_pos = avoid_pos+pos2Agent.Normalize()*(radius+pad);
             new_pos[0] = updated_pos[0];
             new_pos[1] = updated_pos[1];
-            new_pos = GetSafeReposition(new_pos, (*i)->GetUniformNumber(), idx);
-            SoccerBase::MoveAgent(agent_aspect, new_pos);
+            MoveAgent(agent_aspect, new_pos, true /*fSafe*/, fAvoidBall);
+            //new_pos = GetSafeReposition(new_pos, (*i)->GetUniformNumber(), idx);
+            //SoccerBase::MoveAgent(agent_aspect, new_pos);
         }
     }
 }
@@ -1700,7 +1792,7 @@ SoccerRuleAspect::RepelPlayersForKick(TTeamIndex idx)
     if (mRepelPlayersForKick) {
         // Move players taking the kick out of the way of the ball 
         // when it is first placed
-        RepelPlayers(mFreeKickPos, mKickRepelDist, idx);
+        RepelPlayers(mFreeKickPos, mKickRepelDist, idx, false /*fAvoidBall*/);
         mRepelPlayersForKick = false;
     }
 }
@@ -1924,7 +2016,7 @@ SoccerRuleAspect::ClearSelectedPlayers()
 
         if ((*i)->IsSelected())
         {
-            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            float dist = min_dist; //salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
             if ((*i)->GetTeamIndex() == TI_LEFT)
             {
@@ -2915,8 +3007,6 @@ SoccerRuleAspect::Update(float deltaTime)
         return;
     }
 
-    reposLocs.clear();
-
     CheckTime();
 
     TPlayMode playMode = mGameState->GetPlayMode();
@@ -3163,10 +3253,12 @@ SoccerRuleAspect::UpdateCachedInternal()
     SoccerBase::GetSoccerVar(*this,"GroundMaxTime",mGroundMaxTime);
     SoccerBase::GetSoccerVar(*this,"GoalieGroundMaxTime",mGoalieGroundMaxTime);
     SoccerBase::GetSoccerVar(*this,"MaxPlayersInsideOwnArea",mMaxPlayersInsideOwnArea);
+    SoccerBase::GetSoccerVar(*this,"IllegalDefenseBeamPenalty",mIllegalDefenseBeamPenalty);
     SoccerBase::GetSoccerVar(*this,"MinOppDistance",mMinOppDistance);
     SoccerBase::GetSoccerVar(*this,"Min2PlDistance",mMin2PlDistance);
     SoccerBase::GetSoccerVar(*this,"Min3PlDistance",mMin3PlDistance);
     SoccerBase::GetSoccerVar(*this,"MaxTouchGroupSize",mMaxTouchGroupSize);
+    SoccerBase::GetSoccerVar(*this,"TouchingFoulBeamPenalty",mTouchingFoulBeamPenalty);
     //SoccerBase::GetSoccerVar(*this,"MaxFoulTime",mMaxFoulTime);
     SoccerBase::GetSoccerVar(*this,"UseCharging",mUseCharging);
     SoccerBase::GetSoccerVar(*this,"ChargingMinSpeed",mChargingMinSpeed);
@@ -3620,13 +3712,17 @@ SoccerRuleAspect::ClearPlayersWithException(const salt::Vector3f& pos,
             continue;
 
         SoccerBase::GetTransformParent(**i, agent_aspect);
-        // if agent is too close, move it away
-        Vector3f new_pos = agent_aspect->GetWorldTransform().Pos();
+        boost::shared_ptr<RigidBody> agent_body;
+        SoccerBase::GetAgentBody(agent_aspect, agent_body);
+        Vector3f moved_adjustment = agent_body->GetPosition() - agent_aspect->GetWorldTransform().Pos();
         AABB3 agentAABB = SoccerBase::GetAgentBoundingBox(*agent_aspect);
-
+        agentAABB.Translate(moved_adjustment);
+        
+        // if agent is too close, move it away
+        Vector3f new_pos = agent_body->GetPosition();
         if (sphere.Intersects(agentAABB))
         {
-            float dist = salt::UniformRNG<>(min_dist, min_dist + 2.0)();
+            float dist = min_dist; //salt::UniformRNG<>(min_dist, min_dist + 2.0)();
 
             if (idx == TI_LEFT)
             {
@@ -3700,7 +3796,7 @@ SoccerRuleAspect::SelectNextAgent()
 
 
 bool
-SoccerRuleAspect::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& pos, bool fSafe)
+SoccerRuleAspect::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& pos, bool fSafe, bool fAvoidBall)
 {
     Vector3f move_pos = pos;
 
@@ -3717,7 +3813,7 @@ SoccerRuleAspect::MoveAgent(boost::shared_ptr<Transform> agent_aspect, const Vec
         playerTimeSinceLastWasMoved[unum][idx] = 0; 
         
         if (fSafe) {
-            move_pos = GetSafeReposition(pos, unum, idx);
+            move_pos = GetSafeReposition(pos, unum, idx, fAvoidBall);
         }
     }
 
