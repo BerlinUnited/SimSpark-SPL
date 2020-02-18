@@ -73,7 +73,7 @@ void SimSpark::PrintGreeting()
             RCSS_VERSION"\n"
         << "Copyright (C) 2004 Markus Rollmann, \n"
         << "Universität Koblenz.\n"
-        << "Copyright (C) 2004-2016, "
+        << "Copyright (C) 2004-2020, "
         << "The RoboCup Soccer Server Maintenance Group.\n"
         << "\nType '--help' for further information\n\n";
 }
