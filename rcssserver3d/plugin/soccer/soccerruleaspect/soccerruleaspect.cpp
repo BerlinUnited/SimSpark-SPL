@@ -818,7 +818,6 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
         {
             // determine the team that has more players in the touch group
             int pl[3] = { 0 };
-            TTeamIndex oppIdx = TI_NONE; // Initialize value to prevent compiler warning
             TouchGroup::iterator oppIt; // stores the last opponent in touch group
             TouchGroup::iterator teammateIt; // stores the last teammate in touch group
 
@@ -846,7 +845,6 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
                 {
                     if ((*agentIt)->GetTeamIndex() != idx)
                     {
-                        oppIdx = (*agentIt)->GetTeamIndex();
                         oppIt = agentIt;
                     } 
                     else 
@@ -856,7 +854,7 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
                 }
             }
 
-            if ((int)touchGroup->size() <= mMaxTouchGroupSize-numPlayersCommittedFoul)
+            if ((int)touchGroup->size()-numPlayersCommittedFoul <= mMaxTouchGroupSize)
             {
                 // Not enough players who haven't already committed fouls in 
                 // group to call a touching foul
