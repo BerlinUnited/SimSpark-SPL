@@ -9,22 +9,56 @@ void AgentCollisionHandler::OnLink()
 
 #include <ode/ode.h>
 
-void AgentCollisionHandler::HandleCollision(boost::shared_ptr<Collider> collidee, GenericContact& contact)
+void AgentCollisionHandler::HandleCollision(boost::shared_ptr<Collider> collidee, GenericContact &contact)
 {
-  if (!mAgentState.get())
-  {
-    mAgentState = FindAgentState(this);
     if (!mAgentState.get())
     {
-        GetLog()->Error() <<
-            "(AgentCollisionHandler) Could not find own AgentState\n";
-        return;
+        mAgentState = FindAgentState(this);
+        if (!mAgentState.get())
+        {
+            GetLog()->Error() << "(AgentCollisionHandler) Could not find own AgentState\n";
+            return;
+        }
     }
-  }
 
-  boost::shared_ptr<AgentState> other = FindAgentState(collidee.get());
-  if (other.get())
-  {
+    boost::shared_ptr<AgentState> other = FindAgentState(collidee.get());
+    if (other.get())
+    {
+        dContact &ODEContact = (dContact &)contact;
+        //GetLog()->Error() << "(AgentCollisionHandler) contact pos " << ODEContact.geom.pos[0]<<","<< ODEContact.geom.pos[1]  << ","<< ODEContact.geom.pos[2] << "\n";
+        if (mAgentState->GetTeamIndex() != other->GetTeamIndex()) {
+            boost::shared_ptr<AgentState> recordCollisionAgent;
+            boost::shared_ptr<AgentState> otherCollisionAgent;
+            if (mAgentState->GetTeamIndex() == TI_LEFT) {
+                recordCollisionAgent = mAgentState; 
+                otherCollisionAgent = other;
+            }
+            else {
+                recordCollisionAgent = other;
+                otherCollisionAgent = mAgentState;
+            }
+            bool fAlreadyHaveCollision = false;
+            salt::Vector3f newCollPos = salt::Vector3f(ODEContact.geom.pos[0], ODEContact.geom.pos[1], ODEContact.geom.pos[2]);
+            OpponentCollisionInfoVec& oppCollisionPosInfoVec = recordCollisionAgent->GetOppCollisionPosInfoVec();
+            for (unsigned int c = 0; c < oppCollisionPosInfoVec.size(); c++) {
+                if (oppCollisionPosInfoVec[c].first == otherCollisionAgent->GetUniformNumber()) {
+                    salt::Vector3f collPos = oppCollisionPosInfoVec[c].second.first;
+                    int prevCollNum = oppCollisionPosInfoVec[c].second.second;
+                    // Get updated average collision position
+                    collPos = (collPos*prevCollNum + newCollPos)/(prevCollNum+1); 
+                    oppCollisionPosInfoVec[c].second.first = collPos;
+                    oppCollisionPosInfoVec[c].second.second = prevCollNum+1;  
+                    fAlreadyHaveCollision = true;
+                    break;
+                }
+            }
+            if (!fAlreadyHaveCollision) {
+                oppCollisionPosInfoVec.push_back(OpponentCollisionInfo(
+                    otherCollisionAgent->GetUniformNumber(),
+                    OpponentCollisionPositionInfo (newCollPos, 1)));
+            }
+        }
+
         boost::shared_ptr<TouchGroup> myGroup = mAgentState->GetTouchGroup();
         boost::shared_ptr<TouchGroup> otherGroup = other->GetTouchGroup();
 
@@ -53,16 +87,7 @@ void AgentCollisionHandler::HandleCollision(boost::shared_ptr<Collider> collidee
         {
             (*agentIt)->SetTouchGroup(updatedGroup);
         }
-
-          dContact& ODEContact = (dContact&) contact;
-          //GetLog()->Error() << "(AgentCollisionHandler) contact pos " << ODEContact.geom.pos[0]<<","<< ODEContact.geom.pos[1]  << ","<< ODEContact.geom.pos[2] << "\n";
-          mAgentState->mCollisionPos.x() = ODEContact.geom.pos[0];
-          mAgentState->mCollisionPos.y() = ODEContact.geom.pos[1];
-          mAgentState->mCollisionPos.z() = ODEContact.geom.pos[2];
-          other->mCollisionPos.x() = ODEContact.geom.pos[0];
-          other->mCollisionPos.y() = ODEContact.geom.pos[1];
-          other->mCollisionPos.z() = ODEContact.geom.pos[2];
-  }
+    }
 }
 
 boost::shared_ptr<AgentState> AgentCollisionHandler::FindAgentState(BaseNode* node)

@@ -301,3 +301,9 @@ AgentState::GetTouchGroup()
 {
     return mTouchGroup;
 }
+
+OpponentCollisionInfoVec& 
+AgentState::GetOppCollisionPosInfoVec() 
+{
+    return mOppCollisionPosInfoVec; 
+}

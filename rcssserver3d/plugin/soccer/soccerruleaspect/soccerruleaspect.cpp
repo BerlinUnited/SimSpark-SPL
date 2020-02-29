@@ -557,15 +557,25 @@ void SoccerRuleAspect::AnalyseChargingFouls()
     if (! SoccerBase::GetAgentStates(*mBallState.get(), agent_states, TI_LEFT))
         return;
 
+    // Initialize values that will be updates
+    int playerTimeSinceLastBallTouch_new[12][3];
+    memcpy(&playerTimeSinceLastBallTouch_new, &playerTimeSinceLastBallTouch, sizeof(playerTimeSinceLastBallTouch));
+    int playerChargingTime_new[12][3];
+    memcpy(&playerChargingTime_new, &playerChargingTime, sizeof(playerChargingTime));
+    int playerFoulTime_new[12][3];
+    memcpy(&playerFoulTime_new, &playerFoulTime, sizeof(playerFoulTime));
+    EFoulType playerLastFoul_new[12][3];
+    memcpy(&playerLastFoul_new, &playerLastFoul, sizeof(playerLastFoul));
+
     SoccerBase::TAgentStateList::iterator asIt = agent_states.begin();
     for (; asIt != agent_states.end(); ++asIt)
     {
-        boost::shared_ptr<TouchGroup> touchGroup = (*asIt)->GetTouchGroup();
-        if (touchGroup->size() != 2)
-        {
+        OpponentCollisionInfoVec& collisions = (*asIt)->GetOppCollisionPosInfoVec();
+        
+        if (collisions.empty()) {
             continue;
         }
-        
+
         salt::Vector3f agentAvgVel[2];
         salt::Vector3f agentPos[2];
         float s[2]; //agentSpeed
@@ -578,16 +588,29 @@ void SoccerRuleAspect::AnalyseChargingFouls()
         salt::Vector3f ballPos = mBallBody->GetPosition();
         
         int i = 0;
-        for (TouchGroup::iterator agentIt = touchGroup->begin(); agentIt != touchGroup->end(); ++agentIt)
+        // Start collision c counter at -1 which means we're collecting info for current agent not an opponent that 
+        // has been collided with.
+        for (int c = -1; c < (int)collisions.size(); c++)
         {
+            boost::shared_ptr<AgentState> agent_state;         
+            if (c == -1) {
+                agent_state = *asIt;
+                i = 0;
+            } else {
+                if (!SoccerBase::GetAgentState(*mBallState.get(), SoccerBase::OpponentTeam(agentTeamIndex[0]),
+                                                collisions[c].first, agent_state)) {
+                    continue;
+                }
+                i = 1;
+            }
             boost::shared_ptr<Transform> transform_parent;
             boost::shared_ptr<RigidBody> agent_body;
-            SoccerBase::GetTransformParent(*(*agentIt), transform_parent);
+            SoccerBase::GetTransformParent(*agent_state, transform_parent);
             SoccerBase::GetAgentBody(transform_parent, agent_body);
             
             // Get agent uniform number and team index
-            agentUNum[i] = (*agentIt)->GetUniformNumber();
-            agentTeamIndex[i] = (*agentIt)->GetTeamIndex();
+            agentUNum[i] = agent_state->GetUniformNumber();
+            agentTeamIndex[i] = agent_state->GetTeamIndex();
 
             // Get agent position
             agentPos[i] = agent_body->GetPosition();
@@ -618,173 +641,177 @@ void SoccerRuleAspect::AnalyseChargingFouls()
                                                              salt::gArcTan2(agentAvgVel[i].y(), agentAvgVel[i].x()) -
                                                              salt::gArcTan2(ballPos.y()-agentPos[i].y(), ballPos.x() - agentPos[i].x())
                                                              )));
-            
-            
 
-            i++;
-        }
-        
-        // Check if these are opponent agents meaning they have different team indexes
-        bool haveOpponent = agentTeamIndex[0] != agentTeamIndex[1];
-        
-        if(!haveOpponent
-           || playerNotStanding[agentUNum[0]][agentTeamIndex[0]] != 0
-           || playerNotStanding[agentUNum[1]][agentTeamIndex[1]] != 0
-           || playerTimeSinceLastWasMoved[agentUNum[0]][agentTeamIndex[0]] < 1/.02
-           || playerTimeSinceLastWasMoved[agentUNum[1]][agentTeamIndex[1]] < 1/.02
-           || HaveEnforceableFoul(agentUNum[0],agentTeamIndex[0])
-           || HaveEnforceableFoul(agentUNum[1],agentTeamIndex[1])
-           )
-        {
-            continue;
-        }
-
-        // Check if one of the agents is a goalie in their own penalty area
-        bool goalieInOwnPenaltyArea[2];
-        for (int i = 0; i <= 1; i++)
-        {
-            goalieInOwnPenaltyArea[i] = false;
-            if (agentUNum[i] == 1) 
-            {
-                // Could use playerInsideOwnArea[agentUNum[i]][agentTeamIndex[i]], however prefer to stretch the area for a goalie behind the goal line
-                if (agentTeamIndex[i] == TI_LEFT) {
-                    if (agentPos[i].x() <= mLeftPenaltyArea.maxVec[0] && agentPos[i].y() >= mLeftPenaltyArea.minVec[1] && agentPos[i].y() <= mLeftPenaltyArea.maxVec[1]) {
-                        goalieInOwnPenaltyArea[i] = true;
-                        break;
-                    }
-                } else if (agentTeamIndex[i] == TI_RIGHT) {
-                    if (agentPos[i].x() >= mRightPenaltyArea.minVec[0] && agentPos[i].y() >= mRightPenaltyArea.minVec[1] && agentPos[i].y() <= mRightPenaltyArea.maxVec[1]) {
-                        goalieInOwnPenaltyArea[i] = true;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        // Compute speed vector angle to opponent
-        for (i = 0; i <= 1; i++)
-        {
-            aVO[i] = abs(salt::gRadToDeg(salt::gNormalizeRad(
-                                                             salt::gArcTan2(agentAvgVel[i].y(), agentAvgVel[i].x()) -
-                                                             salt::gArcTan2(agentPos[1-i].y()-agentPos[i].y(),
-                                                                            agentPos[1-i].x()-agentPos[i].x()))
-                                         ));
-        } 
-
-        isCharging[0] = true;
-        isCharging[1] = true;
-        if(d[0] < mChargingMaxBallRulesDist || d[1] < mChargingMaxBallRulesDist)
-        {
-        	for (int i = 0; i <= 1; i++)
-            {
-                isCharging[i] = (aVB[i] >= aVO[i] && aVB[i] >= mChargingMinBallSpeedAngle && s[i] >= mChargingMinSpeed);
-            }
-
-            float deltaD;
-            float deltaaVO;
-            if (!isCharging[0] && !isCharging[1])
-            {
-                // Handle case where both agents are apparently heading for the ball
-                deltaD = abs(d[0] - d[1]);
-                deltaaVO = abs(aVO[0] - aVO[1]);
-                
-                if(deltaD > mChargingMinDeltaDist)
-                {
-                    isCharging[0] = d[0] > d[1] && (deltaaVO > mChargingMinDeltaAng || s[1] < mChargingMinSpeed);
-                    isCharging[1] = d[1] > d[0] && (deltaaVO > mChargingMinDeltaAng || s[0] < mChargingMinSpeed);
-                }
-            }
-        }
-
-        salt::Vector3f agentToCollisionVec[2];
-        float agentCollisionSpeed[2];
-
-        for (int i = 0; i <= 1; i++)
-        {
-            agentToCollisionVec[i] = salt::Vector3f(((*asIt)->mCollisionPos.x()+agentPos[1-i].x())/2.0-agentPos[i].x(), ((*asIt)->mCollisionPos.y()+agentPos[1-i].y())/2.0-agentPos[i].y(), 0);
-            agentToCollisionVec[i].Normalize();
-        }
-        
-        for (int i = 0; i <= 1; i++)
-        {
-            // Get collision speed
-            agentCollisionSpeed[i] = agentAvgVel[i].x()*agentToCollisionVec[i].x() + agentAvgVel[i].y()*agentToCollisionVec[i].y();
-            isCharging[i] = (isCharging[i]
-                             && s[i] >= mChargingMinSpeed
-                             && agentCollisionSpeed[i] >= mMinCollisionSpeed);                
-        }
-
-#ifdef RVDRAW
-        if (mRVSender) {
-            mRVSender->clearStaticDrawings();
-            mRVSender->drawPoint((*asIt)->mCollisionPos.x(), (*asIt)->mCollisionPos.y(), 10, RVSender::PINK);
-            if (mChargingMinCollBallDist > 0) {
-                mRVSender->drawCircle(ballPos.x(), ballPos.y(), mChargingMinCollBallDist, RVSender::ORANGE);
-            }
-            bool shade = goalieInOwnPenaltyArea[0] || playerTimeSinceLastBallTouch[agentUNum[0]][agentTeamIndex[0]] < mChargingImmunityTime/0.02 || playerChargingTime[agentUNum[0]][agentTeamIndex[0]] < mChargingCollisionMinTime/0.02;
-            mRVSender->drawPoint(agentPos[0].x(), agentPos[0].y(), 10, agentTeamIndex[0] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
-            mRVSender->drawLine(agentPos[0].x(), agentPos[0].y(), agentPos[0].x()+agentAvgVel[0].x(), agentPos[0].y()+agentAvgVel[0].y(), agentTeamIndex[0] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
-            shade = goalieInOwnPenaltyArea[1] || playerTimeSinceLastBallTouch[agentUNum[1]][agentTeamIndex[1]] < mChargingImmunityTime/0.02;
-            mRVSender->drawPoint(agentPos[1].x(), agentPos[1].y(), 10, agentTeamIndex[1] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
-            mRVSender->drawLine(agentPos[1].x(), agentPos[1].y(), agentPos[1].x()+agentAvgVel[1].x(), agentPos[1].y()+agentAvgVel[1].y(), agentTeamIndex[1] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
-            if (agentCollisionSpeed[0] > 0) {
-                mRVSender->drawLine(agentPos[0].x(), agentPos[0].y(), agentPos[0].x()+(agentCollisionSpeed[0]*agentToCollisionVec[0].x()), agentPos[0].y()+(agentCollisionSpeed[0]*agentToCollisionVec[0].y()), RVSender::YELLOW, !isCharging[0]);
-            }
-            if (agentCollisionSpeed[1] > 0) {
-                mRVSender->drawLine(agentPos[1].x(), agentPos[1].y(), agentPos[1].x()+(agentCollisionSpeed[1]*agentToCollisionVec[1].x()), agentPos[1].y()+(agentCollisionSpeed[1]*agentToCollisionVec[1].y()), RVSender::YELLOW, !isCharging[1]);
-            }
-        }
-#endif // RVDRAW
-        
-        for (int i = 0; i <= 1; i++)
-        {
-            if (isCharging[i]) {
-                if (goalieInOwnPenaltyArea[i])
-                {
-                    playerTimeSinceLastBallTouch[agentUNum[1-i]][agentTeamIndex[1-i]] = 0;
-                }
-                else if (playerTimeSinceLastBallTouch[agentUNum[i]][agentTeamIndex[i]] < mChargingImmunityTime/0.02)
-                {
-                    playerTimeSinceLastBallTouch[agentUNum[1-i]][agentTeamIndex[1-i]] = min(playerTimeSinceLastBallTouch[agentUNum[1-i]][agentTeamIndex[1-i]],
-                    																		playerTimeSinceLastBallTouch[agentUNum[i]][agentTeamIndex[i]]);
-                }
-                playerChargingTime[agentUNum[1-i]][agentTeamIndex[1-i]] = min(playerChargingTime[agentUNum[1-i]][agentTeamIndex[1-i]],
-                                                                              playerChargingTime[agentUNum[i]][agentTeamIndex[i]]);
-            }
-        }
-        
-        float ballToCollDist = sqrt(pow((*asIt)->mCollisionPos.x()- ballPos.x(), 2)
-                                    + pow((*asIt)->mCollisionPos.y() - ballPos.y(), 2));
-     
-        if((isCharging[0] && isCharging[1]) || ballToCollDist < mChargingMinCollBallDist) //Type 3
-        {
-            isCharging[0] = false;
-            isCharging[1] = false;
-        }
-
-        for (int i = 0; i <= 1; i++)
-        {
-            if (mKeepaway && agentTeamIndex[i] == TI_RIGHT) 
-            {
-                // Don't call charging fouls on agents trying to take ball
-                // during keepaway
+            if (c == -1) {
+                // Were just initializing values for first agent so go on to second agents
                 continue;
             }
-            
-            if (isCharging[i] && !goalieInOwnPenaltyArea[i] && playerChargingTime[agentUNum[i]][agentTeamIndex[i]] >= mChargingCollisionMinTime/0.02
-                && playerTimeSinceLastBallTouch[agentUNum[i]][agentTeamIndex[i]] >= mChargingImmunityTime/0.02)
+
+            if (playerNotStanding[agentUNum[0]][agentTeamIndex[0]] != 0
+                || playerNotStanding[agentUNum[1]][agentTeamIndex[1]] != 0
+                || playerTimeSinceLastWasMoved[agentUNum[0]][agentTeamIndex[0]] < 1/.02
+                || playerTimeSinceLastWasMoved[agentUNum[1]][agentTeamIndex[1]] < 1/.02
+                || HaveEnforceableFoul(agentUNum[0],agentTeamIndex[0])
+                || HaveEnforceableFoul(agentUNum[1],agentTeamIndex[1]))
             {
-                playerFoulTime[agentUNum[i]][agentTeamIndex[i]]++;
-                playerLastFoul[agentUNum[i]][agentTeamIndex[i]] = FT_Charging;
+                continue;
+            }
+
+            // Check if one of the agents is a goalie in their own penalty area
+            bool goalieInOwnPenaltyArea[2];
+            for (int i = 0; i <= 1; i++)
+            {
+                goalieInOwnPenaltyArea[i] = false;
+                if (agentUNum[i] == 1) 
+                {
+                    // Could use playerInsideOwnArea[agentUNum[i]][agentTeamIndex[i]], however prefer to stretch the area for a goalie behind the goal line
+                    if (agentTeamIndex[i] == TI_LEFT) {
+                        if (agentPos[i].x() <= mLeftPenaltyArea.maxVec[0] && agentPos[i].y() >= mLeftPenaltyArea.minVec[1] && agentPos[i].y() <= mLeftPenaltyArea.maxVec[1]) {
+                            goalieInOwnPenaltyArea[i] = true;
+                            break;
+                        }
+                    } else if (agentTeamIndex[i] == TI_RIGHT) {
+                        if (agentPos[i].x() >= mRightPenaltyArea.minVec[0] && agentPos[i].y() >= mRightPenaltyArea.minVec[1] && agentPos[i].y() <= mRightPenaltyArea.maxVec[1]) {
+                            goalieInOwnPenaltyArea[i] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // Compute speed vector angle to opponent
+            for (i = 0; i <= 1; i++)
+            {
+                aVO[i] = abs(salt::gRadToDeg(salt::gNormalizeRad(
+                                                                salt::gArcTan2(agentAvgVel[i].y(), agentAvgVel[i].x()) -
+                                                                salt::gArcTan2(agentPos[1-i].y()-agentPos[i].y(),
+                                                                                agentPos[1-i].x()-agentPos[i].x()))
+                                            ));
+            } 
+
+            isCharging[0] = true;
+            isCharging[1] = true;
+            if(d[0] < mChargingMaxBallRulesDist || d[1] < mChargingMaxBallRulesDist)
+            {
+                for (int i = 0; i <= 1; i++)
+                {
+                    isCharging[i] = (aVB[i] >= aVO[i] && aVB[i] >= mChargingMinBallSpeedAngle && s[i] >= mChargingMinSpeed);
+                }
+
+                float deltaD;
+                float deltaaVO;
+                if (!isCharging[0] && !isCharging[1])
+                {
+                    // Handle case where both agents are apparently heading for the ball
+                    deltaD = abs(d[0] - d[1]);
+                    deltaaVO = abs(aVO[0] - aVO[1]);
+                    
+                    if(deltaD > mChargingMinDeltaDist)
+                    {
+                        isCharging[0] = d[0] > d[1] && (deltaaVO > mChargingMinDeltaAng || s[1] < mChargingMinSpeed);
+                        isCharging[1] = d[1] > d[0] && (deltaaVO > mChargingMinDeltaAng || s[0] < mChargingMinSpeed);
+                    }
+                }
+            }
+
+            salt::Vector3f agentToCollisionVec[2];
+            float agentCollisionSpeed[2];
+
+            salt::Vector3f collPos = collisions[c].second.first;
+
+            for (int i = 0; i <= 1; i++)
+            {
+                agentToCollisionVec[i] = salt::Vector3f((collPos.x()+agentPos[1-i].x())/2.0-agentPos[i].x(), (collPos.y()+agentPos[1-i].y())/2.0-agentPos[i].y(), 0);
+                agentToCollisionVec[i].Normalize();
+            }
+            
+            for (int i = 0; i <= 1; i++)
+            {
+                // Get collision speed
+                agentCollisionSpeed[i] = agentAvgVel[i].x()*agentToCollisionVec[i].x() + agentAvgVel[i].y()*agentToCollisionVec[i].y();
+                isCharging[i] = (isCharging[i]
+                                && s[i] >= mChargingMinSpeed
+                                && agentCollisionSpeed[i] >= mMinCollisionSpeed);                             
+            }
+
+#ifdef RVDRAW
+            if (mRVSender) {
+                mRVSender->clearStaticDrawings();
+                mRVSender->drawPoint((*asIt)->mCollisionPos.x(), (*asIt)->mCollisionPos.y(), 10, RVSender::PINK);
+                if (mChargingMinCollBallDist > 0) {
+                    mRVSender->drawCircle(ballPos.x(), ballPos.y(), mChargingMinCollBallDist, RVSender::ORANGE);
+                }
+                bool shade = goalieInOwnPenaltyArea[0] || playerTimeSinceLastBallTouch[agentUNum[0]][agentTeamIndex[0]] < mChargingImmunityTime/0.02 || playerChargingTime[agentUNum[0]][agentTeamIndex[0]] < mChargingCollisionMinTime/0.02;
+                mRVSender->drawPoint(agentPos[0].x(), agentPos[0].y(), 10, agentTeamIndex[0] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
+                mRVSender->drawLine(agentPos[0].x(), agentPos[0].y(), agentPos[0].x()+agentAvgVel[0].x(), agentPos[0].y()+agentAvgVel[0].y(), agentTeamIndex[0] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
+                shade = goalieInOwnPenaltyArea[1] || playerTimeSinceLastBallTouch[agentUNum[1]][agentTeamIndex[1]] < mChargingImmunityTime/0.02;
+                mRVSender->drawPoint(agentPos[1].x(), agentPos[1].y(), 10, agentTeamIndex[1] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
+                mRVSender->drawLine(agentPos[1].x(), agentPos[1].y(), agentPos[1].x()+agentAvgVel[1].x(), agentPos[1].y()+agentAvgVel[1].y(), agentTeamIndex[1] == TI_LEFT ? RVSender::BLUE : RVSender::RED, shade);
+                if (agentCollisionSpeed[0] > 0) {
+                    mRVSender->drawLine(agentPos[0].x(), agentPos[0].y(), agentPos[0].x()+(agentCollisionSpeed[0]*agentToCollisionVec[0].x()), agentPos[0].y()+(agentCollisionSpeed[0]*agentToCollisionVec[0].y()), RVSender::YELLOW, !isCharging[0]);
+                }
+                if (agentCollisionSpeed[1] > 0) {
+                    mRVSender->drawLine(agentPos[1].x(), agentPos[1].y(), agentPos[1].x()+(agentCollisionSpeed[1]*agentToCollisionVec[1].x()), agentPos[1].y()+(agentCollisionSpeed[1]*agentToCollisionVec[1].y()), RVSender::YELLOW, !isCharging[1]);
+                }
+            }
+#endif // RVDRAW
+            
+            for (int i = 0; i <= 1; i++)
+            {
+                if (isCharging[i]) {
+                    if (goalieInOwnPenaltyArea[i])
+                    {
+                        playerTimeSinceLastBallTouch_new[agentUNum[1-i]][agentTeamIndex[1-i]] = 0;
+                    }
+                    else if (playerTimeSinceLastBallTouch[agentUNum[i]][agentTeamIndex[i]] < mChargingImmunityTime/0.02)
+                    {
+                        playerTimeSinceLastBallTouch_new[agentUNum[1-i]][agentTeamIndex[1-i]] = min(playerTimeSinceLastBallTouch_new[agentUNum[1-i]][agentTeamIndex[1-i]],
+                                                                                                playerTimeSinceLastBallTouch[agentUNum[i]][agentTeamIndex[i]]);
+                    }
+                    playerChargingTime_new[agentUNum[1-i]][agentTeamIndex[1-i]] = min(playerChargingTime_new[agentUNum[1-i]][agentTeamIndex[1-i]],
+                                                                                playerChargingTime[agentUNum[i]][agentTeamIndex[i]]);
+                }
+            }
+            
+            float ballToCollDist = sqrt(pow(collPos.x()- ballPos.x(), 2)
+                                        + pow(collPos.y() - ballPos.y(), 2));
+        
+            if((isCharging[0] && isCharging[1]) || ballToCollDist < mChargingMinCollBallDist) //Type 3
+            {
+                isCharging[0] = false;
+                isCharging[1] = false;
+            }
+
+            for (int i = 0; i <= 1; i++)
+            {
+                if (mKeepaway && agentTeamIndex[i] == TI_RIGHT) 
+                {
+                    // Don't call charging fouls on agents trying to take ball
+                    // during keepaway
+                    continue;
+                }
+                
+                if (isCharging[i] && !goalieInOwnPenaltyArea[i] && playerChargingTime[agentUNum[i]][agentTeamIndex[i]] >= mChargingCollisionMinTime/0.02
+                    && playerTimeSinceLastBallTouch[agentUNum[i]][agentTeamIndex[i]] >= mChargingImmunityTime/0.02)
+                {
+                    playerFoulTime_new[agentUNum[i]][agentTeamIndex[i]] = playerFoulTime[agentUNum[i]][agentTeamIndex[i]]+1;
+                    playerLastFoul_new[agentUNum[i]][agentTeamIndex[i]] = FT_Charging;
+                }
+            }
+
+            if(!isCharging[0] && !isCharging[1])
+            {
+                playerChargingTime_new[agentUNum[0]][agentTeamIndex[0]] = 0;
+                playerChargingTime_new[agentUNum[1]][agentTeamIndex[1]] = 0;
             }
         }
-
-        if(!isCharging[0] && !isCharging[1])
-        {
-            playerChargingTime[agentUNum[0]][agentTeamIndex[0]] = 0;
-            playerChargingTime[agentUNum[1]][agentTeamIndex[1]] = 0;
-        }
     }
+
+    // Update values
+    memcpy(&playerTimeSinceLastBallTouch, &playerTimeSinceLastBallTouch_new, sizeof(playerTimeSinceLastBallTouch_new));
+    memcpy(&playerChargingTime, &playerChargingTime_new, sizeof(playerChargingTime_new));
+    memcpy(&playerFoulTime, &playerFoulTime_new, sizeof(playerFoulTime_new));
+    memcpy(&playerLastFoul, &playerLastFoul_new, sizeof(playerLastFoul_new));
 }
 
 void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx, bool fOnlyProcessNewlyJoinedGroupAgents)
@@ -923,7 +950,8 @@ void SoccerRuleAspect::ResetTouchGroups(TTeamIndex idx)
 
     SoccerBase::TAgentStateList::const_iterator i;
     for (i = agent_states.begin(); i != agent_states.end(); i++)
-    {
+    {   
+        (*i)->GetOppCollisionPosInfoVec().clear();
         (*i)->NewTouchGroup();
         (*i)->GetTouchGroup()->insert(*i);
     }
