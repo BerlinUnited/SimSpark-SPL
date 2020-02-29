@@ -3910,36 +3910,80 @@ SoccerRuleAspect::CanActivatePassMode(int unum, TTeamIndex ti)
         return false;
     }
 
+
     // Can't activate pass mode if it was recently used
     if (mGameState->GetTime() - lastTimeInPassMode[ti] < mPassModeRetryWaitTime) {
         return false;
     }
-    
-    salt::Vector3f ballVel = mBallBody->GetVelocity();
-    float ballSpeed = sqrt(pow(ballVel.x(),2)+pow(ballVel.y(),2)+pow(ballVel.z(),2));
-    // Can't acticate when then ball is moving too much
-    if (ballSpeed > mPassModeMaxBallSpeed) {
-        return false;
-    }
 
-    // Can only activate if the agent is close to the ball
-    if (distArr[unum][ti] > mPassModeMaxBallDist) {
-        return false;
-    }
 
-    /*
     // If a player from the team is currently touching the ball don't activate 
     if (mBallState->GetBallCollidingWithAgentTeam(ti)) {
         return false;
     }
-    */
+
+
+    // Can't acticate when then ball is moving too much
+    salt::Vector3f ballVel = mBallBody->GetVelocity();
+    float ballSpeed = sqrt(pow(ballVel.x(),2)+pow(ballVel.y(),2)+pow(ballVel.z(),2));
+    if (ballSpeed > mPassModeMaxBallSpeed) {
+        return false;
+    }
+
+
+    // Can only activate if the agent is close to the ball
+    // Check original/current distance
+    if (distArr[unum][ti] > mPassModeMaxBallDist) {
+        return false;
+    }
+
+    salt::Vector3f ballPos = mBallBody->GetPosition();
+    boost::shared_ptr<AgentState> agent_state; 
+    if (!SoccerBase::GetAgentState(*mBallState.get(), ti, unum, agent_state)) {
+        return false;
+    }
+
+    boost::shared_ptr<Transform> transform_parent;
+    boost::shared_ptr<RigidBody> agent_body;
+    SoccerBase::GetTransformParent(*agent_state, transform_parent);
+    SoccerBase::GetAgentBody(transform_parent, agent_body);
+    salt::Vector3f agentPos = agent_body->GetPosition();
+
+    float ballDist = sqrt((agentPos.x()-ballPos.x())*(agentPos.x()-ballPos.x()) +
+                          (agentPos.y()-ballPos.y())*(agentPos.y()-ballPos.y()));
+    
+    // Check updated distance if player or ball is being moved this cycle
+    if (ballDist > mPassModeMaxBallDist) {
+        return false;
+    }
+
 
     // Check that no opponents are too close to the ball before activating
     for(int i = 1; i <= 11; i++) {
+        // Check original/current distance
         if (distArr[i][SoccerBase::OpponentTeam(ti)] < mPassModeMinOppBallDist) {
             return false;
         }
-    }            
+    }
+
+    SoccerBase::TAgentStateList agent_states;
+    if (SoccerBase::GetAgentStates(*mBallState.get(), agent_states, SoccerBase::OpponentTeam(ti))) {
+        boost::shared_ptr<oxygen::Transform> agent_aspect;
+        SoccerBase::TAgentStateList::const_iterator i;
+
+        for (i = agent_states.begin(); i != agent_states.end(); ++i)
+        {
+            SoccerBase::GetTransformParent(**i, transform_parent);
+            SoccerBase::GetAgentBody(transform_parent, agent_body);
+            agentPos = agent_body->GetPosition();
+            ballDist = sqrt((agentPos.x()-ballPos.x())*(agentPos.x()-ballPos.x()) +
+                            (agentPos.y()-ballPos.y())*(agentPos.y()-ballPos.y()));
+            // Check updated distance if player or ball is being moved this cycle
+            if (ballDist < mPassModeMinOppBallDist) {
+                return false;
+            }
+        }
+    } 
 
     return true;
 }
