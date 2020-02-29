@@ -192,7 +192,7 @@ public:
 
     /** Check whether too many agents are touching
      */
-    void AnalyseTouchGroups(TTeamIndex idx);
+    void AnalyseTouchGroups(TTeamIndex idx, bool fOnlyProcessNewlyJoinedGroupAgents=true);
 
     /** Reset the touch groups
     */

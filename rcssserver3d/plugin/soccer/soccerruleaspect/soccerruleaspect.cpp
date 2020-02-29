@@ -787,7 +787,7 @@ void SoccerRuleAspect::AnalyseChargingFouls()
     }
 }
 
-void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
+void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx, bool fOnlyProcessNewlyJoinedGroupAgents)
 {
     if (idx == TI_NONE || mBallState.get() == 0)
         return;
@@ -806,25 +806,32 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             // Once a player has been called for a foul don't check for
             // additional fouls
             
-            // Remove player from touch group so no more agents are replaced
-            touchGroup->erase(*i);
+            if (touchGroup->size() > 1) {
+                // Remove player from touch group so no more agents are replaced
+                touchGroup->erase(*i);
+            }
 
             continue;
         }
 
         // Wasn't touching before, joined group making group too large
-        if ((*i)->GetOldTouchGroup()->size() == 1 &&
+        if (((*i)->GetOldTouchGroup()->size() == 1 || !fOnlyProcessNewlyJoinedGroupAgents) &&
             (int)touchGroup->size() > mMaxTouchGroupSize)
         {
             // determine the team that has more players in the touch group
             int pl[3] = { 0 };
-            TouchGroup::iterator oppIt; // stores the last opponent in touch group
-            TouchGroup::iterator teammateIt; // stores the last teammate in touch group
+            SoccerBase::TAgentStateList::iterator oppIt; // stores the last opponent in touch group
+            SoccerBase::TAgentStateList::iterator teammateIt; // stores the last teammate in touch group
 
             int numPlayersCommittedFoul = 0;
             salt::Vector3f agentsPosSum = salt::Vector3f(0,0,0);
-            for (TouchGroup::iterator agentIt = touchGroup->begin();
-                    agentIt != touchGroup->end(); ++agentIt)
+
+            // Randomize order of agent states in touch group to remove any bias in order before processing
+            SoccerBase::TAgentStateList touchGroupList(touchGroup->begin(), touchGroup->end());
+            random_shuffle(touchGroupList.begin(), touchGroupList.end());
+
+            for (SoccerBase::TAgentStateList::iterator agentIt = touchGroupList.begin();
+                    agentIt != touchGroupList.end(); ++agentIt)
             {
                 if (HaveEnforceableFoul((*agentIt)->GetUniformNumber(),(*agentIt)->GetTeamIndex())) 
                 {
@@ -893,6 +900,19 @@ void SoccerRuleAspect::AnalyseTouchGroups(TTeamIndex idx)
             }
         }
     }
+
+    
+    if (fOnlyProcessNewlyJoinedGroupAgents) {
+        i = agent_states.begin();
+        for (; i != agent_states.end(); ++i)
+        {
+            if ((int)(*i)->GetTouchGroup()->size() > mMaxTouchGroupSize) {
+                AnalyseTouchGroups(idx, false /*fOnlyProcessNewlyJoinedGroupAgents*/);
+                break;
+            }
+        }
+    }
+    
 }
 
 void SoccerRuleAspect::ResetTouchGroups(TTeamIndex idx)
