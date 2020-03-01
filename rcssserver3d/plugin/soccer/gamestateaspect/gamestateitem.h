@@ -78,6 +78,9 @@ protected:
     //! flag if the monitors received field flags information
     bool mSentFlags;
 
+    /** Time that must pass before a team can score after their pass mode was last being used */
+    float mPassModeScoreWaitTime;
+
 };
 
 DECLARE_CLASS(GameStateItem)

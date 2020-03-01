@@ -2538,14 +2538,14 @@ SoccerRuleAspect::UpdatePassMode(TTeamIndex idx)
 {
     mGameState->SetPaused(false);
 
-    lastTimeInPassMode[idx] = mGameState->GetTime();
+    mGameState->SetLastTimeInPassMode(idx, mGameState->GetTime());
     playerUNumTouchedBallSincePassMode[idx] = -1;
     mulitpleTeammatesTouchedBallSincePassMode[idx] = false;
     ballLeftPassModeCircle[idx] = false;
-    passModeClearedToScore[idx] = false;
+    mGameState->SetPassModeClearedToScore(idx, false);
 
     // Cancel out affects of pass mode for opponent
-    lastTimeInPassMode[SoccerBase::OpponentTeam(idx)] = -1000;
+    mGameState->SetLastTimeInPassMode(SoccerBase::OpponentTeam(idx), -1000);
 
     boost::shared_ptr<AgentAspect> agent;
     TTime time;
@@ -2750,8 +2750,8 @@ SoccerRuleAspect::CheckGoal()
     }
 
     // Check that a team hasn't scored out of pass mode
-    if (mGameState->GetTime()-lastTimeInPassMode[SoccerBase::OpponentTeam(idx)] < mPassModeScoreWaitTime 
-        && !passModeClearedToScore[SoccerBase::OpponentTeam(idx)]) {
+    if (mGameState->GetTime()-mGameState->GetLastTimeInPassMode(SoccerBase::OpponentTeam(idx)) < mPassModeScoreWaitTime 
+        && !mGameState->GetPassModeClearedToScore(SoccerBase::OpponentTeam(idx))) {
         AwardGoalKick(idx);
         // Return true so that we know the ball is in the goal and don't
         // check for other conditions such as the ball being out of 
@@ -2772,8 +2772,10 @@ SoccerRuleAspect::ResetKickChecks()
     mCheckFreeKickKickerFoul = false;
     mIndirectKick = false;
     
-    lastTimeInPassMode[TI_LEFT] = -1000;
-    lastTimeInPassMode[TI_RIGHT] = -1000;
+    if (mGameState.get()) {
+        mGameState->SetLastTimeInPassMode(TI_LEFT, -1000);
+        mGameState->SetLastTimeInPassMode(TI_RIGHT, -1000);
+    }
 }
 
 void
@@ -2829,9 +2831,9 @@ void
 SoccerRuleAspect::UpdatePassModeScoringCheckValues()
 {
     TTeamIndex passModeTeam = TI_NONE;
-    if (mGameState->GetTime() - lastTimeInPassMode[TI_LEFT] < mPassModeScoreWaitTime && !passModeClearedToScore[TI_LEFT]) {
+    if (mGameState->GetTime() - mGameState->GetLastTimeInPassMode(TI_LEFT) < mPassModeScoreWaitTime && !mGameState->GetPassModeClearedToScore(TI_LEFT)) {
         passModeTeam = TI_LEFT;
-    } else if (mGameState->GetTime() - lastTimeInPassMode[TI_RIGHT] < mPassModeScoreWaitTime && !passModeClearedToScore[TI_RIGHT]) {
+    } else if (mGameState->GetTime() - mGameState->GetLastTimeInPassMode(TI_RIGHT) < mPassModeScoreWaitTime && !mGameState->GetPassModeClearedToScore(TI_RIGHT)) {
         passModeTeam = TI_RIGHT;
     }
 
@@ -2870,7 +2872,7 @@ SoccerRuleAspect::UpdatePassModeScoringCheckValues()
                             mulitpleTeammatesTouchedBallSincePassMode[passModeTeam] = true;
                             if (ballLeftPassModeCircle[passModeTeam]) {
                                 GetLog()->Error() << "Pass mode for " << (passModeTeam == TI_LEFT ? "left" : "right") << " team cleared to score.\n";
-                                passModeClearedToScore[passModeTeam] = true;
+                                mGameState->SetPassModeClearedToScore(passModeTeam, true);
                             }
                             break;
                         } else {
@@ -3912,7 +3914,7 @@ SoccerRuleAspect::CanActivatePassMode(int unum, TTeamIndex ti)
 
 
     // Can't activate pass mode if it was recently used
-    if (mGameState->GetTime() - lastTimeInPassMode[ti] < mPassModeRetryWaitTime) {
+    if (mGameState->GetTime() - mGameState->GetLastTimeInPassMode(ti) < mPassModeRetryWaitTime) {
         return false;
     }
 

@@ -684,8 +684,6 @@ protected:
         side of the field */
     bool mStartAnyFieldPosition;
 
-    /** The last game time that a team was in pass mode */
-    TTime lastTimeInPassMode[3];
     /** Position of the ball during a team's pass mode */
     salt::Vector3f passModeBallPos[3];
     /** Ball left original pass mode circle */
@@ -694,8 +692,6 @@ protected:
     int playerUNumTouchedBallSincePassMode[3];
     /** If multiple teammates have touched ball since pass mode */
     bool mulitpleTeammatesTouchedBallSincePassMode[3];
-    /** If a team has met the requirements after pass mode to score */
-    bool passModeClearedToScore[3];
 
     /** Maximum speed of ball when pass mode is allowed to be activated */
     float mPassModeMaxBallSpeed;
