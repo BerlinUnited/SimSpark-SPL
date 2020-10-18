@@ -9,6 +9,7 @@
  (templ $PosX $PosY $PosZ $Name)
 
  (nd Transform
+       (setName $Name)
        (setLocalPos $PosX $PosY $PosZ)
 
        (nd ObjectState

@@ -78,9 +78,7 @@ SayEffector::Realize(boost::shared_ptr<ActionObject> action)
     ifText=true;
 
     // If characters outside allowed value range or " ", "(" or ")" are in mMessage, return false
-    boost::regex allowedCharacterRange("[\x20-\x7E]*");
-    if (!boost::regex_match(mMessage, allowedCharacterRange)
-        || mMessage.find_first_of("() ") != std::string::npos)
+    if (!std::all_of(mMessage.begin(), mMessage.end(), [](char c){ return c >= 0x21 && c <= 0x7E && c!=0x28 && c!=0x29; }))
     {
         std::string teamName = mAgentState->GetTeamIndex() == TI_RIGHT ? "Right" : "Left";
 

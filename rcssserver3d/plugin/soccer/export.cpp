@@ -62,6 +62,8 @@
 #include "splstate/splstate.h"
 #include "splstate/splstateitem.h"
 #include "monitormessages/monitormessages.h"
+#include "sonarperceptor/sonarperceptor.h"
+#include "goalpost/goalpost.h"
 
 ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SoccerControlAspect);
@@ -106,5 +108,7 @@ ZEITGEIST_EXPORT_BEGIN()
         ZEITGEIST_EXPORT(SPLRule);
         ZEITGEIST_EXPORT(SPLState);
         ZEITGEIST_EXPORT(SPLStateItem);
+        ZEITGEIST_EXPORT(SonarPerceptor);
+        ZEITGEIST_EXPORT(GoalPost);
 ZEITGEIST_EXPORT_END()
 

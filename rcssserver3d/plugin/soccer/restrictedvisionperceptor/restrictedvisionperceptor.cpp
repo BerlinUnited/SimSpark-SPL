@@ -162,6 +162,9 @@ RestrictedVisionPerceptor::OnLink()
     SoccerBase::GetTransformParent(*this,mTransformParent);
 //     SoccerBase::GetAgentState(*this, mAgentState);
     SoccerBase::GetActiveScene(*this,mActiveScene);
+    // retrieve all lines of the scene
+    // NOTE: new lines aren't expected after first initialization
+    ListChildrenSupportingClass<Line>(mLineList, true);
 
     boost::shared_ptr<AgentAspect> agent_aspect =
         FindParentSupportingClass<AgentAspect>().lock();
@@ -228,16 +231,29 @@ RestrictedVisionPerceptor::ConstructInternal()
     return true;
 }
 
+const zeitgeist::Leaf::TLeafList& RestrictedVisionPerceptor::GetObjects()
+{
+    if (mActiveSceneLastChildCount != mActiveScene->GetNumberOfChildren())
+    {
+        // remove old objects
+        mObjectList.clear();
+        // retrieve all new objects; this is slow!
+        mActiveScene->ListChildrenSupportingClass<ObjectState>(mObjectList, true);
+
+        mActiveSceneLastChildCount = mActiveScene->GetNumberOfChildren();
+    }
+
+    return mObjectList;
+}
+
 void
 RestrictedVisionPerceptor::SetupVisibleNodes(TNodeObjectsMap& visibleNodes)
 {
-    TLeafList objectList;
-    //mActiveScene->ListChildrenSupportingClass<ObjectState>(objectList, true);
-    mActiveScene->GetChildrenOfClass("ObjectState", objectList, true);
+    const TLeafList& objectList = GetObjects();
 
     salt::Vector3f myPos = mTransformParent->GetWorldTransform().Pos();
 
-    for (TLeafList::iterator i = objectList.begin();
+    for (TLeafList::const_iterator i = objectList.begin();
         i != objectList.end(); ++i)
     {
         ObjectData od;
@@ -342,7 +358,8 @@ RestrictedVisionPerceptor::AddSense(Predicate& predicate,
         {
             ObjectData& od = (*j);
 
-            if (!od.mObj->GetID().empty())
+            // ignore empty objects and the body of the nao
+            if (!od.mObj->GetID().empty() && od.mObj != agent_state)
             {
                 ParameterList id;
                 id.AddValue(od.mObj->GetID());
@@ -860,9 +877,6 @@ void RestrictedVisionPerceptor::SenseLine(Predicate& predicate)
 void
 RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
 {
-  TLeafList lineList;
-  mActiveScene->GetChildrenOfClass("Line", lineList, true);
-
   // determine position relative to the local reference frame
   const Matrix& mat = mTransformParent->GetWorldTransform();
 
@@ -873,8 +887,7 @@ RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
     myPos -= mError;
   }
 
-
-  for (TLeafList::iterator i = lineList.begin(); i != lineList.end(); ++i)
+  for (TLeafList::iterator i = mLineList.begin(); i != mLineList.end(); ++i)
   {
     LineData ld;
 

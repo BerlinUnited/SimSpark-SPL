@@ -55,6 +55,8 @@ set(soccer_LIB_HDRS
    splstate/splstateitem.h
    splstate/splstate.h
    monitormessages/monitormessages.h
+   sonarperceptor/sonarperceptor.h
+   goalpost/goalpost.h
 )
 
 if (RVDRAW)
@@ -150,6 +152,9 @@ set(soccer_LIB_SRCS
    splstate/splstate_c.cpp
    monitormessages/monitormessages.cpp
    monitormessages/monitormessages_c.cpp
+   sonarperceptor/sonarperceptor.cpp
+   sonarperceptor/sonarperceptor_c.cpp
+   goalpost/goalpost_c.cpp
 )
 
 if (RVDRAW)

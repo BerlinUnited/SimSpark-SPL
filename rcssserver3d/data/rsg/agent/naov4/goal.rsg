@@ -44,19 +44,19 @@
 	     (setName BoxCollider)
 	     (setBoxLengths $GoalColliderDepth $GoalColliderWidth $GoalColliderHeight)
 	     (nd RecorderHandler
-		   (setName recorder)
-		 )
+	         (setName recorder)
+	     )
      )
 
 	 (nd Transform
 	     (setLocalPos (eval $BallDiameter + $GoalHalfDepth) 0.0 (eval -1 * $GoalHalfHeight))
 	     (setLocalRotation 90 90 0)
 	     (nd StaticMesh
-          (load $GoalObj)
-          (setScale $ObjWidth $ObjHeight $ObjDepth)
-          (setTransparent)
-         )
-     )
+	         (load $GoalObj)
+	         (setScale $ObjWidth $ObjHeight $ObjDepth)
+	         (setTransparent)
+	     )
+	 )
 
 	 ;; create the left goal post
 	 (nd Transform
@@ -67,8 +67,8 @@
 ;; 		 )
 	     (nd BoxCollider
 		 (setBoxLengths $GoalDepth $BarDiameter $GoalHeight)
-		 )
 	     )
+	 )
 
 	 ;; create the right goal post
 	 (nd Transform
@@ -107,20 +107,20 @@
 	     )
 
 	 ;; mark the goal (no visualization)
-	 (importScene rsg/agent/flag_no_viz.rsg
+	 (importScene rsg/agent/goalpost.rsg
 		      (eval $GoalHalfDepth )
 		      $GoalHalfWidth
 		      (eval -1 * $GoalHalfHeight)
 		      $LeftFlagName
 		      )
 
-	 (importScene rsg/agent/flag_no_viz.rsg
+	 (importScene rsg/agent/goalpost.rsg
 		      (eval $GoalHalfDepth )
 		      (eval -1 * $GoalHalfWidth)
 		      (eval -1 * $GoalHalfHeight)
 		      $RightFlagName
 		      )
 
-	 ) ;; of Transform
+	 ) ;; of GoalBox Transform
      ) ;; of Space
  )

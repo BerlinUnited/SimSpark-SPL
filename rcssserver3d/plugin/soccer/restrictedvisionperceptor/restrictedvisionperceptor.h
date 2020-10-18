@@ -174,6 +174,14 @@ protected:
     /** constructs the internal ray collider */
     virtual bool ConstructInternal();
 
+    /**
+     * @brief Returns the objects detected by this perceptor.
+     * Since this operation can be slow, the objects are only updated if the
+     * number of children in the scene changes!
+     * @return reference to the object list
+     */
+    const TLeafList &GetObjects();
+
     /** prepares a list of visible nodes */
     void SetupVisibleNodes(TNodeObjectsMap& visibleNodes);
 
@@ -280,6 +288,13 @@ protected:
     boost::shared_ptr<oxygen::AgentAspect> mAgentAspect;
     //! a reference to the agent state
     boost::shared_ptr<AgentState> mAgentState;
+
+    /** remember the 'last' child count of the active scene */
+    int mActiveSceneLastChildCount;
+    /** list of all objects detected by the perceptor */
+    TLeafList mObjectList;
+    /** list of all lines detected by the perceptor */
+    TLeafList mLineList;
 };
 
 DECLARE_CLASS(RestrictedVisionPerceptor);

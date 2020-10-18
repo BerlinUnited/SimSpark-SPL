@@ -134,6 +134,34 @@
 
         (nd AgentSyncEffector)
 
+        (nd Transform
+            (setName Sonar)
+            (setLocalPos -0.04 0.05 0.06) ;; y,x,z !
+;           (setLocalRotation 0 0 0)
+
+            (nd SonarPerceptor
+                (setName Left)
+;               (setMaxEchoes 10)
+;               (setRange 0.25 5.0)
+;               (setSenseCone 60)
+;               (addNoise false)
+            )
+        )
+
+        (nd Transform
+            (setName Sonar)
+            (setLocalPos 0.04 0.05 0.06) ;; y,x,z !
+;           (setLocalRotation 0 0 0)
+
+            (nd SonarPerceptor
+                (setName Right)
+;               (setMaxEchoes 10)
+;               (setRange 0.25 5.0)
+;               (setSenseCone 60)
+;               (addNoise false)
+            )
+        )
+
     );end of AgentAspect
     
     
