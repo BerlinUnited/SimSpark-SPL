@@ -205,6 +205,10 @@ public:
                        const salt::Vector3f& pos,
                        float angle);
 
+    /* Rotate an agent (x,y,z) including all its connected bodies */
+    static bool
+    RotateAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& rot);
+
     /** returns the bounding box around the agent below the closest Space parent */
     static salt::AABB3
     GetAgentBoundingBox(const zeitgeist::Leaf& base);

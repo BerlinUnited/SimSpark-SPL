@@ -745,6 +745,69 @@ SoccerBase::MoveAndRotateAgent(boost::shared_ptr<Transform> agent_aspect, const 
     return true;
 }
 
+bool
+SoccerBase::RotateAgent(boost::shared_ptr<Transform> agent_aspect, const Vector3f& rot)
+{
+    boost::shared_ptr<Transform> parent = dynamic_pointer_cast<Transform>
+            (agent_aspect->FindParentSupportingClass<Transform>().lock());
+
+    if (parent.get() == 0)
+    {
+        agent_aspect->GetLog()->Error() << "(RotateAgent) ERROR: can't get parent node.\n";
+        return false;
+    }
+
+    Leaf::TLeafList leafList;
+
+    parent->ListChildrenSupportingClass<RigidBody>(leafList, true);
+
+    if (leafList.size() == 0)
+    {
+        agent_aspect->GetLog()->Error()
+            << "(RotateAgent) ERROR: agent aspect doesn't have "
+            << "children of type Body\n";
+
+        return false;
+    }
+
+    boost::shared_ptr<RigidBody> body;
+    GetAgentBody(agent_aspect, body);
+
+    const Vector3f& agentPos = body->GetPosition();
+    Matrix bodyR = body->GetRotation();
+    bodyR.InvertRotationMatrix();
+
+    Matrix mat;
+    mat.Identity();
+    mat.RotateX(gDegToRad(rot.x()));
+    mat.RotateY(gDegToRad(rot.y()));
+    mat.RotateZ(gDegToRad(rot.z()));
+
+    mat *= bodyR;
+
+    Leaf::TLeafList::iterator iter = leafList.begin();
+
+    // rotate all child bodies
+    for (;
+         iter != leafList.end();
+         ++iter
+         )
+        {
+           boost::shared_ptr<RigidBody> childBody =
+                dynamic_pointer_cast<RigidBody>(*iter);
+
+           Vector3f childPos = childBody->GetPosition();
+           Matrix childR = childBody->GetRotation();
+           childR = mat*childR;
+           childBody->SetPosition(agentPos + mat.Rotate(childPos-agentPos));
+           childBody->SetVelocity(Vector3f(0,0,0));
+           childBody->SetAngularVelocity(Vector3f(0,0,0));
+           childBody->SetRotation(childR);
+        }
+
+    return true;
+}
+
 AABB3 SoccerBase::GetAgentBoundingBox(const Leaf& base)
 {
     AABB3 boundingBox;

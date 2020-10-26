@@ -347,7 +347,7 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         // extract position vector
         if (! predicate.AdvanceValue(moveParam, pos))
         {
-            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent rot\n";
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent move\n";
             return;
         }
         // extract direction
@@ -363,6 +363,32 @@ void TrainerCommandParser::ParsePlayerCommand(const oxygen::Predicate & predicat
         {
             // move all the bodies belonging to this agent
             SoccerBase::MoveAndRotateAgent(agent_aspect, pos, ang);
+        }
+        else
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent body\n";
+            return;
+        }
+    }
+
+    Predicate::Iterator rotParam(predicate);
+    if (predicate.FindParameter(rotParam, "rot"))
+    {
+        salt::Vector3f rot;
+
+        // extract rotation vector
+        if (! predicate.AdvanceValue(rotParam, rot))
+        {
+            GetLog()->Error() << "(TrainerCommandParser) ERROR: can't get agent rot\n";
+            return;
+        }
+
+        boost::shared_ptr<Transform> agent_aspect;
+
+        if (SoccerBase::GetTransformParent(*(*iter), agent_aspect))
+        {
+            // rotate all the bodies belonging to this agent
+            SoccerBase::RotateAgent(agent_aspect, rot);
         }
         else
         {
