@@ -48,6 +48,12 @@ public:
     /** sets the monitor logger update interval in cycles */
     void SetMonitorLoggerInterval(int i);
 
+    /** returns a constant reference to the name of the log file */
+    const std::string& GetLogFileName() const;
+
+    /** sets the name of this node */
+    void SetLogFileName(const std::string &name);
+
 protected:
     virtual void OnLink();
     virtual void OnUnlink();
@@ -55,6 +61,9 @@ protected:
 protected:
     /** cached reference to the MonitorServer */
     boost::shared_ptr<MonitorServer> mMonitorServer;
+
+    /** name of the log file */
+    std::string mLogFileName;
 
     /** ofstream object to log monitor messages */
     std::ofstream mLogFile;

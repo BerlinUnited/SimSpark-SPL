@@ -43,7 +43,8 @@ RestrictedVisionPerceptor::RestrictedVisionPerceptor() : Perceptor(),
                                      mAddNoise(true),
                                      mStaticSenseAxis(true),
                                      mSenseLine(false),
-                                     mSenseLineName(false)
+                                     mSenseLineName(false),
+                                     mActiveSceneLastModifiedNum(0)
 {
     // set predicate name
     SetPredicateName("See");
@@ -233,14 +234,14 @@ RestrictedVisionPerceptor::ConstructInternal()
 
 const zeitgeist::Leaf::TLeafList& RestrictedVisionPerceptor::GetObjects()
 {
-    if (mActiveSceneLastChildCount != mActiveScene->GetNumberOfChildren())
+    if (mActiveSceneLastModifiedNum != mActiveScene->GetModifiedNum())
     {
         // remove old objects
         mObjectList.clear();
         // retrieve all new objects; this is slow!
         mActiveScene->ListChildrenSupportingClass<ObjectState>(mObjectList, true);
 
-        mActiveSceneLastChildCount = mActiveScene->GetNumberOfChildren();
+        mActiveSceneLastModifiedNum = mActiveScene->GetModifiedNum();
     }
 
     return mObjectList;

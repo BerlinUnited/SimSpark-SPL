@@ -13,7 +13,7 @@ SonarPerceptor::SonarPerceptor() : Perceptor(),
     mMaxDistance(5.0),
     mSenseCone(60),
     mAddNoise(false),
-    mActiveSceneLastChildCount(0)
+    mActiveSceneLastModifiedNum(0)
 {
     SetPredicateName("US"); // ultra sonic
 
@@ -89,7 +89,7 @@ bool SonarPerceptor::Percept(boost::shared_ptr<oxygen::PredicateList> predList)
 
 const zeitgeist::Leaf::TLeafList& SonarPerceptor::GetObjects()
 {
-    if (mActiveSceneLastChildCount != mActiveScene->GetNumberOfChildren())
+    if (mActiveSceneLastModifiedNum != mActiveScene->GetModifiedNum())
     {
         // remove old objects
         mObjectList.clear();
@@ -108,7 +108,7 @@ const zeitgeist::Leaf::TLeafList& SonarPerceptor::GetObjects()
             ++i;
         }
 
-        mActiveSceneLastChildCount = mActiveScene->GetNumberOfChildren();
+        mActiveSceneLastModifiedNum = mActiveScene->GetModifiedNum();
     }
 
     return mObjectList;

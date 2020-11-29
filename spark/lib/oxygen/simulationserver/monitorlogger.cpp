@@ -29,8 +29,10 @@ using namespace zeitgeist;
 using namespace boost;
 using namespace std;
 
-MonitorLogger::MonitorLogger() : SimControlNode(), mFullStateLogged(0),
-        mFullStateLoggedTime(0)
+MonitorLogger::MonitorLogger() : SimControlNode(),
+    mLogFileName("sparkmonitor.log"),
+    mFullStateLogged(0),
+    mFullStateLoggedTime(0)
 {
 }
 
@@ -56,7 +58,7 @@ void MonitorLogger::OnLink()
         return;
     }
 
-    mLogFile.open("sparkmonitor.log");
+    mLogFile.open(mLogFileName);
 }
 
 void MonitorLogger::OnUnlink()
@@ -87,4 +89,27 @@ void MonitorLogger::EndCycle()
 
     // log updates
     mLogFile << info << std::endl;
+}
+
+const std::string& MonitorLogger::GetLogFileName() const
+{
+    return mLogFileName;
+}
+
+void MonitorLogger::SetLogFileName(const std::string &name)
+{
+    bool isOpen = mLogFile.is_open();
+
+    // close and rename "old" file first
+    if (isOpen) {
+        mLogFile.close();
+        std::rename(mLogFileName.c_str(), name.c_str());
+    }
+
+    mLogFileName = name;
+
+    // re-open with new name
+    if (isOpen) {
+        mLogFile.open(mLogFileName, std::ofstream::out | std::ofstream::app);
+    }
 }

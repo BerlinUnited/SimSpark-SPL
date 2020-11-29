@@ -290,7 +290,7 @@ protected:
     boost::shared_ptr<AgentState> mAgentState;
 
     /** remember the 'last' child count of the active scene */
-    int mActiveSceneLastChildCount;
+    int mActiveSceneLastModifiedNum;
     /** list of all objects detected by the perceptor */
     TLeafList mObjectList;
     /** list of all lines detected by the perceptor */

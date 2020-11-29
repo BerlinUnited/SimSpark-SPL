@@ -4,6 +4,7 @@
 
 # toggle log file recording
 $recordLogfile = true
+#$recordLogfileName = Time.now.strftime("sparkmonitor_%Y-%m-%d_%H-%M-%S.log") # default: sparkmonitor.log
 
 # toggle the internal monitor
 $enableInternalMonitor = true

@@ -443,9 +443,10 @@ def sparkSetupServer
   # log recording setup
 
   if ($recordLogfile == true)
-    logNormal($sparkPrefix + " recording Logfile as 'sparkmonitor.log'\n")
     monitorLogger = sparkCreate('oxygen/MonitorLogger', $serverPath+'simulation/MonitorLogger')
     monitorLogger.setStep($monitorLoggerStep)
+    monitorLogger.setLogFileName($recordLogfileName)
+    logNormal($sparkPrefix + " recording Logfile as '" + monitorLogger.getLogFileName() + "'\n")
   end
 end
 

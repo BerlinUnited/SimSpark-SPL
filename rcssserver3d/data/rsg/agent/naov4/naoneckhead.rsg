@@ -10,7 +10,7 @@
     ;
     (def $Neck_Radius   0.015)
     (def $Neck_Length   0.08)
-    (def $Neck_Mass     0.05959)
+    (def $Neck_Mass     0.06442)
     (def $NeckCGX       -0.00018)
     (def $NeckCGY       -0.00003)
     (def $NeckCGZ       -0.02573)
@@ -28,7 +28,7 @@
     ;head parameter
     ;
     (def $Head_Radius   0.05)
-    (def $Head_Mass     0.47671)
+    (def $Head_Mass     0.60533)
     (def $HeadCGX       0.00093)
     (def $HeadCGY       0.00383)
     (def $HeadCGZ       0.05156)

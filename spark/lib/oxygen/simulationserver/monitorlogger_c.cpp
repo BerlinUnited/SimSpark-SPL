@@ -22,7 +22,32 @@
 using namespace oxygen;
 using namespace std;
 
+
+FUNCTION(MonitorLogger,setLogFileName)
+{
+    string inName;
+
+    if (
+        (in.GetSize() != 1) ||
+        (! in.GetValue(in.begin(), inName))
+        )
+        {
+            return false;
+        }
+
+    obj->SetLogFileName(inName);
+    return true;
+}
+
+FUNCTION(MonitorLogger,getLogFileName)
+{
+    return obj->GetLogFileName();
+}
+
+
 void CLASS(MonitorLogger)::DefineClass()
 {
     DEFINE_BASECLASS(oxygen/SimControlNode);
+    DEFINE_FUNCTION(setLogFileName);
+    DEFINE_FUNCTION(getLogFileName);
 }
