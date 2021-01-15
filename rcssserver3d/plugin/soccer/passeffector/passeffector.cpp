@@ -43,7 +43,7 @@ PassEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
 {
     if (
         (mAction.get() == 0) ||
-        (mGameState.get() == 0) ||
+        (mSoccerRule.get() == 0) ||
         (mAgentState.get() == 0)
         )
     {
@@ -61,17 +61,12 @@ PassEffector::PrePhysicsUpdateInternal(float /*deltaTime*/)
             << "ERROR: (PassEffector) cannot realize an unknown ActionObject\n";
         return;
     }
-
-    // the pass effector only has an effect in PM_PlayOn
-    //if (mGameState->GetPlayMode() == PM_PlayOn)
-    //{
                 
     TTeamIndex team = mAgentState->GetTeamIndex();
     int unum = mAgentState->GetUniformNumber();
     if (mSoccerRule->CanActivatePassMode(unum, team)) {
-        mGameState->SetPlayMode(team == TI_LEFT ? PM_PASS_LEFT : PM_PASS_RIGHT);
+        mSoccerRule->StartPassMode(team);
     }
-    //}
 }
 
 boost::shared_ptr<ActionObject>
