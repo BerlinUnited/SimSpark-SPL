@@ -1,3 +1,51 @@
+[0.7.3]
+New changes in 0.7.3:
+
+* Rule Changes:
+    - Changing pass mode so that a team can score after their pass mode has
+      ended as soon as multiple players from the team have touched the ball
+      with at least one touch coming after the ball has traveled outside the
+      location of the pass mode opponent protection circle when pass mode
+      was active.
+    - Making it so that touching and illegal defense penalties are no longer
+      penalized by beaming but instead players are repositioned on the field
+      to appropriate locations. Also fixing up the safe repositiong code a
+      little to be more efficient and to directly account for players' positions
+      after they have been desiganted to be repositioned to new locations when
+      repositioning other players. Additionally making repositioning a little
+      safer by not moving players inside a goal or too close to the ball.
+    - Extending the automatic referee for charging fouls so that they can
+      be called between any two agents colliding instead of only within groups
+      of two agents (they would never be called for larger groups of touching
+      agents). Also taking the average position of all current collision points
+      between two agents colliding instead of just the most recent evaluated
+      collision point when determing if charging has occurred.
+    - Checking both current and updated (being moved this simulation step)
+      player and ball positions before allowing pass mode to be activated.
+      Also preventing a team from activating pass mode if they're currently
+      touching the ball as doing so will result in the undesireable behavior
+      of pass mode immediately ending before it really starts.
+
+* Bug Fixes:
+    - Fix calibration error in robot frame of reference and applied to all 
+      spherical coordinates.
+    - Fixing bug where illegal defense was sometimes not being called or
+      was removing the wrong player from the penalty area.
+    - Fixing potential segfault that can happen when evaluating touch groups
+      with goalies and agents that have enforceable fouls. Also removing
+      unused variable that was causing a warning.
+    - Fix issues with touch groups and touching fouls where incorrect agents
+      were sometimes penalized and groups of agents touching larger than the
+      allowed size might not be penalized at all.
+      
+* Other Changes:
+    - Reformatting code a litle to have more standard indentations -- no
+      functional changes.
+    - Moving some of the state values for determining when a team can
+      score after pass mode from SoccerRuleAspect to GameStateAspect.
+    - Sending information needed for reporting the status of pass
+      mode and related scoring eligibility to the monitor.
+
 [0.7.2]
 New changes for the RoboCup 2019 competition:
 
