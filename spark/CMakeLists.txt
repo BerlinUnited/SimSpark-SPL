@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 project(simspark CXX C)
-set(PACKAGE_VERSION "0.3.1")
+set(PACKAGE_VERSION "0.3.2")
 
 ########## check for headerfiles/libraries ##########
 include(CheckIncludeFile) 

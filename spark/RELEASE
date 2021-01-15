@@ -1,18 +1,8 @@
-RELEASE News of simspark-0.3.1
+[0.3.2]
+Simspark 0.3.2 is ready. It contains a fix for exploding agents.
 
-Simspark 0.3.1 is ready. It introduces the option to check collisions between
-two box colliders without using the physics engine and to enable/disable
-effectors. In addition to that, this release contains a couple of minor bug
-fixes and plugin (shared library) loading fixes for some linux systems.
-
- - Detecting and punishing self collisions without using the physics engine:
-  -- Added collision check between two box colliders
-  -- Added option to enable and disable effectors
-  -- Added option to specify (via rsg files) the joints to disable in case of a
-     self collision to box colliders
- - Fixed plugin search paths for some linux distributions
- - Improved support for 32 bit linux systems
- - Several bug fixes
+ - By not allowing the effector to be used when the angle is already outside of its range, 
+   the toe exploding problem seems to be largely reduced if not eliminated.
 
 You can get the package on the Simspark page on Gitlab
 at https://robocup-sim.gitlab.io/SimSpark/

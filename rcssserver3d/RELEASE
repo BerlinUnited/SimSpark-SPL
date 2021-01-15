@@ -1,60 +1,51 @@
-RELEASE News of rcssserver3d-0.7.2
+RELEASE News of rcssserver3d-0.7.3
 
-New changes for the RoboCup 2019 competition:
+New changes in 0.7.3:
 
-* Pass Mode:
+* Rule Changes:
+    - Changing pass mode so that a team can score after their pass mode has
+      ended as soon as multiple players from the team have touched the ball
+      with at least one touch coming after the ball has traveled outside the
+      location of the pass mode opponent protection circle when pass mode
+      was active.
+    - Making is so that touching and illegal defense penalties are no longer
+      penalized by beaming but instead players are repositioned on the field
+      to appropriate locations.  Also fixing up the safe repositiong code a
+      little to be more efficient and to directly account for players' positions
+      after they have been desiganted to be repositioned to new locasitons when
+      repositioning other players.  Additionally making repositioning a little
+      safer by not moving players inside a goal or too close to the ball.
+    - Extending the automatic referee for charging fouls so that they can
+      be called between any two agents colliding instead of only within groups
+      of two agents (they would never be called for larger groups of touching
+      agents). Also taking the average position of all current collision points
+      between two agents colliding instead of just the most recent evaluated
+      collision point when determing if charging has occurred.
+    - Checking both current and updated (being moved this simulation step)
+      player and ball positions before allowing pass mode to be activated.
+      Also preventing a team from activating pass mode if they're currently
+      touching the ball as doing so will result in the undesireable behavior
+      of pass mode immediately ending before it really starts.
 
-Pass mode is a new playmode that can be initiated by an agent of a team, in
-which the corresponding team gets some extra privileges for a short amount of
-time in exchange for some constraints to increase the possibility of a
-successful pass.
-Once pass mode for a team has been issued the following happens:
-    - The playmode changes to "pass_left" or "pass_right" depending on which
-      team has initiated the pass playmode
-    - The opponent team is prevented from getting within a certain distance of
-      the ball which is the same as the minimum distance any opponent can be
-      from the ball for the passmode to be initiated (default 1.0 meters)
-    - The pass playmode will end as soon as a player touches the ball or a
-      certain amount of time has passed (default 4 seconds)
-    - After pass mode has ended the team who initiated the pass mode is unable
-      to score for a certain amount of time (default 10 seconds) -- if a team
-      does score within that time the opponent is awarded a goal kick just as
-      if a goal had been scored off an indirect kick
-
-The pass command will only be successful if the following conditions are met:
-    - The current playmode is PlayOn
-    - The agent issuing the pass command is within a certain distance of the
-      ball (default 0.5 meters)
-    - No opponents are within a certain distance of the ball (default 1.0
-      meters)
-    - The ball is stationary as measured by having a speed no greater than a
-      certain amount (default 0.05)
-    - A certain amount of time has passed since the last time the agent issuing
-      the pass command's team has been in pass mode (default 3 seconds)
-
-
-* Self Collisions:
-
-Self collisions (collisions between body parts of an agent) are now detected
-without the use of a physics engine and penalized with loss of control of the
-involved limbs (default) or beaming the agent to the side.
-This is achieved by freezing joints involved in a self collision for
-SelfCollisionJointFrozenTime, and then unfreezing the joints and let them be
-controlled again before being potentially flagged for another self collision
-for SelfCollisionJointThawTime. Each joint is monitored individually such that
-only those joints involved in a self collision can be specified as needing to
-be frozen. Currently all joints in an arm or leg are frozen if any box collider
-in that arm or leg is involved in a self collision. The penalty for a self
-collision can be changed to beaming an agent if desired. Additionally an output
-file can be specified to write self collision info to.
-
-
-* Rectangular Goals:
-
-    - Changed goal colliders to resemble a rectangular shape
-    - Added new object files and the corresponding material definition files
-      for visualizing rectangular goals
-
+* Bug Fixes:
+    - Fix calibration error in robot frame of reference and applied to all 
+      spherical coordinates.
+    - Fixing bug where illegal defense was sometimes not being called or
+      was removing the wrong player from the penalty area.
+    - Fixing potential segfault that can happen when evaluating touch groups
+      with goalies and agents that have enforceable fouls. Also removing
+      unused varaible that was causing a warning.
+    - Fix issues with touch groups and touching fouls where incorrect agents
+      were sometimes penalized and groups of agents touching larger than the
+      allowed size might not be penalized at all.
+      
+* Other Changes:
+    - Reformatting code a litle to have more standard indentations -- no
+      functional changes.
+    - Moving some of the state values for determining when a team can
+      score after pass mode from SoccerRuleAspect to GameStateAspect,
+      and sending information needed for reporting the status of pass
+      mode and related scoring eligibility to the monitor.
 
 You can get the package on the Simspark page on Gitlab
 at https://robocup-sim.gitlab.io/SimSpark/
