@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility
+include_directories(BEFORE ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/utility
     ${OPENGL_INCLUDE_DIR})
 
 # It is problematic under Linux! Will cause segfaults on simspark exit.
