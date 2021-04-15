@@ -126,6 +126,18 @@ public:
     /** swaps the team index (side) of current teams */
     void SwapTeamIndexes();
 
+    /** gets the last time a team was in pass mode */ 
+    TTime GetLastTimeInPassMode(const TTeamIndex idx) const;
+
+    /** sets the last time a team was in pass mode */ 
+    void SetLastTimeInPassMode(const TTeamIndex idx, const TTime time);
+
+    /** gets if a team has been cleared to score since pass mode */ 
+    bool GetPassModeClearedToScore(const TTeamIndex idx) const;
+
+    /** sets if a team has been cleared to score since pass mode */ 
+    void SetPassModeClearedToScore(const TTeamIndex idx, const bool canScore);
+
 protected:
     /** setup the init positions for the agents */
     virtual void OnLink();
@@ -230,6 +242,12 @@ protected:
 
     /** the maximum sum of robots for any two robot types */
     int mMaxSumTwoRobotTypes;
+
+    /** The last game time that a team was in pass mode */
+    TTime mlastTimeInPassMode[2];
+
+    /** If a team has met the requirements after pass mode to score */
+    bool mPassModeClearedToScore[2];
 };
 
 DECLARE_CLASS(GameStateAspect);

@@ -34,6 +34,14 @@ class AgentState;
 
 typedef std::set<boost::shared_ptr<AgentState> > TouchGroup;
 
+// pair<avg_position_of_collisions, number_of_collisions>
+typedef std::pair<salt::Vector3f, int> OpponentCollisionPositionInfo;
+
+// pair<agent_uniform_number, OpponentCollisionPositionInfo>
+typedef std::pair<int, OpponentCollisionPositionInfo> OpponentCollisionInfo;
+
+typedef std::vector<OpponentCollisionInfo> OpponentCollisionInfoVec;
+
 class AgentState : public ObjectState
 {
     //
@@ -122,6 +130,9 @@ public:
     /** Set the current touch group */
     void SetTouchGroup(boost::shared_ptr<TouchGroup> group);
 
+    /** Returns the opponent collision position info vec passed by reference so that it can be modified */
+    OpponentCollisionInfoVec& GetOppCollisionPosInfoVec();
+
     void Penalize(const TTime gameTime, const spl::TSPLPenalty cause, const TTime duration);
 
     void UnPenalize();
@@ -197,6 +208,9 @@ protected:
 
     boost::shared_ptr<TouchGroup> mOldTouchGroup;
     boost::shared_ptr<TouchGroup> mTouchGroup;
+
+    /** Vector of average position points at which collisions with opponent agents occurred */
+    OpponentCollisionInfoVec mOppCollisionPosInfoVec;
 
 protected:
     virtual void UpdateHierarchyInternal();

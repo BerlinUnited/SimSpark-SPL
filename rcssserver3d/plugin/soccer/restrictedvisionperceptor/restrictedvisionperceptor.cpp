@@ -542,11 +542,6 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
         {
             ObjectData& od = (*j);
 
-            if (mAddNoise)
-            {
-                od.mRelPos += mError;
-            }
-
             if (od.mRelPos.Length() <= 0.1)
             {
                 // object is too close
@@ -556,6 +551,13 @@ RestrictedVisionPerceptor::DynamicAxisPercept(boost::shared_ptr<PredicateList> p
 
             // determine position relative to the local reference frame
             Vector3f localRelPos = mat.InverseRotate(od.mRelPos);
+
+            if (mAddNoise)
+            {
+                localRelPos += mError;
+            }
+
+            od.mDist = localRelPos.Length();
 
             // theta is the angle in horizontal plane, with fwAngle as 0 degree
             od.mTheta = gNormalizeDeg (gRadToDeg(gNormalizeRad(
@@ -883,10 +885,6 @@ RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
 
   // get the transformation matrix describing the current orientation
   Vector3f myPos = mat.Pos();
-  if (mAddNoise)
-  {
-    myPos -= mError;
-  }
 
   for (TLeafList::iterator i = mLineList.begin(); i != mLineList.end(); ++i)
   {
@@ -913,6 +911,12 @@ RestrictedVisionPerceptor::SetupLines(TLineList& visibleLines)
     const salt::Matrix& t = j->GetWorldTransform();
     ld.mBeginPoint.mRelPos =   mat.InverseRotate( t * ld.mLine->BeginPoint() - myPos );
     ld.mEndPoint.mRelPos = mat.InverseRotate( t * ld.mLine->EndPoint() - myPos );
+
+    if (mAddNoise)
+    {
+        ld.mBeginPoint.mRelPos += mError;
+        ld.mEndPoint.mRelPos   += mError;
+    }
 
     visibleLines.push_back(ld);
   }

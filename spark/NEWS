@@ -1,3 +1,9 @@
+[0.3.2]
+Simspark 0.3.2 is ready. It contains a fix for exploding agents.
+
+ - By not allowing the effector to be used when the angle is already outside of its range, 
+   the toe exploding problem seems to be largely reduced if not eliminated.
+
 [0.3.1]
 Simspark 0.3.1 is ready. It introduces the option to check collisions between
 two box colliders without using the physics engine and to enable/disable

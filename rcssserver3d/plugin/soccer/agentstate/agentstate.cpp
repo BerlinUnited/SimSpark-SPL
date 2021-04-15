@@ -304,6 +304,12 @@ AgentState::GetTouchGroup()
     return mTouchGroup;
 }
 
+OpponentCollisionInfoVec& 
+AgentState::GetOppCollisionPosInfoVec() 
+{
+    return mOppCollisionPosInfoVec; 
+}
+
 void AgentState::Penalize(const TTime gameTime, const spl::TSPLPenalty cause, const TTime duration) {
     whenPenalized = gameTime;
     penalty = cause;

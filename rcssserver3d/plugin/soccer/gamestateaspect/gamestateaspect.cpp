@@ -56,6 +56,8 @@ GameStateAspect::GameStateAspect() : SoccerControlAspect()
     mInternalIndex[TI_NONE] = -1;
     mInternalIndex[TI_LEFT] = 0;
     mInternalIndex[TI_RIGHT] = 1;
+    mlastTimeInPassMode[0] = -1000;
+    mlastTimeInPassMode[1] = -1000;
 }
 
 GameStateAspect::~GameStateAspect()
@@ -594,4 +596,40 @@ void GameStateAspect::SetPaused(bool paused)
 void GameStateAspect::SwapTeamIndexes()
 {
     swap(mInternalIndex[TI_LEFT], mInternalIndex[TI_RIGHT]);
+}
+
+TTime GameStateAspect::GetLastTimeInPassMode(const TTeamIndex idx) const
+{
+    int i = GetInternalIndex(idx);
+    if (i < 0)
+        return 0;
+
+    return mlastTimeInPassMode[i];
+}
+
+void GameStateAspect::SetLastTimeInPassMode(const TTeamIndex idx, const TTime time)
+{
+    int i = GetInternalIndex(idx);
+    if (i < 0)
+        return;
+
+    mlastTimeInPassMode[i] = time;
+}
+
+bool GameStateAspect::GetPassModeClearedToScore(const TTeamIndex idx) const
+{
+    int i = GetInternalIndex(idx);
+    if (i < 0)
+        return false;
+
+    return mPassModeClearedToScore[i];
+}
+
+void GameStateAspect::SetPassModeClearedToScore(const TTeamIndex idx, const bool canScore)
+{
+    int i = GetInternalIndex(idx);
+    if (i < 0)
+        return;
+
+    mPassModeClearedToScore[i] = canScore;
 }

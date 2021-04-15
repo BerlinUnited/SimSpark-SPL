@@ -125,7 +125,7 @@ public:
         potential collisions with other agents, and adjusts the position if need
         be to avoid collisions
     */
-    salt::Vector3f GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx);
+    salt::Vector3f GetSafeReposition(salt::Vector3f posIni, int unum, TTeamIndex idx, bool fAvoidBall=true);
 
     /** Calculates the inside field reposition pos for a given agent with unum and team idx
         Agents are repositioned at distance from the ball, that is, at: plpos + (plpos-ballpos).normalize()*dist
@@ -167,6 +167,10 @@ public:
     */
     void AnalyseFouls(TTeamIndex idx);
 
+    /** Penalizes an agent for an illegal defense foul
+     */ 
+    void PenalizeIllegelDefenseFoul(int unum, TTeamIndex idx);
+
 #ifdef RVDRAW
     /** Draws players' velocities with colors for debugging charging fouls
      */
@@ -189,11 +193,15 @@ public:
 
     /** Check whether too many agents are touching
      */
-    void AnalyseTouchGroups(TTeamIndex idx);
+    void AnalyseTouchGroups(TTeamIndex idx, bool fOnlyProcessNewlyJoinedGroupAgents=true);
 
     /** Reset the touch groups
     */
     void ResetTouchGroups(TTeamIndex idx);
+
+    /** Penalizes an agent for a touching foul
+     */
+    void PenalizeTouchingFoul(boost::shared_ptr<AgentState> agentState, const salt::Vector3f touchGroupCenter);
 
     /** Automatic Referee that clears players that violate the rules
     */
@@ -246,6 +254,9 @@ public:
 
     /** if a player can activate pass mode */
     bool CanActivatePassMode(int unum, TTeamIndex ti);
+
+    /** starts pass mode for a team */
+    void StartPassMode(TTeamIndex idx);
 
 protected:
     /** rereads the current soccer script values */
@@ -319,6 +330,9 @@ protected:
     /** checks if kick taker has kicked the ball again before other players */
     bool CheckFreeKickTakerFoul();
 
+    /** Updates values needed when checking if a team can score after pass mode */
+    void UpdatePassModeScoringCheckValues();
+
     /** moves the ball to pos setting its linear and angular velocity to 0 */
     void MoveBall(const salt::Vector3f& pos);
 
@@ -365,7 +379,7 @@ protected:
 
         If idx is TI_NONE, nothing will happen.
     */
-    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx, float pad=0.0);
+    void RepelPlayers(const salt::Vector3f& pos, float radius, TTeamIndex idx, float pad=0.0, bool fAvoidBall=false);
 
     /**
      * Moves players taking a kick slightly away from the ball when it is placed
@@ -413,7 +427,7 @@ protected:
     bool WasLastKickFromFreeKick(
         boost::shared_ptr<oxygen::AgentAspect> &lastKicker);
 
-    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos, bool fSafe=true);
+    bool MoveAgent(boost::shared_ptr<oxygen::Transform> agent_aspect, const salt::Vector3f& pos, bool fSafe=true, bool fAvoidBall=true);
 
     /** if a player has committed a foul that should be enforced */
     bool HaveEnforceableFoul(int unum, TTeamIndex ti);
@@ -517,8 +531,12 @@ protected:
     float mMin3PlDistance;
     /** maximum number of players of the defending team that may be inside own penalty area */
     int mMaxPlayersInsideOwnArea;
+    /** use beaming to penalize illegal defense */
+    bool mIllegalDefenseBeamPenalty;
     /** maximum number of players that may be in a single touch group */
     int mMaxTouchGroupSize;
+    /** use beaming to penalize touching fouls */
+    bool mTouchingFoulBeamPenalty;
     /** maximum time allowed for a player to commit a positional foul before being repositioned */
     int mMaxFoulTime;
     /** maximum tolerance allowed for self collisions along the box collider separating planes */
@@ -555,8 +573,7 @@ protected:
     EFoulType playerLastFoul[12][3];	//Type of last foul committed by player
     std::map<std::string,TTime> lastTimeJointFrozen[12][3]; // Time since joint last frozen
     int numPlInsideOwnArea[3]; 		//Number of players inside own area
-    int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area
-    std::list<salt::Vector2f> reposLocs; // List of locations players have been repositioned to 
+    int numPlReposInsideOwnArea[3]; 	//Number of players repositioned inside own area 
     int closestPlayer[3]; 		//Closest Player from each team
     float closestPlayerDist[3]; 	//Closest Player distance to ball from each team
     salt::Vector3f playerVelocities[12][3][AVERAGE_VELOCITY_MEASUREMENTS];  // Player velocities over last AVERAGE_VELOCITY_MEASUREMENTS cycles 
@@ -674,8 +691,14 @@ protected:
         side of the field */
     bool mStartAnyFieldPosition;
 
-    /** The last game time that a team was in pass mode */
-    TTime lastTimeInPassMode[3];
+    /** Position of the ball during a team's pass mode */
+    salt::Vector3f passModeBallPos[3];
+    /** Ball left original pass mode circle */
+    bool ballLeftPassModeCircle[3];
+    /** Uniform number of a player that has touched the ball since pass mode */
+    int playerUNumTouchedBallSincePassMode[3];
+    /** If multiple teammates have touched ball since pass mode */
+    bool mulitpleTeammatesTouchedBallSincePassMode[3];
 
     /** Maximum speed of ball when pass mode is allowed to be activated */
     float mPassModeMaxBallSpeed;
