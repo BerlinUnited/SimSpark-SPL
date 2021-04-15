@@ -87,6 +87,8 @@ void GameStateItem::GetInitialPredicates(PredicateList& pList)
     PutFloatParam("RuleGoalPauseTime",pList);
     PutFloatParam("RuleKickInPauseTime",pList);
     PutFloatParam("RuleHalfTime",pList);
+    PutFloatParam("PassModeMinOppBallDist",pList);
+    PutFloatParam("PassModeDuration",pList);
 
     // play modes
     Predicate& pred = pList.AddPredicate();
@@ -176,11 +178,36 @@ void GameStateItem::GetPredicates(PredicateList& pList)
             modePred.name = "play_mode";
             modePred.parameter.AddValue(static_cast<int>(play_mode));
         }
+
+    //pass mode score wait time left team
+    if (mGameState->GetPlayMode() == PM_PlayOn
+        && mGameState->GetTime()-mGameState->GetLastTimeInPassMode(TI_LEFT) < mPassModeScoreWaitTime 
+        && !mGameState->GetPassModeClearedToScore(TI_LEFT)) 
+        {
+            float wait_time = mPassModeScoreWaitTime - (mGameState->GetTime()-mGameState->GetLastTimeInPassMode(TI_LEFT)); 
+            Predicate& passModeScoreWaitLeftPred = pList.AddPredicate();
+            passModeScoreWaitLeftPred.name = "pass_mode_score_wait_left";
+            passModeScoreWaitLeftPred.parameter.AddValue(wait_time); 
+        }
+
+    //pass mode score wait time right team
+    if (mGameState->GetPlayMode() == PM_PlayOn
+        && mGameState->GetTime()-mGameState->GetLastTimeInPassMode(TI_RIGHT) < mPassModeScoreWaitTime 
+        && !mGameState->GetPassModeClearedToScore(TI_RIGHT)) 
+        {
+            float wait_time = mPassModeScoreWaitTime - (mGameState->GetTime()-mGameState->GetLastTimeInPassMode(TI_RIGHT)); 
+            Predicate& passModeScoreWaitRightPred = pList.AddPredicate();
+            passModeScoreWaitRightPred.name = "pass_mode_score_wait_right";
+            passModeScoreWaitRightPred.parameter.AddValue(wait_time); 
+        }
 }
 
 void GameStateItem::OnLink()
 {
     SoccerBase::GetGameState(*this,mGameState);
+
+    mPassModeScoreWaitTime = 10.0;
+    SoccerBase::GetSoccerVar(*this,"PassModeScoreWaitTime",mPassModeScoreWaitTime);
 }
 
 void GameStateItem::OnUnlink()

@@ -69,8 +69,12 @@ bool HingeEffector::Realize(boost::shared_ptr<ActionObject> action)
         finalMotorVel = 0;
     }
     
-    mJoint->SetParameter(2 /*value of dParamVel in ODE*/, finalMotorVel);
-
+    if(mJoint->GetAngle() < mJoint->GetHighStopPos(static_cast<Joint::EAxisIndex>(0))*180.0/M_PI
+       && mJoint->GetAngle() > mJoint->GetLowStopPos(static_cast<Joint::EAxisIndex>(0))*180.0/M_PI
+       ) {
+          mJoint->SetParameter(2 /*value of dParamVel in ODE*/, finalMotorVel);
+    }
+       
     if (hingeAction->GetMotorVelocity() != 0)
         {
             boost::shared_ptr<RigidBody> body = mJoint->GetBody(Joint::BI_FIRST);
