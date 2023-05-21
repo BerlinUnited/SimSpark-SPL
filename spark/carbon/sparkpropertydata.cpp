@@ -22,6 +22,7 @@
 #include "cutelogger/logger.h"
 #include "simspark.h"
 
+#include <limits>
 #include <QStringList>
 
 using namespace boost;
