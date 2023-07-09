@@ -37,6 +37,7 @@ class MonitorMessages : public oxygen::MonitorItem
 {
     struct message_info {
       TTeamIndex ti_side;
+      int number;
       std::string message;
       std::string ip;
     };

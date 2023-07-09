@@ -52,6 +52,7 @@ void MonitorMessages::GetPredicates(PredicateList& pList)
           << it->message << " "
           << "(side " << it->ti_side << ") "
           << "(ip " << it->ip << ") "
+          << "(num " << it->number << ") "
         << ")";
       pred.parameter.AddValue(ss.str());
     }
@@ -86,5 +87,5 @@ void MonitorMessages::addMessage(const std::string& msg, const TTeamIndex idx, c
   {
     mAgentControl->GetClientAddr(num, ip);
   }
-  msg_list.push_back({idx, msg, ip});
+  msg_list.push_back({idx, num, msg, ip});
 }
